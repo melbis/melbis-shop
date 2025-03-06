@@ -1,0 +1,80 @@
+<footer class="footer mt-auto py-3 bg-light">
+    <div class="container">
+        <div class="d-flex justify-content-between">
+            <span class="text-muted mr-1">&copy; Company Name. Last changes at <span class="text-nowrap">{LASTMODIFY}.</span></span>
+            <span class="text-muted">{MELBIS_COPY}</span>
+        </div>            
+    </div>
+</footer>                   
+
+<div class="modal fade" tabindex="-1" id="melbis_win_basket">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Your Basket</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="melbis_btn_checkout"><i class="fas fa-shopping-cart"></i> Checkout</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" id="melbis_win_checkout">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Your order</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="melbis_form_order">                
+            <h4 class="border-bottom pb-1">Cart</h4>
+            <div id="melbis_order_goods"></div>
+            <h4 class="border-bottom pb-1">Billing</h4>
+            <div id="melbis_order_fields"></div>             
+            <h4 class="border-bottom pb-1">Options</h4>
+            <div id="melbis_order_options"></div>
+        </form>        
+      </div>
+        <div class="alert m-2 alert-danger fade"><strong>Oh! Error found</strong> <span></span></div>            
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="melbis_btn_finish"><i class="fas fa-paper-plane"></i> Finish</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" id="melbis_win_finish">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Order finish</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h4 class="text-center">Order was successfully placed</h4>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+             
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>        
+<script defer src="https://use.fontawesome.com/releases/v5.8.1/js/all.js" integrity="sha384-g5uSoOSBd7KkhAMlnQILrecXvzst9TdC09/VM+pjDTCM+1il8RHz5fKANTFFb+gQ" crossorigin="anonymous"></script>
+<script src="{PATH}/autocomplete.js"></script>
+<script src="{PATH}/melbis.js?{BUILD}"></script>
