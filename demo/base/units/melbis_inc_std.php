@@ -116,7 +116,9 @@ function MELBIS_INC_STD_number_short($mValue, $mMaxPrec = 2)
  **/
 function MELBIS_INC_STD_get_date() 
 {
-    return gmdate("Y-m-d", time() + (3600 * SHOP_GMT));
+    $offset = timezone_offset_get(timezone_open(TIME_ZONE), new DateTime("now", new DateTimeZone("GMT")));
+
+    return gmdate("Y-m-d", time() + $offset);
 }
 
 /** 
@@ -126,7 +128,8 @@ function MELBIS_INC_STD_get_date()
 function MELBIS_INC_STD_get_week() 
 {
 
-    $time = time() + (3600 * SHOP_GMT);
+    $offset = timezone_offset_get(timezone_open(TIME_ZONE), new DateTime("now", new DateTimeZone("GMT")));
+    $time = time() + $offset;
     $now_day = gmdate("w", $time);
     if ( $now_day == 0 ) $now_day = 7;
     
@@ -139,7 +142,9 @@ function MELBIS_INC_STD_get_week()
  **/
 function MELBIS_INC_STD_get_month() 
 {
-    return gmdate("Y-m-1",  time() + (3600 * SHOP_GMT) );
+    $offset = timezone_offset_get(timezone_open(TIME_ZONE), new DateTime("now", new DateTimeZone("GMT")));
+
+    return gmdate("Y-m-1",  time() + $offset );
 }
 
 /** 
@@ -148,7 +153,9 @@ function MELBIS_INC_STD_get_month()
  **/
 function MELBIS_INC_STD_get_time() 
 {
-    return gmdate("H:i:s", time() + (3600 * SHOP_GMT));
+    $offset = timezone_offset_get(timezone_open(TIME_ZONE), new DateTime("now", new DateTimeZone("GMT")));
+
+    return gmdate("H:i:s", time() + $offset);
 }
 
 /** 
@@ -157,7 +164,9 @@ function MELBIS_INC_STD_get_time()
  **/
 function MELBIS_INC_STD_get_now($mFormat = "Y-m-d H:i:s") 
 {
-    return gmdate($mFormat, time() + (3600 * SHOP_GMT));
+    $offset = timezone_offset_get(timezone_open(TIME_ZONE), new DateTime("now", new DateTimeZone("GMT")));
+
+    return gmdate($mFormat, time() + $offset);
 }
 
 /** 
@@ -166,7 +175,9 @@ function MELBIS_INC_STD_get_now($mFormat = "Y-m-d H:i:s")
  **/
 function MELBIS_INC_STD_make_date($mOffSet, $mFormat = "Y-m-d H:i:s") 
 {
-    return gmdate($mFormat, time() + (3600 * SHOP_GMT) + $mOffSet);
+    $offset = timezone_offset_get(timezone_open(TIME_ZONE), new DateTime("now", new DateTimeZone("GMT")));
+
+    return gmdate($mFormat, time() + $offset + $mOffSet);
 }
 
 /** 
@@ -175,7 +186,9 @@ function MELBIS_INC_STD_make_date($mOffSet, $mFormat = "Y-m-d H:i:s")
  **/
 function MELBIS_INC_STD_make_time($mOffSet, $mFormat = "H:i:s") 
 {
-    return gmdate($mFormat, time() + (3600 * SHOP_GMT) + $mOffSet);
+    $offset = timezone_offset_get(timezone_open(TIME_ZONE), new DateTime("now", new DateTimeZone("GMT")));
+
+    return gmdate($mFormat, time() + $offset + $mOffSet);
 }
  
 /** 

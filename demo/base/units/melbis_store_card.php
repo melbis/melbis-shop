@@ -16,7 +16,7 @@ function MELBIS_STORE_CARD($mVars)
                        
     // Create 
     $tpl = $gParser->TplCreate();
-            
+
     // Get goods                  
     $command = "SELECT s.*,
                        IF(c.id IS NULL, s.price, 
