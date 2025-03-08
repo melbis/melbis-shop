@@ -27,12 +27,16 @@ $gParser->DefineSelfConst();
 // Define session
 $gSession = $gParser->DefineSession(DB_USER_NAME.'_MELBIS_SHOP');
 
+// Define lazy load script
+$gParser->DefineLazyScript($gSitePath.'/lazy.php');
+
 // Define module
 if ( isset($gGet['topic_id']) ) $gGet['mod'] = 'melbis_base_topic';
 if ( !isset($gGet['mod']) ) $gGet['mod'] = 'melbis_base_index'; 
 
 // Parse
 $gParser->Parse($gSitePath, $gTemplate, $gGet['mod'], [serialize($gGet), serialize($gPost)], $gUseCache, $gBuild);
+
 
 // Publish
 $gParser->Publish();

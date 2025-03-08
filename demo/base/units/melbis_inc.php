@@ -12,14 +12,15 @@ error_reporting(E_ALL);
 ini_set('display_errors', 'off');      
 set_error_handler(function ($mError, $mMessage, $mFile, $mLine) 
     {    
-        if ( error_reporting() !== 0 ) 
+        $error = error_reporting();
+        if ( $error !== 0 && $error != 4437 ) 
             MELBIS_INC_halt('PHP Runtime Exception', $mFile.' : '.$mLine, $mMessage); 
     });
 register_shutdown_function(function ()
     {
         $error = error_get_last();
         if ( isset($error) && $error["type"] == E_ERROR )
-            MELBIS_INC_halt('PHP Runtime Exception', $error["file"].' : '.$error["line"], $error["message"]); 
+            MELBIS_INC_halt('PHP Shutdown Exception', $error["file"].' : '.$error["line"], $error["message"]); 
     });
 
 // Set Local Setting 
