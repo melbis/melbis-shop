@@ -37,7 +37,6 @@ if ( !isset($gGet['mod']) ) $gGet['mod'] = 'melbis_base_index';
 // Parse
 $gParser->Parse($gSitePath, $gTemplate, $gGet['mod'], [serialize($gGet), serialize($gPost)], $gUseCache, $gBuild);
 
-
 // Publish
 $gParser->Publish();
 
