@@ -4,8 +4,8 @@
  * index.php - index page
  * 
  ***************************************************************************************************
- * @version 6.3.0
- * @copyright 2019 Melbis Company
+ * @version 6.4.0
+ * @copyright 2025 Melbis Company
  * @link https://melbis.com
  * @author Dmitriy Kasyanoff
  **************************************************************************************************/                             

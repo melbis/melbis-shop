@@ -3,8 +3,8 @@
  * init_set.sql - Server database initial set
  * 
  ************************************************************************************************************
- * @version 6.3.0
- * @copyright 2019 Melbis Company
+ * @version 6.4.0
+ * @copyright 2025 Melbis Company
  * @link https://melbis.com
  * @author Dmitriy Kasyanoff
  ************************************************************************************************************/
@@ -28,6 +28,11 @@ INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('advert_text', 0)
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('advert_goods', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('advert_link', 0);
 
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('lang', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('trans', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('trans_origin', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('trans_lang', 0);
+
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('brand', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('brand_key', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('brand_key_value', 0);
@@ -44,6 +49,7 @@ INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('disc_group', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('disc_rate', 0);
 
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('files_advert_text', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('files_lang', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('files_brand', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('files_field', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('files_info', 0);

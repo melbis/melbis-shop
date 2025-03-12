@@ -3,8 +3,8 @@
  * install.sql - Server database structure
  * 
  ************************************************************************************************************
- * @version 6.3.0
- * @copyright 2019 Melbis Company
+ * @version 6.4.0
+ * @copyright 2025 Melbis Company
  * @link https://melbis.com
  * @author Dmitriy Kasyanoff
  ************************************************************************************************************/
@@ -972,6 +972,102 @@ CREATE TABLE {DBNICK}_store_param (
    KEY param_id (param_id),
    KEY value_id (value_id),
    KEY store_value (store_id, value_id)
+) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+
+
+/**
+ * Table lang
+ **/
+DROP TABLE IF EXISTS {DBNICK}_lang;
+CREATE TABLE {DBNICK}_lang (
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   skey 	      CHAR(32) DEFAULT '' NOT NULL,
+   name 	      CHAR(255) DEFAULT '' NOT NULL,
+   descr       MEDIUMTEXT DEFAULT ('') NOT NULL,
+   kind_key 	CHAR(100) DEFAULT '' NOT NULL,
+   params	   CHAR(255) DEFAULT '' NOT NULL,
+   pos         INT UNSIGNED DEFAULT '0' NOT NULL,
+   PRIMARY KEY (id)
+) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+
+/**
+ * Table files_lang
+ **/
+DROP TABLE IF EXISTS {DBNICK}_files_lang;
+CREATE TABLE {DBNICK}_files_lang (
+   id		      INT UNSIGNED DEFAULT '0' NOT NULL,
+   elem_id	   INT UNSIGNED DEFAULT NULL,
+   kind_key 	CHAR(100) DEFAULT '' NOT NULL,
+   file_name 	CHAR(100) DEFAULT '' NOT NULL,
+   file_size	INT UNSIGNED DEFAULT '0' NOT NULL,
+   upload_time DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,
+   upload_ok 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   real_name	CHAR(255) DEFAULT '' NOT NULL,
+   parent_id	INT UNSIGNED DEFAULT NULL,
+   format_xml 	MEDIUMTEXT DEFAULT ('') NOT NULL,
+   pos		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   PRIMARY KEY (id),
+   KEY elem_id (elem_id)
+) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+
+
+/**
+ * Table trans
+ **/
+DROP TABLE IF EXISTS {DBNICK}_trans;
+CREATE TABLE {DBNICK}_trans (
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   skey 	      CHAR(32) DEFAULT '' NOT NULL,
+   name 	      CHAR(255) DEFAULT '' NOT NULL,
+   tindex 	   INT UNSIGNED DEFAULT '0' NOT NULL,
+   tlevel 	   INT UNSIGNED DEFAULT '0' NOT NULL,
+   absindex 	INT UNSIGNED DEFAULT '0' NOT NULL,
+   folder 	   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   kind_key 	CHAR(100) DEFAULT '' NOT NULL,
+   table_key 	CHAR(32) DEFAULT '' NOT NULL,
+   PRIMARY KEY (id)
+) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+
+
+
+/**
+ * Table trans_origin
+ **/
+DROP TABLE IF EXISTS {DBNICK}_trans_origin;
+CREATE TABLE {DBNICK}_trans_origin (
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   trans_id	   INT UNSIGNED DEFAULT NULL,
+   item_id	   INT UNSIGNED DEFAULT NULL,
+   item_code 	CHAR(32) DEFAULT '' NOT NULL,
+   context     CHAR(255) DEFAULT '' NOT NULL,
+   origin      MEDIUMTEXT DEFAULT ('') NOT NULL,
+   crc 	      CHAR(32) DEFAULT '' NOT NULL,
+   kind_key 	CHAR(100) DEFAULT '' NOT NULL,
+   params      CHAR(255) DEFAULT '' NOT NULL,
+   is_active   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   PRIMARY KEY (id),
+   KEY trans_id (trans_id),
+   KEY item_id (item_id),
+   KEY item_code (item_code)   
+) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+
+
+/**
+ * Table trans_lang
+ **/
+DROP TABLE IF EXISTS {DBNICK}_trans_lang;
+CREATE TABLE {DBNICK}_trans_lang (
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   lang_id	   INT UNSIGNED DEFAULT NULL,
+   trans_id	   INT UNSIGNED DEFAULT NULL,
+   origin_id   INT UNSIGNED DEFAULT NULL,
+   translate   MEDIUMTEXT DEFAULT ('') NOT NULL,
+   is_approve  TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   is_error    TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   PRIMARY KEY (id),
+   KEY lang_id (lang_id),
+   KEY trans_id (trans_id),
+   KEY origin_id (origin_id)
 ) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
 
 

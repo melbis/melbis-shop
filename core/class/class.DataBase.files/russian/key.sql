@@ -3,8 +3,8 @@
  * key_set.sql - Server database initial set
  * 
  ************************************************************************************************************
- * @version 6.3.0
- * @copyright 2019 Melbis Company
+ * @version 6.4.0
+ * @copyright 2025 Melbis Company
  * @link https://melbis.com
  * @author Dmitriy Kasyanoff
  ************************************************************************************************************/
@@ -54,61 +54,69 @@ INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALU
 INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('94', 'code 94', '------------------ Компоненты --------------------', '0', '0', '35', '1');
 INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('91', 'code 91', 'Фильтры товаров', '94', '1', '36', '1');
 INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('69', 'TOPIC_FILTER_KIND_KEY', 'Тип', '91', '2', '37', '0');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('54', 'code 54', 'Промо-блоки', '94', '1', '38', '1');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('55', 'ADVERT_KIND_KEY', 'Тип блока', '54', '2', '39', '0');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('57', 'code 57', 'Текст', '54', '2', '40', '1');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('56', 'ADVERT_TEXT_KIND_KEY', 'Тип', '57', '3', '41', '0');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('58', 'FILES_ADVERT_TEXT', 'Группы файлов', '57', '3', '42', '0');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('101', 'code 101', 'Товары', '54', '2', '43', '1');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('60', 'ADVERT_GOODS_KIND_KEY', 'Тип', '101', '3', '44', '0');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('102', 'code 102', 'Привязка', '54', '2', '45', '1');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('103', 'ADVERT_LINK_OBJ_KEY', 'Объект', '102', '3', '46', '0');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('61', 'ADVERT_LINK_KIND_KEY', 'Тип', '102', '3', '47', '0');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('127', 'code 127', 'Планировщик', '94', '1', '48', '1');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('128', 'TASK_KIND_KEY', 'Тип', '127', '2', '49', '0');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('129', 'TASK_STATE_KEY', 'Статус', '127', '2', '50', '0');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('130', 'code 130', 'Опции модулей', '94', '1', '51', '1');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('131', 'code 131', 'Наименование', '130', '2', '52', '1');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('133', 'WEB_KEY_KIND_KEY', 'Тип', '131', '3', '53', '0');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('134', 'FILES_WEB_KEY', 'Группы файлов', '131', '3', '54', '0');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('132', 'code 132', 'Значение', '130', '2', '55', '1');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('135', 'WEB_KEY_VALUE_KIND_KEY', 'Тип', '132', '3', '56', '0');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('136', 'FILES_WEB_KEY_VALUE', 'Группы файлов', '132', '3', '57', '0');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('70', 'code 70', '-------------- Покупатели и заказы --------------', '0', '0', '58', '1');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('71', 'code 71', 'Покупатели', '70', '1', '59', '1');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('72', 'code 72', 'Регистрация', '71', '2', '60', '1');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('86', 'code 86', 'Поле', '72', '3', '61', '1');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('73', 'FIELD_KIND_KEY', 'Тип', '86', '4', '62', '0');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('74', 'FIELD_SPEC_KEY', 'Спец', '86', '4', '63', '0');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('87', 'code 87', 'Значение', '72', '3', '64', '1');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('75', 'FIELD_VALUE_KIND_KEY', 'Тип', '87', '4', '65', '0');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('76', 'code 76', 'Заказы', '70', '1', '66', '1');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('111', 'code 111', 'Опции товаров', '76', '2', '67', '1');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('112', 'code 112', 'Опция', '111', '3', '68', '1');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('113', 'ORDER_STORE_OPTION_KIND_KEY', 'Тип', '112', '4', '69', '0');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('88', 'code 88', 'Опции заказов', '76', '2', '70', '1');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('77', 'code 77', 'Опция', '88', '3', '71', '1');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('78', 'ORDER_OPTION_KIND_KEY', 'Тип', '77', '4', '72', '0');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('84', 'code 84', 'Значение опции', '88', '3', '73', '1');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('79', 'ORDER_OPTION_VALUE_KIND_KEY', 'Тип', '84', '4', '74', '0');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('106', 'code 106', '------------- Вызываемые модули ---------------', '0', '0', '75', '1');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('80', 'code 80', 'Заказы', '106', '1', '76', '1');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('81', 'MODULE_ORDER_VERSION_CALC', 'Калькуляция', '80', '2', '77', '0');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('83', 'MODULE_ORDER_VERSION_ADD', 'Редактирование', '80', '2', '78', '0');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('107', 'ORDER_TRANSPORT', 'Параметры передачи', '80', '2', '79', '0');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('118', 'code 118', 'Диспетчер', '106', '1', '80', '1');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('116', 'MODULE_NOTIFICATION', 'Обнаружение событий', '118', '2', '81', '0');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('117', 'EVENT_NOTIFICATION', 'Список событий', '118', '2', '82', '0');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('8', 'FILES_KEY_VALUE', '------------- Настройки редакторов -------------', '0', '0', '83', '1');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('66', 'code 66', 'Редактор изображений', '8', '1', '84', '1');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('9', 'FILES_PROFILE', 'Профайлы', '66', '2', '85', '0');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('7', 'FILES_MASK', 'Файлы-маски', '66', '2', '86', '0');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('67', 'code 67', 'HTML-редактор', '8', '1', '87', '1');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('65', 'HTML_OPTION', 'Настройки', '67', '2', '88', '0');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('123', 'HTML_TAG', 'Теги', '67', '2', '89', '0');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('124', 'HTML_CLASS', 'Классы', '67', '2', '90', '0');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('125', 'HTML_TEMPLATE', 'Шаблоны', '67', '2', '91', '0');
-UPDATE {DBNICK}_generator SET gen_value = 0 WHERE table_name = 'key';
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('142', 'code 142', 'Мультиязычность', '94', '1', '38', '1');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('143', 'code 143', 'Язык', '142', '2', '39', '1');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('144', 'LANG_KIND_KEY', 'Тип', '143', '3', '40', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('145', 'code 145', 'Категория', '142', '2', '41', '1');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('146', 'TRANS_KIND_KEY', 'Тип', '145', '3', '42', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('149', 'TRANS_TABLE_KEY', 'Данные', '145', '3', '43', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('147', 'code 147', 'Оригинал', '142', '2', '44', '1');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('148', 'TRANS_ORIGIN_KIND_KEY', 'Тип', '147', '3', '45', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('54', 'code 54', 'Промо-блоки', '94', '1', '46', '1');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('55', 'ADVERT_KIND_KEY', 'Тип блока', '54', '2', '47', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('57', 'code 57', 'Текст', '54', '2', '48', '1');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('56', 'ADVERT_TEXT_KIND_KEY', 'Тип', '57', '3', '49', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('58', 'FILES_ADVERT_TEXT', 'Группы файлов', '57', '3', '50', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('101', 'code 101', 'Товары', '54', '2', '51', '1');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('60', 'ADVERT_GOODS_KIND_KEY', 'Тип', '101', '3', '52', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('102', 'code 102', 'Привязка', '54', '2', '53', '1');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('103', 'ADVERT_LINK_OBJ_KEY', 'Объект', '102', '3', '54', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('61', 'ADVERT_LINK_KIND_KEY', 'Тип', '102', '3', '55', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('127', 'code 127', 'Планировщик', '94', '1', '56', '1');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('128', 'TASK_KIND_KEY', 'Тип', '127', '2', '57', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('129', 'TASK_STATE_KEY', 'Статус', '127', '2', '58', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('130', 'code 130', 'Опции модулей', '94', '1', '59', '1');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('131', 'code 131', 'Наименование', '130', '2', '60', '1');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('133', 'WEB_KEY_KIND_KEY', 'Тип', '131', '3', '61', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('134', 'FILES_WEB_KEY', 'Группы файлов', '131', '3', '62', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('132', 'code 132', 'Значение', '130', '2', '63', '1');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('135', 'WEB_KEY_VALUE_KIND_KEY', 'Тип', '132', '3', '64', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('136', 'FILES_WEB_KEY_VALUE', 'Группы файлов', '132', '3', '65', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('70', 'code 70', '-------------- Покупатели и заказы --------------', '0', '0', '66', '1');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('71', 'code 71', 'Покупатели', '70', '1', '67', '1');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('72', 'code 72', 'Регистрация', '71', '2', '68', '1');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('86', 'code 86', 'Поле', '72', '3', '69', '1');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('73', 'FIELD_KIND_KEY', 'Тип', '86', '4', '70', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('74', 'FIELD_SPEC_KEY', 'Спец', '86', '4', '71', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('87', 'code 87', 'Значение', '72', '3', '72', '1');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('75', 'FIELD_VALUE_KIND_KEY', 'Тип', '87', '4', '73', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('76', 'code 76', 'Заказы', '70', '1', '74', '1');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('111', 'code 111', 'Опции товаров', '76', '2', '75', '1');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('112', 'code 112', 'Опция', '111', '3', '76', '1');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('113', 'ORDER_STORE_OPTION_KIND_KEY', 'Тип', '112', '4', '77', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('88', 'code 88', 'Опции заказов', '76', '2', '78', '1');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('77', 'code 77', 'Опция', '88', '3', '79', '1');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('78', 'ORDER_OPTION_KIND_KEY', 'Тип', '77', '4', '80', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('84', 'code 84', 'Значение опции', '88', '3', '81', '1');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('79', 'ORDER_OPTION_VALUE_KIND_KEY', 'Тип', '84', '4', '82', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('106', 'code 106', '------------- Вызываемые модули ---------------', '0', '0', '83', '1');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('80', 'code 80', 'Заказы', '106', '1', '84', '1');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('81', 'MODULE_ORDER_VERSION_CALC', 'Калькуляция', '80', '2', '85', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('83', 'MODULE_ORDER_VERSION_ADD', 'Редактирование', '80', '2', '86', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('107', 'ORDER_TRANSPORT', 'Параметры передачи', '80', '2', '87', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('118', 'code 118', 'Диспетчер', '106', '1', '88', '1');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('116', 'MODULE_NOTIFICATION', 'Обнаружение событий', '118', '2', '89', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('117', 'EVENT_NOTIFICATION', 'Список событий', '118', '2', '90', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('8', 'FILES_KEY_VALUE', '------------- Настройки редакторов -------------', '0', '0', '91', '1');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('66', 'code 66', 'Редактор изображений', '8', '1', '92', '1');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('9', 'FILES_PROFILE', 'Профайлы', '66', '2', '93', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('7', 'FILES_MASK', 'Файлы-маски', '66', '2', '94', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('67', 'code 67', 'HTML-редактор', '8', '1', '95', '1');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('65', 'HTML_OPTION', 'Настройки', '67', '2', '96', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('123', 'HTML_TAG', 'Теги', '67', '2', '97', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('124', 'HTML_CLASS', 'Классы', '67', '2', '98', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('125', 'HTML_TEMPLATE', 'Шаблоны', '67', '2', '99', '0');
+UPDATE {DBNICK}_generator SET gen_value = 149 WHERE table_name = 'key';
 
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, value_txt, sys_key, pos) VALUES ('1', 'INFO_KIND_KEY', 'kDefault', 'По умолчанию', '1', '1');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, value_txt, sys_key, pos) VALUES ('3', 'FILES_INFO', 'kBase', 'Исходный файл', '1', '1');
@@ -220,4 +228,10 @@ INSERT INTO {DBNICK}_key_value (id, key_code, key_name, value_txt, sys_key, pos)
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, value_txt, sys_key, pos) VALUES ('289', 'STORE_SET_OBJ_KEY', 'kGoods', 'К товару', '1', '289');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, value_txt, sys_key, pos) VALUES ('290', 'STORE_SET_OBJ_KEY', 'kTopic', 'К разделу', '1', '290');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, value_txt, sys_key, pos) VALUES ('291', 'HTML_OPTION', 'kPostProcess', 'editor.find("span.Apple-tab-span").replaceWith("&nbsp;");', '1', '291');
-UPDATE {DBNICK}_generator SET gen_value = 291 WHERE table_name = 'key_value';
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, value_txt, sys_key, pos) VALUES ('292', 'LANG_KIND_KEY', 'kDefault', 'По умолчанию', '1', '292');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, value_txt, sys_key, pos) VALUES ('293', 'TRANS_KIND_KEY', 'kDefault', 'По умолчанию', '1', '293');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, value_txt, sys_key, pos) VALUES ('294', 'TRANS_ORIGIN_KIND_KEY', 'kDefault', 'По умолчанию', '1', '294');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, value_txt, sys_key, pos) VALUES ('295', 'TRANS_TABLE_KEY', 'kDefault', 'По умолчанию', '1', '295');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, value_txt, sys_key, pos) VALUES ('296', 'TRANS_TABLE_KEY', 'kTopic', 'Разделы', '0', '296');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, value_txt, sys_key, pos) VALUES ('297', 'TRANS_TABLE_KEY', 'kStore', 'Товары', '0', '297');
+UPDATE {DBNICK}_generator SET gen_value = 298 WHERE table_name = 'key_value';
