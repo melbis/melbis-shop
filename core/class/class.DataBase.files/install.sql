@@ -986,6 +986,7 @@ CREATE TABLE {DBNICK}_lang (
    descr       MEDIUMTEXT DEFAULT ('') NOT NULL,
    kind_key 	CHAR(100) DEFAULT '' NOT NULL,
    params	   CHAR(255) DEFAULT '' NOT NULL,
+   is_origin 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    pos         INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id)
 ) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
@@ -1045,6 +1046,7 @@ CREATE TABLE {DBNICK}_trans_origin (
    kind_key 	CHAR(100) DEFAULT '' NOT NULL,
    params      CHAR(255) DEFAULT '' NOT NULL,
    is_active   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   pos          INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY trans_id (trans_id),
    KEY item_id (item_id),
@@ -2367,6 +2369,19 @@ CREATE TABLE {DBNICK}_tmp_store (
  **/
 DROP TABLE IF EXISTS {DBNICK}_tmp_store_comment;
 CREATE TABLE {DBNICK}_tmp_store_comment (
+   id 		INT UNSIGNED DEFAULT '0' NOT NULL,
+   user_id	INT UNSIGNED DEFAULT NULL,
+   UNIQUE (user_id, id)
+) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+
+
+-- Trans List for import data 
+
+/**
+ * Table tmp_topic
+ **/
+DROP TABLE IF EXISTS {DBNICK}_tmp_trans;
+CREATE TABLE {DBNICK}_tmp_trans (
    id 		INT UNSIGNED DEFAULT '0' NOT NULL,
    user_id	INT UNSIGNED DEFAULT NULL,
    UNIQUE (user_id, id)
