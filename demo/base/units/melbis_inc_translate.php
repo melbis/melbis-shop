@@ -42,11 +42,11 @@ function MELBIS_INC_TRANSLATE_google($mText, $mContext, $mLangFrom, $mLangTo, $m
                   'format'      => ( $mHtml ) ? 'html' : 'text',
                   'source'      => $mLangFrom,
                   'model'       => 'nmt',
-                  'key'         => 'AIzaSyBaR5NstqckQ2N-p7yb-1GY5gjkEpnmmTg'
+                  'key'         => 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
                   );
     $ch = curl_init();    
     curl_setopt($ch, CURLOPT_URL, 'https://translation.googleapis.com/language/translate/v2');
-    //curl_setopt($ch, CURLOPT_REFERER, 'https://astroscope.com.ua');
+    curl_setopt($ch, CURLOPT_REFERER, 'https://site.com');
     curl_setopt($ch, CURLOPT_POST, true);  
     curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
     curl_setopt($ch, CURLOPT_ENCODING, "gzip");
@@ -93,7 +93,7 @@ function MELBIS_INC_TRANSLATE_deepl($mText, $mContext, $mLangFrom, $mLangTo, $mH
     //$ch = curl_init('https://api.deepl.com/v2/translate'); 
     $ch = curl_init('https://api-free.deepl.com/v2/translate');
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Authorization: DeepL-Auth-Key 57098793-9d18-4c85-a3f8-c984e2699c38:fx',
+        'Authorization: DeepL-Auth-Key XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
         'Content-Type: application/json',
     ]);
     curl_setopt($ch, CURLOPT_POST, 1);
