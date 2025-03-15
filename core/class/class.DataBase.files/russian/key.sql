@@ -16,6 +16,7 @@
  *
  **/
 
+ 
 INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('95', 'code 95', '------------- Каталог и товары ----------------', '0', '0', '0', '1');
 INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('24', 'TOPIC_ALT_KIND_KEY', 'Альтернативные каталоги', '95', '1', '1', '0');
 INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('22', 'code 22', 'Разделы', '95', '1', '2', '1');
@@ -107,16 +108,18 @@ INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALU
 INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('118', 'code 118', 'Диспетчер', '106', '1', '88', '1');
 INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('116', 'MODULE_NOTIFICATION', 'Обнаружение событий', '118', '2', '89', '0');
 INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('117', 'EVENT_NOTIFICATION', 'Список событий', '118', '2', '90', '0');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('8', 'FILES_KEY_VALUE', '------------- Настройки редакторов -------------', '0', '0', '91', '1');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('66', 'code 66', 'Редактор изображений', '8', '1', '92', '1');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('9', 'FILES_PROFILE', 'Профайлы', '66', '2', '93', '0');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('7', 'FILES_MASK', 'Файлы-маски', '66', '2', '94', '0');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('67', 'code 67', 'HTML-редактор', '8', '1', '95', '1');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('65', 'HTML_OPTION', 'Настройки', '67', '2', '96', '0');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('123', 'HTML_TAG', 'Теги', '67', '2', '97', '0');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('124', 'HTML_CLASS', 'Классы', '67', '2', '98', '0');
-INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('125', 'HTML_TEMPLATE', 'Шаблоны', '67', '2', '99', '0');
-UPDATE {DBNICK}_generator SET gen_value = 149 WHERE table_name = 'key';
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('150', 'code 150', 'Мультиязычность', '106', '1', '91', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('151', 'MODULE_TRANSLATE', 'Переводчик', '150', '2', '92', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('8', 'FILES_KEY_VALUE', '------------- Настройки редакторов -------------', '0', '0', '93', '1');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('66', 'code 66', 'Редактор изображений', '8', '1', '94', '1');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('9', 'FILES_PROFILE', 'Профайлы', '66', '2', '95', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('7', 'FILES_MASK', 'Файлы-маски', '66', '2', '96', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('67', 'code 67', 'HTML-редактор', '8', '1', '97', '1');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('65', 'HTML_OPTION', 'Настройки', '67', '2', '98', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('123', 'HTML_TAG', 'Теги', '67', '2', '99', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('124', 'HTML_CLASS', 'Классы', '67', '2', '100', '0');
+INSERT INTO {DBNICK}_key (id, code, name, tindex, tlevel, absindex, folder) VALUES ('125', 'HTML_TEMPLATE', 'Шаблоны', '67', '2', '101', '0');
+UPDATE {DBNICK}_generator SET gen_value = 151 WHERE table_name = 'key';
 
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, value_txt, sys_key, pos) VALUES ('1', 'INFO_KIND_KEY', 'kDefault', 'По умолчанию', '1', '1');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, value_txt, sys_key, pos) VALUES ('3', 'FILES_INFO', 'kBase', 'Исходный файл', '1', '1');
@@ -234,4 +237,5 @@ INSERT INTO {DBNICK}_key_value (id, key_code, key_name, value_txt, sys_key, pos)
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, value_txt, sys_key, pos) VALUES ('295', 'TRANS_TABLE_KEY', 'kDefault', 'По умолчанию', '1', '295');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, value_txt, sys_key, pos) VALUES ('296', 'TRANS_TABLE_KEY', 'kTopic', 'Разделы', '0', '296');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, value_txt, sys_key, pos) VALUES ('297', 'TRANS_TABLE_KEY', 'kStore', 'Товары', '0', '297');
-UPDATE {DBNICK}_generator SET gen_value = 298 WHERE table_name = 'key_value';
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, value_txt, sys_key, pos) VALUES ('299', 'MODULE_TRANSLATE', 'melbis_inc_translate.php', 'MELBIS_INC_TRANSLATE_service', '0', '299');
+UPDATE {DBNICK}_generator SET gen_value = 299 WHERE table_name = 'key_value';

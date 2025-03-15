@@ -151,12 +151,13 @@ INSERT INTO {DBNICK}_topic (id, name, kind_key, templ_key, order_key) VALUES (1,
  *
  ***************************************************************/
 
-INSERT INTO {DBNICK}_web_outside VALUES ('1','','Магазин','0','0','0','0','http://ms6.com','0');
-INSERT INTO {DBNICK}_web_outside VALUES ('2','TEST','Тестовый модуль','0','0','1','0','http://ms6.com/?mod=melbis_web_test','1');
+INSERT INTO {DBNICK}_web_outside VALUES ('1','','Магазин','0','0','0','0','https://shop.melbis.com','0');
+INSERT INTO {DBNICK}_web_outside VALUES ('2','TEST','Тестовый модуль','0','0','1','0','https://shop.melbis.com/?mod=melbis_web_test','1');
 INSERT INTO {DBNICK}_web_outside VALUES ('3','','Поисковая система','0','0','2','0','https://google.com','0');
 
-INSERT INTO {DBNICK}_web_inside VALUES ('1','TEST','0','Тестовый модуль','http://ms6.com/?mod=melbis_web_test','1','1');
-INSERT INTO {DBNICK}_web_inside VALUES ('2','TEST','1','Тестовый модуль','http://ms6.com/?mod=melbis_web_test','1','1');
-INSERT INTO {DBNICK}_web_inside VALUES ('3','TEST','2','Тестовый модуль','http://ms6.com/?mod=melbis_web_test','1','1');
-INSERT INTO {DBNICK}_web_inside VALUES ('4','TEST','3','Тестовый модуль','http://ms6.com/?mod=melbis_web_test','1','1');
+INSERT INTO {DBNICK}_web_inside VALUES ('1','TEST','0','Тестовый модуль','https://shop.melbis.com/?mod=melbis_web_test','1','1');
+INSERT INTO {DBNICK}_web_inside VALUES ('2','TEST','1','Тестовый модуль','https://shop.melbis.com/?mod=melbis_web_test','1','1');
+INSERT INTO {DBNICK}_web_inside VALUES ('3','TEST','2','Тестовый модуль','https://shop.melbis.com/?mod=melbis_web_test','1','1');
+INSERT INTO {DBNICK}_web_inside VALUES ('4','TEST','3','Тестовый модуль','https://shop.melbis.com/?mod=melbis_web_test','1','1');
+INSERT INTO {DBNICK}_web_inside VALUES ('5','TEST','4','Тестовый модуль','https://shop.melbis.com/?mod=melbis_web_test','1','1');
 
