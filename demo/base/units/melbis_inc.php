@@ -18,7 +18,7 @@ set_error_handler(function ($mError, $mMessage, $mFile, $mLine)
 register_shutdown_function(function ()
     {
         $error = error_get_last();
-        if ( isset($error) && $error["type"] == E_ERROR )
+        if ( isset($error) && ( $error["type"] == E_ERROR || $error["type"] == E_WARNING || $error["type"] == E_PARSE ) )
             MELBIS_INC_halt('PHP Shutdown Exception', $error["file"].' : '.$error["line"], $error["message"]); 
     });
 
