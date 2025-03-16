@@ -8,7 +8,7 @@
 
 // Core version
 define('SCRIPT_VERSION', '6.4.0');
-define('SCRIPT_BUILD', '59');
+define('SCRIPT_BUILD', '60');
  
 // PHP error control
 error_reporting(E_ALL);  
