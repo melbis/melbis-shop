@@ -5,7 +5,11 @@
  * @link https://melbis.com
  * @author Dmitriy Kasyanoff         
  **************************************************************************************************/
-    
+
+// Core version
+define('SCRIPT_VERSION', '6.4.0');
+define('SCRIPT_BUILD', '58');
+ 
 // PHP error control
 error_reporting(E_ALL);  
 ini_set('display_errors', 'off');      
