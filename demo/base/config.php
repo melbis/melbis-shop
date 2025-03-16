@@ -1,6 +1,4 @@
 <?php
-define('SCRIPT_VERSION', '6.4.0');
-define('SCRIPT_BUILD', '58');
 define('DB_HOST_NAME', 'db');
 define('DB_USER_NAME', 'melbis_user');
 define('DB_USER_PASS', 'melbis_pass');
