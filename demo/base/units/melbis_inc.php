@@ -6,9 +6,8 @@
  * @author Dmitriy Kasyanoff         
  **************************************************************************************************/
 
-// Core version
-define('SCRIPT_VERSION', '6.4.0');
-define('SCRIPT_BUILD', '62');
+ // Core
+require_once('core/core.php');
  
 // PHP error control
 error_reporting(E_ALL);  
