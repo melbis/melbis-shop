@@ -38,6 +38,19 @@ function MELBIS_INC_STD_path($mFile)
     return $gSitePath.'files/'.$y.'/'.$m.'_'.$d.'/'.$h.'_'.$n.'/'.$mFile['file_name']; 
 } 
 
+/** 
+ * Function MELBIS_INC_STD_text
+ * Return text with rigth path images
+ **/
+function MELBIS_INC_STD_text($mText) 
+{
+    global $gSitePath;
+        
+    $text = str_replace('src="files/2', 'src="'.$gSitePath.'files/2', $mText);
+    $text = str_replace('href="files/2', 'href="'.$gSitePath.'files/2', $text);
+
+    return $text;
+} 
  
 /** 
  * Function MELBIS_INC_STD_utf_decode
@@ -116,9 +129,10 @@ function MELBIS_INC_STD_number_short($mValue, $mMaxPrec = 2)
  **/
 function MELBIS_INC_STD_get_date() 
 {
-    $offset = timezone_offset_get(timezone_open(TIME_ZONE), new DateTime("now", new DateTimeZone("GMT")));
+    $date = new DateTime('now', new DateTimeZone(TIME_ZONE));
 
-    return gmdate("Y-m-d", time() + $offset);
+    return $date->format("Y-m-d");     
+
 }
 
 /** 
@@ -128,12 +142,11 @@ function MELBIS_INC_STD_get_date()
 function MELBIS_INC_STD_get_week() 
 {
 
-    $offset = timezone_offset_get(timezone_open(TIME_ZONE), new DateTime("now", new DateTimeZone("GMT")));
-    $time = time() + $offset;
-    $now_day = gmdate("w", $time);
-    if ( $now_day == 0 ) $now_day = 7;
-    
-    return gmdate("Y-m-d", $time - ($now_day-1)*86400 );
+    $date = new DateTime('now', new DateTimeZone(TIME_ZONE));
+    $now_day = (int)$date->format('N'); 
+    $date->modify('-'.($now_day - 1).' days');
+
+    return $date->format('Y-m-d');
 }
 
 /** 
@@ -142,9 +155,9 @@ function MELBIS_INC_STD_get_week()
  **/
 function MELBIS_INC_STD_get_month() 
 {
-    $offset = timezone_offset_get(timezone_open(TIME_ZONE), new DateTime("now", new DateTimeZone("GMT")));
+    $date = new DateTime('now', new DateTimeZone(TIME_ZONE));
 
-    return gmdate("Y-m-1",  time() + $offset );
+    return $date->format("Y-m-1");     
 }
 
 /** 
@@ -153,9 +166,9 @@ function MELBIS_INC_STD_get_month()
  **/
 function MELBIS_INC_STD_get_time() 
 {
-    $offset = timezone_offset_get(timezone_open(TIME_ZONE), new DateTime("now", new DateTimeZone("GMT")));
+    $date = new DateTime('now', new DateTimeZone(TIME_ZONE));
 
-    return gmdate("H:i:s", time() + $offset);
+    return $date->format("H:i:s");    
 }
 
 /** 
@@ -164,9 +177,9 @@ function MELBIS_INC_STD_get_time()
  **/
 function MELBIS_INC_STD_get_now($mFormat = "Y-m-d H:i:s") 
 {
-    $offset = timezone_offset_get(timezone_open(TIME_ZONE), new DateTime("now", new DateTimeZone("GMT")));
+    $date = new DateTime('now', new DateTimeZone(TIME_ZONE));
 
-    return gmdate($mFormat, time() + $offset);
+    return $date->format($mFormat);    
 }
 
 /** 
@@ -175,9 +188,10 @@ function MELBIS_INC_STD_get_now($mFormat = "Y-m-d H:i:s")
  **/
 function MELBIS_INC_STD_make_date($mOffSet, $mFormat = "Y-m-d H:i:s") 
 {
-    $offset = timezone_offset_get(timezone_open(TIME_ZONE), new DateTime("now", new DateTimeZone("GMT")));
+    $date = new DateTime('now', new DateTimeZone(TIME_ZONE));
+    $date->modify("{$mOffSet} seconds");
 
-    return gmdate($mFormat, time() + $offset + $mOffSet);
+    return $date->format($mFormat);
 }
 
 /** 
@@ -186,9 +200,10 @@ function MELBIS_INC_STD_make_date($mOffSet, $mFormat = "Y-m-d H:i:s")
  **/
 function MELBIS_INC_STD_make_time($mOffSet, $mFormat = "H:i:s") 
 {
-    $offset = timezone_offset_get(timezone_open(TIME_ZONE), new DateTime("now", new DateTimeZone("GMT")));
+    $date = new DateTime('now', new DateTimeZone(TIME_ZONE));
+    $date->modify("{$mOffSet} seconds");
 
-    return gmdate($mFormat, time() + $offset + $mOffSet);
+    return $date->format($mFormat);
 }
  
 /** 

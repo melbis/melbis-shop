@@ -8,7 +8,7 @@
 
 // Core version
 define('SCRIPT_VERSION', '6.4.0');
-define('SCRIPT_BUILD', '60');
+define('SCRIPT_BUILD', '61');
  
 // PHP error control
 error_reporting(E_ALL);  
@@ -107,7 +107,7 @@ function MELBIS_INC_halt($mErrorType, $mErrorFile, $mError, $mErrorInfo = '')
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="<?php echo '/templates/'.TEMPLATE.'/bootstrap.css'; ?>">
-    <title>System error in Melbis Shop <?php echo SCRIPT_VERSION; ?></title>
+    <title>System error in Melbis Shop <?php echo SCRIPT_VERSION.'.'.SCRIPT_BUILD; ?></title>
   </head>
   <body class="d-flex flex-column h-100 ">
     <main class="m-auto">
@@ -129,7 +129,7 @@ function MELBIS_INC_halt($mErrorType, $mErrorFile, $mError, $mErrorInfo = '')
     <footer class="footer mt-auto py-3 bg-light">
         <div class="container">
             <div class="d-flex justify-content-between">
-                <span class="text-muted mr-1">Powered by Melbis Shop <?php echo SCRIPT_VERSION; ?></span>
+                <span class="text-muted mr-1">Powered by Melbis Shop <?php echo SCRIPT_VERSION.'.'.SCRIPT_BUILD; ?></span>
                 <span class="text-muted"><a href="https://melbis.com" target="_blank">https://melbis.com</a></span>
             </div>            
         </div>

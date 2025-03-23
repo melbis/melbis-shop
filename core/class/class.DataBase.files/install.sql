@@ -2379,7 +2379,7 @@ CREATE TABLE {DBNICK}_tmp_store_comment (
 -- Trans List for import data 
 
 /**
- * Table tmp_topic
+ * Table tmp_trans
  **/
 DROP TABLE IF EXISTS {DBNICK}_tmp_trans;
 CREATE TABLE {DBNICK}_tmp_trans (
