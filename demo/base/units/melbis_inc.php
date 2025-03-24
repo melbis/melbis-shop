@@ -6,7 +6,7 @@
  * @author Dmitriy Kasyanoff         
  **************************************************************************************************/
 
- // Core
+// Core
 require_once('core/core.php');
  
 // PHP error control
