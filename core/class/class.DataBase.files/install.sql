@@ -1047,6 +1047,7 @@ CREATE TABLE {DBNICK}_trans_origin (
    params      CHAR(255) DEFAULT '' NOT NULL,
    is_active   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    is_html     TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   no_trans    TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    pos         INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY trans_id (trans_id),
