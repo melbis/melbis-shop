@@ -142,7 +142,7 @@ INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('web_key_value', 
  *
  ***************************************************************/
 
-INSERT INTO {DBNICK}_topic (id, name, kind_key, templ_key, order_key) VALUES (1, 'First Page', 'kFirst', 'kDefault', 'kDefault');
+INSERT INTO {DBNICK}_topic (id, name, kind_key, templ_key, order_key) VALUES (1, 'Root', 'kFirst', 'kDefault', 'kDefault');
 
 
 /****************************************************************

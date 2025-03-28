@@ -1,6 +1,38 @@
 # Basic rules
-DirectoryIndex index.html index.htm index.php
 AddDefaultCharset UTF-8
+DirectoryIndex index.html index.htm index.php
+Options -Indexes
+
+ErrorDocument 404 /en/404/
+
+RewriteEngine on
+
+# Language auto 
+RewriteCond %{HTTP:Accept-Language} ^en [NC]
+RewriteRule ^$ /en/ [L,R=301]
+
+RewriteCond %{HTTP:Accept-Language} ^ru [NC]
+RewriteRule ^$ /ru/ [L,R=301]
+
+RewriteCond %{HTTP:Accept-Language} ^uk [NC]
+RewriteRule ^$ /uk/ [L,R=301]
+
+# Default
+RewriteRule ^$ /en/ [L,R=301]
+
+# Base page  
+RewriteRule ^([a-z]{2})/$ index.php?lang=$1 [L,QSA]
+
+# Modules
+RewriteRule ^([a-z]{2})\/([A-Za-z0-9_\-]+)\.php$ $2.php?lang=$1 [L,QSA]
+
+# Core
+RewriteRule ^core\/([A-Za-z0-9_\-\.\+]+)\/$ index.php?mod=kasdim_core_$1 [L,B,QSA]
+
+# Cataloge pages
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([a-z]{2})\/(.+)$ index.php?mod=melbis_base_page&psu=$2&lang=$1 [L,QSA]
 
 
 

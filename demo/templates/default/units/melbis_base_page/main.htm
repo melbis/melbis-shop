@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="[MS:VAR:LANG]" class="h-100">
+    
+    {MELBIS:melbis_base_head([MS:VAR:LANG])}
+    
+    <body class="d-flex flex-column h-100">
+     
+        <script type="text/javascript"> var kasdim_topic_id = [KASDIM:PAGE:ID] </script>
+        
+        {1MELBIS:melbis_base_header([MS:VAR:LANG])}
+
+        <main class="flex-shrink-0 mt-3">  
+            {CONTENT}   
+        </main> 
+        
+        <div class="modal fade" tabindex="-1" id="kasdim_win_imageview" data-backdrop="static">
+            <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable" style="min-width: 95vw;">
+                <div class="modal-content">
+                    <div class="modal-body text-center p-1" style="min-height: calc(100vh - 10rem)">
+                        <img src="" style="cursor: pointer; max-height: calc(100vh - 10rem)">                
+                    </div>                
+                    <div class="modal-footer">                                                         
+                        <button type="button" class="btn btn-sm btn-secondary prev">{TAG_IMG_PREV}</button>   
+                        <button type="button" class="btn btn-sm btn-secondary next">{TAG_IMG_NEXT}</button>
+                        <button type="button" class="btn btn-sm btn-primary ml-auto" data-dismiss="modal">{TAG_IMG_CLOSE}</button>
+                    </div>            
+                </div>
+            </div>
+        </div>     
+        
+        {SCRIPTS}
+        
+        {1MELBIS:melbis_base_footer([MS:VAR:LANG])}
+    
+    </body>
+</html>
