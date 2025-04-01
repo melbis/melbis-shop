@@ -42,7 +42,7 @@ function MELBIS_INC_TRANSLATE_google($mText, $mContext, $mLangFrom, $mLangTo, $m
                   'format'      => ( $mHtml ) ? 'html' : 'text',
                   'source'      => $mLangFrom,
                   'model'       => 'nmt',
-                  'key'         => 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+                  'key'         => MELBIS_GOOGLE_API
                   );
     $ch = curl_init();    
     curl_setopt($ch, CURLOPT_URL, 'https://translation.googleapis.com/language/translate/v2');
@@ -90,10 +90,10 @@ function MELBIS_INC_TRANSLATE_deepl($mText, $mContext, $mLangFrom, $mLangTo, $mH
     ];
     
     // cURL
-    //$ch = curl_init('https://api.deepl.com/v2/translate'); 
-    $ch = curl_init('https://api-free.deepl.com/v2/translate');
+    $ch = curl_init('https://api.deepl.com/v2/translate'); 
+    //$ch = curl_init('https://api-free.deepl.com/v2/translate');
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Authorization: DeepL-Auth-Key XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+        'Authorization: DeepL-Auth-Key '.MELBIS_DEEPL_API,
         'Content-Type: application/json',
     ]);
     curl_setopt($ch, CURLOPT_POST, 1);

@@ -15,8 +15,11 @@ function MELBIS_STORE_CARD($mVars)
     global $gParser;
                        
     // Create 
-    $tpl = $gParser->TplCreate();
-
+    $tpl = $gParser->TplCreate(); 
+    
+    // Lang tags    
+    MELBIS_INC_LANG_tags($tpl, __FUNCTION__);                                     
+    
     // Get goods                  
     $command = "SELECT s.*,
                        IF(c.id IS NULL, s.price, 
@@ -27,18 +30,18 @@ function MELBIS_STORE_CARD($mVars)
              LEFT JOIN {DBNICK}_currency c
                     ON c.id = s.price_curr_id             
              LEFT JOIN {DBNICK}_key_value kv
-                   ON ( s.status_key = kv.key_name AND kv.key_code = 'STORE_STATUS_KEY' )                                  
+                    ON ( s.status_key = kv.key_name AND kv.key_code = 'STORE_STATUS_KEY' )                                  
                  WHERE s.id = '$mVars[id]'
               ORDER BY id
                 ";                    
     $item = $gParser->SqlSelectToArray(__LINE__, $command);
     $gParser->TplAssign($tpl, ['ID'         => $item['id'],                               
-                               'NAME'       => htmlspecialchars($item['name']),
                                'CODE'       => htmlspecialchars($item['code_shop']),
-                               'INTRO'      => htmlspecialchars($item['intro']),
-                               'STATUS'     => htmlspecialchars($item['status_name']),
+                               'NAME'       => MELBIS_INC_LANG('kStore', 'NAME', $item['id'], $item['name']),                               
+                               'INTRO'      => MELBIS_INC_LANG('kStore', 'INTRO', $item['id'], $item['intro']),
+                               'STATUS'     => MELBIS_INC_LANG_tag('STATUS', $item['status_key']), 
                                'PRICE'      => MELBIS_INC_STD_number($item['price_curr'], 2),
-                               'UPDATE'     => date("j F Y", strtotime($item['update_time'])),                                        
+                               'UPDATE'     => date("d.m.Y", strtotime($item['update_time'])),                                        
                                ]);   
     
     // Final: return content

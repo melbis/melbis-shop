@@ -5,32 +5,82 @@
     
     <body class="d-flex flex-column h-100">
      
-        <script type="text/javascript"> var kasdim_topic_id = [KASDIM:PAGE:ID] </script>
+        <script type="text/javascript"> var melbis_topic_id = [MS:PAGE:ID] </script>
         
-        {1MELBIS:melbis_base_header([MS:VAR:LANG])}
+        {MELBIS:melbis_base_header([MS:VAR:LANG])}
 
         <main class="flex-shrink-0 mt-3">  
             {CONTENT}   
-        </main> 
+        </main>              
         
-        <div class="modal fade" tabindex="-1" id="kasdim_win_imageview" data-backdrop="static">
-            <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable" style="min-width: 95vw;">
-                <div class="modal-content">
-                    <div class="modal-body text-center p-1" style="min-height: calc(100vh - 10rem)">
-                        <img src="" style="cursor: pointer; max-height: calc(100vh - 10rem)">                
-                    </div>                
-                    <div class="modal-footer">                                                         
-                        <button type="button" class="btn btn-sm btn-secondary prev">{TAG_IMG_PREV}</button>   
-                        <button type="button" class="btn btn-sm btn-secondary next">{TAG_IMG_NEXT}</button>
-                        <button type="button" class="btn btn-sm btn-primary ml-auto" data-dismiss="modal">{TAG_IMG_CLOSE}</button>
-                    </div>            
-                </div>
-            </div>
-        </div>     
-        
-        {SCRIPTS}
-        
-        {1MELBIS:melbis_base_footer([MS:VAR:LANG])}
+        {MELBIS:melbis_base_footer([MS:VAR:LANG])}    
+    </body>                                       
     
-    </body>
+<div class="modal fade" tabindex="-1" id="melbis_win_basket">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{TAG_BASKET}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{TAG_CLOSE}</button>
+        <button type="button" class="btn btn-primary" id="melbis_btn_checkout"><i class="fas fa-shopping-cart"></i> {TAG_CHECKOUT}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" id="melbis_win_checkout">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">{TAG_ORDER}</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="melbis_form_order">                
+            <h4 class="border-bottom pb-1">{TAG_CART}</h4>
+            <div id="melbis_order_goods"></div>
+            <h4 class="border-bottom pb-1">{TAG_FIELDS}</h4>
+            <div id="melbis_order_fields"></div>             
+            <h4 class="border-bottom pb-1">{TAG_OPTIONS}</h4>
+            <div id="melbis_order_options"></div>
+        </form>        
+      </div>
+        <div class="alert m-2 alert-danger fade"><strong>{TAG_ERROR}</strong> <span></span></div>            
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{TAG_CLOSE}</button>
+        <button type="button" class="btn btn-primary" id="melbis_btn_finish"><i class="fas fa-paper-plane"></i> {TAG_FINISH}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" id="melbis_win_finish">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{TAG_ORDER}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h4 class="text-center">{TAG_SUCCESS}</h4>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{TAG_CLOSE}</button>
+      </div>
+    </div>
+  </div>
+</div>   
+
+{SCRIPTS} 
+    
 </html>

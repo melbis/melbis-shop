@@ -15,7 +15,10 @@ function MELBIS_BASE_FOOTER($mVars)
     global $gParser;
     
     // Create 
-    $tpl = $gParser->TplCreate();                                                                
+    $tpl = $gParser->TplCreate();    
+    
+    // Lang tags    
+    MELBIS_INC_LANG_tags($tpl, __FUNCTION__);                                                                 
     
     // Final: return content
     $gParser->TplParse($tpl, 'MAIN', 'main');   

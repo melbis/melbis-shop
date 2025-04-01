@@ -23,8 +23,11 @@ function MELBIS_STORE_RANDOM($mVars)
                   FROM {DBNICK}_store s
                   JOIN {DBNICK}_topic_store ts
                     ON s.id = ts.store_id
-                 WHERE s.no_visible = 0
-              ORDER BY RAND()
+                  JOIN {DBNICK}_topic t
+                    ON t.id = ts.topic_id                    
+                 WHERE s.no_visible = 0   
+                   AND t.kind_key = 'kGoods'
+              ORDER BY s.id
                  LIMIT $lim 
                 ";                    
     $goods = $gParser->SqlSelect(__LINE__, $command);

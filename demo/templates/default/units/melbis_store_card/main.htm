@@ -1,18 +1,21 @@
-<div class="card h-100 shadow-sm">
-    {MELBIS:melbis_store_image([ID],kDefault)}      
+<div class="card h-100">
+    <h4 class="card-header text-center">{NAME}</h4>
+    {MELBIS:melbis_store_image([ID],kDefault)}          
     <div class="card-body">
-        <h5 class="card-title">{NAME}</h5>
-        <p class="card-text">{INTRO} Some quick example text to build on the card title and make up the bulk of the card's content.</p>    
+        <p class="card-text">{INTRO}</p>
+    </div>
+    {MELBIS:melbis_store_features([MS:VAR:LANG],[ID])}
+    <div class="card-footer ">        
         <div class="d-flex justify-content-around align-items-center">
             <div class="text-center">    
-                <p class="lead m-0">${PRICE}</p>
+                <p class="lead m-0">{PRICE}</p>
                 <p class="badge badge-warning m-0">{STATUS}</p>                                                                          
             </div>
-            <button class="btn btn-primary melbis_btn_add" data-id="{ID}"><i class="fas fa-cart-plus"></i> Add to Basket</button>
+            <button class="btn btn-primary melbis_btn_add" data-id="{ID}"><i class="fas fa-cart-plus"></i> {TAG_ADD}</button>
         </div>
-    </div>   
+    </div>       
     <div class="card-footer d-flex justify-content-between">  
-        <small class="text-muted">Last updated {UPDATE}</small>
-        <span class="badge badge-info float-right">Code: {CODE}</span>
+        <small class="text-muted">{TAG_UPDATE} {UPDATE}</small>
+        <span class="badge badge-info float-right">{TAG_CODE}: {CODE}</span>
     </div>  
 </div>

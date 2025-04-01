@@ -1,81 +1,85 @@
 <script type="text/javascript">
 
-// Auto image preview
-//==================================================================================================
-
-// Get image
-$('main').on('click', '.img_preview', function() 
+// Change images
+function melbis_images(img)
 {
-    if ( $(this).hasClass('img_max') )
-    {
-        $('#kasdim_win_imageview img').removeClass('img-fluid').addClass('kasdim_css_img_detail');    
-    }                                                            
-    else
-    {
-        $('#kasdim_win_imageview img').addClass('img-fluid').removeClass('kasdim_css_img_detail');
+    var src = img.parents('div').prev('img').attr('src');         
+    img.parents('div').prev('img').attr('src', img.attr('src'))
+    img.attr('src', src);
+}
+
+// Add to basket
+$('.melbis_goods').on('click', '.melbis_btn_add', function(event)
+{
+    var name = $(this).parents('.card').find('h4').text();
+    $.post('[MS:VAR:LANG]/?mod=melbis_basket',        
+        { func: 'plus', id: $(this).data('id') },
+        function(data) 
+        {             
+            $('#melbis_win_basket .modal-body').html('<p>' + name + '</p><p>{TAGS_GOODS_ADD}</p>');
+            $('#melbis_win_basket').modal('show');                       
+        }
+    );    
+});
+
+// Remove from basket
+$('#melbis_win_checkout').on('click', '.melbis_btn_remove', function(event)
+{    
+    $.post('[MS:VAR:LANG]/?mod=melbis_basket',        
+        { func: 'minus', id: $(this).data('id') },
+        function(data) 
+        {                                     
+            $('#melbis_order_goods').html(data);                           
+        }
+    );    
+});
+
+// Go to checkout
+$('#melbis_btn_checkout').on('click', function(event)
+{
+    $('#melbis_win_basket').modal('hide');
+    $('#melbis_win_checkout').modal('show');      
+});
+
+// Load checkout
+$('#melbis_win_checkout').on('show.bs.modal', function (event) 
+{
+    $('.alert').hide();
+    $('#melbis_order_fields').html('<li class="d-flex justify-content-center"><div class="spinner-border m-3"><span class="sr-only"></span></div></li>');
+    $('#melbis_order_goods').html('<li class="d-flex justify-content-center"><div class="spinner-border m-3"><span class="sr-only"></span></div></li>');
+    $('#melbis_order_options').html('<li class="d-flex justify-content-center"><div class="spinner-border m-3"><span class="sr-only"></span></div></li>');
+    $.post('[MS:VAR:LANG]/?mod=melbis_basket', { func: 'fields' }, function(data) { $('#melbis_order_fields').html(data); } );
+    $.post('[MS:VAR:LANG]/?mod=melbis_basket', { func: 'goods' }, function(data) { $('#melbis_order_goods').html(data); } );
+    $.post('[MS:VAR:LANG]/?mod=melbis_basket', { func: 'options' }, function(data) { $('#melbis_order_options').html(data); } );       
+});
+
+
+// Finish
+$('#melbis_btn_finish').on('click', function(event)
+{
+    for( var item of $('#melbis_form_order select') )
+    { 
+        $(item).prev('input').val($('option:selected', $(item)).text());
     }
-    $('#kasdim_win_imageview img').attr('src', $(this).attr('src'));
-                     
-    $('#kasdim_win_imageview').modal('show'); 
-});
-
-
-// Get prev image 
-$('#kasdim_win_imageview .prev').on('click', function() 
-{        
-    var src = $('#kasdim_win_imageview img').attr('src');
-    $('main .img_preview').each(function(i)
-    {        
-        if ( src == $(this).attr('src') )                         
-        {            
-            if ( i > 0 )
+        
+    var form = $('#melbis_form_order').melbis_serial();
+    form.func = 'save';
+    $.post('[MS:VAR:LANG]/?mod=melbis_basket', form, function(data) 
+        {                     
+            if ( data.result != 'OK' )
             {
-                src =  $('main .img_preview').eq(i-1).attr('src');
-                if ( $('main .img_preview').eq(i-1).hasClass('img_max') )
-                {
-                    $('#kasdim_win_imageview img').removeClass('img-fluid').addClass('kasdim_css_img_detail');    
-                }                                                            
-                else
-                {
-                    $('#kasdim_win_imageview img').addClass('img-fluid').removeClass('kasdim_css_img_detail');
-                }              
+                $('.alert span').html('[' + data.result + '] ' + data.message);
+                $('.alert').addClass('show').show();        
             }
-            return false;             
-        }          
-    }); 
-    $('#kasdim_win_imageview img').attr('src', src);            
-});
-
-
-// Get next image 
-$('#kasdim_win_imageview .next').on('click', function() 
-{            
-    var src = $('#kasdim_win_imageview img').attr('src');
-    $('main .img_preview').each(function(i)
-    {                        
-        if ( src == $(this).attr('src') && i < $('main .img_preview').length )                         
-        {                        
-            src =  $('main .img_preview').eq(i+1).attr('src');
-            if ( $('main .img_preview').eq(i+1).hasClass('img_max') )
-            {
-                $('#kasdim_win_imageview img').removeClass('img-fluid').addClass('kasdim_css_img_detail');    
-            }                                                            
             else
             {
-                $('#kasdim_win_imageview img').addClass('img-fluid').removeClass('kasdim_css_img_detail');
-            }                 
-            return false;             
-        }          
-    });    
-    $('#kasdim_win_imageview img').attr('src', src);
+                $('#melbis_win_checkout').modal('hide');    
+                $('#melbis_win_finish').modal('show');
+            }         
+        }, 
+        'json');                
 });
 
-
-// Close preview 
-$('#kasdim_win_imageview img').on('click', function() 
-{            
-    $('#kasdim_win_imageview').modal('hide');
-});
-     
+ 
 
 </script>

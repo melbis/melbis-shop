@@ -12,13 +12,13 @@
  **/
 function MELBIS_BASE_HEAD($mVars)
 { 
-    global $gParser, $gLang, $gLangList;
+    global $gParser;
                        
     // Create 
     $tpl = $gParser->TplCreate();           
                      
-    // Auto tag    
-    //KASDIM_INC_LANG_tags($tpl, __FUNCTION__); 
+    // Lang tags    
+    MELBIS_INC_LANG_tags($tpl, __FUNCTION__); 
                                                                 
     // Alternate languages
     $command = "SELECT * FROM {DBNICK}_lang ORDER BY pos";

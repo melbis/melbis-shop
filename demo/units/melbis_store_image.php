@@ -15,10 +15,12 @@ function MELBIS_STORE_IMAGE($mVars)
     global $gParser;
                        
     // Create 
-    $tpl = $gParser->TplCreate();
+    $tpl = $gParser->TplCreate();   
+    
+    // Lang tags    
+    MELBIS_INC_LANG_tags($tpl, __FUNCTION__);      
        
     // Get image    
-    //$mVars['id'] = 11;
     $command = "SELECT *
                   FROM {DBNICK}_files_store
                  WHERE elem_id = '$mVars[id]' 
@@ -26,11 +28,28 @@ function MELBIS_STORE_IMAGE($mVars)
               ORDER BY pos
                  LIMIT 1
                 ";                    
-    $hash = $gParser->SqlSelectToArray(__LINE__, $command);
+    $hash = $gParser->SqlSelectToArray(__LINE__, $command);                 
+    
+    $gParser->TplAssign($tpl, 'IMAGES', '');
     if ( isset($hash['id']) )
     {    
-        $gParser->TplAssign($tpl, 'IMAGE_FILE', MELBIS_INC_STD_path($hash));
-        $gParser->TplParse($tpl, 'IMAGE', 'image'); 
+        // Additional
+        $command = "SELECT *
+                      FROM {DBNICK}_files_store
+                     WHERE elem_id = '$mVars[id]' 
+                       AND kind_key <> '$mVars[key]'
+                  ORDER BY pos
+                ";                    
+        $imgs = $gParser->SqlSelect(__LINE__, $command);   
+        foreach ($imgs as $img) 
+        {
+            $gParser->TplAssign($tpl, 'FILE', MELBIS_INC_STD_path($img));
+            $gParser->TplParse($tpl, 'IMAGES', '.img');                              
+        }                                                           
+                                                           
+        // Base
+        $gParser->TplAssign($tpl, 'FILE', MELBIS_INC_STD_path($hash));
+        $gParser->TplParse($tpl, 'IMAGE', 'image');                 
     }
     else
     {

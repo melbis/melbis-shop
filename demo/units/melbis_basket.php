@@ -106,6 +106,9 @@ function MELBIS_BASKET_goods($mVars)
     
     // Create 
     $tpl = $gParser->TplCreate();  
+    
+    // Lang tags    
+    MELBIS_INC_LANG_tags($tpl, __FUNCTION__);         
              
     // Get Goods
     if ( count($version['store']) > 0 )
@@ -114,9 +117,8 @@ function MELBIS_BASKET_goods($mVars)
         {
             $gParser->TplAssign($tpl, array('ID'            => $hash['store_id'],
                                             'AMOUNT'        => $hash['amount'],
-                                            'MEAS'          => htmlspecialchars($hash['store_meas']),                                            
                                             'PRICE'         => MELBIS_INC_STD_number($hash['out_price'], 0),
-                                            'NAME'          => htmlspecialchars($hash['store_name'])
+                                            'NAME'          => MELBIS_INC_LANG('kStore', 'NAME', $hash['store_id'], $hash['store_name'])
                                             ));         
             $gParser->TplParse($tpl, 'ITEM', '.goods_item');  
         }                         
@@ -136,7 +138,10 @@ function MELBIS_BASKET_goods($mVars)
  **/
 function MELBIS_BASKET_fields($mVars)
 { 
-    global $gParser, $gSession;       
+    global $gParser, $gSession; 
+                                        
+    // Vars
+    $gParser->gVars['ms']['var']['lang'] = $mVars['lang'];      
     
     // Get version    
     $version = $gSession->GetValue('melbis_version');
@@ -155,7 +160,7 @@ function MELBIS_BASKET_fields($mVars)
         {
             if ( $hash['field_folder'] == 1 )
             {
-                $gParser->TplAssign($tpl, 'NAME', htmlspecialchars($hash['field_name']));
+                $gParser->TplAssign($tpl, 'NAME', MELBIS_INC_LANG('kClient', 'FIELD', $hash['field_id'], $hash['field_name']));
                 $gParser->TplParse($tpl, 'FIELD', '.fields_group');
                 continue;                        
             }
@@ -179,13 +184,13 @@ function MELBIS_BASKET_fields($mVars)
                 foreach( $value as $val )
                 {
                     $gParser->TplAssign($tpl, array('ID'    => $val['id'],
-                                                    'NAME'  => htmlspecialchars($val['name']),
+                                                    'NAME'  => MELBIS_INC_LANG('kClient', 'VALUE', $val['id'], $val['name']),
                                                     'SELECT'=> ( $hash['value_id'] == $val['id'] ) ? 'selected' : ''
                                                     )); 
                     $gParser->TplParse($tpl, 'VALUE', '.fields_box_val');            
                 } 
                 $gParser->TplAssign($tpl, array('ID'    => $hash['field_id'],
-                                                'NAME'  => htmlspecialchars($hash['field_name'])
+                                                'NAME'  => MELBIS_INC_LANG('kClient', 'FIELD', $hash['field_id'], $hash['field_name'])
                                                 )); 
                 $gParser->TplParse($tpl, 'FIELD', '.fields_box');                                       
             }
@@ -194,7 +199,7 @@ function MELBIS_BASKET_fields($mVars)
                 $gParser->TplAssign($tpl, array('ID'        => $hash['field_id'], 
                                                 'VALUE_ID'  => $hash['value_id'],
                                                 'VALUE'     => htmlspecialchars($hash['value_txt']),                                            
-                                                'NAME'      => htmlspecialchars($hash['field_name']),
+                                                'NAME'      => MELBIS_INC_LANG('kClient', 'FIELD', $hash['field_id'], $hash['field_name']),
                                                 'AUTO'      => ''
                                                 ));
                 if ( count($value) > 0 )
@@ -220,7 +225,10 @@ function MELBIS_BASKET_fields($mVars)
  **/
 function MELBIS_BASKET_options($mVars)
 { 
-    global $gParser, $gSession;       
+    global $gParser, $gSession;  
+    
+    // Vars
+    $gParser->gVars['ms']['var']['lang'] = $mVars['lang'];         
     
     // Get version    
     $version = $gSession->GetValue('melbis_version');
@@ -256,13 +264,13 @@ function MELBIS_BASKET_options($mVars)
                 foreach( $value as $val )
                 {
                     $gParser->TplAssign($tpl, array('ID'    => $val['id'],
-                                                    'NAME'  => htmlspecialchars($val['name']),
+                                                    'NAME'  => MELBIS_INC_LANG('kOption', 'VALUE', $val['id'], $val['name']),
                                                     'SELECT'=> ( $hash['value_id'] == $val['id'] ) ? 'selected' : ''
                                                     )); 
                     $gParser->TplParse($tpl, 'VALUE', '.options_box_val');            
                 } 
                 $gParser->TplAssign($tpl, array('ID'    => $hash['option_id'],
-                                                'NAME'  => htmlspecialchars($hash['option_name'])
+                                                'NAME'  => MELBIS_INC_LANG('kOption', 'FIELD', $hash['option_id'], $hash['option_name'])
                                                 )); 
                 $gParser->TplParse($tpl, 'OPTION', '.options_box');                                       
             }
@@ -271,7 +279,7 @@ function MELBIS_BASKET_options($mVars)
                 $gParser->TplAssign($tpl, array('ID'        => $hash['option_id'],  
                                                 'VALUE_ID'  => $hash['value_id'],
                                                 'VALUE'     => htmlspecialchars($hash['value_name']),                                            
-                                                'NAME'      => htmlspecialchars($hash['option_name']),
+                                                'NAME'      => MELBIS_INC_LANG('kOption', 'FIELD', $hash['option_id'], $hash['option_name']),
                                                 'AUTO'      => ''
                                                 ));
                 if ( count($value) > 0 )
@@ -363,7 +371,7 @@ function MELBIS_BASKET_save($mVars)
         $id = $version['client'][$i]['field_id'];
         $value_id = $mVars['post']['field'.$id.'_id'] ?? 0;        
         $version['client'][$i]['value_id'] = ( $value_id == 0 ) ? null : (int)$value_id;
-        $version['client'][$i]['value_txt'] = $mVars['post']['field'.$id.'_text'];
+        $version['client'][$i]['value_txt'] = $mVars['post']['field'.$id.'_text'] ?? '';
     }
         
     // Update options
