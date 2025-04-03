@@ -31,6 +31,8 @@ function MELBIS_INC_STD_path($mFile)
 {
     global $gSitePath;
     
+    if ( !strtotime($mFile['upload_time'] ?? '') ) return '';
+
     list( $date, $time ) = explode(' ', $mFile['upload_time']);
     list( $y, $m, $d ) = explode('-', $date);
     list( $h, $n, $s ) = explode(':', $time);

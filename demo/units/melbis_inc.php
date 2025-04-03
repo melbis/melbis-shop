@@ -105,7 +105,7 @@ function MELBIS_INC_halt($mErrorType, $mErrorFile, $mError, $mErrorInfo = '')
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="<?php echo '/templates/'.TEMPLATE.'/bootstrap.css'; ?>">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <title>System error in Melbis Shop <?php echo SCRIPT_VERSION.'.'.SCRIPT_BUILD; ?></title>
   </head>
   <body class="d-flex flex-column h-100 ">
