@@ -1,4 +1,4 @@
-# Melbis Shop 6 Server Core
+# Melbis Shop 6 Server
 
 Please refer to the installation instructions at: https://melbis.com/en/dev/install/
 
