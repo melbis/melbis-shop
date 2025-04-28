@@ -1,0 +1,178 @@
+<script type="text/javascript">
+
+var melbis_detail_num = 0;
+var melbis_order = {ORDER};
+
+// System Logout
+$('#melbis_btn_logout').on('click', function()
+{
+    $.post('/?mod=[MELBIS:MOD]', { logout: true }, function() { location.reload(); }); 
+});
+
+
+// Tabs activate in first
+$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) 
+{    
+    if ( $(e.target).data('init') != '' ) window[$(e.target).data('init')]();        
+});
+
+// Init Table
+function melbis_init_table()
+{
+    var columns = [                                              
+    { field: 'id', title: 'Id', sortable: true },    
+    { field: 'name', title: 'Name', sortable: true, formatter: 'melbis_fmt_cat_name' },            
+    { field: 'amount', title: 'Amount goods', sortable: true, formatter: 'melbis_fmt_num', align: 'right' },
+    ];           
+    
+    $('#melbis_table_cataloge').bootstrapTable({
+        columns: columns, 
+        toolbar: '#melbis_toolbar_cataloge',
+        detailView: true,                           
+        detailFormatter: 'melbis_detail_cataloge',           
+        url: '/?mod=[MELBIS:MOD]',        
+        method: 'post',          
+        contentType: 'application/x-www-form-urlencoded',
+        queryParams: function (params)
+            {    
+                params = $.extend(params, 
+                { 
+                    func: 'get_cataloge', 
+                });
+        
+                return params;
+            },               
+        pagination: true,
+        sidePagination: 'server',  
+        pageSize: 20,                 
+        pageList: [5, 10, 20, 50, 100, 200],
+        uniqueId: 'id',
+        sortable: true,
+        sortName: 'absindex',
+        sortOrder: 'asc',
+        showRefresh: true,                
+        showColumns: true,    
+        striped: true        
+    });
+}
+
+// Get cataloge goods 
+function melbis_detail_cataloge(index, row) 
+{
+    var html = [];
+    melbis_detail_num++;  
+    html.push('<table id=melbis_detail_' + melbis_detail_num + '></table>');
+    setTimeout('melbis_detail_goods_init(' + melbis_detail_num + ',' + row.id + ')', 200);                                                                
+    
+    return html.join('');
+}
+
+// Start load goods
+function melbis_detail_goods_init(table_id, row_id)
+{        
+    var columns = [
+    { field: 'id', title: 'Id', sortable: true },
+    { field: 'code_shop', title: 'Code', sortable: true },    
+    { field: 'name', title: 'Name', sortable: true },
+    { field: 'status_key', title: 'Status', sortable: true, formatter: 'melbis_fmt_status', align: 'center' },    
+    { field: 'price', title: 'Price', sortable: true, formatter: '$ %s', align: 'left' }
+    ];           
+    
+    $('#melbis_detail_' + table_id).bootstrapTable({
+        columns: columns,  
+        toolbar: '#melbis_detail_toolbar_' + table_id,
+        url: '/?mod=[MELBIS:MOD]',        
+        method: 'post',          
+        contentType: 'application/x-www-form-urlencoded',
+        queryParams: function(p)
+            {
+                p.func = 'get_goods';
+                p.id = row_id;                
+                return p;
+            },              
+        pagination: true,
+        sidePagination: 'server',  
+        pageSize: 20,                 
+        pageList: [5, 10, 20, 50, 100, 200],
+        sortable: true,
+        sortName: 'id',
+        sortOrder: 'desc',
+        search: true,
+        showRefresh: true,                
+        showColumns: true,    
+        showPrint: true,
+        striped: true,        
+    });  
+}
+
+
+// Init change back
+function melbis_init_back()
+{
+    for ( var table in melbis_order )      
+    {
+        var data = melbis_order[table];
+        var columns = [];
+        for (var c in data[0])
+        {
+            columns.push({field: c, title: c});  
+        }         
+        $('.melbis_table_order[data-table="' + table + '"]').bootstrapTable({
+            columns: columns,
+            data: data 
+        });
+    }
+}
+
+// Change field value 
+$('.melbis_table_order').on('click-cell.bs.table', function (event, field, value, row)  
+{
+    var table = event.target.dataset.table;
+    bootbox.prompt({ 
+        title: 'Edit value of "' + field +'"',
+        value: value, 
+        callback: function (result) 
+        { 
+            var update = {};    
+            update[table] = [];
+            update[table].push({id: row.id, [field]: result });               
+            console.log('MELBIS_ORDER_UPDATE' + JSON.stringify(update));                    
+        }
+    });    
+});
+
+
+
+// Formats
+//==================================================================================================
+
+// Format cataloge name 
+function melbis_fmt_cat_name(value, row)
+{
+    return '&nbsp; &nbsp; &nbsp;'.repeat(row.tlevel) + value;
+}
+
+// Format status
+function melbis_fmt_status(value, row)
+{
+    var res = '';
+    switch (row.status_key) 
+    {
+       case 'kExist':
+          res = '<span class="badge badge-success">' + row.status_name + '</span>';
+          break;      
+       case 'kAbsent':
+          res = '<span class="badge badge-danger">' + row.status_name + '</span>';
+          break;
+    }    
+    
+    return res;
+}
+
+// Format num 
+function melbis_fmt_num(value, row)
+{
+    return melbis_num(value, 0);
+}
+
+</script>

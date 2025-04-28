@@ -1,0 +1,21 @@
+<div class="card h-100">
+    <h4 class="card-header text-center">{NAME}</h4>
+    {MELBIS:melbis_store_image([ID],kDefault)}          
+    <div class="card-body">
+        <p class="card-text">{INTRO}</p>
+    </div>
+    {MELBIS:melbis_store_features([MS:VAR:LANG],[ID])}
+    <div class="card-footer ">        
+        <div class="d-flex justify-content-around align-items-center">
+            <div class="text-center">    
+                <p class="lead m-0">{PRICE}</p>
+                <p class="badge badge-warning m-0">{STATUS}</p>                                                                          
+            </div>
+            <button class="btn btn-primary melbis_btn_add" data-id="{ID}"><i class="fas fa-cart-plus"></i> {TAG_ADD}</button>
+        </div>
+    </div>       
+    <div class="card-footer d-flex justify-content-between">  
+        <small class="text-muted">{TAG_UPDATE} {UPDATE}</small>
+        <span class="badge badge-info float-right">{TAG_CODE}: {CODE}</span>
+    </div>  
+</div>
