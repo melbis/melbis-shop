@@ -104,7 +104,7 @@ function MELBIS_INC_STD_utf_encode($mValue)
  **/
 function MELBIS_INC_STD_number($mValue, $mPrec = 2) 
 {
-    return number_format($mValue, $mPrec, "," ,"'");
+    return number_format((float)$mValue, $mPrec, "," ,"'");
 }
 
 /** 
@@ -113,6 +113,7 @@ function MELBIS_INC_STD_number($mValue, $mPrec = 2)
  **/
 function MELBIS_INC_STD_number_short($mValue, $mMaxPrec = 2) 
 {
+    $mValue = (float) $mValue;
     if ( ceil($mValue) == $mValue ) 
     {
         $mPrec = 0;  
