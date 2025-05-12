@@ -98,7 +98,7 @@ function MELBIS_WEB_TEST_get_goods($mUserId, $mVars)
     $order = ( $mVars['post']['order'] == 'asc' ) ? 'ASC' : 'DESC';
     $sort = ( $mVars['post']['sort'] == '' ) ? 'id' : addslashes($mVars['post']['sort']);
     $where = '';    
-    if ( $mVars['post']['search'] != '' )
+    if ( isset($mVars['post']['search']) )
     {
         $key = addslashes($mVars['post']['search']);
         $where .= " AND ( s.id = '$key' OR s.code_shop LIKE '%$key%' OR s.name LIKE '%$key%') "; 

@@ -55,7 +55,7 @@ function MELBIS_INC_LOGIC_order_create()
     $version['client'] = $gParser->SqlSelect(__LINE__, $command);
 
     // Goods
-    $version['store'] = array();  
+    $version['store'] = [];  
     
     // Option
     $command = "SELECT oo.id AS option_id, oo.skey AS option_skey, oo.name AS option_name, 
@@ -207,13 +207,11 @@ function MELBIS_INC_LOGIC_order_norm($mVersion)
                         AND use_default = 1
                     ORDER BY oso.pos        
                     ";  
-        $query_opt = $gParser->SqlQuery(__LINE__, $command);
-        $rows_opt = $gParser->SqlNumRows($query_opt);
+        $templ_opt = $gParser->SqlSelect(__LINE__, $command);
         $store_option = $mVersion['store'][$i]['store_option'] ?? [];
         unset($mVersion['store'][$i]['store_option']);                 
-        for ( $n = 1; $n <= $rows_opt; $n++ )
+        foreach ( $templ_opt as $templ )
         {    
-            $templ = $gParser->SqlFetchHash($query_opt);
             if ( is_array($store_option) )
             {                            
                 foreach( $store_option as $hash )
@@ -270,7 +268,7 @@ function MELBIS_INC_LOGIC_order_norm($mVersion)
     {                                                
         if ( isset($item['store_option']) )
         {                                        
-            $option_value = array();
+            $option_value = [];
             foreach ( $item['store_option'] as $hash )
             {                                    
                 if ( !is_null($hash['value_id']) )
@@ -301,7 +299,7 @@ function MELBIS_INC_LOGIC_order_norm($mVersion)
          
     
     // Option block verify           
-    $option_value = array();
+    $option_value = [];
     foreach ( $mVersion['option'] as $hash )
     {    
         if ( !is_null($hash['value_id']) )
@@ -337,7 +335,7 @@ function MELBIS_INC_LOGIC_order_norm($mVersion)
         if ( is_array($mVersion['option']) && !is_null($mVersion['order_id']) && !$user_admin )
         {                    
             // Get previous option value
-            $option_was = array(); 
+            $option_was = []; 
             $command = "SELECT oo.value_id 
                           FROM {DBNICK}_orders o
                           JOIN {DBNICK}_orders_version ov
@@ -347,20 +345,18 @@ function MELBIS_INC_LOGIC_order_norm($mVersion)
                          WHERE o.id = '$mVersion[order_id]'
                            AND oo.value_id IS NOT NULL 
                        ";     
-            $query = $gParser->SqlQuery(__LINE__, $command);
-            $rows = $gParser->SqlNumRows($query);
-            for ( $i = 1; $i <= $rows; $i++ ) 
+            $options = $gParser->SqlSelect(__LINE__, $command);
+            foreach ( $options as $option ) 
             {
-                $hash = $gParser->SqlFetchHash($query);            
-                $option_was[] = $hash['value_id'];                
+                $option_was[] = $option['value_id'];                
             }         
             // Get now option value                                          
-            $option_set = array();
-            foreach ( $mVersion['option'] as $hash )
+            $option_set = [];
+            foreach ( $mVersion['option'] as $option )
             {    
-                if ( !is_null($hash['value_id']) )
+                if ( !is_null($option['value_id']) )
                 {
-                    $option_set[] = $hash['value_id'];
+                    $option_set[] = $option['value_id'];
                 }
             }  
             // Verify
@@ -422,15 +418,12 @@ function MELBIS_INC_LOGIC_order_load($mOrderId)
                   FROM {DBNICK}_orders_client_field 
                  WHERE version_id = '$ver_id'
                ";              
-    $query = $gParser->SqlQuery(__LINE__, $command);
-    $rows = $gParser->SqlNumRows($query);
-    for ( $i = 1; $i <= $rows; $i++ ) 
+    $fields = $gParser->SqlSelect(__LINE__, $command);
+    foreach ( $fields as $field ) 
     {
-        $hash = $gParser->SqlFetchHash($query);
-        
-        unset($hash['id']);
-        unset($hash['version_id']);
-        $version['client'][] = $hash;        
+        unset($field['id']);
+        unset($field['version_id']);
+        $version['client'][] = $field;        
     }      
     
     // Get Goods
@@ -438,15 +431,12 @@ function MELBIS_INC_LOGIC_order_load($mOrderId)
                   FROM {DBNICK}_orders_store 
                  WHERE version_id = '$ver_id'
                ";              
-    $query = $gParser->SqlQuery(__LINE__, $command);
-    $rows = $gParser->SqlNumRows($query);
-    for ( $i = 1; $i <= $rows; $i++ ) 
+    $stores = $gParser->SqlSelect(__LINE__, $command);
+    foreach ( $stores as $store ) 
     {
-        $hash = $gParser->SqlFetchHash($query);
-        
-        $store_id = $hash['id'];
-        unset($hash['id']);
-        unset($hash['version_id']);                    
+        $store_id = $store['id'];
+        unset($store['id']);
+        unset($store['version_id']);                    
         
         // Get goods options
         $command = "SELECT * 
@@ -454,19 +444,15 @@ function MELBIS_INC_LOGIC_order_load($mOrderId)
                      WHERE version_id = '$ver_id'
                        AND order_store_id = '$store_id'
                    ";
-        $s_query = $gParser->SqlQuery(__LINE__, $command);
-        $s_rows = $gParser->SqlNumRows($s_query);
-        for ( $n = 1; $n <= $s_rows; $n++ ) 
+        $options = $gParser->SqlSelect(__LINE__, $command);
+        foreach ( $options as $option ) 
         {
-            $sub = $gParser->SqlFetchHash($s_query);
-            
-            unset($sub['id']);   
-            unset($sub['version_id']);
-            unset($sub['order_store_id']);
-            $hash['store_option'][] = $sub;
-            
+            unset($option['id']);   
+            unset($option['version_id']);
+            unset($option['order_store_id']);
+            $store['store_option'][] = $option;            
         }               
-        $version['store'][] = $hash;                
+        $version['store'][] = $store;                
     }   
     
     // Get options
@@ -474,15 +460,12 @@ function MELBIS_INC_LOGIC_order_load($mOrderId)
                   FROM {DBNICK}_orders_option 
                  WHERE version_id = '$ver_id'
                ";              
-    $query = $gParser->SqlQuery(__LINE__, $command);
-    $rows = $gParser->SqlNumRows($query);
-    for ( $i = 1; $i <= $rows; $i++ ) 
+    $options = $gParser->SqlSelect(__LINE__, $command);
+    foreach ( $options as $option ) 
     {
-        $hash = $gParser->SqlFetchHash($query);
-        
-        unset($hash['id']);
-        unset($hash['version_id']);
-        $version['option'][] = $hash;        
+        unset($option['id']);
+        unset($option['version_id']);
+        $version['option'][] = $option;        
     }                     
     
     return $version;                            
@@ -501,7 +484,7 @@ function MELBIS_INC_LOGIC_order_edit($mVersion)
     $now = MELBIS_INC_STD_get_now();
     $result['value'] = 'OK';
     $result['message'] = ''; 
-    $result['orders'] = array(); 
+    $result['orders'] = []; 
     
     // Normalize                                           
     $mVersion = MELBIS_INC_LOGIC_order_norm($mVersion);                  
@@ -523,7 +506,7 @@ function MELBIS_INC_LOGIC_order_edit($mVersion)
     }             
 
     // Version 
-    $version = array();
+    $version = [];
     $version['id'] = $gParser->SqlGenId('orders_version');
     $version['user_id'] = $mVersion['user_id'];
     $version['order_id'] = $mVersion['order_id'];
@@ -586,7 +569,7 @@ function MELBIS_INC_LOGIC_order_edit($mVersion)
     } 
     
     // Update client last date                                           
-    $hash = array();
+    $hash = [];
     $hash['id'] = $client['id'];
     $hash['last_date'] = $now;            
     $gParser->SqlUpdate(__LINE__, '{DBNICK}_client', $hash, 'id');      
@@ -783,18 +766,16 @@ function MELBIS_INC_LOGIC_order_goods_add($mVersion, $mId, $mAmount = 1, $mPrice
     // Prepare currency
     $curr = array('' => 1);
     $command = "SELECT * FROM {DBNICK}_currency";  
-    $query = $gParser->SqlQuery(__LINE__, $command);
-    $rows = $gParser->SqlNumRows($query); 
-    for ( $i = 1; $i <= $rows; $i++ )
+    $currencies = $gParser->SqlSelect(__LINE__, $command);
+    foreach ( $currencies as $currency )
     {    
-        $hash = $gParser->SqlFetchHash($query);    
-        if ( $hash['division'] > 0 && $hash['multiplex'] != 0 )
+        if ( $currency['division'] > 0 && $currency['multiplex'] != 0 )
         {
-            $curr[$hash['id']] = 1/$hash['multiplex'];
+            $curr[$currency['id']] = 1/$currency['multiplex'];
         }
         else 
         {
-            $curr[$hash['id']] = $hash['multiplex']; 
+            $curr[$currency['id']] = $currency['multiplex']; 
         }
     }                     
     
@@ -809,10 +790,9 @@ function MELBIS_INC_LOGIC_order_goods_add($mVersion, $mId, $mAmount = 1, $mPrice
                   FROM {DBNICK}_store
                  WHERE id = '$mId'
                ";  
-    $query = $gParser->SqlQuery(__LINE__, $command);
-    if ( $gParser->SqlNumRows($query) > 0 )
+    $store = $gParser->SqlSelectToArray(__LINE__, $command);
+    if ( isset($store['store_id']) )
     {
-        $store = $gParser->SqlFetchHash($query);
         $store['recalc'] = 1;
         $store['store_pprice'] = round($store['store_pprice'] * $curr[$store['pprice_curr_id']], 2);
         $store['store_rprice'] = round($store['store_rprice'] * $curr[$store['rprice_curr_id']], 2);        

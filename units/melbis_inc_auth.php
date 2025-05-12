@@ -158,7 +158,7 @@ function MELBIS_INC_AUTH_web($mType, $mModuleKey, $mPost)
         else
         {                        
             // Not auth yet
-            if ( $mPost['login'] != '' )
+            if ( isset($mPost['login']) )
             {                   
                 // Try auth user
                 $user_id = MELBIS_INC_AUTH_user($mPost['login'], $mPost['pass_code']);
