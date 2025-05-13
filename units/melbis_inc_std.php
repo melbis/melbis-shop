@@ -135,7 +135,6 @@ function MELBIS_INC_STD_get_date()
     $date = new DateTime('now', new DateTimeZone(TIME_ZONE));
 
     return $date->format("Y-m-d");     
-
 }
 
 /** 
