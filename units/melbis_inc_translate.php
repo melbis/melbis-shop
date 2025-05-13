@@ -6,8 +6,7 @@
  * @author Dmitriy Kasyanoff     
  **************************************************************************************************
  * 
- * MELBIS_INC_TRANSLATE_service          - Return file path from time
- * MELBIS_INC_TRANSLATE_service          - Convert HTML to plain text      
+ * MELBIS_INC_TRANSLATE_service          - Translater    
  *     
  **************************************************************************************************/
 
