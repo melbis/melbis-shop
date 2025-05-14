@@ -8,7 +8,7 @@
  *
  * MELBIS_INC_LANG                      - Translater from origin
  * MELBIS_INC_LANG_tag                  - One tag parser in script
- * MELBIS_INC_LANG_tags                 - All Tags parser on page
+ * MELBIS_INC_LANG_tags                 - All tags parser on page
  * 
  **************************************************************************************************/
    

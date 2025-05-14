@@ -15,11 +15,16 @@
  **/
 function MELBIS_INC_TRANSLATE_service($mUserId, $mVars)
 { 
-    global $gParser;
-                       
+    global $gParser; 
+                  
+    // Constant
+    $gParser->DefineSelfConst();
+                
+    // Get origin lang name      
     $command = "SELECT * FROM {DBNICK}_lang WHERE is_origin = 1";               
     $from = $gParser->SqlSelectToArray(__LINE__, $command);    
-
+                      
+    // Translate lang name
     $command = "SELECT * FROM {DBNICK}_lang WHERE id = '$mVars[lang_id]'";               
     $to = $gParser->SqlSelectToArray(__LINE__, $command);   
 

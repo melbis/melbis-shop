@@ -23,7 +23,6 @@ $gParser = new Parser('MELBIS_INC_halt', $gDb);
 
 // Define self constants
 $gParser->DefineSelfConst();
-$gParser->DefineSelfVars('CONST');
 
 // Define session
 $gSession = $gParser->DefineSession(DB_USER_NAME.'_MELBIS_SHOP');
@@ -31,18 +30,11 @@ $gSession = $gParser->DefineSession(DB_USER_NAME.'_MELBIS_SHOP');
 // Define lazy load script
 $gParser->DefineLazyScript($gSitePath.'lazy.php');
 
-// Define languge                   
-$default_lang = 'ru';
-$lang = addslashes($gGet['lang'] ?? $default_lang);
-$command = "SELECT * FROM {DBNICK}_lang WHERE skey = '$lang'";
-$langs = $gParser->SqlSelectToArray(__LINE__, $command);               
-$gLang = ( $langs['skey'] ?? $default_lang ); 
-
-// Define module
+// Default module
 if ( !isset($gGet['mod']) ) $gGet['mod'] = 'melbis_base_page'; 
 
 // Parse
-$gParser->Parse($gSitePath, $gTemplate, $gGet['mod'], [$gLang, serialize($gGet), serialize($gPost)], $gUseCache, $gBuild);
+$gParser->Parse($gSitePath, $gTemplate, $gGet['mod'], [serialize($gGet), serialize($gPost)], $gUseCache, $gBuild);
 
 // Publish
 $gParser->Publish();

@@ -1,34 +1,34 @@
 <!doctype html>
-<html lang="[MS:VAR:LANG]" class="h-100">
+<html lang="en" class="h-100">
     
-    {MELBIS:melbis_base_head([MS:VAR:LANG])}
+    {MELBIS:melbis_base_head()}
     
     <body class="d-flex flex-column h-100">
      
         <script type="text/javascript"> var melbis_topic_id = [MS:PAGE:ID] </script>
         
-        {MELBIS:melbis_base_header([MS:VAR:LANG])}
+        {MELBIS:melbis_base_header()}
 
         <main class="flex-shrink-0 mt-3">  
             {CONTENT}   
         </main>              
         
-        {MELBIS:melbis_base_footer([MS:VAR:LANG])}    
+        {MELBIS:melbis_base_footer()}    
     </body>                                       
     
 <div class="modal fade" tabindex="-1" id="melbis_win_basket">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">{TAG_BASKET}</h5>
+        <h5 class="modal-title">Shopping cart</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body"></div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">{TAG_CLOSE}</button>
-        <button type="button" class="btn btn-primary" id="melbis_btn_checkout"><i class="fas fa-shopping-cart"></i> {TAG_CHECKOUT}</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="melbis_btn_checkout"><i class="fas fa-shopping-cart"></i>Checkout</button>
       </div>
     </div>
   </div>
@@ -38,25 +38,25 @@
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 class="modal-title">{TAG_ORDER}</h3>
+        <h3 class="modal-title">Your order</h3>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <form id="melbis_form_order">                
-            <h4 class="border-bottom pb-1">{TAG_CART}</h4>
+            <h4 class="border-bottom pb-1">Cart</h4>
             <div id="melbis_order_goods"></div>
-            <h4 class="border-bottom pb-1">{TAG_FIELDS}</h4>
+            <h4 class="border-bottom pb-1">Fields</h4>
             <div id="melbis_order_fields"></div>             
-            <h4 class="border-bottom pb-1">{TAG_OPTIONS}</h4>
+            <h4 class="border-bottom pb-1">Options</h4>
             <div id="melbis_order_options"></div>
         </form>        
       </div>
-        <div class="alert m-2 alert-danger fade"><strong>{TAG_ERROR}</strong> <span></span></div>            
+        <div class="alert m-2 alert-danger fade"><strong>Found a mistake!</strong> <span></span></div>            
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">{TAG_CLOSE}</button>
-        <button type="button" class="btn btn-primary" id="melbis_btn_finish"><i class="fas fa-paper-plane"></i> {TAG_FINISH}</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="melbis_btn_finish"><i class="fas fa-paper-plane"></i> Finalize</button>
       </div>
     </div>
   </div>
@@ -66,16 +66,16 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">{TAG_ORDER}</h5>
+        <h5 class="modal-title">Your order</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <h4 class="text-center">{TAG_SUCCESS}</h4>
+        <h4 class="text-center">Order successfully placed!</h4>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">{TAG_CLOSE}</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>

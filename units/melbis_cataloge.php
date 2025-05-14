@@ -19,7 +19,7 @@ function MELBIS_CATALOGE($mVars)
     // Find root
     $command = "SELECT id, tindex, tlevel
                   FROM {DBNICK}_topic
-                 WHERE skey = 'CATALOG'              
+                 WHERE kind_key = 'kFirst'              
                ";                    
     $root = $gParser->SqlSelectToArray(__LINE__, $command);         
         

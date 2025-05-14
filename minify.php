@@ -12,21 +12,13 @@
                                           
  
 switch (pathinfo($_POST['name'], PATHINFO_EXTENSION)) 
-{
-    case 'php':
-        $temp = tmpfile();
-        fwrite($temp, $_POST['content']); 
-        $info = stream_get_meta_data($temp);                   
-        echo php_strip_whitespace($info['uri']);    
-        fclose($temp);        
-        break;                 
-        
+{                        
     case 'js':                    
         $code = preg_replace('#<script(.*?)>#is', '', $_POST['content']);    
         $code = preg_replace('#</script>#is', '', $code);
         $data = array('input' => $code);
         $ch = curl_init();    
-        curl_setopt($ch, CURLOPT_URL, 'https://javascript-minifier.com/raw');
+        curl_setopt($ch, CURLOPT_URL, 'https://www.toptal.com/developers/javascript-minifier/api/raw');
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -38,7 +30,7 @@ switch (pathinfo($_POST['name'], PATHINFO_EXTENSION))
     case 'css':               
         $data = array('input' => $_POST['content']);
         $ch = curl_init();    
-        curl_setopt($ch, CURLOPT_URL, 'https://cssminifier.com/raw');
+        curl_setopt($ch, CURLOPT_URL, 'https://www.toptal.com/developers/cssminifier/api/raw');
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

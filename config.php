@@ -6,7 +6,7 @@ define('DB_NAME', 'melbis');
 define('DB_NICK', 'ms');
 define('DB_CHARSET', 'utf8mb4');
 define('DB_COMMAND', 'SET sql_mode = CONCAT(@@sql_mode, \',NO_UNSIGNED_SUBTRACTION\');');
-define('TIME_ZONE', 'Europe/Kyiv');
+define('TIME_ZONE', 'UTC');
 define('SHOP_LOCALE', 'ru_RU.UTF8');
 define('DEBUG_CODE', 'code');
 define('VERSION_CACHE', '1000');
