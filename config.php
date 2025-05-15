@@ -1,5 +1,5 @@
 <?php
-define('DB_HOST_NAME', 'localhost');
+define('DB_HOST_NAME', 'db');
 define('DB_USER_NAME', 'melbis');
 define('DB_USER_PASS', 'melbis_pass');
 define('DB_NAME', 'melbis');
