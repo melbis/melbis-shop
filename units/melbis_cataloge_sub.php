@@ -18,7 +18,7 @@ function MELBIS_CATALOGE_SUB($mVars)
     $tpl = $gParser->TplCreate();
             
     // Vars
-    $id = $mVars['post']['id']*1;   
+    $id = (int) $mVars['post']['id'];   
     
     $command = "SELECT id, tlevel
                   FROM {DBNICK}_topic
@@ -27,7 +27,7 @@ function MELBIS_CATALOGE_SUB($mVars)
     $root = $gParser->SqlSelectToArray(__LINE__, $command);       
         
     // Get menu items     
-    $command = "SELECT t.id, t.name, t.seo_psu, t.seo_title, t.kind_key, t.link, t.in_xml, t_s.how
+    $command = "SELECT t.id, t.name, t.kind_key, t.link, t_s.how
                   FROM {DBNICK}_topic t                                                                           
              LEFT JOIN ( SELECT tindex, COUNT(*) AS how 
                            FROM {DBNICK}_topic
@@ -49,11 +49,11 @@ function MELBIS_CATALOGE_SUB($mVars)
         }
         else
         {                                    
-            $link = ( $item['kind_key'] == 'kLink' ) ? $item['link'] : '/'.$mVars['lang'].$item['seo_psu'] ;                                    
+            $name = htmlspecialchars($item['name']); // MELBIS_INC_LANG('kTopic', 'NAME', $item['id'], $item['name']);
+            $link = ( $item['kind_key'] == 'kLink' ) ? $item['link'] : '/'.$mVars['lang'].'/?topic_id='.$item['id'] ;                                    
             $gParser->TplAssign($tpl, ['ID'    => $item['id'],
-                                       'NAME'  => MELBIS_INC_LANG('kTopic', 'NAME', $item['id'], $item['name']),
-                                       'LINK'  => $link,
-                                       'ICON'  => $item['seo_title']
+                                       'NAME'  => $name,
+                                       'LINK'  => $link
                                        ]);        
             if ( is_null($item['how']) )
             {

@@ -30,12 +30,11 @@ function MELBIS_INC_TRANSLATE_service($mUserId, $mVars)
 
     $html = ( $mVars['is_html'] > 0 );
     
-    $result = call_user_func(MELBIS_TRANSLATE_SERVICE, 
-                             $mVars['origin'], 
-                             $mVars['context'], 
-                             $from['skey'], 
-                             $to['skey'], 
-                             $html);    
+    $result = MELBIS_INC_TRANSLATE_deepl($mVars['origin'], 
+                                         $mVars['context'], 
+                                         $from['skey'], 
+                                         $to['skey'], 
+                                         $html);    
 
     return $result;
 } 

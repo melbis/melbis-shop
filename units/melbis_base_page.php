@@ -16,10 +16,16 @@ function MELBIS_BASE_PAGE($mVars)
                        
     // Create 
     $tpl = $gParser->TplCreate();                
+
+    // Lang tags    
+    MELBIS_INC_LANG_tags($tpl, __FUNCTION__);                                                     
     
     // Vars
-    $id = (int) ($mVars['get']['topic_id'] ?? 0);  
-                
+    $id = (int) ($mVars['get']['topic_id'] ?? 0);
+    
+    $gParser->gVars['ms']['page']['lang'] = $mVars['lang'];        
+    $gParser->gVars['ms']['page']['year'] = MELBIS_INC_STD_get_now('Y');      
+                     
     // Define page
     $command = "SELECT *
                   FROM {DBNICK}_topic   
@@ -32,16 +38,18 @@ function MELBIS_BASE_PAGE($mVars)
         if ( $id == 0 )
         {
             // Index page
-            $gParser->gVars['melbis']['page']['id'] = 0;
-            $gParser->gVars['melbis']['page']['title'] = 'Home page';         
+            $gParser->gVars['ms']['page']['id'] = 0;      
+            $gParser->gVars['ms']['page']['path'] = '/';         
+            $gParser->gVars['ms']['page']['title'] = 'Home page';         
             
             $gParser->TplParse($tpl, 'CONTENT', 'index');             
         }
         else
         {          
             // Not found
-            $gParser->gVars['melbis']['page']['id'] = 0;
-            $gParser->gVars['melbis']['page']['title'] = '404 Not Found';         
+            $gParser->gVars['ms']['page']['id'] = 0;         
+            $gParser->gVars['ms']['page']['path'] = '/?topic_id=-404';
+            $gParser->gVars['ms']['page']['title'] = '404 Not Found'; // MELBIS_INC_LANG_tag('BASE_PAGE', '404_TITLE');         
     
             // Header
             header($gServer['SERVER_PROTOCOL']." 404 Not Found");           
@@ -53,8 +61,9 @@ function MELBIS_BASE_PAGE($mVars)
     else              
     {                           
         // Found
-        $gParser->gVars['melbis']['page']['id'] = $topic['id'];
-        $gParser->gVars['melbis']['page']['title'] = htmlspecialchars($topic['name']);    
+        $gParser->gVars['ms']['page']['id'] = $topic['id'];   
+        $gParser->gVars['ms']['page']['path'] = '/?topic_id='.$topic['id'];
+        $gParser->gVars['ms']['page']['title'] = htmlspecialchars($topic['name']); // MELBIS_INC_LANG('kTopic', 'TITLE', $topic['id'], $topic['name']);     
 
         if ( $topic['kind_key'] == 'kText' )  
         { 
@@ -77,7 +86,8 @@ function MELBIS_BASE_PAGE($mVars)
             else
             {
                 // Content                     
-                $gParser->TplAssign($tpl, 'DESCR', MELBIS_INC_STD_text($page['descr']));  
+                $descr = $page['descr']; // MELBIS_INC_LANG('kTopic', 'DESCR', $page['id'], $page['descr'], true); 
+                $gParser->TplAssign($tpl, 'DESCR', MELBIS_INC_STD_text($descr));  
                 $gParser->TplParse($tpl, 'CONTENT', 'text');                
             }
         }

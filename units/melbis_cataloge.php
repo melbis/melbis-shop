@@ -24,7 +24,7 @@ function MELBIS_CATALOGE($mVars)
     $root = $gParser->SqlSelectToArray(__LINE__, $command);         
         
     // Get item
-    $command = "SELECT t.id, t.name, t.seo_psu, t.seo_title, t_s.how
+    $command = "SELECT t.id, t.name, t.kind_key, t.link, t_s.how
                   FROM {DBNICK}_topic t                                                                           
              LEFT JOIN ( SELECT tindex, COUNT(*) AS how 
                            FROM {DBNICK}_topic
@@ -40,11 +40,12 @@ function MELBIS_CATALOGE($mVars)
     $menu = $gParser->SqlSelect(__LINE__, $command);
     foreach ($menu as $item)
     {                        
+        $name = htmlspecialchars($item['name']); // MELBIS_INC_LANG('kTopic', 'NAME', $item['id'], $item['name']);
+        $link = ( $item['kind_key'] == 'kLink' ) ? $item['link'] : '/'.$mVars['lang'].'/?topic_id='.$item['id'] ;       
         $gParser->TplAssign($tpl, ['ID'    => $item['id'],
                                    'SUB'   => serialize(['id' => $item['id']]),
-                                   'NAME'  => MELBIS_INC_LANG('kTopic', 'NAME', $item['id'], $item['name']),
-                                   'LINK'  => $item['seo_psu'],
-                                   'ICON'  => $item['seo_title']                                        
+                                   'NAME'  => $name,
+                                   'LINK'  => $link
                                    ]);                         
         if ( is_null($item['how']) )
         {
@@ -54,7 +55,11 @@ function MELBIS_CATALOGE($mVars)
         {
             $gParser->TplParse($tpl, 'ITEM', '.item_sub');
         }
-    } 
+    }     
+    
+    if ( count($menu) == 0 ) $gParser->TplAssign($tpl, 'ITEM', '');  
+    
+    $gParser->TplParse($tpl, 'SCRIPTS', 'scripts');    
     
     // Final: return content
     $gParser->TplParse($tpl, 'MAIN', 'main');

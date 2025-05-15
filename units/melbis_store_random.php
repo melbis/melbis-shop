@@ -16,9 +16,11 @@ function MELBIS_STORE_RANDOM($mVars)
                        
     // Create 
     $tpl = $gParser->TplCreate();
-            
+                       
+    // Vars
+    $lim = (int) $mVars['limit'];
+    
     // Get random goods
-    $lim = $mVars['limit']*1;
     $command = "SELECT s.id
                   FROM {DBNICK}_store s
                   JOIN {DBNICK}_topic_store ts

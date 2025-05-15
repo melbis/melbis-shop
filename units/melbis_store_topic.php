@@ -17,8 +17,8 @@ function MELBIS_STORE_TOPIC($mVars)
     // Create 
     $tpl = $gParser->TplCreate();
             
-    // Get random goods
-    $id = $mVars['topic_id']*1;  
+    // Vars
+    $id = (int) $mVars['topic_id'];  
     
     $command = "WITH RECURSIVE topic_tree AS ( 
                     SELECT *
@@ -29,7 +29,7 @@ function MELBIS_STORE_TOPIC($mVars)
                       FROM {DBNICK}_topic t
                       JOIN topic_tree tt 
                         ON t.tindex = tt.id
-                     WHERE t.kind_key = 'kGoods')                  
+                     WHERE t.kind_key = 'kGoods' )                  
                 SELECT s.id 
                   FROM topic_tree tt
                   JOIN {DBNICK}_topic_store ts

@@ -43,13 +43,13 @@ function MELBIS_STORE_FEATURES($mVars)
         switch ( $row['type_key'] ) 
         {
             case 'kSet':
-                $value .= MELBIS_INC_LANG('kInfo', 'VALUE', $row['value_id'], $row['value_name']);
+                $value .= htmlspecialchars($row['value_name']); // MELBIS_INC_LANG('kInfo', 'VALUE', $row['value_id'], $row['value_name']);
                 break;
             case 'kDecimal':
                 $value = MELBIS_INC_STD_number($row['value_dec']);
                 break;                  
             case 'kText':
-                $value = MELBIS_INC_LANG('kInfo', 'TEXT', $row['id'], $row['value_txt']);
+                $value = htmlspecialchars($row['value_txt']); // MELBIS_INC_LANG('kInfo', 'TEXT', $row['id'], $row['value_txt']);
                 break;                                  
         }
                              
@@ -57,7 +57,8 @@ function MELBIS_STORE_FEATURES($mVars)
         $next = $gParser->SqlFetchHash($query);
         if ( ( $next['info_id'] ?? 0 ) != $row['info_id'] )
         {                                              
-            $gParser->TplAssign($tpl, array('NAME'  => MELBIS_INC_LANG('kInfo', 'NAME', $row['info_id'], $row['info_name']), 
+            $name = htmlspecialchars($row['info_name']); // MELBIS_INC_LANG('kInfo', 'NAME', $row['info_id'], $row['info_name']);
+            $gParser->TplAssign($tpl, array('NAME'  => $name, 
                                             'VALUE' => $value
                                             )); 
             $gParser->TplParse($tpl, 'ITEM', '.item');

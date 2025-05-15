@@ -2,8 +2,8 @@
 
 // Language
 //==================================================================================================
-$('div.language_set a[hreflang={MS:VAR:LANG}]').addClass('active');
-$('div.language_set').prev().html($('div.language_set a[hreflang={MS:VAR:LANG}]').html())
+$('div.language_set a[hreflang={MS:PAGE:LANG}]').addClass('active');
+$('div.language_set').prev().html($('div.language_set a[hreflang={MS:PAGE:LANG}]').html())
 
 // Navbar
 //==================================================================================================
@@ -72,7 +72,7 @@ $('.dropdown-menu').on('click', 'a.dropdown-toggle', function(event)
     {           
         sub.html('<li class="d-flex justify-content-center"><div class="spinner-border m-3"><span class="sr-only"></span></div></li>');
         sub.toggleClass('show');                
-        $.post('/{MS:VAR:LANG}/?mod=melbis_cataloge_sub',        
+        $.post('/{MS:PAGE:LANG}/?mod=melbis_cataloge_sub',        
             { id: $(this).data('id') },
             function(data) 
             {            

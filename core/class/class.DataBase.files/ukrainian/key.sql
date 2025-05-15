@@ -236,5 +236,6 @@ INSERT INTO {DBNICK}_key_value (id, key_code, key_name, value_txt, sys_key, pos)
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, value_txt, sys_key, pos) VALUES ('295', 'TRANS_TABLE_KEY', 'kDefault', 'За замовчуванням', '1', '295');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, value_txt, sys_key, pos) VALUES ('296', 'TRANS_TABLE_KEY', 'kTopic', 'Розділи', '0', '296');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, value_txt, sys_key, pos) VALUES ('297', 'TRANS_TABLE_KEY', 'kStore', 'Товари', '0', '297');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, value_txt, sys_key, pos) VALUES ('298', 'TRANS_TABLE_KEY', 'kTags', 'Теги', '0', '298');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, value_txt, sys_key, pos) VALUES ('299', 'MODULE_TRANSLATE_LINE', 'melbis_inc_translate.php', 'MELBIS_INC_TRANSLATE_service', '0', '299');
 UPDATE {DBNICK}_generator SET gen_value = 299 WHERE table_name = 'key_value';

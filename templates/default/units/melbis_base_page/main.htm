@@ -1,19 +1,19 @@
 <!doctype html>
-<html lang="en" class="h-100">
+<html lang="{MS:PAGE:LANG}" class="h-100">
     
-    {MELBIS:melbis_base_head()}
+    {MELBIS:melbis_base_head([MS:PAGE:LANG])}
     
     <body class="d-flex flex-column h-100">
      
         <script type="text/javascript"> var melbis_topic_id = [MS:PAGE:ID] </script>
         
-        {MELBIS:melbis_base_header()}
+        {MELBIS:melbis_base_header([MS:PAGE:LANG])}
 
         <main class="flex-shrink-0 mt-3">  
             {CONTENT}   
         </main>              
         
-        {MELBIS:melbis_base_footer()}    
+        {MELBIS:melbis_base_footer([MS:PAGE:LANG])}    
     </body>                                       
     
 <div class="modal fade" tabindex="-1" id="melbis_win_basket">

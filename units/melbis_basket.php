@@ -37,11 +37,11 @@ function MELBIS_BASKET_plus($mVars)
     global $gParser, $gSession;       
 
     // Vars
-    $store_id = $mVars['post']['id']*1;
+    $store_id = (int) $mVars['post']['id'];
     
     // Get version    
     $version = $gSession->GetValue('melbis_version');
-    if ( !is_array($version) )
+    if ( !isset($version) )
     {
         $version = MELBIS_INC_LOGIC_order_create();   
     }               
@@ -71,7 +71,7 @@ function MELBIS_BASKET_minus($mVars)
     
     // Get version    
     $version = $gSession->GetValue('melbis_version');
-    if ( !is_array($version) )
+    if ( !isset($version) )
     {
         $version = MELBIS_INC_LOGIC_order_create();   
     }               
@@ -99,7 +99,7 @@ function MELBIS_BASKET_goods($mVars)
     
     // Get version    
     $version = $gSession->GetValue('melbis_version');
-    if ( !is_array($version) )
+    if ( !isset($version) )
     {
         $version = MELBIS_INC_LOGIC_order_create();   
     }                                 
@@ -115,10 +115,11 @@ function MELBIS_BASKET_goods($mVars)
     {   
         foreach($version['store'] as $hash )
         {
+            $name = htmlspecialchars($hash['store_name']); // MELBIS_INC_LANG('kStore', 'NAME', $hash['store_id'], $hash['store_name']);
             $gParser->TplAssign($tpl, array('ID'            => $hash['store_id'],
                                             'AMOUNT'        => $hash['amount'],
                                             'PRICE'         => MELBIS_INC_STD_number($hash['out_price'], 0),
-                                            'NAME'          => MELBIS_INC_LANG('kStore', 'NAME', $hash['store_id'], $hash['store_name'])
+                                            'NAME'          => $name
                                             ));         
             $gParser->TplParse($tpl, 'ITEM', '.goods_item');  
         }                         
@@ -141,11 +142,11 @@ function MELBIS_BASKET_fields($mVars)
     global $gParser, $gSession; 
                                         
     // Vars
-    $gParser->gVars['ms']['var']['lang'] = $mVars['lang'];      
+    $gParser->gVars['ms']['page']['lang'] = $mVars['lang'];      
     
-    // Get version    
+    // Get order version    
     $version = $gSession->GetValue('melbis_version');
-    if ( !is_array($version) )
+    if ( !isset($version) )
     {
         $version = MELBIS_INC_LOGIC_order_create();   
     }                                 
@@ -160,8 +161,10 @@ function MELBIS_BASKET_fields($mVars)
         {
             if ( $hash['field_folder'] == 1 )
             {
-                $gParser->TplAssign($tpl, 'NAME', MELBIS_INC_LANG('kClient', 'FIELD', $hash['field_id'], $hash['field_name']));
+                $name = htmlspecialchars($hash['field_name']); // MELBIS_INC_LANG('kClient', 'FIELD', $hash['field_id'], $hash['field_name']);
+                $gParser->TplAssign($tpl, 'NAME', $name);
                 $gParser->TplParse($tpl, 'FIELD', '.fields_group');
+                
                 continue;                        
             }
                                               
@@ -183,23 +186,26 @@ function MELBIS_BASKET_fields($mVars)
                 $gParser->TplClear($tpl, 'VALUE');
                 foreach( $value as $val )
                 {
+                    $name = htmlspecialchars($val['name']); // MELBIS_INC_LANG('kClient', 'VALUE', $val['id'], $val['name']);
                     $gParser->TplAssign($tpl, array('ID'    => $val['id'],
-                                                    'NAME'  => MELBIS_INC_LANG('kClient', 'VALUE', $val['id'], $val['name']),
+                                                    'NAME'  => $name,
                                                     'SELECT'=> ( $hash['value_id'] == $val['id'] ) ? 'selected' : ''
                                                     )); 
                     $gParser->TplParse($tpl, 'VALUE', '.fields_box_val');            
-                } 
+                }
+                $name = htmlspecialchars($hash['field_name']); // MELBIS_INC_LANG('kClient', 'FIELD', $hash['field_id'], $hash['field_name']); 
                 $gParser->TplAssign($tpl, array('ID'    => $hash['field_id'],
-                                                'NAME'  => MELBIS_INC_LANG('kClient', 'FIELD', $hash['field_id'], $hash['field_name'])
+                                                'NAME'  => $name
                                                 )); 
                 $gParser->TplParse($tpl, 'FIELD', '.fields_box');                                       
             }
             else
             {                                                                 
+                $name = htmlspecialchars($hash['field_name']); // MELBIS_INC_LANG('kClient', 'FIELD', $hash['field_id'], $hash['field_name']);
                 $gParser->TplAssign($tpl, array('ID'        => $hash['field_id'], 
                                                 'VALUE_ID'  => $hash['value_id'],
                                                 'VALUE'     => htmlspecialchars($hash['value_txt']),                                            
-                                                'NAME'      => MELBIS_INC_LANG('kClient', 'FIELD', $hash['field_id'], $hash['field_name']),
+                                                'NAME'      => $name,
                                                 'AUTO'      => ''
                                                 ));
                 if ( count($value) > 0 )
@@ -228,11 +234,11 @@ function MELBIS_BASKET_options($mVars)
     global $gParser, $gSession;  
     
     // Vars
-    $gParser->gVars['ms']['var']['lang'] = $mVars['lang'];         
+    $gParser->gVars['ms']['page']['lang'] = $mVars['lang'];         
     
     // Get version    
     $version = $gSession->GetValue('melbis_version');
-    if ( !is_array($version) )
+    if ( !isset($version) )
     {
         $version = MELBIS_INC_LOGIC_order_create();   
     }                                 
@@ -262,24 +268,27 @@ function MELBIS_BASKET_options($mVars)
             {          
                 $gParser->TplClear($tpl, 'VALUE');
                 foreach( $value as $val )
-                {
+                {                                                    
+                    $name = htmlspecialchars($val['name']); // MELBIS_INC_LANG('kOption', 'VALUE', $val['id'], $val['name']);
                     $gParser->TplAssign($tpl, array('ID'    => $val['id'],
-                                                    'NAME'  => MELBIS_INC_LANG('kOption', 'VALUE', $val['id'], $val['name']),
+                                                    'NAME'  => $name,
                                                     'SELECT'=> ( $hash['value_id'] == $val['id'] ) ? 'selected' : ''
                                                     )); 
                     $gParser->TplParse($tpl, 'VALUE', '.options_box_val');            
-                } 
+                }
+                $name = htmlspecialchars($hash['option_name']); MELBIS_INC_LANG('kOption', 'FIELD', $hash['option_id'], $hash['option_name']); 
                 $gParser->TplAssign($tpl, array('ID'    => $hash['option_id'],
-                                                'NAME'  => MELBIS_INC_LANG('kOption', 'FIELD', $hash['option_id'], $hash['option_name'])
+                                                'NAME'  => $name
                                                 )); 
                 $gParser->TplParse($tpl, 'OPTION', '.options_box');                                       
             }
             else
             {                                                                 
+                $name = htmlspecialchars($hash['option_name']); // MELBIS_INC_LANG('kOption', 'FIELD', $hash['option_id'], $hash['option_name']);
                 $gParser->TplAssign($tpl, array('ID'        => $hash['option_id'],  
                                                 'VALUE_ID'  => $hash['value_id'],
                                                 'VALUE'     => htmlspecialchars($hash['value_name']),                                            
-                                                'NAME'      => MELBIS_INC_LANG('kOption', 'FIELD', $hash['option_id'], $hash['option_name']),
+                                                'NAME'      => $name,
                                                 'AUTO'      => ''
                                                 ));
                 if ( count($value) > 0 )

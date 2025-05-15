@@ -3,4 +3,22 @@ AddDefaultCharset UTF-8
 DirectoryIndex index.html index.htm index.php
 Options -Indexes
 
+ErrorDocument 404 /en/?topic_id=-404
 
+RewriteEngine on
+
+# Language  
+RewriteCond %{HTTP:Accept-Language} ^en [NC]
+RewriteRule ^$ /en/ [L,R=301]
+
+# Default
+RewriteRule ^$ /en/ [L,R=301]
+
+# Index page  
+RewriteRule ^([a-z]{2})/$ index.php?lang=$1 [L,QSA]
+
+# Modules
+RewriteRule ^([a-z]{2})\/([A-Za-z0-9_\-]+)\.php$ $2.php?lang=$1 [L,QSA]
+
+# Core
+RewriteRule ^core\/([A-Za-z0-9_\-\.\+]+)\/$ index.php?mod=melbis_core_$1 [L,B,QSA]

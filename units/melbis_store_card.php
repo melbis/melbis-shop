@@ -35,11 +35,14 @@ function MELBIS_STORE_CARD($mVars)
               ORDER BY id
                 ";                    
     $item = $gParser->SqlSelectToArray(__LINE__, $command);
+    $name = htmlspecialchars($item['name']); // MELBIS_INC_LANG('kStore', 'NAME', $item['id'], $item['name']);
+    $intro = htmlspecialchars($item['intro']); // MELBIS_INC_LANG('kStore', 'INTRO', $item['id'], $item['intro']);
+    $status = htmlspecialchars($item['status_name']); // MELBIS_INC_LANG_tag('STATUS', $item['status_key']);         
     $gParser->TplAssign($tpl, ['ID'         => $item['id'],                               
                                'CODE'       => htmlspecialchars($item['code_shop']),
-                               'NAME'       => MELBIS_INC_LANG('kStore', 'NAME', $item['id'], $item['name']),                               
-                               'INTRO'      => MELBIS_INC_LANG('kStore', 'INTRO', $item['id'], $item['intro']),
-                               'STATUS'     => MELBIS_INC_LANG_tag('STATUS', $item['status_key']), 
+                               'NAME'       => $name,                               
+                               'INTRO'      => $intro,
+                               'STATUS'     => $status, 
                                'PRICE'      => MELBIS_INC_STD_number($item['price_curr'], 2),
                                'UPDATE'     => date("d.m.Y", strtotime($item['update_time'])),                                        
                                ]);   

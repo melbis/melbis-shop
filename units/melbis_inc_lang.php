@@ -110,7 +110,7 @@ function MELBIS_INC_LANG_tag($mMod, $mName)
              LEFT JOIN {DBNICK}_trans_lang tl
                     ON o.id = tl.origin_id 
                    AND tl.lang_id = ( SELECT id FROM {DBNICK}_lang where skey = '$gLang' )                    
-                 WHERE t.table_key = 'kTag'
+                 WHERE t.table_key = 'kDefault'
                    AND t.name = '$mMod'
                    AND o.item_code = '$mName'
                ";                         
@@ -153,7 +153,7 @@ function MELBIS_INC_LANG_tags($mTpl, $mModule)
              LEFT JOIN {DBNICK}_trans_lang tl
                     ON o.id = tl.origin_id 
                    AND tl.lang_id = ( SELECT id FROM {DBNICK}_lang where skey = '$gLang' )                    
-                 WHERE t.table_key = 'kTag'
+                 WHERE t.table_key = 'kTags'
                    AND ( t.name = '$page_short' OR t.name = '$page_full' )     
                ";                                                     
     $tags = $gParser->SqlSelect(__LINE__, $command);

@@ -15,8 +15,8 @@ function MELBIS_BASE_HEAD($mVars)
     global $gParser;
                        
     // Create 
-    $tpl = $gParser->TplCreate();           
-                     
+    $tpl = $gParser->TplCreate();   
+
     // Lang tags    
     MELBIS_INC_LANG_tags($tpl, __FUNCTION__); 
                                                                 
@@ -28,6 +28,7 @@ function MELBIS_BASE_HEAD($mVars)
         $gParser->TplAssign($tpl, 'LANG', $lang['skey']);
         $gParser->TplParse($tpl, 'ALTER', '.alter');
     }    
+            
     
     // Final: return content
     $gParser->TplParse($tpl, 'MAIN', 'main');

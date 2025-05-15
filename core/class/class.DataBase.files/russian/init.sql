@@ -28,7 +28,7 @@ INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('advert_text', 0)
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('advert_goods', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('advert_link', 0);
 
-INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('lang', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('lang', 1);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('trans', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('trans_origin', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('trans_lang', 0);
@@ -144,6 +144,13 @@ INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('web_key_value', 
 
 INSERT INTO {DBNICK}_topic (id, name, kind_key, templ_key, order_key) VALUES (1, 'Основа', 'kFirst', 'kDefault', 'kDefault');
 
+/****************************************************************
+ *
+ * Language
+ *
+ ***************************************************************/
+
+INSERT INTO {DBNICK}_lang (id, skey, name, kind_key, is_origin, pos) VALUES (1, 'en', 'English', 'kDefault', 1, 1);
 
 /****************************************************************
  *

@@ -46,7 +46,7 @@ function MELBIS_CORE_TRANSLATE($mVars)
                      WHERE md5(CONCAT(o.context, o.origin)) <> o.crc 
                         OR tl.id IS NULL
                   ORDER BY size ASC                    
-                     LIMIT 10
+                     LIMIT 50
                    ";
         $origins = $gParser->SqlSelect(__LINE__, $command);
         foreach ($origins as $origin)

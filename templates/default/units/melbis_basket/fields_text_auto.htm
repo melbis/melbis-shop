@@ -6,7 +6,16 @@ $('input[name=field{ID}_text]').autocomplete(
 {    
     lookup: function (query, done) 
     {
-        $.post('[MS:VAR:LANG]/?mod=melbis_basket', { func: 'auto_field', query: query, id: {ID} }, function(data) { done(data); }, 'json');        
+        $.post('/[MS:PAGE:LANG]/?mod=melbis_basket', 
+            { 
+                func: 'auto_field', 
+                query: query, 
+                id: {ID} 
+            }, 
+            function(data) 
+            { 
+                done(data); 
+            }, 'json');        
     },
     onSelect: function (sugg) 
     {
