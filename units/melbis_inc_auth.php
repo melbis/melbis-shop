@@ -32,19 +32,14 @@ function MELBIS_INC_AUTH($mModule, $mVars)
         $gSession->RemoveValue('melbis_auth_user_id');
     }           
         
-    // Init vars  
-    $type = ( strpos($mModule, 'OUTSIDE') !== false ) ? 'outside' : 'inside';
-    $key = ( isset($mVars['post']['key']) ) ? '_'.preg_replace('/[^\w-]/', '', $mVars['post']['key']) : '';
+    // Init vars             
     $gParser->gVars['melbis']['mod'] = strtolower($mModule);    
-    $gParser->gVars['melbis']['mod_key'] = strtolower($mModule.$key);
-    $gParser->gVars['melbis']['serial'] = serialize($gParser->gVars['melbis']);
     
     // Auth module          
-    list($user_id, $result) = MELBIS_INC_AUTH_web($type, $mModule.$key, $mVars['post']);    
+    list($user_id, $result) = MELBIS_INC_AUTH_web($mModule, $mVars['post']);    
                              
     // Action switcher
-    $func = $mVars['post']['func'] ?? '';   
-    if ( $func == '' ) $func = 'default';  
+    $func = $mVars['post']['func'] ?? 'default';   
     if ( function_exists($mModule.'_'.$func) )
     {
         if ( $func == 'default' )
@@ -63,7 +58,7 @@ function MELBIS_INC_AUTH($mModule, $mVars)
             }
         }            
     }  
-    else
+    else 
     {
         return 'Function '.$func.' is absent!';
     }                                   
@@ -85,7 +80,7 @@ function MELBIS_INC_AUTH_user($mLogin, $mPassCode)
                ";   
     $user = $gParser->SqlSelectToArray(__LINE__, $command);
             
-    return $user['id']*1;
+    return $user['id'] ?? 0;
 } 
 
 
@@ -123,7 +118,7 @@ function MELBIS_INC_AUTH_user_command($mUserId, $mCommand)
  * Function MELBIS_INC_AUTH_web    
  * Authorization user for web or application
  **/
-function MELBIS_INC_AUTH_web($mType, $mModuleKey, $mPost)
+function MELBIS_INC_AUTH_web($mModule, $mPost)
 { 
     global $gParser, $gSession;                
                         
@@ -131,7 +126,7 @@ function MELBIS_INC_AUTH_web($mType, $mModuleKey, $mPost)
     if ( isset($mPost['pass']) ) $mPost['pass_code'] = md5($mPost['pass']);                                                
             
     // User module auth
-    $user_id = $gSession->GetValue('melbis_auth_'.$mModuleKey.'_user_id');    
+    $user_id = $gSession->GetValue('melbis_auth_'.$mModule.'_user_id');    
     if ( $gSession->GetValue('melbis_auth_user_id') == $user_id && $user_id > 0 )
     {                                    
         return array($user_id, 'accept');
@@ -143,10 +138,10 @@ function MELBIS_INC_AUTH_web($mType, $mModuleKey, $mPost)
         if ( $user_id > 0 )
         {
             // Test module access            
-            if ( MELBIS_INC_AUTH_web_access($user_id, $mType, $mModuleKey) > 0 )
+            if ( MELBIS_INC_AUTH_web_access($user_id, $mModule) > 0 )
             {
                 // Accept access, save it
-                $gSession->SetValue('melbis_auth_'.$mModuleKey.'_user_id', $user_id);
+                $gSession->SetValue('melbis_auth_'.$mModule.'_user_id', $user_id);
                 return array($user_id, 'accept');            
             }                   
             else
@@ -172,10 +167,10 @@ function MELBIS_INC_AUTH_web($mType, $mModuleKey, $mPost)
                     // Accept user and save it
                     $gSession->SetValue('melbis_auth_user_id', $user_id);
                     // Test module access
-                    if ( MELBIS_INC_AUTH_web_access($user_id, $mType, $mModuleKey) > 0 )
+                    if ( MELBIS_INC_AUTH_web_access($user_id, $mModule) > 0 )
                     {
                         // Accept access, save it
-                        $gSession->SetValue('melbis_auth_'.$mModuleKey.'_user_id', $user_id);
+                        $gSession->SetValue('melbis_auth_'.$mModule.'_user_id', $user_id);
                         return array($user_id, 'accept');            
                     }                   
                     else
@@ -199,17 +194,18 @@ function MELBIS_INC_AUTH_web($mType, $mModuleKey, $mPost)
  * Function MELBIS_INC_AUTH_web_access 
  * Verify user access for inside or outside module
  **/
-function MELBIS_INC_AUTH_web_access($mUserId, $mTable, $mModuleKey)
+function MELBIS_INC_AUTH_web_access($mUserId, $mModule)
 { 
     global $gParser;    
                       
     // User has admin access? 
-    $user_admin = MELBIS_INC_AUTH_user_command($mUserId, 'PUT_OUTSIDE_RIGHT');
+    $user_admin = MELBIS_INC_AUTH_user_command($mUserId, 'PUT_OUTSIDE_RIGHT');        
     
     // User module access         
     if ( !$user_admin )
     {                                 
-        switch ($mTable) 
+        $table = ( strpos($mModule, 'OUTSIDE') !== false ) ? 'outside' : 'inside';
+        switch ($table) 
         {
             case 'inside':
                 $command = "SELECT inside_right.*
@@ -218,7 +214,7 @@ function MELBIS_INC_AUTH_web_access($mUserId, $mTable, $mModuleKey)
                                 ON inside_right.inside_id = inside.id
                          LEFT JOIN {DBNICK}_user u
                                 ON ( u.group_id = inside_right.group_id OR u.add_group_id = inside_right.group_id )
-                             WHERE inside.skey = '$mModuleKey' 
+                             WHERE inside.skey = '$mModule' 
                                AND ( inside_right.user_id = '$mUserId' OR u.id = '$mUserId' OR inside.auth = 0 )
                            ";
                 $query = $gParser->SqlQuery(__LINE__, $command);                                               
@@ -232,7 +228,7 @@ function MELBIS_INC_AUTH_web_access($mUserId, $mTable, $mModuleKey)
                                 ON outside_right.outside_id = outside.id
                          LEFT JOIN {DBNICK}_user u
                                 ON ( u.group_id = outside_right.group_id OR u.add_group_id = outside_right.group_id )
-                             WHERE outside.skey = '$mModuleKey' 
+                             WHERE outside.skey = '$mModule' 
                                AND ( outside_right.user_id = '$mUserId' OR u.id = '$mUserId' OR outside.auth = 0 )
                            ";
                 $query = $gParser->SqlQuery(__LINE__, $command);                                               

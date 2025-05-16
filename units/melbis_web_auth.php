@@ -12,7 +12,7 @@
  **/
 function MELBIS_WEB_AUTH($mVars)
 { 
-    global $gParser;
+    global $gParser;  
     
     return MELBIS_INC_AUTH(__FUNCTION__, $mVars);                    
 }  
@@ -24,7 +24,7 @@ function MELBIS_WEB_AUTH($mVars)
 function MELBIS_WEB_AUTH_default($mUserId, $mResultAuth, $mVars)
 { 
     global $gParser;
-                       
+                     
     // Auth     
     if ( isset($mVars['post']['form_auth']) )
     {  
@@ -33,7 +33,13 @@ function MELBIS_WEB_AUTH_default($mUserId, $mResultAuth, $mVars)
     else
     {                                
         // Create 
-        $tpl = $gParser->TplCreate();          
+        $tpl = $gParser->TplCreate();     
+        
+        // Lang tags    
+        MELBIS_INC_LANG_tags($tpl, __FUNCTION__);
+        
+        // Vars
+        $gParser->gVars['ms']['page']['title'] = 'Authentication'; // MELBIS_INC_LANG_tag('WEB_AUTH', 'TITLE');                     
         
         // Parse result auth
         $gParser->TplParse($tpl, 'RESULT', 'result_'.$mResultAuth);           

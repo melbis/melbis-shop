@@ -4,7 +4,7 @@
 $('#melbis_form_auth').submit(function(event)
 {
     $('#melbis_form_auth button[type="submit"]').html('Please wait...').attr('disabled','disabled');      
-    $.post('/?mod=[MELBIS:MOD]',        
+    $.post('/[MS:PAGE:LANG]/?mod=[MELBIS:MOD]',        
         { 
             form_auth: true,
             login: $('#melbis_form_auth input[name="login"]').val(),
@@ -36,7 +36,7 @@ $('#melbis_form_auth').submit(function(event)
 // Logout
 $('#melbis_btn_logout').on('click', function()
 {
-    $.post('/?mod=[MELBIS:MOD]', { logout: true }, function() { location.reload(); }); 
+    $.post('/[MS:PAGE:LANG]/?mod=[MELBIS:MOD]', { logout: true }, function() { location.reload(); }); 
 });
 
 

@@ -160,12 +160,12 @@ INSERT INTO {DBNICK}_lang (id, skey, name, kind_key, is_origin, pos) VALUES (1, 
  ***************************************************************/
 
 INSERT INTO {DBNICK}_web_outside VALUES ('1','','Shop','0','0','0','0','https://shop.com','0');
-INSERT INTO {DBNICK}_web_outside VALUES ('2','TEST','Test module','0','0','1','0','https://shop.com/?mod=melbis_web_test','1');
+INSERT INTO {DBNICK}_web_outside VALUES ('2','melbis_web_test','Test module','0','0','1','0','https://shop.com/en/?mod=melbis_web_test','1');
 INSERT INTO {DBNICK}_web_outside VALUES ('3','','Search engine','0','0','2','0','https://google.com','0');
 
-INSERT INTO {DBNICK}_web_inside VALUES ('1','TEST','0','Test module','https://shop.com/?mod=melbis_web_test','1','1');
-INSERT INTO {DBNICK}_web_inside VALUES ('2','TEST','1','Test module','https://shop.com/?mod=melbis_web_test','1','1');
-INSERT INTO {DBNICK}_web_inside VALUES ('3','TEST','2','Test module','https://shop.com/?mod=melbis_web_test','1','1');
-INSERT INTO {DBNICK}_web_inside VALUES ('4','TEST','3','Test module','https://shop.com/?mod=melbis_web_test','1','1');
-INSERT INTO {DBNICK}_web_inside VALUES ('5','TEST','4','Test module','https://shop.com/?mod=melbis_web_test','1','1');
+INSERT INTO {DBNICK}_web_inside VALUES ('1','melbis_web_test','0','Test module','https://shop.com/en/?mod=melbis_web_test','1','1');
+INSERT INTO {DBNICK}_web_inside VALUES ('2','melbis_web_test','1','Test module','https://shop.com/en/?mod=melbis_web_test','1','1');
+INSERT INTO {DBNICK}_web_inside VALUES ('3','melbis_web_test','2','Test module','https://shop.com/en/?mod=melbis_web_test','1','1');
+INSERT INTO {DBNICK}_web_inside VALUES ('4','melbis_web_test','3','Test module','https://shop.com/en/?mod=melbis_web_test','1','1');
+INSERT INTO {DBNICK}_web_inside VALUES ('5','melbis_web_test','4','Test module','https://shop.com/en/?mod=melbis_web_test','1','1');
 

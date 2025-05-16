@@ -1,12 +1,8 @@
 <!doctype html>
-<html lang="en" class="h-100">
-  <head>                                                                  
-    <meta charset="{CHARSET}">          
-    <meta name="generator" content="Melbis Shop v6.3.0">    
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">    
-    <title>Authentication :: Melbis Shop 6 Work!</title>
-    {1MELBIS:melbis_base_meta()}
-  </head>
+<html lang="{MS:PAGE:LANG}" class="h-100">
+    
+    {MELBIS:melbis_base_head([MS:PAGE:LANG])}
+    
   <body class="d-flex flex-column h-100">
     
     <main class="m-auto">
@@ -21,10 +17,8 @@
         </div>        
     </main>
     
-    {MELBIS:melbis_base_footer()}
+    {MELBIS:melbis_base_footer([MS:PAGE:LANG])}
            
-    <script src="{PATH}/bootbox.js"></script>
-    
     {SCRIPTS}
 
   </body>

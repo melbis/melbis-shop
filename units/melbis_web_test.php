@@ -26,7 +26,12 @@ function MELBIS_WEB_TEST_default($mUserId, $mResultAuth, $mVars)
     global $gParser;
                        
     // Create 
-    $tpl = $gParser->TplCreate();   
+    $tpl = $gParser->TplCreate();    
+    
+    // Vars
+    $gParser->gVars['ms']['page']['lang'] = $mVars['lang'];
+    $gParser->gVars['ms']['page']['title'] = 'Test web module'; // MELBIS_INC_LANG_tag('WEB_TEST', 'TITLE');
+    $gParser->gVars['ms']['page']['year'] = MELBIS_INC_STD_get_now('Y');
                                                            
     // Auth                
     if ( $mResultAuth == 'accept' )

@@ -1,20 +1,15 @@
 <!doctype html>
-<html lang="en" class="h-100">
-  <head>                                                                  
-    <meta charset="{CHARSET}">          
-    <meta name="generator" content="Melbis Shop v6.3.0">    
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">    
-    <title>Test web module :: Melbis Shop 6 Work!</title>
-    {1MELBIS:melbis_base_meta()}
-    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.14.2/dist/bootstrap-table.min.css">    
-  </head>
+<html lang="{MS:PAGE:LANG}" class="h-100">
+    
+    {MELBIS:melbis_base_head([MS:PAGE:LANG])}
+    
   <body class="d-flex flex-column h-100">
     
     <main class="flex-shrink-0">     
         <div class="container-fluid">
             <button class="btn btn-sm btn-secondary float-right" id="melbis_btn_logout">Sign out</button>                       
             <h1 class="text-center my-3">Demo for some possible func of the web-module</h1>   
-            <p class="lead text-center my-2"><span class="badge badge-warning">By the way</span> You can open this demo-script in your browser <br>by url: http://ms6.com/?mod=melbis_web_test</p>     
+            <p class="lead text-center my-2"><span class="badge badge-warning">By the way</span> You can open this demo-script in your browser <br>like url: http://shop.com/?mod=melbis_web_test</p>     
             <nav>
                 <div class="nav nav-tabs">
                     <a class="nav-item nav-link active h4 font-weight-normal" data-toggle="tab" href="#melbis_tab_var">Got variables</a>
@@ -24,7 +19,7 @@
             </nav>        
             <div class="tab-content">        
                 <div class="tab-pane fade show active" id="melbis_tab_var">
-                    <pre class="my-2" >{VARS}</pre>
+                    <pre class="my-2">{VARS}</pre>
                 </div>
                 <div class="tab-pane fade pt-2" id="melbis_tab_table">                
                     <div id="melbis_toolbar_cataloge">                                   
@@ -50,10 +45,7 @@
         </div>           
     </main>
     
-    {MELBIS:melbis_base_footer()}
-           
-    <script src="{PATH}/bootbox.js"></script>  
-    <script src="https://unpkg.com/bootstrap-table@1.14.2/dist/bootstrap-table.min.js"></script>         
+    {MELBIS:melbis_base_footer([MS:PAGE:LANG])}     
     
     {SCRIPTS}
 
