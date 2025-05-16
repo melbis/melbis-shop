@@ -31,12 +31,9 @@ $gSession = $gParser->DefineSession(DB_USER_NAME.'_MELBIS_SHOP');
 $gParser->DefineLazyScript($gSitePath.'lazy.php');
 
 // Define lang
-$default_lang = 'en';
-$lang = addslashes($gGet['lang'] ?? $default_lang);
-$command = "SELECT * FROM {DBNICK}_lang WHERE skey = '$lang'";
-$langs = $gParser->SqlSelectToArray(__LINE__, $command);               
-$gLang = ( $langs['skey'] ?? $default_lang ); 
-
+$lang_list = ['en'];
+$lang_get = $gGet['lang'] ?? $lang_list[0];
+$gLang = ( in_array($lang_get, $lang_list) ) ? $lang_get : $lang_list[0];
 
 // Default module
 if ( !isset($gGet['mod']) ) $gGet['mod'] = 'melbis_base_page'; 
