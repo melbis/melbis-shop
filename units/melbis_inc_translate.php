@@ -6,7 +6,8 @@
  * @author Dmitriy Kasyanoff     
  **************************************************************************************************
  * 
- * MELBIS_INC_TRANSLATE_service          - Translater service    
+ * MELBIS_INC_TRANSLATE_service          - Return file path from time
+ * MELBIS_INC_TRANSLATE_service             - Convert HTML to plain text      
  *     
  **************************************************************************************************/
 
@@ -15,26 +16,17 @@
  **/
 function MELBIS_INC_TRANSLATE_service($mUserId, $mVars)
 { 
-    global $gParser; 
-                  
-    // Constant
-    $gParser->DefineSelfConst();
-                
-    // Get origin lang name      
+    global $gParser;
+                       
     $command = "SELECT * FROM {DBNICK}_lang WHERE is_origin = 1";               
     $from = $gParser->SqlSelectToArray(__LINE__, $command);    
-                      
-    // Translate lang name
+
     $command = "SELECT * FROM {DBNICK}_lang WHERE id = '$mVars[lang_id]'";               
     $to = $gParser->SqlSelectToArray(__LINE__, $command);   
 
     $html = ( $mVars['is_html'] > 0 );
     
-    $result = MELBIS_INC_TRANSLATE_deepl($mVars['origin'], 
-                                         $mVars['context'], 
-                                         $from['skey'], 
-                                         $to['skey'], 
-                                         $html);    
+    $result = MELBIS_INC_TRANSLATE_deepl($mVars['origin'], $mVars['context'], $from['skey'], $to['skey'], $html);
 
     return $result;
 } 
@@ -45,16 +37,16 @@ function MELBIS_INC_TRANSLATE_service($mUserId, $mVars)
  **/
 function MELBIS_INC_TRANSLATE_google($mText, $mContext, $mLangFrom, $mLangTo, $mHtml = false)
 {    
-    $data = array('q'           => $mText,
+    $data = array('q'           => '!'.$mText,
                   'target'      => $mLangTo,
                   'format'      => ( $mHtml ) ? 'html' : 'text',
                   'source'      => $mLangFrom,
                   'model'       => 'nmt',
-                  'key'         => MELBIS_GOOGLE_API_KEY
+                  'key'         => 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
                   );
     $ch = curl_init();    
-    curl_setopt($ch, CURLOPT_URL, MELBIS_GOOGLE_API_URL);
-    curl_setopt($ch, CURLOPT_REFERER, 'https://'.MELBIS_SHOP_DOMAIN);
+    curl_setopt($ch, CURLOPT_URL, 'https://translation.googleapis.com/language/translate/v2');
+    curl_setopt($ch, CURLOPT_REFERER, 'https://site.com');
     curl_setopt($ch, CURLOPT_POST, true);  
     curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
     curl_setopt($ch, CURLOPT_ENCODING, "gzip");
@@ -98,9 +90,10 @@ function MELBIS_INC_TRANSLATE_deepl($mText, $mContext, $mLangFrom, $mLangTo, $mH
     ];
     
     // cURL
-    $ch = curl_init(MELBIS_DEEPL_API_URL); 
+    //$ch = curl_init('https://api.deepl.com/v2/translate'); 
+    $ch = curl_init('https://api-free.deepl.com/v2/translate');
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Authorization: DeepL-Auth-Key '.MELBIS_DEEPL_API_KEY,
+        'Authorization: DeepL-Auth-Key XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
         'Content-Type: application/json',
     ]);
     curl_setopt($ch, CURLOPT_POST, 1);
