@@ -12,7 +12,7 @@
  **/
 function MELBIS_BASE_PAGE($mVars)
 { 
-    global $gParser, $gServer;
+    global $gParser, $gServer; 
                        
     // Create 
     $tpl = $gParser->TplCreate();                
