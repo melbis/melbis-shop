@@ -45,7 +45,7 @@ if ( !function_exists('MELBIS_INC_autoload') )
 $gSitePath = '/'; 
 
 // For switch off caching system set the value "false", it's useful in developing process
-$gUseCache = false;
+$gUseCache = true;
 
 // Set default shop template
 $gTemplate = TEMPLATE;
