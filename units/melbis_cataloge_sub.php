@@ -55,7 +55,7 @@ function MELBIS_CATALOGE_SUB($mVars)
                                        'NAME'  => $name,
                                        'LINK'  => $link
                                        ]);        
-            if ( is_null($item['how']) )
+            if ( !isset($item['how']) )
             {
                 $gParser->TplParse($tpl, 'ITEM', '.item');
             }            

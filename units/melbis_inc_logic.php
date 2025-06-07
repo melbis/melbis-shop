@@ -162,7 +162,7 @@ function MELBIS_INC_LOGIC_order_norm($mVersion)
                                 WHERE oo.id = '$hash[option_id]'
                             ";                             
                 $value = $gParser->SqlSelectToArray(__LINE__, $command);
-                if ( $value['fixed_set'] == 1 && is_null($value['value_id']) && !is_null($templ['option'][$i]['value_id']) )
+                if ( $value['fixed_set'] == 1 && !isset($value['value_id']) && isset($templ['option'][$i]['value_id']) )
                 {
                     $value = array_merge($value, $templ['option'][$i]);
                 }
@@ -233,7 +233,7 @@ function MELBIS_INC_LOGIC_order_norm($mVersion)
                                         WHERE oso.id = '$hash[option_id]'
                                     ";                             
                         $value = $gParser->SqlSelectToArray(__LINE__, $command);
-                        if ( $value['fixed_set'] == 1 && is_null($value['value_id']) && !is_null($templ['value_id']) )
+                        if ( $value['fixed_set'] == 1 && !isset($value['value_id']) && isset($templ['value_id']) )
                         {
                             $value = array_merge($value, $templ);
                         }                                                
@@ -271,7 +271,7 @@ function MELBIS_INC_LOGIC_order_norm($mVersion)
             $option_value = [];
             foreach ( $item['store_option'] as $hash )
             {                                    
-                if ( !is_null($hash['value_id']) )
+                if ( isset($hash['value_id']) )
                 {
                     $option_value[] = $hash['value_id'];
                 }
@@ -286,7 +286,7 @@ function MELBIS_INC_LOGIC_order_norm($mVersion)
                             ORDER BY id  
                             ";
                 $hash = $gParser->SqlSelectToArray(__LINE__, $command);
-                if ( !is_null($hash['id'] ?? null) )
+                if ( isset($hash['id']) )
                 {
                     $mVersion['result']['value'] = 'STORE_OPTION_BLOCK';
                     $mVersion['result']['message'] = $item['store_name'].":\r\n".$hash['message'];
@@ -302,7 +302,7 @@ function MELBIS_INC_LOGIC_order_norm($mVersion)
     $option_value = [];
     foreach ( $mVersion['option'] as $hash )
     {    
-        if ( !is_null($hash['value_id']) )
+        if ( isset($hash['value_id']) )
         {
             $option_value[] = $hash['value_id'];
         }
@@ -317,7 +317,7 @@ function MELBIS_INC_LOGIC_order_norm($mVersion)
                     ORDER BY id  
                     ";
         $hash = $gParser->SqlSelectToArray(__LINE__, $command);
-        if ( !is_null($hash['id'] ?? null) )
+        if ( isset($hash['id']) )
         {
             $mVersion['result']['value'] = 'OPTION_BLOCK';
             $mVersion['result']['message'] = $hash['message'];
@@ -328,11 +328,11 @@ function MELBIS_INC_LOGIC_order_norm($mVersion)
        
          
     // Option limit verify
-    if ( !is_null($mVersion['user_id']) )
+    if ( isset($mVersion['user_id']) )
     {                   
         $user_admin = MELBIS_INC_AUTH_user_command($mVersion['user_id'], 'PUT_ORDER_OPTION');
         $user_admin = false;
-        if ( is_array($mVersion['option']) && !is_null($mVersion['order_id']) && !$user_admin )
+        if ( is_array($mVersion['option']) && isset($mVersion['order_id']) && !$user_admin )
         {                    
             // Get previous option value
             $option_was = []; 
@@ -354,7 +354,7 @@ function MELBIS_INC_LOGIC_order_norm($mVersion)
             $option_set = [];
             foreach ( $mVersion['option'] as $option )
             {    
-                if ( !is_null($option['value_id']) )
+                if ( isset($option['value_id']) )
                 {
                     $option_set[] = $option['value_id'];
                 }
@@ -375,7 +375,7 @@ function MELBIS_INC_LOGIC_order_norm($mVersion)
                                AND ( oolr.user_id = '$mVersion[user_id]' OR u.id = '$mVersion[user_id]' )
                            ";
                 $hash = $gParser->SqlSelectToArray(__LINE__, $command);
-                if ( !is_null($hash['id'] ?? null) )
+                if ( isset($hash['id']) )
                 {
                     $mVersion['result']['value'] = 'OPTION_LIMIT';
                     $mVersion['result']['message'] = $hash['message'];
@@ -491,7 +491,7 @@ function MELBIS_INC_LOGIC_order_edit($mVersion)
     if ( $mVersion['result']['value'] != 'OK' ) return $mVersion['result'];
     
     // Test for intermediate version
-    if ( !is_null($mVersion['order_id']) )
+    if ( isset($mVersion['order_id']) )
     {            
         $command = "SELECT * FROM {DBNICK}_orders WHERE id = '$mVersion[order_id]'";
         $hash = $gParser->SqlSelectToArray(__LINE__, $command);                
@@ -553,7 +553,7 @@ function MELBIS_INC_LOGIC_order_edit($mVersion)
             foreach ( $mVersion['client'] as $item ) 
             {
                 $value_txt = addslashes($item['value_txt']);
-                $value_id = ( is_null($item['value_id']) ) ? 'NULL' : $item['value_id'];
+                $value_id = ( !isset($item['value_id']) ) ? 'NULL' : $item['value_id'];
                 $command = "UPDATE {DBNICK}_client_field cfv,
                                    {DBNICK}_field cf
                                SET cfv.value_txt = '$value_txt',

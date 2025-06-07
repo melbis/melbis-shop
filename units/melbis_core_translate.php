@@ -60,7 +60,7 @@ function MELBIS_CORE_TRANSLATE($mVars)
                                                     $origin['is_html']);
             echo $translate."\r\n"; 
             
-            if ( is_null($origin['tl_id']) )
+            if ( !isset($origin['tl_id']) )
             {   
                 // Add translate
                 $hash = [];
