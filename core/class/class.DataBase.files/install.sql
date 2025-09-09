@@ -23,7 +23,7 @@
  *
  ***************************************************************/
 
-
+ 
 /**
  * Table generator
  **/
@@ -63,7 +63,7 @@ CREATE TABLE {DBNICK}_oper (
    allow_from	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,	
    allow_to	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,	
    PRIMARY KEY (id),
-   KEY command (command(10))
+   KEY command (command)
 ) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
 
 
@@ -140,7 +140,7 @@ CREATE TABLE {DBNICK}_key_value (
    sys_key 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    pos		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY	key_code (key_code(10))
+   KEY	key_code (key_code)
 ) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
 
 
@@ -274,7 +274,7 @@ CREATE TABLE {DBNICK}_user_file_version (
    version 	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,
    PRIMARY KEY (id),
    KEY user_id (user_id),
-   KEY path (path(50))
+   KEY path (path(250))
 ) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
 
 
@@ -383,7 +383,7 @@ CREATE TABLE {DBNICK}_topic_alt (
    tlevel 	INT UNSIGNED DEFAULT '0' NOT NULL,
    absindex 	INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY kind_key (kind_key(10))
+   KEY kind_key (kind_key)
 ) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
 
 
@@ -980,14 +980,14 @@ CREATE TABLE {DBNICK}_store_param (
  **/
 DROP TABLE IF EXISTS {DBNICK}_lang;
 CREATE TABLE {DBNICK}_lang (
-   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
-   skey 	      CHAR(32) DEFAULT '' NOT NULL,
-   name 	      CHAR(255) DEFAULT '' NOT NULL,
-   descr       MEDIUMTEXT DEFAULT ('') NOT NULL,
+   id 		INT UNSIGNED DEFAULT '0' NOT NULL,
+   skey 	CHAR(32) DEFAULT '' NOT NULL,
+   name 	CHAR(255) DEFAULT '' NOT NULL,
+   descr      	MEDIUMTEXT DEFAULT ('') NOT NULL,
    kind_key 	CHAR(100) DEFAULT '' NOT NULL,
-   params	   CHAR(255) DEFAULT '' NOT NULL,
+   params	CHAR(255) DEFAULT '' NOT NULL,
    is_origin 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
-   pos         INT UNSIGNED DEFAULT '0' NOT NULL,
+   pos         	INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id)
 ) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
 
@@ -996,17 +996,17 @@ CREATE TABLE {DBNICK}_lang (
  **/
 DROP TABLE IF EXISTS {DBNICK}_files_lang;
 CREATE TABLE {DBNICK}_files_lang (
-   id		      INT UNSIGNED DEFAULT '0' NOT NULL,
-   elem_id	   INT UNSIGNED DEFAULT NULL,
+   id		INT UNSIGNED DEFAULT '0' NOT NULL,
+   elem_id	INT UNSIGNED DEFAULT NULL,
    kind_key 	CHAR(100) DEFAULT '' NOT NULL,
    file_name 	CHAR(100) DEFAULT '' NOT NULL,
    file_size	INT UNSIGNED DEFAULT '0' NOT NULL,
-   upload_time DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,
+   upload_time 	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,
    upload_ok 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    real_name	CHAR(255) DEFAULT '' NOT NULL,
    parent_id	INT UNSIGNED DEFAULT NULL,
    format_xml 	MEDIUMTEXT DEFAULT ('') NOT NULL,
-   pos		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   pos		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY elem_id (elem_id)
 ) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
@@ -1017,13 +1017,13 @@ CREATE TABLE {DBNICK}_files_lang (
  **/
 DROP TABLE IF EXISTS {DBNICK}_trans;
 CREATE TABLE {DBNICK}_trans (
-   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
-   skey 	      CHAR(32) DEFAULT '' NOT NULL,
-   name 	      CHAR(255) DEFAULT '' NOT NULL,
-   tindex 	   INT UNSIGNED DEFAULT '0' NOT NULL,
-   tlevel 	   INT UNSIGNED DEFAULT '0' NOT NULL,
+   id 		INT UNSIGNED DEFAULT '0' NOT NULL,
+   skey 	CHAR(32) DEFAULT '' NOT NULL,
+   name 	CHAR(255) DEFAULT '' NOT NULL,
+   tindex 	INT UNSIGNED DEFAULT '0' NOT NULL,
+   tlevel 	INT UNSIGNED DEFAULT '0' NOT NULL,
    absindex 	INT UNSIGNED DEFAULT '0' NOT NULL,
-   folder 	   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   folder 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    kind_key 	CHAR(100) DEFAULT '' NOT NULL,
    table_key 	CHAR(32) DEFAULT '' NOT NULL,
    PRIMARY KEY (id)
@@ -1036,19 +1036,19 @@ CREATE TABLE {DBNICK}_trans (
  **/
 DROP TABLE IF EXISTS {DBNICK}_trans_origin;
 CREATE TABLE {DBNICK}_trans_origin (
-   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
-   trans_id	   INT UNSIGNED DEFAULT NULL,
-   item_id	   INT UNSIGNED DEFAULT NULL,
+   id 		INT UNSIGNED DEFAULT '0' NOT NULL,
+   trans_id	INT UNSIGNED DEFAULT NULL,
+   item_id	INT UNSIGNED DEFAULT NULL,
    item_code 	CHAR(32) DEFAULT '' NOT NULL,
-   context     CHAR(255) DEFAULT '' NOT NULL,
-   origin      MEDIUMTEXT DEFAULT ('') NOT NULL,
-   crc 	      CHAR(32) DEFAULT '' NOT NULL,
+   context     	CHAR(255) DEFAULT '' NOT NULL,
+   origin      	MEDIUMTEXT DEFAULT ('') NOT NULL,
+   crc 	      	CHAR(32) DEFAULT '' NOT NULL,
    kind_key 	CHAR(100) DEFAULT '' NOT NULL,
-   params      CHAR(255) DEFAULT '' NOT NULL,
-   is_active   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
-   is_html     TINYINT UNSIGNED DEFAULT '0' NOT NULL,
-   no_trans    TINYINT UNSIGNED DEFAULT '0' NOT NULL,
-   pos         INT UNSIGNED DEFAULT '0' NOT NULL,
+   params      	CHAR(255) DEFAULT '' NOT NULL,
+   is_active   	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   is_html     	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   no_trans    	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   pos         	INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY trans_id (trans_id),
    KEY item_id (item_id),
@@ -1061,13 +1061,13 @@ CREATE TABLE {DBNICK}_trans_origin (
  **/
 DROP TABLE IF EXISTS {DBNICK}_trans_lang;
 CREATE TABLE {DBNICK}_trans_lang (
-   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
-   lang_id	   INT UNSIGNED DEFAULT NULL,
-   trans_id	   INT UNSIGNED DEFAULT NULL,
-   origin_id   INT UNSIGNED DEFAULT NULL,
-   translate   MEDIUMTEXT DEFAULT ('') NOT NULL,
-   is_approve  TINYINT UNSIGNED DEFAULT '0' NOT NULL,
-   is_error    TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   id 		INT UNSIGNED DEFAULT '0' NOT NULL,
+   lang_id	INT UNSIGNED DEFAULT NULL,
+   trans_id	INT UNSIGNED DEFAULT NULL,
+   origin_id   	INT UNSIGNED DEFAULT NULL,
+   translate   	MEDIUMTEXT DEFAULT ('') NOT NULL,
+   is_approve  	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   is_error    	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY lang_id (lang_id),
    KEY trans_id (trans_id),
@@ -1229,9 +1229,9 @@ CREATE TABLE {DBNICK}_store (
    award_cnt 	INT DEFAULT '0' NOT NULL,
    award_avg 	DECIMAL(10,4) DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY code_shop (code_shop(10)),
-   KEY code_prov (code_prov(10)),
-   KEY code_made (code_made(10)),
+   KEY code_shop (code_shop(250)),
+   KEY code_prov (code_prov(250)),
+   KEY code_made (code_made(250)),
    KEY provider_id (provider_id),
    KEY brand_id (brand_id),
    KEY relate_id (relate_id),
