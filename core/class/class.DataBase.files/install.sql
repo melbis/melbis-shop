@@ -1309,7 +1309,7 @@ CREATE TABLE {DBNICK}_store_comment (
    user_name	CHAR(255) DEFAULT '' NOT NULL,
    user_email	CHAR(255) DEFAULT '' NOT NULL,
    user_ip	INT UNSIGNED DEFAULT '0' NOT NULL,
-   params 	MEDIUMTEXT DEFAULT (''),
+   params 	MEDIUMTEXT DEFAULT ('') NOT NULL,
    award        TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    positive     MEDIUMTEXT DEFAULT ('') NOT NULL,
    negative     MEDIUMTEXT DEFAULT ('') NOT NULL,
