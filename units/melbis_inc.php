@@ -40,7 +40,6 @@ if ( !function_exists('MELBIS_INC_autoload') )
     spl_autoload_register('MELBIS_INC_autoload');
 }
 
-
 // Set path of shop on the domain, for sample: "www.site.com/shop", right path is "/shop/"
 $gSitePath = '/'; 
 
@@ -96,9 +95,77 @@ function MELBIS_INC($mInclude)
  * Function MELBIS_INC_halt
  * Returm info message about error and die
  **/    
-function MELBIS_INC_halt($mErrorType, $mErrorFile, $mError, $mErrorInfo = '') 
+function MELBIS_INC_halt($mType, $mFile, $mError, $mInfo = '') 
 {
-    // So, print error message 
+    if ( file_exists('./error.log') )
+    {                               
+        $log_file = __DIR__.'/../_error_front.log';
+        $now = new DateTime('now', new DateTimeZone(TIME_ZONE));
+        $url = $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];    
+        $ip = $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['HTTP_X_REAL_IP'] ?? $_SERVER['REMOTE_ADDR'] ?? '';
+        $agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+        $refer = $_SERVER['HTTP_REFERER'] ?? '';
+        $cookie = print_r($_COOKIE, true); 
+        $sid = session_id() ?? ''; 
+        $stamp = md5($ip.$agent);
+                
+        $log = "--- ERROR LOG [".$now->format("Y-m-d H:i:s")."] ---\n";
+        $log .= "URL: http://$url\n";                                   
+        $log .= "Stamp: $stamp\n";
+        $log .= "Session: $sid\n";
+        $log .= "IP: $ip\n";
+        $log .= "Agent: $agent\n";
+        $log .= "Referer: $refer\n";
+        $log .= "Type: $mType\n";
+        $log .= "Source: $mFile\n";
+        $log .= "Message: $mError\n"; 
+        $log .= "Info: ".trim($mInfo)."\n";        
+        $log .= "Cookie Data: ".trim($cookie) . "\n";
+        
+        if (!empty($_POST)) 
+        {
+            $post = print_r($_POST, true);
+            $log .= "POST Data: ".trim($post)."\n";
+        }     
+        
+        $input = file_get_contents('php://input');
+        if (!empty($input)) 
+        {
+            $json = json_decode($input, true);
+            if (json_last_error() === JSON_ERROR_NONE) 
+            {
+                $log .= "Input (JSON): ".trim(print_r($json, true))."\n";
+            } 
+            else 
+            {
+                $log .= "Input (RAW): ".trim($input)."\n";
+            }                        
+        }           
+        
+        $log .= "----------------------------\n\n";
+                
+        @file_put_contents($log_file, $log, FILE_APPEND | LOCK_EX);
+    }
+    
+    // Headers
+    $backup_begin = new DateTime(BACKUP_TIME_BEGIN, new DateTimeZone(TIME_ZONE));
+    $backup_end = new DateTime(BACKUP_TIME_END, new DateTimeZone(TIME_ZONE));
+    if ( $now >= $backup_begin && $now <= $backup_end ) 
+    {
+        // Service Unavailable
+        $retry = $backup_end->getTimestamp() - $now->getTimestamp();                
+        $error_header = '503 Service Unavailable';
+        header('HTTP/1.1 '.$error_header);
+        header('Retry-After: '.$retry);
+    }
+    else
+    {        
+        // Server Error
+        $error_header = '500 Internal Server Error';
+        header('HTTP/1.1 '.$error_header);              
+        header('Content-Type: text/html; charset=utf-8');
+    }
+    
 ?>    
 <!doctype html>
 <html lang="en" class="h-100">
@@ -112,13 +179,14 @@ function MELBIS_INC_halt($mErrorType, $mErrorFile, $mError, $mErrorInfo = '')
     <main class="m-auto">
         <div class="card text-white bg-danger">
             <h3 class="card-header text-center">An exception occurred in shop's script</h3>
-            <div class="card-body bg-white text-dark">
+            <div class="card-body bg-white text-dark"> 
+                <h1 class="text-center"><?php echo $error_header; ?></h1>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item"><strong>Error type:</strong> <code><?php echo $mErrorType; ?></code></li>
-                    <li class="list-group-item"><strong>Source, line:</strong> <code><?php echo $mErrorFile; ?></code></li>
+                    <li class="list-group-item"><strong>Error type:</strong> <code><?php echo $mType; ?></code></li>
+                    <li class="list-group-item"><strong>Source, line:</strong> <code><?php echo $mFile; ?></code></li>
                     <li class="list-group-item"><strong>Error message:</strong> <code><?php echo $mError; ?></code> </li>
                 </ul>                                
-                <pre class="pre-scrollable my-2" style="white-space: pre-wrap"> <?php echo $mErrorInfo; ?> </pre>
+                <pre class="pre-scrollable my-2" style="white-space: pre-wrap"> <?php echo $mInfo; ?> </pre>
             </div>
             <div class="card-footer bg-light text-muted text-right">
                 <?php echo date("H:i:s d-m-Y"); ?>   

@@ -7,6 +7,10 @@ ErrorDocument 404 /en/?topic_id=-404
 
 RewriteEngine on
 
+# Deny Error logs
+RewriteCond %{QUERY_STRING} !your_pass_key
+RewriteRule ^_[^/]*\.log$ - [F]
+
 # Language  
 RewriteCond %{HTTP:Accept-Language} ^en [NC]
 RewriteRule ^$ /en/ [L,R=301]

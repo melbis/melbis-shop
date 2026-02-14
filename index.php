@@ -39,7 +39,7 @@ $gLang = ( in_array($lang_get, $lang_list) ) ? $lang_get : $lang_list[0];
 if ( !isset($gGet['mod']) ) $gGet['mod'] = 'melbis_base_page'; 
 
 // Parse
-$gParser->Parse($gSitePath, $gTemplate, $gGet['mod'], [$gLang, serialize($gGet), serialize($gPost)], $gUseCache, $gBuild);
+$gParser->Parse($gSitePath, $gTemplate, $gGet['mod'], [$gLang1, serialize($gGet), serialize($gPost)], $gUseCache, $gBuild);
 
 // Publish
 $gParser->Publish();
