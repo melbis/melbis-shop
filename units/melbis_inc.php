@@ -97,10 +97,15 @@ function MELBIS_INC($mInclude)
  **/    
 function MELBIS_INC_halt($mType, $mFile, $mError, $mInfo = '') 
 {
+    // Get time
+    $now = new DateTime('now', new DateTimeZone(TIME_ZONE));
+    $backup_begin = new DateTime(BACKUP_TIME_BEGIN, new DateTimeZone(TIME_ZONE));
+    $backup_end = new DateTime(BACKUP_TIME_END, new DateTimeZone(TIME_ZONE));        
+               
+    // Save log
     if ( file_exists('./error.log') )
     {                               
         $log_file = __DIR__.'/../_error_front.log';
-        $now = new DateTime('now', new DateTimeZone(TIME_ZONE));
         $url = $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];    
         $ip = $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['HTTP_X_REAL_IP'] ?? $_SERVER['REMOTE_ADDR'] ?? '';
         $agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
@@ -148,8 +153,6 @@ function MELBIS_INC_halt($mType, $mFile, $mError, $mInfo = '')
     }
     
     // Headers
-    $backup_begin = new DateTime(BACKUP_TIME_BEGIN, new DateTimeZone(TIME_ZONE));
-    $backup_end = new DateTime(BACKUP_TIME_END, new DateTimeZone(TIME_ZONE));
     if ( $now >= $backup_begin && $now <= $backup_end ) 
     {
         // Service Unavailable
