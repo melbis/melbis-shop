@@ -15,10 +15,10 @@ function MELBIS_BASE_PAGE($mVars)
     global $gParser, $gServer; 
                        
     // Create 
-    $tpl = $gParser->TplCreate();                
-
+    $tpl = $gParser->TplCreate();    
+    
     // Lang tags    
-    MELBIS_INC_LANG_tags($tpl, __FUNCTION__);                                                     
+    MELBIS_INC_LANG_tags($tpl, __FUNCTION__);                           
     
     // Vars
     $id = (int) ($mVars['get']['topic_id'] ?? 0);
@@ -97,13 +97,11 @@ function MELBIS_BASE_PAGE($mVars)
             // Page goods
             $gParser->TplParse($tpl, 'CONTENT', 'goods');        
         }                                
-    }      
-         
-    $gParser->TplParse($tpl, 'SCRIPTS', 'scripts');
-    
+    }     
+                
     // Final: return content
-    $gParser->TplParse($tpl, 'MAIN', 'main');   
-        
+    $gParser->TplParse($tpl, 'MAIN', 'main'); 
+    
     return $gParser->TplFree($tpl, 'MAIN');
 } 
 

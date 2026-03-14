@@ -140,7 +140,7 @@ function MELBIS_INC_LANG_tags($mTpl, $mModule)
     global $gParser, $gLang;
                        
     $parts = explode('_', $mModule);
-    $page_short =$parts[1];    
+    $page_short = $parts[1];    
     $page_full = $parts[1].'_'.$parts[2];    
             
     $command = "SELECT o.item_code AS name, 
@@ -169,6 +169,8 @@ function MELBIS_INC_LANG_tags($mTpl, $mModule)
             {                                                    
                 $gParser->TplAssign($mTpl, 'TAG_'.$tag['name'], htmlspecialchars($tag['value']));
                 $gParser->TplAssign($mTpl, 'TAGS_'.$tag['name'], addcslashes($tag['value'], "'"));
+                //$gParser->TplAssign($mTpl, 'TAGS_'.$tag['name'],                                            
+//                    json_encode($tag['value'], JSON_HEX_TAG | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_HEX_APOS));
             }
             else
             {
