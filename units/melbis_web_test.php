@@ -23,8 +23,8 @@ function MELBIS_WEB_TEST($mVars)
  **/
 function MELBIS_WEB_TEST_default($mUserId, $mResultAuth, $mVars)
 { 
-    global $gParser;
-                       
+    global $gParser;   
+    
     // Create 
     $tpl = $gParser->TplCreate();    
     
