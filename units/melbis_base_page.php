@@ -29,10 +29,11 @@ function MELBIS_BASE_PAGE($mVars)
     // Define page
     $command = "SELECT *
                   FROM {DBNICK}_topic   
-                 WHERE id = '$id' 
+                 WHERE id = :ID 
                    AND no_visible = 0
-                ";     
-    $topic = $gParser->SqlSelectToArray(__LINE__, $command);
+                ";                    
+    $params = [ 'id' => $id ];                
+    $topic = $gParser->SqlSelectToArray(__LINE__, $command, $params);
     if ( !isset($topic['id']) ) 
     {   
         if ( $id == 0 )
@@ -72,12 +73,13 @@ function MELBIS_BASE_PAGE($mVars)
                           FROM {DBNICK}_store s
                           JOIN {DBNICK}_topic_store ts
                             ON s.id = ts.store_id
-                         WHERE ts.topic_id = '$topic[id]'  
+                         WHERE ts.topic_id = :TOPIC_ID  
                            AND s.no_visible = 0                          
                       ORDER BY ts.pos
                          LIMIT 1             
-                        ";                    
-            $page = $gParser->SqlSelectToArray(__LINE__, $command);
+                        ";                                       
+            $params = [ 'topic_id' => $topic['id'] ];                        
+            $page = $gParser->SqlSelectToArray(__LINE__, $command, $params);
             if ( !isset($page['id']) )
             {
                 // Error 
@@ -93,11 +95,15 @@ function MELBIS_BASE_PAGE($mVars)
         }
                  
         if ( $topic['kind_key'] == 'kGoods' )  
-        {                  
+        {           
             // Page goods
             $gParser->TplParse($tpl, 'CONTENT', 'goods');        
         }                                
-    }     
+    }   
+
+    $id = $gParser->SqlLastInsertId();
+    
+    $gParser->TplParse($tpl, 'SCRIPTS', 'scripts');
                 
     // Final: return content
     $gParser->TplParse($tpl, 'MAIN', 'main'); 

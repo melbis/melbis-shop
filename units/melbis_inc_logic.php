@@ -37,11 +37,15 @@ function MELBIS_INC_LOGIC_order_create()
 {
     global $gParser; 
     
-    $version =  array('order_id'    => null, 
-                      'user_id'     => null, 
-                      'client_id'   => null,  
-                      'date_time'   => MELBIS_INC_STD_get_now(), 
-                      'total_sum'   => 0
+    $now = MELBIS_INC_STD_get_now();
+    $version =  array('order_id'        => null, 
+                      'user_id'         => null, 
+                      'client_id'       => null,  
+                      'date_time'       => $now, 
+                      'total_sum'       => 0,
+                      'order_code'      => '', 
+                      'version_id'      => null,
+                      'order_date_time' => $now 
                       );
 
     // Client
@@ -399,7 +403,7 @@ function MELBIS_INC_LOGIC_order_load($mOrderId)
     global $gParser;       
     
     // Get version            
-    $command = "SELECT ov.*
+    $command = "SELECT ov.*, o.code AS order_code, o.version_id, o.date_time AS order_date_time
                   FROM {DBNICK}_orders o
                   JOIN {DBNICK}_orders_version ov 
                     ON o.version_id = ov.id
