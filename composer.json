@@ -8,6 +8,8 @@
         "issues": "https://github.com/melbis/melbis-shop/issues",
         "forum": "https://t.me/melbis_shop"
     },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
     "require": {
         "php": ">=8.3",
         "ext-ioncube_loader": "*",
