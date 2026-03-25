@@ -1,0 +1,28 @@
+{
+    "name": "melbis/melbis-shop",
+    "description": "Professional e-commerce platform for high-load projects. Built with speed and scalability in mind.",
+    "type": "project",
+    "homepage": "https://melbis.com",
+    "license": "proprietary",
+    "support": {
+        "issues": "https://github.com/melbis/melbis-shop/issues",
+        "forum": "https://t.me/melbis_shop"
+    },
+    "require": {
+        "php": ">=8.3",
+        "ext-ioncube_loader": "*",
+        "ext-mysqli": "*",
+        "ext-curl": "*",
+        "ext-gd": "*",
+        "ext-zip": "*",
+        "ext-xml": "*",
+        "ext-apcu": "*"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true,
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    }
+}
