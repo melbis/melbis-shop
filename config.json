@@ -1,0 +1,21 @@
+{
+    "DB_HOST_NAME": "db",
+    "DB_USER_NAME": "melbis",
+    "DB_USER_PASS": "melbis_pass",
+    "DB_NAME": "melbis",
+    "DB_NICK": "ms",
+    "DB_CHARSET": "utf8mb4",
+    "DB_COMMAND": "SET sql_mode = CONCAT(@@sql_mode, ',NO_UNSIGNED_SUBTRACTION');",
+    "TIME_ZONE": "UTC",
+    "SHOP_LOCALE": "en_US.UTF-8",
+    "DEBUG_CODE": "code",
+    "VERSION_CACHE": "1000",
+    "OBFUSCATE_URL": "https:\/\/minify.php",
+    "SHOP_CHARSET": "UTF-8",
+    "DESKTOP_CHARSET": "WIN1252",
+    "IP_LIST": "",
+    "TEMPLATE": "default",
+    "BACKUP_TIME_BEGIN": "05:00:00",
+    "BACKUP_TIME_END": "05:30:00",
+    "USER_LOG": "False"
+}

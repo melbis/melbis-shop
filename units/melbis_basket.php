@@ -1,9 +1,9 @@
 <?php
 /***************************************************************************************************
- * @version 6.4.0
- * @copyright 2025 Melbis Company
+ * @version 6.4.1
+ * @copyright 2026 Melbis
  * @link https://melbis.com
- * @author Dmitriy Kasyanoff
+ * @author Dmytro Kasyanov
  **************************************************************************************************/
 
 
@@ -34,13 +34,13 @@ function MELBIS_BASKET($mVars)
  **/
 function MELBIS_BASKET_plus($mVars)
 { 
-    global $gParser, $gSession;       
+    global $gParser;       
 
     // Vars
     $store_id = (int) $mVars['post']['id'];
     
     // Get version    
-    $version = $gSession->GetValue('melbis_version');
+    $version = $gParser->SessionGetValue('melbis_version');
     if ( !isset($version) )
     {
         $version = MELBIS_INC_LOGIC_order_create();   
@@ -53,7 +53,7 @@ function MELBIS_BASKET_plus($mVars)
     $version = MELBIS_INC_LOGIC_order_calc($version);
              
     // Save version
-    $gSession->SetValue('melbis_version', $version);    
+    $gParser->SessionSetValue('melbis_version', $version);    
                         
     return '';                         
 }    
@@ -64,13 +64,13 @@ function MELBIS_BASKET_plus($mVars)
  **/
 function MELBIS_BASKET_minus($mVars)
 { 
-    global $gParser, $gSession;       
+    global $gParser;       
 
     // Vars
     $store_id = $mVars['post']['id']*1;
     
     // Get version    
-    $version = $gSession->GetValue('melbis_version');
+    $version = $gParser->SessionGetValue('melbis_version');
     if ( !isset($version) )
     {
         $version = MELBIS_INC_LOGIC_order_create();   
@@ -83,7 +83,7 @@ function MELBIS_BASKET_minus($mVars)
     $version = MELBIS_INC_LOGIC_order_calc($version);
              
     // Save version
-    $gSession->SetValue('melbis_version', $version);        
+    $gParser->SessionSetValue('melbis_version', $version);        
                                
     // Go to list
     return MELBIS_BASKET_goods($mVars);     
@@ -95,10 +95,10 @@ function MELBIS_BASKET_minus($mVars)
  **/
 function MELBIS_BASKET_goods($mVars)
 { 
-    global $gParser, $gSession;       
+    global $gParser;       
     
     // Get version    
-    $version = $gSession->GetValue('melbis_version');
+    $version = $gParser->SessionGetValue('melbis_version');
     if ( !isset($version) )
     {
         $version = MELBIS_INC_LOGIC_order_create();   
@@ -139,13 +139,13 @@ function MELBIS_BASKET_goods($mVars)
  **/
 function MELBIS_BASKET_fields($mVars)
 { 
-    global $gParser, $gSession; 
+    global $gParser; 
                                         
     // Vars
     $gParser->gVars['ms']['page']['lang'] = $mVars['lang'];      
     
     // Get order version    
-    $version = $gSession->GetValue('melbis_version');
+    $version = $gParser->SessionGetValue('melbis_version');
     if ( !isset($version) )
     {
         $version = MELBIS_INC_LOGIC_order_create();   
@@ -231,13 +231,13 @@ function MELBIS_BASKET_fields($mVars)
  **/
 function MELBIS_BASKET_options($mVars)
 { 
-    global $gParser, $gSession;  
+    global $gParser;  
     
     // Vars
     $gParser->gVars['ms']['page']['lang'] = $mVars['lang'];         
     
     // Get version    
-    $version = $gSession->GetValue('melbis_version');
+    $version = $gParser->SessionGetValue('melbis_version');
     if ( !isset($version) )
     {
         $version = MELBIS_INC_LOGIC_order_create();   
@@ -360,14 +360,14 @@ function MELBIS_BASKET_auto_option($mVars)
  **/
 function MELBIS_BASKET_save($mVars)
 { 
-    global $gParser, $gSession; 
+    global $gParser; 
                                
     // Vars
     $data['result'] = 'OK';
     $data['message'] = '';    
     
     // Get version    
-    $version = $gSession->GetValue('melbis_version');
+    $version = $gParser->SessionGetValue('melbis_version');
     if ( !is_array($version) )
     {
         $version = MELBIS_INC_LOGIC_order_create();   
@@ -397,7 +397,7 @@ function MELBIS_BASKET_save($mVars)
     $version = MELBIS_INC_LOGIC_order_calc($version);
     
     // Save version
-    $gSession->SetValue('melbis_version', $version);                                          
+    $gParser->SessionSetValue('melbis_version', $version);                                          
 
     // Verify cart    
     if ( count($version['store']) == 0 )
@@ -431,7 +431,7 @@ function MELBIS_BASKET_save($mVars)
     else
     {
         // Close order session
-        $gSession->RemoveValue('melbis_version');
+        $gParser->SessionRemoveValue('melbis_version');
     }       
                         
     return json_encode($data);   

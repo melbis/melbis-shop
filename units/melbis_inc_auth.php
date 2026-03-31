@@ -1,9 +1,9 @@
 <?php
 /***************************************************************************************************
- * @version 6.4.0
- * @copyright 2025 Melbis Company
+ * @version 6.4.1
+ * @copyright 2026 Melbis
  * @link https://melbis.com
- * @author Dmitriy Kasyanoff
+ * @author Dmytro Kasyanov
  **************************************************************************************************
  *
  * MELBIS_INC_AUTH                      - Smart user authorization start
@@ -24,12 +24,12 @@
  **/
 function MELBIS_INC_AUTH($mModule, $mVars)
 { 
-    global $gParser, $gSession;    
+    global $gParser;    
         
     // Logout?
     if ( isset($mVars['post']['logout']) )
     {        
-        $gSession->RemoveValue('melbis_auth_user_id');
+        $gParser->SessionRemoveValue('melbis_auth_user_id');
     }           
         
     // Init vars             
@@ -120,28 +120,28 @@ function MELBIS_INC_AUTH_user_command($mUserId, $mCommand)
  **/
 function MELBIS_INC_AUTH_web($mModule, $mPost)
 { 
-    global $gParser, $gSession;                
+    global $gParser;                
                         
     // Prepare pass code
     if ( isset($mPost['pass']) ) $mPost['pass_code'] = md5($mPost['pass']);                                                
             
     // User module auth
-    $user_id = $gSession->GetValue('melbis_auth_'.$mModule.'_user_id');    
-    if ( $gSession->GetValue('melbis_auth_user_id') == $user_id && $user_id > 0 )
+    $user_id = $gParser->SessionGetValue('melbis_auth_'.$mModule.'_user_id');    
+    if ( $gParser->SessionGetValue('melbis_auth_user_id') == $user_id && $user_id > 0 )
     {                                    
         return array($user_id, 'accept');
     }    
     else
     {     
         // User auth?
-        $user_id = $gSession->GetValue('melbis_auth_user_id');
+        $user_id = $gParser->SessionGetValue('melbis_auth_user_id');
         if ( $user_id > 0 )
         {
             // Test module access            
             if ( MELBIS_INC_AUTH_web_access($user_id, $mModule) > 0 )
             {
                 // Accept access, save it
-                $gSession->SetValue('melbis_auth_'.$mModule.'_user_id', $user_id);
+                $gParser->SessionSetValue('melbis_auth_'.$mModule.'_user_id', $user_id);
                 return array($user_id, 'accept');            
             }                   
             else
@@ -165,12 +165,12 @@ function MELBIS_INC_AUTH_web($mModule, $mPost)
                 else
                 {   
                     // Accept user and save it
-                    $gSession->SetValue('melbis_auth_user_id', $user_id);
+                    $gParser->SessionSetValue('melbis_auth_user_id', $user_id);
                     // Test module access
                     if ( MELBIS_INC_AUTH_web_access($user_id, $mModule) > 0 )
                     {
                         // Accept access, save it
-                        $gSession->SetValue('melbis_auth_'.$mModule.'_user_id', $user_id);
+                        $gParser->SessionSetValue('melbis_auth_'.$mModule.'_user_id', $user_id);
                         return array($user_id, 'accept');            
                     }                   
                     else

@@ -7,6 +7,9 @@ ErrorDocument 404 /en/?topic_id=-404
 
 RewriteEngine on
 
+# Deny config
+RewriteRule ^config.json$ - [F]
+
 # Deny Error logs
 RewriteCond %{QUERY_STRING} !your_pass_key
 RewriteRule ^_[^/]*\.log$ - [F]

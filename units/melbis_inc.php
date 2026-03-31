@@ -1,15 +1,17 @@
 <?php
 /***************************************************************************************************
- * @version 6.4.0
- * @copyright 2025 Melbis Company
+ * @version 6.4.1
+ * @copyright 2026 Melbis
  * @link https://melbis.com
- * @author Dmitriy Kasyanoff         
+ * @author Dmytro Kasyanov       
  **************************************************************************************************/
-
-// Core
-require_once('core/core.php');
  
+// Core
+//-----
+require_once('core/core.php');
+
 // PHP error control
+//------------------
 error_reporting(E_ALL);  
 ini_set('display_errors', 'off');      
 set_error_handler(function ($mError, $mMessage, $mFile, $mLine) 
@@ -25,11 +27,43 @@ register_shutdown_function(function ()
             MELBIS_INC_halt('PHP Shutdown Exception', $error["file"].' : '.$error["line"], $error["message"]); 
     });
 
-// Set Local Setting 
+
+// Configuration
+//--------------
+$config = json_decode(file_get_contents('./config.json'), true);    
+foreach( $config as $const => $value)
+{
+    define($const, $value);
+}
+
+// Path to the shop on the domain
+$gSitePath = '/'; 
+
+// Enabling global caching for scripts
+$gUseCache = true;
+
+// Default shop template
+$gTemplate = TEMPLATE;
+
+// Current build scripts
+$gBuild = 1;
+                    
+    
+// Set Local Setting
+//------------------ 
 if ( strlen(SHOP_LOCALE) > 0 ) setlocale(LC_CTYPE, SHOP_LOCALE); 
 if ( strlen(SHOP_CHARSET) > 0 ) mb_internal_encoding(SHOP_CHARSET);
 
-// Autoload class
+// Shop lock
+//----------
+if ( file_exists('shop.lock') ) 
+{
+    MELBIS_INC_halt('SHOP LOCKED', __FILE__.':'.__LINE__, 'Shop locked!', 'shop.lock');
+} 
+ 
+
+// Autoloader
+//-----------
 if ( !function_exists('MELBIS_INC_autoload') ) 
 {
     function MELBIS_INC_autoload($mClassName)
@@ -40,56 +74,6 @@ if ( !function_exists('MELBIS_INC_autoload') )
     spl_autoload_register('MELBIS_INC_autoload');
 }
 
-// Set path of shop on the domain, for sample: "www.site.com/shop", right path is "/shop/"
-$gSitePath = '/'; 
-
-// For switch off caching system set the value "false", it's useful in developing process
-$gUseCache = true;
-
-// Set default shop template
-$gTemplate = TEMPLATE;
-
-// Set current build counter
-$gBuild = 1;
-
-// GET vars array
-$gGet = $_GET;
-
-// POST vars array
-$gPost = $_POST;
-
-// FILES vars array
-$gFiles = $_FILES;
-
-// SERVER vars array
-$gServer = $_SERVER;
-
-
- // Shop available?
- if ( file_exists('shop.lock') ) 
- {
-     MELBIS_INC_halt('SHOP LOCKED', __FILE__.':'.__LINE__, 'Shop locked!', 'shop.lock');
- } 
- 
-
-/** 
- * Function MELBIS_INC
- * Manual include module
- **/                  
-function MELBIS_INC($mInclude) 
-{
-    if ( file_exists('units/'.$mInclude.'.php') )
-    {
-        require_once('units/'.$mInclude.'.php');
-    
-        return true;
-    }
-    else 
-    {
-        MELBIS_INC_halt('INCLUDE ABSENT', __FILE__.':'.__LINE__, 'Require include is absent!', 'units/'.$mInclude.'.php');
-    }
-} 
-
 
 /** 
  * Function MELBIS_INC_halt
@@ -97,13 +81,15 @@ function MELBIS_INC($mInclude)
  **/    
 function MELBIS_INC_halt($mType, $mFile, $mError, $mInfo = '') 
 {
-    // Get time
-    $now = new DateTime('now', new DateTimeZone(TIME_ZONE));
-    $backup_begin = new DateTime(BACKUP_TIME_BEGIN, new DateTimeZone(TIME_ZONE));
-    $backup_end = new DateTime(BACKUP_TIME_END, new DateTimeZone(TIME_ZONE));        
+    // Vars
+    $config_exist = defined('TIME_ZONE'); 
+    
+    // Datetime                          
+    $time_zone = $config_exist ? TIME_ZONE : 'UTC';
+    $now = new DateTime('now', new DateTimeZone($time_zone));        
                
     // Save log
-    if ( file_exists('./error.log') )
+    if ( file_exists('./error.save') )
     {                               
         $log_file = __DIR__.'/../_error_front.log';
         $url = $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];    
@@ -152,21 +138,30 @@ function MELBIS_INC_halt($mType, $mFile, $mError, $mInfo = '')
         @file_put_contents($log_file, $log, FILE_APPEND | LOCK_EX);
     }
     
-    // Headers
-    if ( $now >= $backup_begin && $now <= $backup_end ) 
+    // Backup time
+    $backup_now = false;
+    if ( $config_exist )
     {
-        // Service Unavailable
-        $retry = $backup_end->getTimestamp() - $now->getTimestamp();                
-        $error_header = '503 Service Unavailable';
-        header('HTTP/1.1 '.$error_header);
-        header('Retry-After: '.$retry);
-    }
-    else
+        $backup_begin = new DateTime(BACKUP_TIME_BEGIN, new DateTimeZone(TIME_ZONE));
+        $backup_end = new DateTime(BACKUP_TIME_END, new DateTimeZone(TIME_ZONE));   
+                 
+        if ( $now >= $backup_begin && $now <= $backup_end ) 
+        {        
+            // Service Unavailable            
+            $retry = $backup_end->getTimestamp() - $now->getTimestamp();                
+            $error_header = '503 Service Unavailable';
+            @header('HTTP/1.1 '.$error_header);
+            @header('Retry-After: '.$retry);
+            $backup_now = true;
+        }
+    }    
+                                   
+    if ( !$backup_now )            
     {        
         // Server Error
         $error_header = '500 Internal Server Error';
-        header('HTTP/1.1 '.$error_header);              
-        header('Content-Type: text/html; charset=utf-8');
+        @header('HTTP/1.1 '.$error_header);              
+        @header('Content-Type: text/html; charset=utf-8');
     }
     
 ?>    

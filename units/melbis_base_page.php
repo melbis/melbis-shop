@@ -1,18 +1,17 @@
 <?php
 /***************************************************************************************************
- * @version 6.4.0
- * @copyright 2025 Melbis Company
+ * @version 6.4.1
+ * @copyright 2026 Melbis
  * @link https://melbis.com
- * @author Dmitriy Kasyanoff
+ * @author Dmytro Kasyanov
  **************************************************************************************************/
-
 
 /** 
  * Function MELBIS_BASE_PAGE
  **/
 function MELBIS_BASE_PAGE($mVars)
 { 
-    global $gParser, $gServer; 
+    global $gParser; 
                        
     // Create 
     $tpl = $gParser->TplCreate();    
@@ -53,7 +52,7 @@ function MELBIS_BASE_PAGE($mVars)
             $gParser->gVars['ms']['page']['title'] = '404 Not Found'; // MELBIS_INC_LANG_tag('BASE_PAGE', '404_TITLE');         
     
             // Header
-            header($gServer['SERVER_PROTOCOL']." 404 Not Found");           
+            header($_SERVER['SERVER_PROTOCOL']." 404 Not Found");           
                              
             // Content
             $gParser->TplParse($tpl, 'CONTENT', '404');

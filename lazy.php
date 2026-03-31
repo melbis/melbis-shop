@@ -4,14 +4,13 @@
  * lazy.php - Lazy loading module via AJAX
  * 
  ***************************************************************************************************
- * @version 6.4.0
- * @copyright 2025 Melbis Company
+ * @version 6.4.1
+ * @copyright 2026 Melbis
  * @link https://melbis.com
- * @author Dmitriy Kasyanoff
+ * @author Dmytro Kasyanov
  **************************************************************************************************/
 
 // Require
-require_once('config.php');
 require_once('units/melbis_inc.php');
 
 // Create connect with DataBase
@@ -25,10 +24,10 @@ $gParser = new Parser('MELBIS_INC_halt', $gDb);
 $gParser->DefineSelfConst();
 
 // Define session
-$gSession = $gParser->DefineSession(DB_USER_NAME.'_MELBIS_SHOP');
+$gParser->DefineSession(DB_USER_NAME.'_MELBIS_SHOP');
 
 // Parse 
-$gParser->ParseLazy($gSitePath, $gTemplate, $gPost['mod'], $gPost['params'], $gUseCache, $gBuild);
+$gParser->ParseLazy($gSitePath, $gTemplate, $_POST['mod'], $_POST['params'], $gUseCache, $gBuild);
 
 // Publish
 $gParser->Publish();

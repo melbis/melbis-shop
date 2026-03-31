@@ -1,9 +1,9 @@
 <?php
 /***************************************************************************************************
- * @version 6.4.0
- * @copyright 2025 Melbis Company
+ * @version 6.4.1
+ * @copyright 2026 Melbis
  * @link https://melbis.com
- * @author Dmitriy Kasyanoff
+ * @author Dmytro Kasyanov
  **************************************************************************************************/
        
  
@@ -12,7 +12,7 @@
  **/
 function MELBIS_WEB_TEST($mVars)
 { 
-    global $gParser;
+    global $gParser;   
     
     return MELBIS_INC_AUTH(__FUNCTION__, $mVars);                    
 }  
