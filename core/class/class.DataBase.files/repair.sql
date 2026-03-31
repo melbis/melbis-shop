@@ -3,10 +3,10 @@
  * repair.sql - Server database repair commands
  * 
  ************************************************************************************************************
- * @version 6.3.0
- * @copyright 2019 Melbis Company
+ * @version 6.5.0
+ * @copyright 2026 Melbis
  * @link https://melbis.com
- * @author Dmitriy Kasyanoff
+ * @author Dmytro Kasianov
  ************************************************************************************************************/
 
 /**

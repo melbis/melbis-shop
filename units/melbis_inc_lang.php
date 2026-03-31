@@ -1,9 +1,9 @@
 <?php
 /***************************************************************************************************
- * @version 6.4.1
- * @copyright 2026 Melbis
+ * @version 6.5.0.200 @ 2026-04-01
+ * @copyright 2002-2026 Melbis
  * @link https://melbis.com
- * @author Dmytro Kasyanov
+ * @author Dmytro Kasianov
  **************************************************************************************************
  *
  * MELBIS_INC_LANG                      - Translater from origin

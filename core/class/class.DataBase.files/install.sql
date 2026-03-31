@@ -3,10 +3,10 @@
  * install.sql - Server database structure
  * 
  ************************************************************************************************************
- * @version 6.4.0
- * @copyright 2025 Melbis Company
+ * @version 6.5.0
+ * @copyright 2026 Melbis
  * @link https://melbis.com
- * @author Dmitriy Kasyanoff
+ * @author Dmytro Kasianov
  ************************************************************************************************************/
 
 /**

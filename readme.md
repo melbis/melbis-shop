@@ -1,4 +1,4 @@
-# 🛒 Melbis Shop (v6.4.x)
+# 🛒 Melbis Shop (v6.x.x)
 
 **Melbis Shop** is a versatile platform for building high-load dynamic websites. It is primarily designed for advanced e-commerce: handling massive product catalogs, multiple suppliers, staff, and customers. 
 
