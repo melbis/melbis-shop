@@ -1,21 +1,9 @@
 /************************************************************************************************************
- * 
- * init_set.sql - Server database initial set
- * 
- ************************************************************************************************************
- * @version 6.5.0
- * @copyright 2026 Melbis
+ * @version 6.5.0.201 @ 2026-04-02
+ * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
  ************************************************************************************************************/
-
-/**
- * Parsing vars
- *--------------
- * {DBNICK} - Prefix for tables, one for all
- *
- **/
-
 
 /****************************************************************
  *
@@ -142,7 +130,7 @@ INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('web_key_value', 
  *
  ***************************************************************/
 
-INSERT INTO {DBNICK}_topic (id, name, kind_key, templ_key, order_key) VALUES (1, 'Основа', 'kFirst', 'kDefault', 'kDefault');
+INSERT INTO {DBNICK}_topic (id, name, kind_key, templ_key, order_key) VALUES (1, 'Root', 'kFirst', 'kDefault', 'kDefault');
 
 /****************************************************************
  *
@@ -152,19 +140,18 @@ INSERT INTO {DBNICK}_topic (id, name, kind_key, templ_key, order_key) VALUES (1,
 
 INSERT INTO {DBNICK}_lang (id, skey, name, kind_key, is_origin, pos) VALUES (1, 'en', 'English', 'kDefault', 1, 1);
 
+
 /****************************************************************
  *
  * Modules
  *
  ***************************************************************/
 
-INSERT INTO {DBNICK}_web_outside VALUES ('1','','Магазин','0','0','0','0','https://shop.com','0');
-INSERT INTO {DBNICK}_web_outside VALUES ('2','melbis_web_test','Тестовый модуль','0','0','1','0','https://shop.com/en/?mod=melbis_web_test','1');
-INSERT INTO {DBNICK}_web_outside VALUES ('3','','Поисковая система','0','0','2','0','https://google.com','0');
+INSERT INTO {DBNICK}_web_outside VALUES ('1','melbis_web_test','Test module','0','0','0','0','https://shop.com/en/?mod=melbis_web_test','1');
 
-INSERT INTO {DBNICK}_web_inside VALUES ('1','melbis_web_test','0','Тестовый модуль','https://shop.com/en/?mod=melbis_web_test','1','1');
-INSERT INTO {DBNICK}_web_inside VALUES ('2','melbis_web_test','1','Тестовый модуль','https://shop.com/en/?mod=melbis_web_test','1','1');
-INSERT INTO {DBNICK}_web_inside VALUES ('3','melbis_web_test','2','Тестовый модуль','https://shop.com/en/?mod=melbis_web_test','1','1');
-INSERT INTO {DBNICK}_web_inside VALUES ('4','melbis_web_test','3','Тестовый модуль','https://shop.com/en/?mod=melbis_web_test','1','1');
-INSERT INTO {DBNICK}_web_inside VALUES ('5','melbis_web_test','4','Тестовый модуль','https://shop.com/en/?mod=melbis_web_test','1','1');
+INSERT INTO {DBNICK}_web_inside VALUES ('1','melbis_web_test','0','Test module','https://shop.com/en/?mod=melbis_web_test','1','1');
+INSERT INTO {DBNICK}_web_inside VALUES ('2','melbis_web_test','1','Test module','https://shop.com/en/?mod=melbis_web_test','1','1');
+INSERT INTO {DBNICK}_web_inside VALUES ('3','melbis_web_test','2','Test module','https://shop.com/en/?mod=melbis_web_test','1','1');
+INSERT INTO {DBNICK}_web_inside VALUES ('4','melbis_web_test','3','Test module','https://shop.com/en/?mod=melbis_web_test','1','1');
+INSERT INTO {DBNICK}_web_inside VALUES ('5','melbis_web_test','4','Test module','https://shop.com/en/?mod=melbis_web_test','1','1');
 
