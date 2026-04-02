@@ -1,0 +1,4 @@
+# Exclude files from GitHub release zip
+.github/ export-ignore
+composer.json export-ignore
+.gitattributes export-ignore

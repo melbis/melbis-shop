@@ -25,17 +25,20 @@ The number of programming languages and frameworks grows every day. However, we 
 ## 🔗 Quick Links
 
 * 🌍 **Official Website:** [melbis.com](https://melbis.com/)
-* 💻 **System Requirements:** [Read here](https://melbis.com/en/system_requirements/)
-* 🖼️ **Screenshots:** [View gallery](https://melbis.com/en/screenshots/)
-* 📖 **Documentation:** [Installation & Setup](https://melbis.com/en/dev/install/prepare/)
-* 🔄 **Update Guide:** [How to update versions](https://melbis.com/en/dev/updates/)
+* 💰 **Prices & Licenses:** [melbis.com/price](https://melbis.com/en/price/)
+* 📀 **Installation Packages:** [melbis.com/download](https://melbis.com/en/download/)
+* 💻 **GitHub Releases:** [melbis/melbis-shop/releases](https://github.com/melbis/melbis-shop/releases)
 * 🐳 **Docker Hub:** [melbis/melbis-shop](https://hub.docker.com/r/melbis/melbis-shop)
+* 📦 **Packagist (Composer):** [melbis/melbis-shop](https://packagist.org/packages/melbis/melbis-shop)
 
 ## 💬 Community & Examples
 
 * 📢 **Telegram News:** [@melbis_shop](https://t.me/melbis_shop)
 * 📺 **YouTube Tutorials:** [Melbis-Shop Channel](https://www.youtube.com/@Melbis-Shop)
-* 🏆 **Flagship Example Store:** [Astroscope.com.ua](https://astroscope.com.ua/) *(A live example of a high-load store powered by Melbis Shop 6)*
+* 🖼️ **Screenshots:** [View gallery](https://melbis.com/en/screenshots/)
+* 📖 **Documentation:** [Installation & Setup](https://melbis.com/en/dev/install/prepare/)
+* 🏆 **Flagship Example Store:** [Astroscope.com.ua](https://astroscope.com.ua/) *(A live example of a high-load store powered by Melbis Shop)*
 
 ---
 *Built for speed, scaled for business.*
+

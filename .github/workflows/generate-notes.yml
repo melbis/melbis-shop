@@ -1,0 +1,83 @@
+name: Generate Release Notes
+
+on:
+  workflow_dispatch:
+    inputs:
+      current_version:
+        description: 'Current version (e.g., 6.5.0)'
+        required: true
+        default: '6.5.0'
+
+permissions:
+  contents: write
+  issues: read
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build Release Notes
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const currentVersion = context.payload.inputs.current_version;
+
+            // 1. Get the date of the last published release
+            const releases = await github.rest.repos.listReleases({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                per_page: 1
+            });
+            const lastDate = releases.data.length > 0 ? releases.data[0].published_at : '2000-01-01T00:00:00Z';
+
+            // 2. Search for issues closed after the last release date
+            const query = `repo:${context.repo.owner}/${context.repo.repo} is:issue is:closed closed:>=${lastDate}`;
+            const result = await github.rest.search.issuesAndPullRequests({ q: query });
+
+            let listCore = [], listUser = [], listDevelop = [], listBug = [];
+
+            // 3. Sort by labels and format with details summary
+            for (const issue of result.data.items) {
+                const labels = issue.labels.map(l => l.name);
+                let line = "";
+                
+                if (issue.body) {
+                    // Format body with blockquote and wrap title in summary
+                    const formattedBody = issue.body.replace(/\r\n|\r|\n/g, '\n  > ');
+                    line = `* <details><summary>#${issue.number} ${issue.title}</summary>\n\n  > ${formattedBody}\n  </details>`; 
+                } else {
+                    // Fallback if there is no description
+                    line = `* #${issue.number} ${issue.title}`;
+                }
+                
+                if (labels.includes('core')) listCore.push(line);
+                else if (labels.includes('user')) listUser.push(line);
+                else if (labels.includes('develop')) listDevelop.push(line);
+                else if (labels.includes('bug')) listBug.push(line);
+            }
+
+            // 4. Build the final markdown text
+            let text = "👷 **Attention! This version is still under development.**\n";
+            text += "---\n";
+            text += `## 🔄 [How update to v.${currentVersion}](https://github.com/melbis/melbis-shop/wiki/Update-to-v${currentVersion})\n`;
+            text += "---\n\n";
+            text += "# What's new\n\n";
+
+            if (listUser.length > 0) text += "## 🚀 Changes for users\n" + listUser.join('\n') + "\n\n";
+            if (listCore.length > 0) text += "## ⚙️ Changes in core\n" + listCore.join('\n') + "\n\n";
+            if (listDevelop.length > 0) text += "## 🛠️ Changes for developers\n" + listDevelop.join('\n') + "\n\n";
+            if (listBug.length > 0) text += "## 🐛 Bug Fixes\n" + listBug.join('\n') + "\n\n";
+
+            if (listCore.length === 0 && listUser.length === 0 && listDevelop.length === 0 && listBug.length === 0) {
+                text += "No completed tasks found for this release.";
+            }
+
+            // 5. Create a Draft Release
+            await github.rest.repos.createRelease({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                tag_name: `v-draft-${Date.now()}`,
+                name: `Melbis Shop v${currentVersion} Draft`,
+                body: text,
+                draft: true
+            });
