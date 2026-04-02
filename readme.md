@@ -29,7 +29,7 @@ The number of programming languages and frameworks grows every day. However, we 
 * 🖼️ **Screenshots:** [View gallery](https://melbis.com/en/screenshots/)
 * 📖 **Documentation:** [Installation & Setup](https://melbis.com/en/dev/install/prepare/)
 * 🔄 **Update Guide:** [How to update versions](https://melbis.com/en/dev/updates/)
-* 🐳 **Docker Hub:** [kasdim/melbis-shop](https://hub.docker.com/r/kasdim/melbis-shop)
+* 🐳 **Docker Hub:** [melbis/melbis-shop](https://hub.docker.com/r/melbis/melbis-shop)
 
 ## 💬 Community & Examples
 
