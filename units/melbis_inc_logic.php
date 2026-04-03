@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.203 @ 2026-04-02
+ * @version 6.5.0.205 @ 2026-04-03
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -48,7 +48,8 @@ function MELBIS_INC_LOGIC_order_create()
                       'order_date_time' => $now 
                       );
 
-    // Client
+    // Client   
+    //-------
     $command = "SELECT id AS field_id, skey AS field_skey, name AS field_name, tindex AS field_tindex,
                        tlevel AS field_tlevel, absindex AS field_absindex, folder AS field_folder,
                        kind_key AS field_kind_key, spec_key AS field_spec_key, NULL AS value_id,
@@ -58,10 +59,12 @@ function MELBIS_INC_LOGIC_order_create()
                ";                        
     $version['client'] = $gParser->SqlSelect(__LINE__, $command);
 
-    // Goods
+    // Goods 
+    //------
     $version['store'] = [];  
     
     // Option
+    //-------
     $command = "SELECT oo.id AS option_id, oo.skey AS option_skey, oo.name AS option_name, 
                        oo.kind_key AS option_kind_key, oo.pos AS option_pos,
                        oov.id AS value_id, IFNULL(oov.skey, '') AS value_skey, IFNULL(oov.name, '') AS value_name, 

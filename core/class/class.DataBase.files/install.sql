@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.203 @ 2026-04-02
+ * @version 6.5.0.205 @ 2026-04-03
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -263,7 +263,7 @@ CREATE TABLE {DBNICK}_user_file_version (
    version 	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,
    PRIMARY KEY (id),
    KEY user_id (user_id),
-   KEY path (path)
+   KEY path (path(200))
 ) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
 
 
@@ -1218,9 +1218,9 @@ CREATE TABLE {DBNICK}_store (
    award_cnt 	INT DEFAULT '0' NOT NULL,
    award_avg 	DECIMAL(10,4) DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY code_shop (code_shop),
-   KEY code_prov (code_prov),
-   KEY code_made (code_made),
+   KEY code_shop (code_shop(200)),
+   KEY code_prov (code_prov(200)),
+   KEY code_made (code_made(200)),
    KEY provider_id (provider_id),
    KEY brand_id (brand_id),
    KEY relate_id (relate_id),

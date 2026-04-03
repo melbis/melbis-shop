@@ -59,7 +59,7 @@ jobs:
             // 4. Build the final markdown text
             let text = "👷 **Attention! This version is still under development.**\n";
             text += "---\n";
-            text += `## 🔄 [How update to v.${currentVersion}](https://github.com/melbis/melbis-shop/wiki/Update-to-v${currentVersion})\n`;
+            text += `## 🔄 [How update to v${currentVersion}](https://github.com/melbis/melbis-shop/wiki/Update-to-v${currentVersion})\n`;
             text += "---\n\n";
             text += "# What's new\n\n";
 

@@ -4,7 +4,7 @@
  * lazy.php - Lazy loading module via AJAX
  * 
  ***************************************************************************************************
- * @version 6.5.0.203 @ 2026-04-02
+ * @version 6.5.0.205 @ 2026-04-03
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
