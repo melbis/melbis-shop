@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.209 @ 2026-04-03
+ * @version 6.5.0.210 @ 2026-04-04
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov  
@@ -139,7 +139,8 @@ function MELBIS_INC_halt($mType, $mFile, $mError, $mInfo = '')
     }
     
     // Backup time
-    $backup_now = false;
+    $backup_now = false;    
+    $error_header = '500 Internal Server Error';
     if ( $config_exist )
     {
         $backup_begin = new DateTime(BACKUP_TIME_BEGIN, new DateTimeZone(TIME_ZONE));
@@ -147,22 +148,27 @@ function MELBIS_INC_halt($mType, $mFile, $mError, $mInfo = '')
                  
         if ( $now >= $backup_begin && $now <= $backup_end ) 
         {        
-            // Service Unavailable            
-            $retry = $backup_end->getTimestamp() - $now->getTimestamp();                
-            $error_header = '503 Service Unavailable';
-            @header('HTTP/1.1 '.$error_header);
-            @header('Retry-After: '.$retry);
+            // Service Unavailable             
             $backup_now = true;
+            $error_header = '503 Service Unavailable';
+            if ( !headers_sent() )
+            {            
+                $retry = $backup_end->getTimestamp() - $now->getTimestamp();                            
+                header('HTTP/1.1 '.$error_header);
+                header('Retry-After: '.$retry);                
+            }
         }
     }    
                                    
     if ( !$backup_now )            
     {        
-        // Server Error
-        $error_header = '500 Internal Server Error';
-        @header('HTTP/1.1 '.$error_header);              
-        @header('Content-Type: text/html; charset=utf-8');
-    }
+        // Server Error  
+        if ( !headers_sent() )
+        { 
+            header('HTTP/1.1 '.$error_header);              
+            header('Content-Type: text/html; charset=utf-8');
+        }
+    }   
     
 ?>    
 <!doctype html>
