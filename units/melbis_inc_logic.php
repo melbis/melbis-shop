@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.210 @ 2026-04-04
+ * @version 6.5.0.212 @ 2026-04-08
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -665,7 +665,7 @@ function MELBIS_INC_LOGIC_order_edit($mVersion)
  **/   
 function MELBIS_INC_LOGIC_order_calc($mVersion)
 {
-    global $gParser;           
+    global $gParser;                         
     
     // Normalize     
     $mVersion = MELBIS_INC_LOGIC_order_norm($mVersion);          

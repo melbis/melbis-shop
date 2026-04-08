@@ -1,14 +1,13 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.210 @ 2026-04-04
+ * @version 6.5.0.212 @ 2026-04-08
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov    
  **************************************************************************************************
  * 
  * MELBIS_INC_STD_path                  - Return file path from time
- * MELBIS_INC_STD_utf_encode            - Encoding to UTF-8             
- * MELBIS_INC_STD_utf_decode            - Decoding from UTF-8  
+ * MELBIS_INC_STD_text                  - Return right path for images and links 
  * MELBIS_INC_STD_number                - Return format price
  * MELBIS_INC_STD_number_short          - Return format price
  * MELBIS_INC_STD_get_date              - Return current date
@@ -53,49 +52,6 @@ function MELBIS_INC_STD_text($mText)
     return $text;
 } 
  
-/** 
- * Function MELBIS_INC_STD_utf_decode
- * Decoding from UTF-8
- **/
-function MELBIS_INC_STD_utf_decode($mValue) 
-{
-    if ( is_array($mValue) )
-    {
-        foreach ( $mValue as $key => $value ) 
-        {
-            $mValue[$key] = iconv('UTF-8', SHOP_CHARSET.'//IGNORE', $value);
-        }
-    }    
-    else
-    {
-        $mValue = iconv('UTF-8', SHOP_CHARSET.'//IGNORE', $mValue);
-    }
-    
-    return $mValue;
-} 
- 
-
-/** 
- * Function MELBIS_INC_STD_utf_encode
- * Encoding to UTF-8
- **/
-function MELBIS_INC_STD_utf_encode($mValue) 
-{
-    if ( is_array($mValue) )
-    {
-        foreach ( $mValue as $key => $value ) 
-        {
-            $mValue[$key] = iconv(SHOP_CHARSET, 'UTF-8//IGNORE', $value);
-        }
-    }    
-    else
-    {
-        $mValue = iconv(SHOP_CHARSET, 'UTF-8//IGNORE', $mValue);
-    }
-    
-    return $mValue;
-} 
- 
      
 /** 
  * Function MELBIS_INC_STD_number
@@ -131,7 +87,7 @@ function MELBIS_INC_STD_number_short($mValue, $mMaxPrec = 2)
  **/
 function MELBIS_INC_STD_get_date() 
 {
-    $date = new DateTime('now', new DateTimeZone(TIME_ZONE));
+    $date = new DateTime('now', new DateTimeZone(MELBIS_TIME_ZONE));
 
     return $date->format("Y-m-d");     
 }
@@ -143,7 +99,7 @@ function MELBIS_INC_STD_get_date()
 function MELBIS_INC_STD_get_week() 
 {
 
-    $date = new DateTime('now', new DateTimeZone(TIME_ZONE));
+    $date = new DateTime('now', new DateTimeZone(MELBIS_TIME_ZONE));
     $now_day = (int)$date->format('N'); 
     $date->modify('-'.($now_day - 1).' days');
 
@@ -156,7 +112,7 @@ function MELBIS_INC_STD_get_week()
  **/
 function MELBIS_INC_STD_get_month() 
 {
-    $date = new DateTime('now', new DateTimeZone(TIME_ZONE));
+    $date = new DateTime('now', new DateTimeZone(MELBIS_TIME_ZONE));
 
     return $date->format("Y-m-1");     
 }
@@ -167,7 +123,7 @@ function MELBIS_INC_STD_get_month()
  **/
 function MELBIS_INC_STD_get_time() 
 {
-    $date = new DateTime('now', new DateTimeZone(TIME_ZONE));
+    $date = new DateTime('now', new DateTimeZone(MELBIS_TIME_ZONE));
 
     return $date->format("H:i:s");    
 }
@@ -178,7 +134,7 @@ function MELBIS_INC_STD_get_time()
  **/
 function MELBIS_INC_STD_get_now($mFormat = "Y-m-d H:i:s") 
 {
-    $date = new DateTime('now', new DateTimeZone(TIME_ZONE));
+    $date = new DateTime('now', new DateTimeZone(MELBIS_TIME_ZONE));
 
     return $date->format($mFormat);    
 }
@@ -189,7 +145,7 @@ function MELBIS_INC_STD_get_now($mFormat = "Y-m-d H:i:s")
  **/
 function MELBIS_INC_STD_make_date($mOffSet, $mFormat = "Y-m-d H:i:s") 
 {
-    $date = new DateTime('now', new DateTimeZone(TIME_ZONE));
+    $date = new DateTime('now', new DateTimeZone(MELBIS_TIME_ZONE));
     $date->modify("{$mOffSet} seconds");
 
     return $date->format($mFormat);
@@ -201,7 +157,7 @@ function MELBIS_INC_STD_make_date($mOffSet, $mFormat = "Y-m-d H:i:s")
  **/
 function MELBIS_INC_STD_make_time($mOffSet, $mFormat = "H:i:s") 
 {
-    $date = new DateTime('now', new DateTimeZone(TIME_ZONE));
+    $date = new DateTime('now', new DateTimeZone(MELBIS_TIME_ZONE));
     $date->modify("{$mOffSet} seconds");
 
     return $date->format($mFormat);

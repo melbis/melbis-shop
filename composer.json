@@ -14,11 +14,18 @@
         "php": ">=8.3",
         "ext-ioncube_loader": "*",
         "ext-mysqli": "*",
+        "ext-iconv": "*",
         "ext-curl": "*",
         "ext-gd": "*",
         "ext-zip": "*",
         "ext-xml": "*",
-        "ext-apcu": "*"
+        "ext-apcu": "*",
+        "ext-intl": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Melbis\\MelbisShop\\": "core/class/"
+        }
     },
     "config": {
         "optimize-autoloader": true,

@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.210 @ 2026-04-04
+ * @version 6.5.0.212 @ 2026-04-08
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -31,8 +31,9 @@ function MELBIS_BASE_PAGE($mVars)
                  WHERE id = :ID 
                    AND no_visible = 0
                 ";                    
-    $params = [ 'id' => $id ];                
+    $params = [ 'id' => $id ];        
     $topic = $gParser->SqlSelectToArray(__LINE__, $command, $params);
+                               
     if ( !isset($topic['id']) ) 
     {   
         if ( $id == 0 )
@@ -100,8 +101,6 @@ function MELBIS_BASE_PAGE($mVars)
         }                                
     }   
 
-    $id = $gParser->SqlLastInsertId();
-    
     $gParser->TplParse($tpl, 'SCRIPTS', 'scripts');
                 
     // Final: return content

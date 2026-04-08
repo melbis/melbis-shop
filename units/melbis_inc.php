@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.210 @ 2026-04-04
+ * @version 6.5.0.212 @ 2026-04-08
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov  
@@ -10,8 +10,8 @@
 //-----
 require_once('core/core.php');
 
-// PHP error control
-//------------------
+// Catch error control
+//--------------------
 error_reporting(E_ALL);  
 ini_set('display_errors', 'off');      
 set_error_handler(function ($mError, $mMessage, $mFile, $mLine) 
@@ -43,16 +43,11 @@ $gSitePath = '/';
 $gUseCache = true;
 
 // Default shop template
-$gTemplate = TEMPLATE;
+$gTemplate = MELBIS_TEMPLATE;
 
 // Current build scripts
 $gBuild = 1;
                     
-    
-// Set Local Setting
-//------------------ 
-if ( strlen(SHOP_LOCALE) > 0 ) setlocale(LC_CTYPE, SHOP_LOCALE); 
-if ( strlen(SHOP_CHARSET) > 0 ) mb_internal_encoding(SHOP_CHARSET);
 
 // Shop lock
 //----------
@@ -61,16 +56,29 @@ if ( file_exists('shop.lock') )
     MELBIS_INC_halt('SHOP LOCKED', __FILE__.':'.__LINE__, 'Shop locked!', 'shop.lock');
 } 
  
+// Composer loader
+//----------------
+if ( file_exists('vendor/autoload.php') ) 
+{
+    require_once('vendor/autoload.php');
+}
 
-// Autoloader
-//-----------
+// Melbis loader
+//--------------
 if ( !function_exists('MELBIS_INC_autoload') ) 
 {
     function MELBIS_INC_autoload($mClassName)
-    {        
-        require_once('core/class/class.'.$mClassName.'.php');
+    {                
+        $melbis_space = 'Melbis\\MelbisShop\\';
+        if ( strncmp($melbis_space, $mClassName, strlen($melbis_space)) === 0 ) 
+        {
+            $file = str_replace($melbis_space, 'core/class/', $mClassName).'.php';
+            if ( file_exists($file) ) 
+            {
+                require_once($file);
+            }
+        }                
     }
-
     spl_autoload_register('MELBIS_INC_autoload');
 }
 
@@ -82,11 +90,11 @@ if ( !function_exists('MELBIS_INC_autoload') )
 function MELBIS_INC_halt($mType, $mFile, $mError, $mInfo = '') 
 {
     // Vars
-    $config_exist = defined('TIME_ZONE'); 
+    $config_exist = defined('MELBIS_TIME_ZONE');          
     
     // Datetime                          
-    $time_zone = $config_exist ? TIME_ZONE : 'UTC';
-    $now = new DateTime('now', new DateTimeZone($time_zone));        
+    $time_zone = $config_exist ? MELBIS_TIME_ZONE : 'UTC';    
+    $now = new DateTime('now', new DateTimeZone($time_zone));
                
     // Save log
     if ( file_exists('./error.save') )
@@ -143,8 +151,8 @@ function MELBIS_INC_halt($mType, $mFile, $mError, $mInfo = '')
     $error_header = '500 Internal Server Error';
     if ( $config_exist )
     {
-        $backup_begin = new DateTime(BACKUP_TIME_BEGIN, new DateTimeZone(TIME_ZONE));
-        $backup_end = new DateTime(BACKUP_TIME_END, new DateTimeZone(TIME_ZONE));   
+        $backup_begin = new DateTime(MELBIS_BACKUP_TIME_BEGIN, new DateTimeZone(MELBIS_TIME_ZONE));
+        $backup_end = new DateTime(MELBIS_BACKUP_TIME_END, new DateTimeZone(MELBIS_TIME_ZONE));   
                  
         if ( $now >= $backup_begin && $now <= $backup_end ) 
         {        
@@ -177,10 +185,10 @@ function MELBIS_INC_halt($mType, $mFile, $mError, $mInfo = '')
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-    <title>System error in Melbis Shop <?php echo SCRIPT_VERSION.'.'.SCRIPT_BUILD; ?></title>
+    <title>System error in Melbis Shop <?php echo MELBIS_SCRIPT_VERSION.'.'.MELBIS_SCRIPT_BUILD; ?></title>
   </head>
   <body class="d-flex flex-column h-100 ">
-    <main class="m-auto">
+    <main class="m-auto" style="max-width: 800px;">
         <div class="card text-white bg-danger">
             <h3 class="card-header text-center">An exception occurred in shop's script</h3>
             <div class="card-body bg-white text-dark"> 
@@ -200,7 +208,7 @@ function MELBIS_INC_halt($mType, $mFile, $mError, $mInfo = '')
     <footer class="footer mt-auto py-3 bg-light">
         <div class="container">
             <div class="d-flex justify-content-between">
-                <span class="text-muted mr-1">Powered by Melbis Shop <?php echo SCRIPT_VERSION.'.'.SCRIPT_BUILD; ?></span>
+                <span class="text-muted mr-1">Powered by Melbis Shop <?php echo MELBIS_SCRIPT_VERSION.'.'.MELBIS_SCRIPT_BUILD; ?></span>
                 <span class="text-muted"><a href="https://melbis.com" target="_blank">https://melbis.com</a></span>
             </div>            
         </div>

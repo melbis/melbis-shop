@@ -1,0 +1,22 @@
+{
+    "MELBIS_DB_HOST_NAME": "db",
+    "MELBIS_DB_USER_NAME": "melbis",
+    "MELBIS_DB_USER_PASS": "melbis_pass",
+    "MELBIS_DB_NAME": "melbis",
+    "MELBIS_DB_NICK": "ms",
+    "MELBIS_DB_CHARSET": "utf8mb4",
+    "MELBIS_DB_COMMAND": "SET sql_mode = CONCAT(@@sql_mode, ',NO_UNSIGNED_SUBTRACTION');",
+    "MELBIS_TIME_ZONE": "UTC",
+    "MELBIS_LANG": "en",
+    "MELBIS_CHARSET": "UTF-8",
+    "MELBIS_DESKTOP_CHARSET": "WIN1252",
+    "MELBIS_CACHE": "False",
+    "MELBIS_TEMPLATE": "default",
+    "MELBIS_PATH": "\/",
+    "MELBIS_BUILD": "1",
+    "MELBIS_DEBUG_CODE": "",
+    "MELBIS_USER_LOG": "False",
+    "MELBIS_IP_LIST": "",
+    "MELBIS_BACKUP_TIME_BEGIN": "05:00:00",
+    "MELBIS_BACKUP_TIME_END": "05:30:00"
+}

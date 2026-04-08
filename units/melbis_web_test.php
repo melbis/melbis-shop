@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.210 @ 2026-04-04
+ * @version 6.5.0.212 @ 2026-04-08
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -15,9 +15,9 @@ function MELBIS_WEB_TEST($mVars)
     global $gParser;   
     
     return MELBIS_INC_AUTH(__FUNCTION__, $mVars);                    
-}  
+}                
 
-
+    
 /** 
  * Function MELBIS_WEB_TEST_default
  **/
