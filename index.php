@@ -4,7 +4,7 @@
  * index.php - index page
  * 
  ***************************************************************************************************
- * @version 6.5.0.215 @ 2026-04-09
+ * @version 6.5.0.216 @ 2026-04-10
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -30,6 +30,7 @@ $gParser->DefineSession('MELBIS_SHOP');
 $lang_list = [ MELBIS_LANG ];
 $lang_get = $_GET['lang'] ?? MELBIS_LANG;
 $gLang = ( in_array($lang_get, $lang_list) ) ? $lang_get : MELBIS_LANG;
+$gParser->LanguageSet($gLang);
 
 // Entry point
 $entry_point = ( isset($_GET['mod']) ) ? $_GET['mod'] : 'melbis_base_page';
@@ -42,8 +43,8 @@ if ( isset($_GET['lazy']) )
     $entry_param = $_POST['params'];
 }
 
-// Parsing
-$gParser->Parse($entry_point, $entry_param);
+// Run
+$gParser->Run($entry_point, $entry_param);
 
 // Publish
 $gParser->Publish();

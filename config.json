@@ -12,7 +12,7 @@
     "MELBIS_DESKTOP_CHARSET": "WIN1252",
     "MELBIS_CACHE": "False",
     "MELBIS_TEMPLATE": "default",
-    "MELBIS_PATH": "\/",
+    "MELBIS_ROOT": "\/",
     "MELBIS_BUILD": "1",
     "MELBIS_DEBUG_CODE": "",
     "MELBIS_USER_LOG": "False",
