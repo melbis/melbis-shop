@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.214 @ 2026-04-09
+ * @version 6.5.0.215 @ 2026-04-09
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -26,7 +26,7 @@ function MELBIS_BASE_PAGE($mVars)
     $gParser->gVars['ms']['page']['year'] = MELBIS_INC_STD_get_now('Y');      
                      
     // Define page
-    $command = "SELECT *
+    $command = "SELECT *  
                   FROM {DBNICK}_topic   
                  WHERE id = :ID 
                    AND no_visible = 0

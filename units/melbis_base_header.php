@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.214 @ 2026-04-09
+ * @version 6.5.0.215 @ 2026-04-09
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -21,7 +21,7 @@ function MELBIS_BASE_HEADER($mVars)
     MELBIS_INC_LANG_tags($tpl, __FUNCTION__);     
     
     // Make language switcher
-    $command = "SELECT * 
+    $command = "SELECT *   
                   FROM {DBNICK}_lang                 
               ORDER BY pos
                 ";                  
