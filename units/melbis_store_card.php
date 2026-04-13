@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.223 @ 2026-04-12
+ * @version 6.5.0.224 @ 2026-04-13
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -48,7 +48,8 @@ function MELBIS_STORE_CARD($mVars)
                                ]);   
     
     // Final: return content
-    $gParser->TplParse($tpl, 'MAIN', 'main');
+    $gParser->TplParse($tpl, 'MAIN', 'main');   
+    
 
     return $gParser->TplFree($tpl, 'MAIN');
 } 

@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.223 @ 2026-04-12
+ * @version 6.5.0.224 @ 2026-04-13
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov  
@@ -84,8 +84,8 @@ function MELBIS_INC_halt($mType, $mFile, $mError, $mInfo = '')
     $time_zone = $config_exist ? MELBIS_TIME_ZONE : 'UTC';    
     $now = new DateTime('now', new DateTimeZone($time_zone));
                
-    // Save log
-    if ( file_exists('./error.save') )
+    // Save log      
+    if ( file_exists(__DIR__.'/../error.save') )
     {                               
         $log_file = __DIR__.'/../_error_front.log';
         $url = $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];    
