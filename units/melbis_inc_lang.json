@@ -7,9 +7,7 @@
         "_trans_lang=1",
         "_trans_origin=1"
     ],
-    "includes": [
-        "melbis_inc_auth.php=1"
-    ],
+    "includes": [],
     "cache_on": "1",
     "cache_time": "0",
     "lazy_load": "0",
