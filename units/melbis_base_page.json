@@ -1,0 +1,26 @@
+{
+    "description": "Page",
+    "parameters": "lang: str, get: serial, post: serial",
+    "tables": [
+        "_store=1",
+        "_topic=1",
+        "_topic_store=1"
+    ],
+    "includes": [
+        "melbis_inc_lang.php=1",
+        "melbis_inc_std.php=1"
+    ],
+    "cache_on": "0",
+    "cache_time": "0",
+    "lazy_load": "0",
+    "entry_point": "1",
+    "trick_on": "0",
+    "trick_load_idx": "0",
+    "trick_load_max": "0",
+    "trick_comp_max": "0",
+    "trick_time_max": "0",
+    "smart_on": "0",
+    "smart_load_idx": "0",
+    "smart_load_max": "0",
+    "smart_comp_max": "0"
+}

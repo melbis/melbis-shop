@@ -4,7 +4,7 @@
  * index.php - index page
  * 
  ***************************************************************************************************
- * @version 6.5.0.227 @ 2026-04-14
+ * @version 6.5.0.228 @ 2026-04-15
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -42,12 +42,6 @@ if ( isset($_GET['lazy']) )
     $entry_point = $_POST['mod'];
     $entry_param = $_POST['params'];
 }
-
-//$gParser->gServerLoadMax = 0;
-//$gParser->gPageCompileMax = 0;
-//$gParser->gTrickCacheEnable=false;
-//$gParser->gSmartCacheEnable=true;      
-
 
 // Run
 $gParser->Run($entry_point, $entry_param);

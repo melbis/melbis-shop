@@ -1,0 +1,23 @@
+{
+    "description": "Get topic goods from storage",
+    "parameters": "topic_id: int",
+    "tables": [
+        "_store=1",
+        "_topic=1",
+        "_topic_store=1"
+    ],
+    "includes": [],
+    "cache_on": "0",
+    "cache_time": "0",
+    "lazy_load": "0",
+    "entry_point": "0",
+    "trick_on": "0",
+    "trick_load_idx": "0",
+    "trick_load_max": "0",
+    "trick_comp_max": "0",
+    "trick_time_max": "0",
+    "smart_on": "0",
+    "smart_load_idx": "0",
+    "smart_load_max": "0",
+    "smart_comp_max": "0"
+}
