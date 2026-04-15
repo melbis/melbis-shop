@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.228 @ 2026-04-15
+ * @version 6.5.0.229 @ 2026-04-15
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -141,7 +141,9 @@ function MELBIS_INC_LANG_tags($mTpl, $mModule)
                        
     $parts = explode('_', $mModule);
     $page_short = $parts[1];    
-    $page_full = $parts[1].'_'.$parts[2];    
+    $page_full = $parts[1].'_'.$parts[2];  
+    
+    MELBIS_INC_AUTH('','');  
             
     $command = "SELECT o.item_code AS name, 
                        IFNULL(tl.translate, o.origin) AS value, 
