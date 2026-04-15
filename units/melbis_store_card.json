@@ -16,11 +16,11 @@
     "entry_point": "0",
     "trick_on": "1",
     "trick_load_idx": "0",
-    "trick_load_max": "0",
-    "trick_comp_max": "0",
+    "trick_load_max": "1.55",
+    "trick_comp_max": "1.55",
     "trick_time_max": "5",
     "smart_on": "1",
     "smart_load_idx": "0",
-    "smart_load_max": "1",
-    "smart_comp_max": "1"
+    "smart_load_max": "0.5",
+    "smart_comp_max": "0.5"
 }
