@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.232 @ 2026-04-16
+ * @version 6.5.0.233 @ 2026-04-16
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -15,7 +15,7 @@ function MELBIS_STORE_CARD($mVars)
     global $gParser;
                        
     // Create 
-    $tpl = $gParser->TplCreate();     
+    $tpl = $gParser->TplCreate();             
     
     // Lang tags    
     MELBIS_INC_LANG_tags($tpl, __FUNCTION__);                                     
