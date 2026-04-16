@@ -10,8 +10,8 @@
         "melbis_inc_lang.php=1",
         "melbis_inc_std.php=1"
     ],
-    "cache_on": "0",
-    "cache_time": "110",
+    "cache_on": "1",
+    "cache_time": "0",
     "lazy_load": "1",
     "entry_point": "1",
     "trick_on": "1",
