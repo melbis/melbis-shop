@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.243 @ 2026-04-21
+ * @version 6.5.0.244 @ 2026-04-25
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -21,7 +21,7 @@ CREATE TABLE {DBNICK}_generator (
    table_name 	CHAR(50) DEFAULT '' NOT NULL,	
    gen_value 	INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (table_name)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -33,7 +33,7 @@ CREATE TABLE {DBNICK}_generator_u (
    user_id 	INT UNSIGNED DEFAULT '0' NOT NULL,
    gen_value 	INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (table_name, user_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 
@@ -53,7 +53,7 @@ CREATE TABLE {DBNICK}_oper (
    allow_to	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,	
    PRIMARY KEY (id),
    KEY command (command)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -69,7 +69,7 @@ CREATE TABLE {DBNICK}_oper_table (
    pos		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY oper_id (oper_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -85,7 +85,7 @@ CREATE TABLE {DBNICK}_oper_right (
    KEY oper_id (oper_id),
    KEY user_id (user_id),
    KEY group_id (group_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -99,7 +99,7 @@ CREATE TABLE {DBNICK}_oper_block (
    from_time 	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,	
    successful	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    UNIQUE (user_id, table_name)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 /**
  * Table key
@@ -114,7 +114,7 @@ CREATE TABLE {DBNICK}_key (
    absindex 	INT UNSIGNED DEFAULT '0' NOT NULL,
    folder 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -130,7 +130,7 @@ CREATE TABLE {DBNICK}_key_value (
    pos		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY	key_code (key_code)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 
@@ -152,7 +152,7 @@ CREATE TABLE {DBNICK}_files_key_value (
    pos		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY elem_id (elem_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 
@@ -182,7 +182,7 @@ CREATE TABLE {DBNICK}_user (
    PRIMARY KEY (id),
    KEY group_id (group_id),
    KEY add_group_id (add_group_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 /**
  * Table user_group
@@ -196,7 +196,7 @@ CREATE TABLE {DBNICK}_user_group (
    email	CHAR(255) DEFAULT '' NOT NULL,
    pos		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 DROP TABLE IF EXISTS {DBNICK}_user_chat;
@@ -206,7 +206,7 @@ CREATE TABLE {DBNICK}_user_chat (
    message_txt	TEXT DEFAULT ('') NOT NULL,
    date_time	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,	
    KEY date_time (date_time)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 /**
  * Table user_online
@@ -216,7 +216,7 @@ CREATE TABLE {DBNICK}_user_online (
    user_id	INT UNSIGNED DEFAULT NULL,
    last_time	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,
    UNIQUE KEY 	user_id (user_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -233,7 +233,7 @@ CREATE TABLE {DBNICK}_user_log (
    vars		TEXT DEFAULT ('') NOT NULL, 
    date_time	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,	
    PRIMARY KEY (id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 
@@ -248,7 +248,7 @@ CREATE TABLE {DBNICK}_user_filter (
    sql_txt	MEDIUMTEXT DEFAULT ('') NOT NULL,
    pos	 	INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -263,8 +263,8 @@ CREATE TABLE {DBNICK}_user_file_version (
    version 	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,
    PRIMARY KEY (id),
    KEY user_id (user_id),
-   KEY path (path(200))
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+   KEY path (path)
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -282,7 +282,7 @@ CREATE TABLE {DBNICK}_user_task (
    date_time	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,	
    PRIMARY KEY (id),
    KEY user_id (user_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -300,7 +300,7 @@ CREATE TABLE {DBNICK}_user_task_note (
    PRIMARY KEY (id),
    KEY task_id (task_id),
    KEY user_id (user_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 
@@ -335,7 +335,7 @@ CREATE TABLE {DBNICK}_topic (
    order_asc	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    option_code 	TEXT DEFAULT ('') NOT NULL,
    PRIMARY KEY (id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -356,7 +356,7 @@ CREATE TABLE {DBNICK}_files_topic (
    pos		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY elem_id (elem_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -373,7 +373,7 @@ CREATE TABLE {DBNICK}_topic_alt (
    absindex 	INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY kind_key (kind_key)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -391,7 +391,7 @@ CREATE TABLE {DBNICK}_topic_filter (
    pos 		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY topic_id (topic_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -410,7 +410,7 @@ CREATE TABLE {DBNICK}_topic_right (
    KEY topic_id (topic_id),
    KEY user_id (user_id),
    KEY group_id (group_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -428,7 +428,7 @@ CREATE TABLE {DBNICK}_topic_key (
    descr	MEDIUMTEXT DEFAULT ('') NOT NULL,
    mask_edit	CHAR(255) DEFAULT '' NOT NULL,
    PRIMARY KEY (id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -443,7 +443,7 @@ CREATE TABLE {DBNICK}_topic_key_value (
    pos 		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY key_id (key_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -460,7 +460,7 @@ CREATE TABLE {DBNICK}_topic_key_set (
    KEY topic_id (topic_id),
    KEY key_id (key_id),
    KEY value_id (value_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -476,7 +476,7 @@ CREATE TABLE {DBNICK}_topic_store (
    KEY topic_id (topic_id),
    KEY store_id (store_id),
    KEY topic_store (topic_id,store_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 
@@ -498,7 +498,7 @@ CREATE TABLE {DBNICK}_self_key (
    absindex 	INT UNSIGNED DEFAULT '0' NOT NULL,
    folder 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -514,7 +514,7 @@ CREATE TABLE {DBNICK}_self_key_right (
    KEY key_id (key_id),
    KEY user_id (user_id),
    KEY group_id (group_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -532,7 +532,7 @@ CREATE TABLE {DBNICK}_self_key_value (
    pos		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY key_id (key_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -549,7 +549,7 @@ CREATE TABLE {DBNICK}_brand (
    seo_code 	CHAR(255) DEFAULT '' NOT NULL,
    pos 		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -570,7 +570,7 @@ CREATE TABLE {DBNICK}_files_brand (
    pos		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY elem_id (elem_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -588,7 +588,7 @@ CREATE TABLE {DBNICK}_brand_key (
    descr	MEDIUMTEXT DEFAULT ('') NOT NULL,
    mask_edit	CHAR(255) DEFAULT '' NOT NULL,
    PRIMARY KEY (id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -603,7 +603,7 @@ CREATE TABLE {DBNICK}_brand_key_value (
    pos 		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY key_id (key_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -620,7 +620,7 @@ CREATE TABLE {DBNICK}_brand_key_set (
    KEY brand_id (brand_id),
    KEY key_id (key_id),
    KEY value_id (value_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -644,7 +644,7 @@ CREATE TABLE {DBNICK}_provider (
    notice	MEDIUMTEXT DEFAULT ('') NOT NULL,
    pos 		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -657,7 +657,7 @@ CREATE TABLE {DBNICK}_provider_group (
    name 	CHAR(100) DEFAULT '' NOT NULL,
    pos		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 
@@ -677,7 +677,7 @@ CREATE TABLE {DBNICK}_provider_key (
    descr	MEDIUMTEXT DEFAULT ('') NOT NULL,
    mask_edit	CHAR(255) DEFAULT '' NOT NULL,
    PRIMARY KEY (id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -692,7 +692,7 @@ CREATE TABLE {DBNICK}_provider_key_value (
    pos 		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY key_id (key_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -709,7 +709,7 @@ CREATE TABLE {DBNICK}_provider_key_set (
    KEY provider_id (provider_id),
    KEY key_id (key_id),
    KEY value_id (value_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -731,7 +731,7 @@ CREATE TABLE {DBNICK}_info (
    in_goods 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    seo_code 	CHAR(255) DEFAULT '' NOT NULL,
    PRIMARY KEY (id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -752,7 +752,7 @@ CREATE TABLE {DBNICK}_files_info (
    pos		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY elem_id (elem_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -771,7 +771,7 @@ CREATE TABLE {DBNICK}_info_value (
    pos 		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY info_id (info_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -792,7 +792,7 @@ CREATE TABLE {DBNICK}_files_info_value (
    pos		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY elem_id (elem_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -810,7 +810,7 @@ CREATE TABLE {DBNICK}_info_right (
    KEY info_id (info_id),
    KEY user_id (user_id),
    KEY group_id (group_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -828,7 +828,7 @@ CREATE TABLE {DBNICK}_info_key (
    descr	MEDIUMTEXT DEFAULT ('') NOT NULL,
    mask_edit	CHAR(255) DEFAULT '' NOT NULL,
    PRIMARY KEY (id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -843,7 +843,7 @@ CREATE TABLE {DBNICK}_info_key_value (
    pos 		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY key_id (key_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -860,7 +860,7 @@ CREATE TABLE {DBNICK}_info_key_set (
    KEY info_id (info_id),
    KEY key_id (key_id),
    KEY value_id (value_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -876,7 +876,7 @@ CREATE TABLE {DBNICK}_currency (
    provider_id 	INT UNSIGNED DEFAULT NULL,
    pos 		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -889,7 +889,7 @@ CREATE TABLE {DBNICK}_disc_group (
    name 	CHAR(255) DEFAULT '' NOT NULL,
    pos 		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -907,7 +907,7 @@ CREATE TABLE {DBNICK}_disc_rate (
    end_time 	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,	
    PRIMARY KEY (id),
    KEY group_id (group_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -923,7 +923,7 @@ CREATE TABLE {DBNICK}_param (
    custom_sum 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    pos 		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -940,7 +940,7 @@ CREATE TABLE {DBNICK}_param_value (
    pos 		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY param_id (param_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -961,7 +961,7 @@ CREATE TABLE {DBNICK}_store_param (
    KEY param_id (param_id),
    KEY value_id (value_id),
    KEY store_value (store_id, value_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -978,7 +978,7 @@ CREATE TABLE {DBNICK}_lang (
    is_origin 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    pos         	INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 /**
  * Table files_lang
@@ -998,7 +998,7 @@ CREATE TABLE {DBNICK}_files_lang (
    pos		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY elem_id (elem_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -1016,7 +1016,7 @@ CREATE TABLE {DBNICK}_trans (
    kind_key 	CHAR(100) DEFAULT '' NOT NULL,
    table_key 	CHAR(32) DEFAULT '' NOT NULL,
    PRIMARY KEY (id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 
@@ -1042,7 +1042,7 @@ CREATE TABLE {DBNICK}_trans_origin (
    KEY trans_id (trans_id),
    KEY item_id (item_id),
    KEY item_code (item_code)   
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -1061,7 +1061,7 @@ CREATE TABLE {DBNICK}_trans_lang (
    KEY lang_id (lang_id),
    KEY trans_id (trans_id),
    KEY origin_id (origin_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -1078,7 +1078,7 @@ CREATE TABLE {DBNICK}_advert (
    folder 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    kind_key 	CHAR(100) DEFAULT '' NOT NULL,
    PRIMARY KEY (id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -1095,7 +1095,7 @@ CREATE TABLE {DBNICK}_advert_text (
    params       CHAR(255) DEFAULT '' NOT NULL,
    pos          INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -1116,7 +1116,7 @@ CREATE TABLE {DBNICK}_files_advert_text (
    pos		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY elem_id (elem_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -1133,7 +1133,7 @@ CREATE TABLE {DBNICK}_advert_goods (
    pos 		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY advert_id (advert_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -1151,7 +1151,7 @@ CREATE TABLE {DBNICK}_advert_link (
    pos 		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY advert_id (advert_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 
@@ -1218,14 +1218,14 @@ CREATE TABLE {DBNICK}_store (
    award_cnt 	INT DEFAULT '0' NOT NULL,
    award_avg 	DECIMAL(10,4) DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY code_shop (code_shop(200)),
-   KEY code_prov (code_prov(200)),
-   KEY code_made (code_made(200)),
+   KEY code_shop (code_shop),
+   KEY code_prov (code_prov),
+   KEY code_made (code_made),
    KEY provider_id (provider_id),
    KEY brand_id (brand_id),
    KEY relate_id (relate_id),
    KEY clann (clann)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 
@@ -1247,7 +1247,7 @@ CREATE TABLE {DBNICK}_files_store (
    pos		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY elem_id (elem_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -1265,7 +1265,7 @@ CREATE TABLE {DBNICK}_store_set (
    pos		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY store_id (store_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -1284,7 +1284,7 @@ CREATE TABLE {DBNICK}_store_info (
    KEY info_id (info_id),
    KEY value_id (value_id),
    KEY store_value (store_id, value_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -1308,7 +1308,7 @@ CREATE TABLE {DBNICK}_store_comment (
    create_time 	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,
    PRIMARY KEY (id),
    KEY store_id (store_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -1322,7 +1322,7 @@ CREATE TABLE {DBNICK}_store_comment_vote (
    PRIMARY KEY (id),
    KEY comment_id (comment_id),
    KEY user_ip (user_ip)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -1335,7 +1335,7 @@ CREATE TABLE {DBNICK}_store_comment_block (
    to_ip	INT UNSIGNED DEFAULT '0' NOT NULL,
    lock_time 	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,	
    PRIMARY KEY (id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 
@@ -1365,7 +1365,7 @@ CREATE TABLE {DBNICK}_u_info_value (
    pos 		INT UNSIGNED DEFAULT '0' NOT NULL,
    UNIQUE (user_id, id),
    KEY base_id (base_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -1388,7 +1388,7 @@ CREATE TABLE {DBNICK}_u_files_info_value (
    pos		INT UNSIGNED DEFAULT '0' NOT NULL,
    UNIQUE (user_id, id),
    KEY elem_id (elem_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 
@@ -1433,7 +1433,7 @@ CREATE TABLE {DBNICK}_u_store (
    option_code 	TEXT DEFAULT ('') NOT NULL,
    UNIQUE (user_id, id),
    KEY base_id (base_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -1456,7 +1456,7 @@ CREATE TABLE {DBNICK}_u_files_store (
    pos		INT UNSIGNED DEFAULT '0' NOT NULL,
    UNIQUE (user_id, id),
    KEY elem_id (elem_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -1474,7 +1474,7 @@ CREATE TABLE {DBNICK}_u_store_set (
    comment 	CHAR(255) DEFAULT '' NOT NULL,
    pos		INT UNSIGNED DEFAULT '0' NOT NULL,
    UNIQUE (user_id, id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -1490,7 +1490,7 @@ CREATE TABLE {DBNICK}_u_store_info (
    value_dec 	DECIMAL(10,4) DEFAULT '0' NOT NULL,
    value_txt 	MEDIUMTEXT DEFAULT ('') NOT NULL,
    UNIQUE (user_id, id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /** 
@@ -1505,7 +1505,7 @@ CREATE TABLE {DBNICK}_u_topic_store (
    store_id 	INT UNSIGNED DEFAULT NULL,   
    pos 		INT UNSIGNED DEFAULT '0' NOT NULL,   
    UNIQUE (user_id, id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 
@@ -1536,7 +1536,7 @@ CREATE TABLE {DBNICK}_field (
    read_only 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    mask_edit	CHAR(255) DEFAULT '' NOT NULL,
    PRIMARY KEY (id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -1557,7 +1557,7 @@ CREATE TABLE {DBNICK}_files_field (
    pos		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY elem_id (elem_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -1574,7 +1574,7 @@ CREATE TABLE {DBNICK}_field_value (
    pos 		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY field_id (field_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 /**
  * Table client
@@ -1591,7 +1591,7 @@ CREATE TABLE {DBNICK}_client (
    last_date 	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,	
    PRIMARY KEY (id),
    KEY group_id (group_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -1606,7 +1606,7 @@ CREATE TABLE {DBNICK}_client_group (
    discount 	DECIMAL(10,4) DEFAULT '0' NOT NULL,
    pos 		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -1620,7 +1620,7 @@ CREATE TABLE {DBNICK}_client_rules (
    set_group_id	INT UNSIGNED DEFAULT NULL,
    set_discount	DECIMAL(10,4) DEFAULT '0' NOT NULL,
    PRIMARY KEY (id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -1636,7 +1636,7 @@ CREATE TABLE {DBNICK}_client_field (
    PRIMARY KEY (id),
    KEY client_id (client_id),
    KEY field_id (field_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 
@@ -1664,7 +1664,7 @@ CREATE TABLE {DBNICK}_order_option (
    custom_sum 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    pos 		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -1685,7 +1685,7 @@ CREATE TABLE {DBNICK}_files_order_option (
    pos		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY elem_id (elem_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -1710,7 +1710,7 @@ CREATE TABLE {DBNICK}_order_option_value (
    pos 		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY option_id (option_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -1731,7 +1731,7 @@ CREATE TABLE {DBNICK}_files_order_option_value (
    pos		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY elem_id (elem_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 /**
  * Table order_option_right
@@ -1746,7 +1746,7 @@ CREATE TABLE {DBNICK}_order_option_right (
    KEY option_id (option_id),
    KEY user_id (user_id),
    KEY group_id (group_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -1762,7 +1762,7 @@ CREATE TABLE {DBNICK}_order_right (
    KEY value_id (value_id),
    KEY user_id (user_id),
    KEY group_id (group_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 /**
  * Table order_option_block
@@ -1774,7 +1774,7 @@ CREATE TABLE {DBNICK}_order_option_block (
    value2_id 	INT UNSIGNED DEFAULT NULL,
    message	TEXT DEFAULT ('') NOT NULL,
    PRIMARY KEY (id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -1788,7 +1788,7 @@ CREATE TABLE {DBNICK}_order_option_limit (
    set_value_id INT UNSIGNED DEFAULT NULL,
    message	TEXT DEFAULT ('') NOT NULL,
    PRIMARY KEY (id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 /**
  * Table order_option_limit_right
@@ -1803,7 +1803,7 @@ CREATE TABLE {DBNICK}_order_option_limit_right (
    KEY limit_id (limit_id),
    KEY user_id (user_id),
    KEY group_id (group_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -1820,7 +1820,7 @@ CREATE TABLE {DBNICK}_order_store_option (
    custom_sum 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    pos 		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -1839,7 +1839,7 @@ CREATE TABLE {DBNICK}_order_store_option_value (
    pos 		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY option_id (option_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 /**
  * Table order_store_option_right
@@ -1854,7 +1854,7 @@ CREATE TABLE {DBNICK}_order_store_option_right (
    KEY option_id (option_id),
    KEY user_id (user_id),
    KEY group_id (group_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -1867,7 +1867,7 @@ CREATE TABLE {DBNICK}_order_store_option_block (
    value2_id 	INT UNSIGNED DEFAULT NULL,
    message	TEXT DEFAULT ('') NOT NULL,
    PRIMARY KEY (id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 
@@ -1890,7 +1890,7 @@ CREATE TABLE {DBNICK}_orders (
    date_time 	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,	
    PRIMARY KEY (id),
    KEY version_id (version_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -1907,7 +1907,7 @@ CREATE TABLE {DBNICK}_orders_version (
    PRIMARY KEY (id),
    KEY order_id (order_id),
    KEY user_id (user_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -1933,7 +1933,7 @@ CREATE TABLE {DBNICK}_orders_client_field (
    value_txt 	MEDIUMTEXT DEFAULT ('') NOT NULL,
    PRIMARY KEY (id),
    KEY version_id (version_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -1970,7 +1970,7 @@ CREATE TABLE {DBNICK}_orders_store (
    pos 			INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY version_id (version_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -1992,7 +1992,7 @@ CREATE TABLE {DBNICK}_orders_store_option (
    value_modify_sum DECIMAL(10,4) DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY version_id (version_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -2018,7 +2018,7 @@ CREATE TABLE {DBNICK}_orders_option (
    PRIMARY KEY (id),
    KEY version_id (version_id),
    KEY option_value (option_id, value_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 
@@ -2046,7 +2046,7 @@ CREATE TABLE {DBNICK}_web_outside (
    url 		TEXT DEFAULT ('') NOT NULL,
    auth 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -2062,7 +2062,7 @@ CREATE TABLE {DBNICK}_web_outside_right (
    KEY outside_id (outside_id),
    KEY user_id (user_id),
    KEY group_id (group_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -2078,7 +2078,7 @@ CREATE TABLE {DBNICK}_web_inside (
    auth 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    pos	 	INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -2094,7 +2094,7 @@ CREATE TABLE {DBNICK}_web_inside_right (
    KEY inside_id (inside_id),
    KEY user_id (user_id),
    KEY group_id (group_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 
@@ -2115,7 +2115,7 @@ CREATE TABLE {DBNICK}_web_key (
    params 	CHAR(255) DEFAULT '' NOT NULL,
    color_set	CHAR(32) DEFAULT '' NOT NULL,
    PRIMARY KEY (id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -2136,7 +2136,7 @@ CREATE TABLE {DBNICK}_files_web_key (
    pos		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY elem_id (elem_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -2155,7 +2155,7 @@ CREATE TABLE {DBNICK}_web_key_value (
    pos 		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY web_key_id (web_key_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -2176,7 +2176,7 @@ CREATE TABLE {DBNICK}_files_web_key_value (
    pos		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY elem_id (elem_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -2195,7 +2195,7 @@ CREATE TABLE {DBNICK}_web_key_right (
    KEY web_key_id (web_key_id),
    KEY user_id (user_id),
    KEY group_id (group_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 
@@ -2218,7 +2218,7 @@ CREATE TABLE {DBNICK}_report (
    folder 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    report_file	MEDIUMTEXT DEFAULT ('') NOT NULL,
    PRIMARY KEY (id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 /**
@@ -2234,7 +2234,7 @@ CREATE TABLE {DBNICK}_report_right (
    KEY report_id (report_id),
    KEY user_id (user_id),
    KEY group_id (group_id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 
@@ -2257,7 +2257,7 @@ CREATE TABLE {DBNICK}_tmp_topic (
    user_id	INT UNSIGNED DEFAULT NULL,
    access_exist	TINYINT UNSIGNED DEFAULT '0' NOT NULL,	
    UNIQUE (user_id, id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 -- Info List for import data to the User Frame
 
@@ -2269,7 +2269,7 @@ CREATE TABLE {DBNICK}_tmp_info (
    id 		INT UNSIGNED DEFAULT '0' NOT NULL,
    user_id	INT UNSIGNED DEFAULT NULL,
    UNIQUE (user_id, id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 -- Order List for get orders for users
@@ -2282,7 +2282,7 @@ CREATE TABLE {DBNICK}_tmp_orders (
    id 		INT UNSIGNED DEFAULT '0' NOT NULL,
    user_id	INT UNSIGNED DEFAULT NULL,
    UNIQUE (user_id, id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 -- Client List for get clients for users
@@ -2295,7 +2295,7 @@ CREATE TABLE {DBNICK}_tmp_client (
    id 		INT UNSIGNED DEFAULT '0' NOT NULL,
    user_id	INT UNSIGNED DEFAULT NULL,
    UNIQUE (user_id, id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 -- Key List for get self_key for users
@@ -2308,7 +2308,7 @@ CREATE TABLE {DBNICK}_tmp_self_key (
    id 		INT UNSIGNED DEFAULT '0' NOT NULL,
    user_id	INT UNSIGNED DEFAULT NULL,
    UNIQUE (user_id, id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 -- Key List for get web_key for users
@@ -2324,7 +2324,7 @@ CREATE TABLE {DBNICK}_tmp_web_key (
    for_write	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    for_remove	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    UNIQUE (user_id, id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 -- Key List for get order_right
@@ -2337,7 +2337,7 @@ CREATE TABLE {DBNICK}_tmp_order_right (
    id		INT UNSIGNED DEFAULT '0' NOT NULL,
    user_id	INT UNSIGNED DEFAULT NULL,
    UNIQUE (user_id, id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 -- Store List for price manager for users
@@ -2350,7 +2350,7 @@ CREATE TABLE {DBNICK}_tmp_store (
    id 		INT UNSIGNED DEFAULT '0' NOT NULL,
    user_id	INT UNSIGNED DEFAULT NULL,
    UNIQUE (user_id, id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 -- Store Comment List
@@ -2363,7 +2363,7 @@ CREATE TABLE {DBNICK}_tmp_store_comment (
    id 		INT UNSIGNED DEFAULT '0' NOT NULL,
    user_id	INT UNSIGNED DEFAULT NULL,
    UNIQUE (user_id, id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
 
 
 -- Trans List for import data 
@@ -2376,7 +2376,5 @@ CREATE TABLE {DBNICK}_tmp_trans (
    id 		INT UNSIGNED DEFAULT '0' NOT NULL,
    user_id	INT UNSIGNED DEFAULT NULL,
    UNIQUE (user_id, id)
-) ENGINE = MYISAM DEFAULT CHARSET={CHARSET};
-
-
-SET sql_mode = 'STRICT_TRANS_TABLES';                   	
+) ENGINE = INNODB DEFAULT CHARSET={CHARSET};
+                  	

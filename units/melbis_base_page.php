@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.243 @ 2026-04-21
+ * @version 6.5.0.244 @ 2026-04-25
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -24,7 +24,7 @@ function MELBIS_BASE_PAGE($mVars)
     
     $gParser->gVars['ms']['page']['lang'] = $mVars['lang'];        
     $gParser->gVars['ms']['page']['year'] = MELBIS_INC_STD_get_now('Y');      
-                     
+                    
     // Define page
     $command = "SELECT *  
                   FROM {DBNICK}_topic   
@@ -32,7 +32,7 @@ function MELBIS_BASE_PAGE($mVars)
                    AND no_visible = 0
                 ";                    
     $params = [ 'id' => $id ];        
-    $topic = $gParser->SqlSelectToArray(__LINE__, $command, $params);
+    $topic = $gParser->SqlSelectToArray(__LINE__, $command, $params);          
                                
     if ( !isset($topic['id']) ) 
     {   
