@@ -6,6 +6,8 @@
     "MELBIS_DB_NICK": "ms",
     "MELBIS_DB_CHARSET": "utf8mb4",
     "MELBIS_DB_COMMAND": "SET sql_mode = CONCAT(@@sql_mode, ',NO_UNSIGNED_SUBTRACTION');",
+    "MELBIS_DB_ENGINE": "MyISAM",
+    "MELBIS_DB_ENGINE_TEMP": "Memory",
     "MELBIS_TIME_ZONE": "UTC",
     "MELBIS_LANG": "en",
     "MELBIS_CHARSET": "UTF-8",
