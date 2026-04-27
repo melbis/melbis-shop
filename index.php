@@ -4,7 +4,7 @@
  * index.php - index page
  * 
  ***************************************************************************************************
- * @version 6.5.0.245 @ 2026-04-26
+ * @version 6.5.0.246 @ 2026-04-27
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
