@@ -4,7 +4,7 @@
  * index.php - index page
  * 
  ***************************************************************************************************
- * @version 6.5.0.246 @ 2026-04-27
+ * @version 6.5.0.247 @ 2026-04-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -42,6 +42,8 @@ if ( isset($_GET['lazy']) )
     $entry_point = $_POST['mod'];
     $entry_param = $_POST['params'];
 }
+
+echo getmypid();
 
 // Run
 $gParser->Run($entry_point, $entry_param);
