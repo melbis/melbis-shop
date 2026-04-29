@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.247 @ 2026-04-28
+ * @version 6.5.0.248 @ 2026-04-29
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -226,7 +226,7 @@ DROP TABLE IF EXISTS {DBNICK}_user_log;
 CREATE TABLE {DBNICK}_user_log (
    id 		   BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
    user_id 	   INT UNSIGNED DEFAULT NULL,
-   user_ip	   INT UNSIGNED DEFAULT '0' NOT NULL,
+   user_ip	   CHAR(45) DEFAULT '' NOT NULL,
    command 	   CHAR(100) DEFAULT '' NOT NULL,
    for_command CHAR(100) DEFAULT '' NOT NULL,
    options	   TEXT DEFAULT ('') NOT NULL,
@@ -1297,7 +1297,7 @@ CREATE TABLE {DBNICK}_store_comment (
    parent_id 	BIGINT UNSIGNED DEFAULT NULL,
    user_name	CHAR(255) DEFAULT '' NOT NULL,
    user_email	CHAR(255) DEFAULT '' NOT NULL,
-   user_ip	   INT UNSIGNED DEFAULT '0' NOT NULL,
+   user_ip	   CHAR(45) DEFAULT '' NOT NULL,
    params 	   MEDIUMTEXT DEFAULT ('') NOT NULL,
    award       TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    positive    MEDIUMTEXT DEFAULT ('') NOT NULL,
@@ -1318,7 +1318,7 @@ DROP TABLE IF EXISTS {DBNICK}_store_comment_vote;
 CREATE TABLE {DBNICK}_store_comment_vote (
    id 		   BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
    comment_id 	BIGINT UNSIGNED DEFAULT NULL,
-   user_ip	   INT UNSIGNED DEFAULT '0' NOT NULL,
+   user_ip	   CHAR(45) DEFAULT '' NOT NULL,   
    PRIMARY KEY (id),
    KEY comment_id (comment_id),
    KEY user_ip (user_ip)
@@ -1331,8 +1331,8 @@ CREATE TABLE {DBNICK}_store_comment_vote (
 DROP TABLE IF EXISTS {DBNICK}_store_comment_block;
 CREATE TABLE {DBNICK}_store_comment_block (
    id 		   BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-   from_ip	   INT UNSIGNED DEFAULT '0' NOT NULL,
-   to_ip	      INT UNSIGNED DEFAULT '0' NOT NULL,
+   from_ip	   CHAR(45) DEFAULT '' NOT NULL,
+   to_ip	      CHAR(45) DEFAULT '' NOT NULL,
    lock_time 	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,	
    PRIMARY KEY (id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};

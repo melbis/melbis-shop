@@ -4,7 +4,7 @@
  * minify.php - Minifier/Compressor/Obfuscator
  * 
  ***************************************************************************************************
- * @version 6.5.0.247 @ 2026-04-28
+ * @version 6.5.0.248 @ 2026-04-29
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
