@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.249 @ 2026-04-30
+ * @version 6.5.0.250 @ 2026-05-01
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -51,6 +51,9 @@ CREATE TABLE {DBNICK}_oper (
    command 	   CHAR(100) DEFAULT '' NOT NULL,
    allow_from	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,	
    allow_to	   DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,	
+   load_max_1  DECIMAL(10,2) DEFAULT '0' NOT NULL,
+   load_max_5  DECIMAL(10,2) DEFAULT '0' NOT NULL,
+   load_max_15 DECIMAL(10,2) DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY command (command)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
@@ -1035,6 +1038,7 @@ CREATE TABLE {DBNICK}_trans_origin (
    kind_key 	CHAR(100) DEFAULT '' NOT NULL,
    params      CHAR(255) DEFAULT '' NOT NULL,
    is_active   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   is_update   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    is_html     TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    no_trans    TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    pos         INT UNSIGNED DEFAULT '0' NOT NULL,
@@ -2378,6 +2382,15 @@ CREATE TABLE {DBNICK}_tmp_trans (
    UNIQUE (user_id, id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
                   	
+/**
+ * Table tmp_trans_origin
+ **/
+DROP TABLE IF EXISTS {DBNICK}_tmp_trans_origin;
+CREATE TABLE {DBNICK}_tmp_trans_origin (
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   user_id	   INT UNSIGNED DEFAULT NULL,
+   UNIQUE (user_id, id)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};                     
 
 /****************************************************************
  *
