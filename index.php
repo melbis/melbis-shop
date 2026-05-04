@@ -1,24 +1,20 @@
 <?php
 /***************************************************************************************************
- * 
- * index.php - index page
- * 
- ***************************************************************************************************
- * @version 6.5.0.255 @ 2026-05-04
+ * @version 6.5.0.256 @ 2026-05-04
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
- * @author Dmytro Kasianov
- **************************************************************************************************/                             
-
-// Require
-require_once('units/melbis_inc.php');
+ * @author Dmytro Kasianov 
+ **************************************************************************************************/                                        
+ 
+// Melbis base
+require 'units/melbis_inc.php';
 
 // Connect to DataBase 
-$gDb = new \Melbis\MelbisShop\MySql('MELBIS_INC_halt');
+$gDb = new Melbis\MelbisShop\MySql('MELBIS_INC_halt');
 $gDb->Connect(__FILE__, __LINE__);
 
 // Create Parser
-$gParser = new \Melbis\MelbisShop\Parser('MELBIS_INC_halt', $gDb);
+$gParser = new Melbis\MelbisShop\Parser('MELBIS_INC_halt', $gDb);
 
 // Define self constants
 $gParser->DefineSelfConst();

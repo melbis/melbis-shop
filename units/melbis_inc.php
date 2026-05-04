@@ -1,9 +1,9 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.255 @ 2026-05-04
+ * @version 6.5.0.256 @ 2026-05-04
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
- * @author Dmytro Kasianov  
+ * @author Dmytro Kasianov
  **************************************************************************************************/
  
 // Core
@@ -68,6 +68,24 @@ if ( !function_exists('MELBIS_INC_autoload') )
         }                
     }
     spl_autoload_register('MELBIS_INC_autoload');
+}
+
+/** 
+ * Function MELBIS
+ * Returm info message about error and die
+ **/    
+function MELBIS() 
+{
+    static $parser = false;
+    
+    if ( !$parser ) 
+    {                 
+        $db = new Melbis\MelbisShop\MySql('MELBIS_INC_halt');
+        $db->Connect(__FILE__, __LINE__);
+        $parser = new Melbis\MelbisShop\Parser('MELBIS_INC_halt', $db);    
+    }
+    
+    return $parser;
 }
 
 
