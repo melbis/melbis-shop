@@ -1,26 +1,24 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.257 @ 2026-05-05
+ * @version 6.5.0.258 @ 2026-05-07
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
  **************************************************************************************************/
 
 /** 
- * Function MELBIS_BASE_PAGE
+ * Function KASDIM_BASE_PAGE
  **/
-function MELBIS_BASE_PAGE($mVars)
+function KASDIM_BASE_PAGE($mVars)
 { 
-    global $gParser; 
-                       
     // Create 
-    $tpl = $gParser->TplCreate();    
+    $tpl = MELBIS()->TplCreate();    
     
     // Lang tags    
     MELBIS_INC_LANG_tags($tpl, __FUNCTION__);                           
     
     // Vars
-    $id = (int) ($mVars['get']['topic_id'] ?? 0);
+    $id = (int) ( $mVars['get']['topic_id'] ?? 0 );
     
     $gParser->gVars['ms']['page']['lang'] = $mVars['lang'];        
     $gParser->gVars['ms']['page']['year'] = MELBIS_INC_STD_get_now('Y');      

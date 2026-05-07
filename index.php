@@ -1,36 +1,29 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.257 @ 2026-05-05
+ * @version 6.5.0.258 @ 2026-05-07
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov 
  **************************************************************************************************/                                        
  
-// Melbis base
-require 'units/melbis_inc.php';
-
-// Connect to DataBase 
-$gDb = new Melbis\MelbisShop\MySql('MELBIS_INC_halt');
-$gDb->Connect(__FILE__, __LINE__);
-
-// Create Parser
-$gParser = new Melbis\MelbisShop\Parser('MELBIS_INC_halt', $gDb);
+// Melbis start
+require 'units/melbis.php';
 
 // Define self constants
-$gParser->DefineSelfConst();
+MELBIS()->DefineSelfConst();
 
 // Define session
-$gParser->DefineSession('MELBIS_SHOP');
+MELBIS()->DefineSession('MELBIS_SHOP');
 
 // Define lang
 $lang_list = [ MELBIS_LANG ];
 $lang_get = $_GET['lang'] ?? MELBIS_LANG;
-$gLang = ( in_array($lang_get, $lang_list) ) ? $lang_get : MELBIS_LANG;
-$gParser->LanguageSet($gLang);
+$lang = ( in_array($lang_get, $lang_list) ) ? $lang_get : MELBIS_LANG;
+MELBIS()->LanguageSet($lang);
 
 // Entry point
-$entry_point = ( isset($_GET['mod']) ) ? $_GET['mod'] : 'melbis_base_page';
-$entry_param = [$gLang, serialize($_GET), serialize($_POST)];  
+$entry_point = $_GET['mod'] ?? 'kasdim_base_page';
+$entry_param = [$lang, serialize($_GET), serialize($_POST)];
 
 // Lazy loading
 if ( isset($_GET['lazy']) ) 
@@ -40,12 +33,12 @@ if ( isset($_GET['lazy']) )
 }
 
 // Run
-$gParser->Run($entry_point, $entry_param);
+MELBIS()->Run($entry_point, $entry_param);
 
 // Publish
-$gParser->Publish();
+MELBIS()->Publish();
 
 // Possible report
-$gParser->Report();
+MELBIS()->Report();
 
 ?>
