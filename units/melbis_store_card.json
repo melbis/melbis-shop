@@ -1,19 +1,16 @@
 {
     "description": "Goods card",
-    "parameters": "lang: str, id: int",
+    "parameters": "id: int",
     "tables": [
         "_currency=1",
         "_key_value=1",
         "_store=1"
     ],
-    "includes": [
-        "melbis_inc_lang.php=1",
-        "melbis_inc_std.php=1"
-    ],
-    "cache_on": "1",
+    "includes": [],
+    "cache_on": "0",
     "cache_time": "0",
-    "lazy_load": "1",
-    "entry_point": "1",
+    "lazy_load": "0",
+    "entry_point": "0",
     "trick_on": "1",
     "trick_load_idx": "0",
     "trick_load_max": "1",

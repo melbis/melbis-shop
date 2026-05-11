@@ -1,7 +1,21 @@
 <ul class="navbar-nav mr-auto">
     <li class="nav-item px-2">
-        <a class="nav-link" href="/{MS:PAGE:LANG}/" data-id="0">Home</a>
-    </li> 
-    {ITEM}
+        <a class="nav-link" href="/" data-id="0">Home</a>
+    </li>           
+    {#MENU}
+        {*SUB}
+        <li class="nav-item dropdown px-2">
+            <a class="nav-link dropdown-toggle" href="#" data-id="{ID}" data-toggle="dropdown">{NAME|html}</a>
+            <ul class="dropdown-menu">
+                {MELBIS:melbis_cataloge_sub(,,[ID])} 
+            </ul>                            
+        </li>
+        {SUB*}
+        {*!SUB}
+        <li class="nav-item px-2">
+            <a class="nav-link" href="{ID|$page_link:KIND_KEY,LINK}" data-id="{ID}">{NAME|html}</a>
+        </li> 
+        {SUB*}        
+    {MENU#}    
 </ul>
 

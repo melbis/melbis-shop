@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.258 @ 2026-05-07
+ * @version 6.5.0.260 @ 2026-05-11
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -12,64 +12,47 @@
  **/
 function MELBIS_CATALOGE_SUB($mVars)
 { 
-    global $gParser;
-                       
     // Create 
-    $tpl = $gParser->TplCreate();
+    $tpl = MELBIS()->TplCreate();
             
-    // Vars
-    $id = (int) $mVars['post']['id'];   
+    // Vars               
+    $id = !empty($mVars['id']) ? $mVars['id'] : (int) $mVars['post']['id'];   
     
     $command = "SELECT id, tlevel
                   FROM {DBNICK}_topic
-                 WHERE id = '$id' 
-                ";                    
-    $root = $gParser->SqlSelectToArray(__LINE__, $command);       
+                 WHERE id = :ID 
+                ";                                        
+    $param = [
+        'id' => $id
+        ];            
+    $root = MELBIS()->SqlSelectFlat(__LINE__, $command, $param);    
+    if ( !isset($root['id']) ) return '';       
         
     // Get menu items     
-    $command = "SELECT t.id, t.name, t.kind_key, t.link, t_s.how
+    $command = "SELECT t.id, t.name, t.kind_key, t.link, t_s.sub
                   FROM {DBNICK}_topic t                                                                           
-             LEFT JOIN ( SELECT tindex, COUNT(*) AS how 
+             LEFT JOIN ( SELECT tindex, COUNT(*) AS sub 
                            FROM {DBNICK}_topic
                           WHERE no_visible = '0'
-                            AND tlevel = '$root[tlevel]' + 2                                
+                            AND tlevel = :TLEVEL                                
                        GROUP BY tindex
                        ) AS t_s 
                     ON t.id = t_s.tindex                                                            
-                 WHERE t.tindex = '$root[id]'
+                 WHERE t.tindex = :TINDEX
                    AND t.no_visible = '0'                                                                
               ORDER BY t.absindex                
-                ";                    
-    $menu = $gParser->SqlSelect(__LINE__, $command);    
-    foreach ($menu as $item)
-    {        
-        if ( $item['name'] == '-' )
-        {
-            $gParser->TplParse($tpl, 'ITEM', '.item_div');
-        }
-        else
-        {                                    
-            $name = htmlspecialchars($item['name']); // MELBIS_INC_LANG('kTopic', 'NAME', $item['id'], $item['name']);
-            $link = ( $item['kind_key'] == 'kLink' ) ? $item['link'] : '/'.$mVars['lang'].'/?topic_id='.$item['id'] ;                                    
-            $gParser->TplAssign($tpl, ['ID'    => $item['id'],
-                                       'NAME'  => $name,
-                                       'LINK'  => $link
-                                       ]);        
-            if ( !isset($item['how']) )
-            {
-                $gParser->TplParse($tpl, 'ITEM', '.item');
-            }            
-            else
-            {
-                $gParser->TplParse($tpl, 'ITEM', '.item_sub');
-            }
-        }
-    } 
+                ";                                        
+    $param = [
+        'tlevel' => $root['tlevel'] + 2,
+        'tindex' => $root['id']
+        ];                
+    $menu = MELBIS()->SqlSelect(__LINE__, $command, $param); 
     
-    // Final: return content
-    $gParser->TplParse($tpl, 'MAIN', 'main');
-
-    return $gParser->TplFree($tpl, 'MAIN');
+    // Menu
+    MELBIS()->TplAssign($tpl, 'MENU', $menu);
+    
+    // Final
+    return MELBIS()->TplFinal($tpl, 'main');
 } 
 
 

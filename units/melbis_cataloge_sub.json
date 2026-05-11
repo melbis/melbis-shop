@@ -1,11 +1,11 @@
 {
     "description": "Cataloge sub items",
-    "parameters": "lang: str, get: serial, post: serial",
+    "parameters": "get: serial, post: serial, id: int",
     "tables": [
         "_topic=1"
     ],
     "includes": [
-        "melbis_inc_lang.php=1"
+        "melbis_inc_callback.php=1"
     ],
     "cache_on": "0",
     "cache_time": "0",

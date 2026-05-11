@@ -1,14 +1,30 @@
-<table class="table">
-  <thead class="thead-light">
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Name</th>
-      <th scope="col">Amount</th>
-      <th scope="col">Price</th>
-      <th scope="col">To do</th>      
-    </tr>
-  </thead>
-  <tbody>
-    {ITEM}
-  </tbody>
-</table>
+{*GOODS:COUNT}
+    <table class="table">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Price</th>
+                <th scope="col">To do</th>      
+            </tr>
+        </thead>
+        <tbody>
+        {#GOODS}
+            <tr>
+              <th scope="row">{STORE_ID}</th>
+                  <td>{STORE_NAME|html}</td>
+                  <td>{AMOUNT}</td>
+                  <td>{OUT_PRICE|inum}</td>
+                  <td><button type="button" class="btn btn-warning melbis_btn_remove btn-sm" data-id="{STORE_ID}"> Remove</button></td>
+            </tr>  
+        {GOODS#}
+        </tbody>
+    </table>        
+{GOODS:COUNT*}
+           
+{*!GOODS:COUNT}
+    <h3 class="text-center m-4">
+        Cart is empty! <small class="text-muted">Add item to cart</small>
+    </h3>  
+{GOODS:COUNT*}

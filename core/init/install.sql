@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.258 @ 2026-05-07
+ * @version 6.5.0.260 @ 2026-05-11
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -55,7 +55,7 @@ CREATE TABLE {DBNICK}_oper (
    load_max_5  DECIMAL(10,2) DEFAULT '0' NOT NULL,
    load_max_15 DECIMAL(10,2) DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY command (command)
+   KEY IDX1 (command)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -71,7 +71,7 @@ CREATE TABLE {DBNICK}_oper_table (
    fields_list 	CHAR(255) DEFAULT '' NOT NULL,
    pos	   	   INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY oper_id (oper_id)
+   KEY IDX1 (oper_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -85,9 +85,9 @@ CREATE TABLE {DBNICK}_oper_right (
    user_id 	      INT UNSIGNED DEFAULT NULL,
    group_id 	   INT UNSIGNED DEFAULT NULL,
    PRIMARY KEY (id),
-   KEY oper_id (oper_id),
-   KEY user_id (user_id),
-   KEY group_id (group_id)
+   KEY IDX1 (oper_id),
+   KEY IDX2 (user_id),
+   KEY IDX3 (group_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -116,7 +116,7 @@ CREATE TABLE {DBNICK}_key (
    tlevel 	   INT UNSIGNED DEFAULT '0' NOT NULL,
    absindex 	INT UNSIGNED DEFAULT '0' NOT NULL,
    folder 	   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
-   PRIMARY KEY (id)
+   PRIMARY KEY (id)   
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -132,7 +132,7 @@ CREATE TABLE {DBNICK}_key_value (
    sys_key 	   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    pos		   INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY	key_code (key_code)
+   KEY IDX1 (key_code)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -154,7 +154,7 @@ CREATE TABLE {DBNICK}_files_key_value (
    format_xml 	MEDIUMTEXT DEFAULT ('') NOT NULL,
    pos		   INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY elem_id (elem_id)
+   KEY IDX1 (elem_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -183,8 +183,8 @@ CREATE TABLE {DBNICK}_user (
    add_group_id 	INT UNSIGNED DEFAULT NULL,
    is_blocked 		TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY group_id (group_id),
-   KEY add_group_id (add_group_id)
+   KEY IDX1 (group_id),
+   KEY IDX2 (add_group_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 /**
@@ -208,7 +208,7 @@ CREATE TABLE {DBNICK}_user_chat (
    to_user_id	INT UNSIGNED DEFAULT NULL,
    message_txt	TEXT DEFAULT ('') NOT NULL,
    date_time	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,	
-   KEY date_time (date_time)
+   KEY IDX1 (date_time)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 /**
@@ -218,7 +218,7 @@ DROP TABLE IF EXISTS {DBNICK}_user_online;
 CREATE TABLE {DBNICK}_user_online (
    user_id	   INT UNSIGNED DEFAULT NULL,
    last_time	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,
-   UNIQUE KEY 	user_id (user_id)
+   UNIQUE (user_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -265,8 +265,8 @@ CREATE TABLE {DBNICK}_user_file_version (
    content	   MEDIUMTEXT DEFAULT ('') NOT NULL,
    version 	   DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,
    PRIMARY KEY (id),
-   KEY user_id (user_id),
-   KEY path (path(250))
+   KEY IDX1 (user_id),
+   KEY IDX2 (path(250))
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -284,7 +284,7 @@ CREATE TABLE {DBNICK}_user_task (
    privy 	   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    date_time	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,	
    PRIMARY KEY (id),
-   KEY user_id (user_id)
+   KEY IDX1 (user_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -301,8 +301,8 @@ CREATE TABLE {DBNICK}_user_task_note (
    content	   MEDIUMTEXT DEFAULT ('') NOT NULL,
    date_time	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,	
    PRIMARY KEY (id),
-   KEY task_id (task_id),
-   KEY user_id (user_id)
+   KEY IDX1 (task_id),
+   KEY IDX2 (user_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -337,7 +337,10 @@ CREATE TABLE {DBNICK}_topic (
    order_key	CHAR(100) DEFAULT '' NOT NULL,
    order_asc	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    option_code TEXT DEFAULT ('') NOT NULL,
-   PRIMARY KEY (id)
+   PRIMARY KEY (id),
+   KEY IDX1 (tindex),
+   KEY IDX2 (absindex),
+   KEY IDX3 (kind_key)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -357,8 +360,8 @@ CREATE TABLE {DBNICK}_files_topic (
    parent_id	INT UNSIGNED DEFAULT NULL,
    format_xml 	MEDIUMTEXT DEFAULT ('') NOT NULL,
    pos		   INT UNSIGNED DEFAULT '0' NOT NULL,
-   PRIMARY KEY (id),
-   KEY elem_id (elem_id)
+   PRIMARY KEY (id),   
+   KEY IDX1 (elem_id, kind_key, pos)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -375,7 +378,9 @@ CREATE TABLE {DBNICK}_topic_alt (
    tlevel 	   INT UNSIGNED DEFAULT '0' NOT NULL,
    absindex 	INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY kind_key (kind_key)
+   KEY IDX1 (tindex),
+   KEY IDX2 (kind_key),
+   KEY IDX3 (absindex)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -393,7 +398,8 @@ CREATE TABLE {DBNICK}_topic_filter (
    use_sub_topic  TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    pos 		      INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY topic_id (topic_id)
+   KEY IDX1 (topic_id),
+   KEY IDX2 (kind_key)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -410,9 +416,9 @@ CREATE TABLE {DBNICK}_topic_right (
    for_price	   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    for_ctrl	      TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY topic_id (topic_id),
-   KEY user_id (user_id),
-   KEY group_id (group_id)
+   KEY IDX1 (topic_id),
+   KEY IDX2 (user_id),
+   KEY IDX3 (group_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -445,7 +451,7 @@ CREATE TABLE {DBNICK}_topic_key_value (
    name 	      CHAR(255) DEFAULT '' NOT NULL,
    pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY key_id (key_id)
+   KEY IDX1 (key_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -460,9 +466,9 @@ CREATE TABLE {DBNICK}_topic_key_set (
    value_id	      INT UNSIGNED DEFAULT NULL,
    value_txt 	   MEDIUMTEXT DEFAULT ('') NOT NULL,
    PRIMARY KEY (id),
-   KEY topic_id (topic_id),
-   KEY key_id (key_id),
-   KEY value_id (value_id)
+   KEY IDX1 (topic_id),
+   KEY IDX2 (key_id),
+   KEY IDX3 (value_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -475,10 +481,9 @@ CREATE TABLE {DBNICK}_topic_store (
    topic_id 	INT UNSIGNED DEFAULT NULL,
    store_id 	BIGINT UNSIGNED DEFAULT NULL,
    pos 		   BIGINT UNSIGNED DEFAULT '0' NOT NULL,
-   PRIMARY KEY (id),
-   KEY topic_id (topic_id),
-   KEY store_id (store_id),
-   KEY topic_store (topic_id,store_id)
+   PRIMARY KEY (id),   
+   KEY IDX1 (store_id),
+   KEY IDX2 (topic_id, store_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -514,9 +519,9 @@ CREATE TABLE {DBNICK}_self_key_right (
    user_id 	   INT UNSIGNED DEFAULT NULL,
    group_id 	INT UNSIGNED DEFAULT NULL,
    PRIMARY KEY (id),
-   KEY key_id (key_id),
-   KEY user_id (user_id),
-   KEY group_id (group_id)
+   KEY IDX1 (key_id),
+   KEY IDX2 (user_id),
+   KEY IDX3 (group_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -534,7 +539,7 @@ CREATE TABLE {DBNICK}_self_key_value (
    value_txt 	MEDIUMTEXT DEFAULT ('') NOT NULL,
    pos		   INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY key_id (key_id)
+   KEY IDX1 (key_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -551,7 +556,8 @@ CREATE TABLE {DBNICK}_brand (
    params 	   CHAR(255) DEFAULT '' NOT NULL,
    seo_code 	CHAR(255) DEFAULT '' NOT NULL,
    pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
-   PRIMARY KEY (id)
+   PRIMARY KEY (id),
+   KEY IDX1 (kind_key)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -572,7 +578,7 @@ CREATE TABLE {DBNICK}_files_brand (
    format_xml 	MEDIUMTEXT DEFAULT ('') NOT NULL,
    pos		   INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY elem_id (elem_id)
+   KEY IDX1 (elem_id, kind_key, pos)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -590,7 +596,7 @@ CREATE TABLE {DBNICK}_brand_key (
    folder 	   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    descr	      MEDIUMTEXT DEFAULT ('') NOT NULL,
    mask_edit	CHAR(255) DEFAULT '' NOT NULL,
-   PRIMARY KEY (id)
+   PRIMARY KEY (id)   
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -605,7 +611,7 @@ CREATE TABLE {DBNICK}_brand_key_value (
    name 	      CHAR(255) DEFAULT '' NOT NULL,
    pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY key_id (key_id)
+   KEY IDX1 (key_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -620,9 +626,9 @@ CREATE TABLE {DBNICK}_brand_key_set (
    value_id	   INT UNSIGNED DEFAULT NULL,
    value_txt 	MEDIUMTEXT DEFAULT ('') NOT NULL,
    PRIMARY KEY (id),
-   KEY brand_id (brand_id),
-   KEY key_id (key_id),
-   KEY value_id (value_id)
+   KEY IDX1 (brand_id),
+   KEY IDX2 (key_id),
+   KEY IDX3 (value_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -646,7 +652,9 @@ CREATE TABLE {DBNICK}_provider (
    serv_phone 	CHAR(255) DEFAULT '' NOT NULL,
    notice	   MEDIUMTEXT DEFAULT ('') NOT NULL,
    pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
-   PRIMARY KEY (id)
+   PRIMARY KEY (id),
+   KEY IDX1 (kind_key),
+   KEY IDX2 (state_key)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -679,7 +687,7 @@ CREATE TABLE {DBNICK}_provider_key (
    folder 	   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    descr	      MEDIUMTEXT DEFAULT ('') NOT NULL,
    mask_edit	CHAR(255) DEFAULT '' NOT NULL,
-   PRIMARY KEY (id)
+   PRIMARY KEY (id)   
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -694,7 +702,7 @@ CREATE TABLE {DBNICK}_provider_key_value (
    name 	      CHAR(255) DEFAULT '' NOT NULL,
    pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY key_id (key_id)
+   KEY IDX1 (key_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -709,9 +717,9 @@ CREATE TABLE {DBNICK}_provider_key_set (
    value_id	      INT UNSIGNED DEFAULT NULL,
    value_txt 	   MEDIUMTEXT DEFAULT ('') NOT NULL,
    PRIMARY KEY (id),
-   KEY provider_id (provider_id),
-   KEY key_id (key_id),
-   KEY value_id (value_id)
+   KEY IDX1 (provider_id),
+   KEY IDX2 (key_id),
+   KEY IDX3 (value_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -733,7 +741,10 @@ CREATE TABLE {DBNICK}_info (
    in_topic 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    in_goods 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    seo_code 	CHAR(255) DEFAULT '' NOT NULL,
-   PRIMARY KEY (id)
+   PRIMARY KEY (id),
+   KEY IDX1 (tindex),
+   KEY IDX2 (absindex),
+   KEY IDX3 (kind_key)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -754,7 +765,7 @@ CREATE TABLE {DBNICK}_files_info (
    format_xml 	MEDIUMTEXT DEFAULT ('') NOT NULL,
    pos		   INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY elem_id (elem_id)
+   KEY IDX1 (elem_id, kind_key, pos)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -773,7 +784,8 @@ CREATE TABLE {DBNICK}_info_value (
    seo_code 	CHAR(255) DEFAULT '' NOT NULL,
    pos 		   BIGINT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY info_id (info_id)
+   KEY IDX1 (info_id),
+   KEY IDX2 (kind_key)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -794,7 +806,7 @@ CREATE TABLE {DBNICK}_files_info_value (
    format_xml 	   MEDIUMTEXT DEFAULT ('') NOT NULL,
    pos		      BIGINT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY elem_id (elem_id)
+   KEY IDX1 (elem_id, kind_key, pos)   
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -810,9 +822,9 @@ CREATE TABLE {DBNICK}_info_right (
    for_info	   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    for_value	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY info_id (info_id),
-   KEY user_id (user_id),
-   KEY group_id (group_id)
+   KEY IDX1 (info_id),
+   KEY IDX2 (user_id),
+   KEY IDX3 (group_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -830,7 +842,7 @@ CREATE TABLE {DBNICK}_info_key (
    folder 	   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    descr	      MEDIUMTEXT DEFAULT ('') NOT NULL,
    mask_edit	CHAR(255) DEFAULT '' NOT NULL,
-   PRIMARY KEY (id)
+   PRIMARY KEY (id)   
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -845,7 +857,7 @@ CREATE TABLE {DBNICK}_info_key_value (
    name 	   CHAR(255) DEFAULT '' NOT NULL,
    pos 		INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY key_id (key_id)
+   KEY IDX1 (key_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -860,9 +872,9 @@ CREATE TABLE {DBNICK}_info_key_set (
    value_id	   INT UNSIGNED DEFAULT NULL,
    value_txt 	MEDIUMTEXT DEFAULT ('') NOT NULL,
    PRIMARY KEY (id),
-   KEY info_id (info_id),
-   KEY key_id (key_id),
-   KEY value_id (value_id)
+   KEY IDX1 (info_id),
+   KEY IDX2 (key_id),
+   KEY IDX3 (value_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -878,7 +890,8 @@ CREATE TABLE {DBNICK}_currency (
    division 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    provider_id INT UNSIGNED DEFAULT NULL,
    pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
-   PRIMARY KEY (id)
+   PRIMARY KEY (id),
+   KEY IDX1 (provider_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -909,7 +922,7 @@ CREATE TABLE {DBNICK}_disc_rate (
    begin_time 	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,	
    end_time 	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,	
    PRIMARY KEY (id),
-   KEY group_id (group_id)
+   KEY IDX1 (group_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -925,7 +938,8 @@ CREATE TABLE {DBNICK}_param (
    fixed_set 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    custom_sum 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    pos 		INT UNSIGNED DEFAULT '0' NOT NULL,
-   PRIMARY KEY (id)
+   PRIMARY KEY (id),
+   KEY IDX1 (kind_key)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -942,7 +956,7 @@ CREATE TABLE {DBNICK}_param_value (
    sum_curr_id INT UNSIGNED DEFAULT NULL,
    pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY param_id (param_id)
+   KEY IDX1 (param_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -959,11 +973,10 @@ CREATE TABLE {DBNICK}_store_param (
    value_set_sum  DECIMAL(10,2) DEFAULT '0' NOT NULL,
    value_curr_id  INT UNSIGNED DEFAULT NULL,
    pos 		      INT UNSIGNED DEFAULT '0' NOT NULL,
-   PRIMARY KEY (id),
-   KEY store_id (store_id),
-   KEY param_id (param_id),
-   KEY value_id (value_id),
-   KEY store_value (store_id, value_id)
+   PRIMARY KEY (id),   
+   KEY IDX1 (param_id),
+   KEY IDX2 (value_id),
+   KEY IDX3 (store_id, value_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -1000,7 +1013,7 @@ CREATE TABLE {DBNICK}_files_lang (
    format_xml 	MEDIUMTEXT DEFAULT ('') NOT NULL,
    pos		   INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY elem_id (elem_id)
+   KEY IDX1 (elem_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -1043,9 +1056,9 @@ CREATE TABLE {DBNICK}_trans_origin (
    no_trans    TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    pos         INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY trans_id (trans_id),
-   KEY item_id (item_id),
-   KEY item_code (item_code)   
+   KEY IDX1 (trans_id),
+   KEY IDX2 (item_id),
+   KEY IDX3 (item_code)   
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -1062,9 +1075,9 @@ CREATE TABLE {DBNICK}_trans_lang (
    is_approve  	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    is_error    	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY lang_id (lang_id),
-   KEY trans_id (trans_id),
-   KEY origin_id (origin_id)
+   KEY IDX1 (lang_id),
+   KEY IDX2 (trans_id),
+   KEY IDX3 (origin_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -1098,7 +1111,8 @@ CREATE TABLE {DBNICK}_advert_text (
    kind_key    CHAR(100) DEFAULT '' NOT NULL,
    params      CHAR(255) DEFAULT '' NOT NULL,
    pos         INT UNSIGNED DEFAULT '0' NOT NULL,
-   PRIMARY KEY (id)
+   PRIMARY KEY (id),
+   KEY IDX1 (kind_key)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -1119,7 +1133,7 @@ CREATE TABLE {DBNICK}_files_advert_text (
    format_xml 	MEDIUMTEXT DEFAULT ('') NOT NULL,
    pos		   INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY elem_id (elem_id)
+   KEY IDX1 (elem_id, kind_key, pos)   
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -1136,7 +1150,8 @@ CREATE TABLE {DBNICK}_advert_goods (
    comment     CHAR(255) DEFAULT '' NOT NULL,
    pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY advert_id (advert_id)
+   KEY IDX1 (advert_id),
+   KEY IDX2 (kind_key)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -1154,7 +1169,8 @@ CREATE TABLE {DBNICK}_advert_link (
    comment     CHAR(255) DEFAULT '' NOT NULL,
    pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY advert_id (advert_id)
+   KEY IDX1 (advert_id),
+   KEY IDX2 (kind_key)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -1222,13 +1238,15 @@ CREATE TABLE {DBNICK}_store (
    award_cnt 	   INT DEFAULT '0' NOT NULL,
    award_avg 	   DECIMAL(10,4) DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY code_shop (code_shop(250)),
-   KEY code_prov (code_prov(250)),
-   KEY code_made (code_made(250)),
-   KEY provider_id (provider_id),
-   KEY brand_id (brand_id),
-   KEY relate_id (relate_id),
-   KEY clann (clann)
+   KEY IDX1 (code_shop(250)),
+   KEY IDX2 (code_prov(250)),
+   KEY IDX3 (code_made(250)),   
+   KEY IDX4 (provider_id),
+   KEY IDX5 (brand_id),
+   KEY IDX6 (relate_id),
+   KEY IDX7 (clann),
+   KEY IDX8 (kind_key),
+   KEY IDX9 (status_key)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -1250,7 +1268,7 @@ CREATE TABLE {DBNICK}_files_store (
    format_xml 	MEDIUMTEXT DEFAULT ('') NOT NULL,
    pos	   	INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY elem_id (elem_id)
+   KEY IDX1 (elem_id, kind_key, pos)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -1268,7 +1286,8 @@ CREATE TABLE {DBNICK}_store_set (
    comment 	   CHAR(255) DEFAULT '' NOT NULL,
    pos		   BIGINT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY store_id (store_id)
+   KEY IDX1 (store_id),
+   KEY IDX2 (kind_key)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -1283,11 +1302,11 @@ CREATE TABLE {DBNICK}_store_info (
    value_id 	BIGINT UNSIGNED DEFAULT NULL,
    value_dec 	DECIMAL(10,4) DEFAULT '0' NOT NULL,
    value_txt 	MEDIUMTEXT DEFAULT ('') NOT NULL,
-   PRIMARY KEY (id),
-   KEY store_id (store_id),
-   KEY info_id (info_id),
-   KEY value_id (value_id),
-   KEY store_value (store_id, value_id)
+   PRIMARY KEY (id),   
+   KEY IDX1 (info_id),
+   KEY IDX2 (value_id),
+   KEY IDX3 (store_id, value_id),
+   KEY IDX4 (store_id, info_id, value_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -1311,7 +1330,8 @@ CREATE TABLE {DBNICK}_store_comment (
    contra_cnt	INT DEFAULT '0' NOT NULL,
    create_time DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,
    PRIMARY KEY (id),
-   KEY store_id (store_id)
+   KEY IDX1 (store_id),
+   KEY IDX2 (parent_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -1324,8 +1344,8 @@ CREATE TABLE {DBNICK}_store_comment_vote (
    comment_id 	BIGINT UNSIGNED DEFAULT NULL,
    user_ip	   CHAR(45) DEFAULT '' NOT NULL,   
    PRIMARY KEY (id),
-   KEY comment_id (comment_id),
-   KEY user_ip (user_ip)
+   KEY IDX1 (comment_id),
+   KEY IDX2 (user_ip)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -1368,7 +1388,7 @@ CREATE TABLE {DBNICK}_u_info_value (
    seo_code 	CHAR(255) DEFAULT '' NOT NULL,
    pos 		   BIGINT UNSIGNED DEFAULT '0' NOT NULL,
    UNIQUE (user_id, id),
-   KEY base_id (base_id)
+   KEY IDX1 (base_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -1391,7 +1411,7 @@ CREATE TABLE {DBNICK}_u_files_info_value (
    format_xml 	MEDIUMTEXT DEFAULT ('') NOT NULL,
    pos		   INT UNSIGNED DEFAULT '0' NOT NULL,
    UNIQUE (user_id, id),
-   KEY elem_id (elem_id)
+   KEY IDX1 (elem_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -1436,7 +1456,7 @@ CREATE TABLE {DBNICK}_u_store (
    edit_time 	   DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,	
    option_code 	TEXT DEFAULT ('') NOT NULL,
    UNIQUE (user_id, id),
-   KEY base_id (base_id)
+   KEY IDX1 (base_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -1459,7 +1479,7 @@ CREATE TABLE {DBNICK}_u_files_store (
    format_xml 	MEDIUMTEXT DEFAULT ('') NOT NULL,
    pos		   BIGINT UNSIGNED DEFAULT '0' NOT NULL,
    UNIQUE (user_id, id),
-   KEY elem_id (elem_id)
+   KEY IDX1 (elem_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -1539,7 +1559,7 @@ CREATE TABLE {DBNICK}_field (
    fixed_set 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    read_only 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    mask_edit	CHAR(255) DEFAULT '' NOT NULL,
-   PRIMARY KEY (id)
+   PRIMARY KEY (id)   
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -1560,7 +1580,7 @@ CREATE TABLE {DBNICK}_files_field (
    format_xml 	MEDIUMTEXT DEFAULT ('') NOT NULL,
    pos		   INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY elem_id (elem_id)
+   KEY IDX1 (elem_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -1577,7 +1597,8 @@ CREATE TABLE {DBNICK}_field_value (
    kind_key 	CHAR(100) DEFAULT '' NOT NULL,
    pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY field_id (field_id)
+   KEY IDX1 (field_id),
+   KEY IDX2 (kind_key)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 /**
@@ -1594,7 +1615,7 @@ CREATE TABLE {DBNICK}_client (
    reg_date 	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,	
    last_date 	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,	
    PRIMARY KEY (id),
-   KEY group_id (group_id)
+   KEY IDX1 (group_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -1638,8 +1659,8 @@ CREATE TABLE {DBNICK}_client_field (
    value_id 	INT UNSIGNED DEFAULT NULL,
    value_txt 	MEDIUMTEXT DEFAULT ('') NOT NULL,
    PRIMARY KEY (id),
-   KEY client_id (client_id),
-   KEY field_id (field_id)
+   KEY IDX1 (client_id),
+   KEY IDX2 (field_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -1688,7 +1709,7 @@ CREATE TABLE {DBNICK}_files_order_option (
    format_xml 	MEDIUMTEXT DEFAULT ('') NOT NULL,
    pos		   INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY elem_id (elem_id)
+   KEY IDX1 (elem_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -1713,7 +1734,7 @@ CREATE TABLE {DBNICK}_order_option_value (
    after_create TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY option_id (option_id)
+   KEY IDX1 (option_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -1734,7 +1755,7 @@ CREATE TABLE {DBNICK}_files_order_option_value (
    format_xml 	MEDIUMTEXT DEFAULT ('') NOT NULL,
    pos		   INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY elem_id (elem_id)
+   KEY IDX1 (elem_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 /**
@@ -1747,9 +1768,9 @@ CREATE TABLE {DBNICK}_order_option_right (
    user_id 	   INT UNSIGNED DEFAULT NULL,
    group_id 	INT UNSIGNED DEFAULT NULL,
    PRIMARY KEY (id),
-   KEY option_id (option_id),
-   KEY user_id (user_id),
-   KEY group_id (group_id)
+   KEY IDX1 (option_id),
+   KEY IDX2 (user_id),
+   KEY IDX3 (group_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -1763,9 +1784,9 @@ CREATE TABLE {DBNICK}_order_right (
    user_id 	   INT UNSIGNED DEFAULT NULL,
    group_id 	INT UNSIGNED DEFAULT NULL,
    PRIMARY KEY (id),
-   KEY value_id (value_id),
-   KEY user_id (user_id),
-   KEY group_id (group_id)
+   KEY IDX1 (value_id),
+   KEY IDX2 (user_id),
+   KEY IDX3 (group_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 /**
@@ -1790,7 +1811,7 @@ CREATE TABLE {DBNICK}_order_option_limit (
    option_id 	   INT UNSIGNED DEFAULT NULL,
    was_value_id   INT UNSIGNED DEFAULT NULL,
    set_value_id   INT UNSIGNED DEFAULT NULL,
-   message	TEXT DEFAULT ('') NOT NULL,
+   message	      TEXT DEFAULT ('') NOT NULL,
    PRIMARY KEY (id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
@@ -1804,9 +1825,9 @@ CREATE TABLE {DBNICK}_order_option_limit_right (
    user_id  	INT UNSIGNED DEFAULT NULL,
    group_id 	INT UNSIGNED DEFAULT NULL,
    PRIMARY KEY (id),
-   KEY limit_id (limit_id),
-   KEY user_id (user_id),
-   KEY group_id (group_id)
+   KEY IDX1 (limit_id),
+   KEY IDX2 (user_id),
+   KEY IDX3 (group_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -1842,7 +1863,7 @@ CREATE TABLE {DBNICK}_order_store_option_value (
    after_create TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY option_id (option_id)
+   KEY IDX1 (option_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 /**
@@ -1855,9 +1876,9 @@ CREATE TABLE {DBNICK}_order_store_option_right (
    user_id 	   INT UNSIGNED DEFAULT NULL,
    group_id 	INT UNSIGNED DEFAULT NULL,
    PRIMARY KEY (id),
-   KEY option_id (option_id),
-   KEY user_id (user_id),
-   KEY group_id (group_id)
+   KEY IDX1 (option_id),
+   KEY IDX2 (user_id),
+   KEY IDX3 (group_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -1893,7 +1914,8 @@ CREATE TABLE {DBNICK}_orders (
    version_id 	INT UNSIGNED DEFAULT NULL,
    date_time 	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,	
    PRIMARY KEY (id),
-   KEY version_id (version_id)
+   KEY IDX1 (date_time),
+   KEY IDX2 (version_id, date_time)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -1909,8 +1931,9 @@ CREATE TABLE {DBNICK}_orders_version (
    date_time 	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,	
    total_sum 	DECIMAL(10,2) DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY order_id (order_id),
-   KEY user_id (user_id)
+   KEY IDX1 (client_id),
+   KEY IDX2 (order_id),
+   KEY IDX3 (user_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -1936,7 +1959,7 @@ CREATE TABLE {DBNICK}_orders_client_field (
    value_kind_key CHAR(100) DEFAULT '' NOT NULL,
    value_txt 	   MEDIUMTEXT DEFAULT ('') NOT NULL,
    PRIMARY KEY (id),
-   KEY version_id (version_id)
+   KEY IDX1 (version_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -1973,7 +1996,8 @@ CREATE TABLE {DBNICK}_orders_store (
    auto_notice 		CHAR(255) DEFAULT '' NOT NULL,
    pos 			      INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY version_id (version_id)
+   KEY IDX1 (version_id),
+   KEY IDX2 (store_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -1995,7 +2019,7 @@ CREATE TABLE {DBNICK}_orders_store_option (
    value_name 	   CHAR(255) DEFAULT '' NOT NULL,
    value_modify_sum DECIMAL(10,4) DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY version_id (version_id)
+   KEY IDX1 (version_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -2020,11 +2044,10 @@ CREATE TABLE {DBNICK}_orders_option (
    value_source_num 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    notice 		MEDIUMTEXT DEFAULT ('') NOT NULL,
    PRIMARY KEY (id),
-   KEY version_id (version_id),
-   KEY option_value (option_id, value_id)
+   KEY IDX1 (version_id),
+   KEY IDX2 (value_id),
+   KEY IDX3 (option_id, value_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
-
-
 
 
 
@@ -2063,9 +2086,9 @@ CREATE TABLE {DBNICK}_web_outside_right (
    user_id 	   INT UNSIGNED DEFAULT NULL,
    group_id 	INT UNSIGNED DEFAULT NULL,
    PRIMARY KEY (id),
-   KEY outside_id (outside_id),
-   KEY user_id (user_id),
-   KEY group_id (group_id)
+   KEY IDX1 (outside_id),
+   KEY IDX2 (user_id),
+   KEY IDX3 (group_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -2095,9 +2118,9 @@ CREATE TABLE {DBNICK}_web_inside_right (
    user_id 	   INT UNSIGNED DEFAULT NULL,
    group_id 	INT UNSIGNED DEFAULT NULL,
    PRIMARY KEY (id),
-   KEY inside_id (inside_id),
-   KEY user_id (user_id),
-   KEY group_id (group_id)
+   KEY IDX1 (inside_id),
+   KEY IDX2 (user_id),
+   KEY IDX3 (group_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -2139,7 +2162,7 @@ CREATE TABLE {DBNICK}_files_web_key (
    format_xml 	MEDIUMTEXT DEFAULT ('') NOT NULL,
    pos	   	INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY elem_id (elem_id)
+   KEY IDX1 (elem_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -2158,7 +2181,7 @@ CREATE TABLE {DBNICK}_web_key_value (
    color_set	CHAR(32) DEFAULT '' NOT NULL,
    pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY web_key_id (web_key_id)
+   KEY IDX1 (web_key_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -2179,7 +2202,7 @@ CREATE TABLE {DBNICK}_files_web_key_value (
    format_xml 	MEDIUMTEXT DEFAULT ('') NOT NULL,
    pos		   INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY elem_id (elem_id)
+   KEY IDX1 (elem_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -2196,9 +2219,9 @@ CREATE TABLE {DBNICK}_web_key_right (
    for_write	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    for_remove	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY web_key_id (web_key_id),
-   KEY user_id (user_id),
-   KEY group_id (group_id)
+   KEY IDX1 (web_key_id),
+   KEY IDX2 (user_id),
+   KEY IDX3 (group_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -2235,9 +2258,9 @@ CREATE TABLE {DBNICK}_report_right (
    user_id 	   INT UNSIGNED DEFAULT NULL,
    group_id 	INT UNSIGNED DEFAULT NULL,
    PRIMARY KEY (id),
-   KEY report_id (report_id),
-   KEY user_id (user_id),
-   KEY group_id (group_id)
+   KEY IDX1 (report_id),
+   KEY IDX2 (user_id),
+   KEY IDX3 (group_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -2392,37 +2415,10 @@ CREATE TABLE {DBNICK}_tmp_trans_origin (
    UNIQUE (user_id, id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};                     
 
-/****************************************************************
- *
- * Base index from our experience
- *
- ***************************************************************/
 
-CREATE INDEX store_IX1 ON {DBNICK}_store (kind_key);
 
-CREATE INDEX files_store_IX1 ON {DBNICK}_files_store (elem_id, kind_key, pos);
 
-CREATE INDEX store_comment_IX1 ON {DBNICK}_store_comment (parent_id);
 
-CREATE INDEX store_info_IX1  ON {DBNICK}_store_info (store_id, info_id, value_id);
-CREATE INDEX store_info_IX2  ON {DBNICK}_store_info (store_id, value_id);
-
-CREATE INDEX orders_IX1 ON {DBNICK}_orders (date_time);
-CREATE INDEX orders_IX2 ON {DBNICK}_orders (version_id, date_time);
-
-CREATE INDEX orders_version_IX1 ON {DBNICK}_orders_version (client_id);
-
-CREATE INDEX orders_store_IX1 ON {DBNICK}_orders_store (store_provider_id);
-CREATE INDEX orders_store_IX2 ON {DBNICK}_orders_store (store_id);
-
-CREATE INDEX orders_option_IX1 ON {DBNICK}_orders_option (value_skey);
-CREATE INDEX orders_option_IX2 ON {DBNICK}_orders_option (option_skey);
-CREATE INDEX orders_option_IX3 ON {DBNICK}_orders_option (value_id);
-CREATE INDEX orders_option_IX4 ON {DBNICK}_orders_option (version_id, option_skey);
-
-CREATE INDEX orders_store_option_IX1 ON {DBNICK}_orders_store_option (version_id, order_store_id, option_skey);
-
-CREATE INDEX orders_client_field_IX1 ON {DBNICK}_orders_client_field (field_skey);
 
 
 

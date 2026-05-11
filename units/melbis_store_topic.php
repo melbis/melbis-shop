@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.258 @ 2026-05-07
+ * @version 6.5.0.260 @ 2026-05-11
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -12,46 +12,37 @@
  **/
 function MELBIS_STORE_TOPIC($mVars)
 { 
-    global $gParser;
-                       
     // Create 
-    $tpl = $gParser->TplCreate();
+    $tpl = MELBIS()->TplCreate();
             
     // Vars
-    $id = (int) $mVars['topic_id'];  
+    $id = $mVars['id'];
     
-    $command = "WITH RECURSIVE topic_tree AS ( 
-                    SELECT *
-                      FROM {DBNICK}_topic
-                     WHERE id = '$id'
-                     UNION ALL     
-                    SELECT t.* 
-                      FROM {DBNICK}_topic t
-                      JOIN topic_tree tt 
-                        ON t.tindex = tt.id
-                     WHERE t.kind_key = 'kGoods' )                  
-                SELECT s.id 
-                  FROM topic_tree tt
+    // Sub topic
+    MELBIS_INC_TEMP_topic_sub($id);  
+    
+    $command = "SELECT s.id 
+                  FROM {DBNICK}_topic_sub t_sub
+                  JOIN {DBNICK}_topic t  
+                    ON t_sub.id = t.id
                   JOIN {DBNICK}_topic_store ts
-                    ON ts.topic_id = tt.id
+                    ON ts.topic_id = t.id
                   JOIN {DBNICK}_store s
                     ON ts.store_id = s.id
                  WHERE s.no_visible = 0 
-              ORDER BY tt.absindex, ts.pos
+              ORDER BY t.absindex, ts.pos
                  LIMIT 100 
                 ";                    
-    $goods = $gParser->SqlSelect(__LINE__, $command);
-    if ( count($goods) == 0 ) $gParser->TplAssign($tpl, 'ITEM', '');
-    foreach ( $goods as $item )
-    {
-        $gParser->TplAssign($tpl, 'ID', $item['id']);
-        $gParser->TplParse($tpl, 'ITEM', '.item');  
-    }    
+    $goods = MELBIS()->SqlSelect(__LINE__, $command);     
     
-    // Final: return content
-    $gParser->TplParse($tpl, 'MAIN', 'main');
+    // Goods
+    MELBIS()->TplAssign($tpl, 'GOODS', $goods);   
+                                                         
+    // Save store for static      
+    MELBIS()->EnumSet('store', array_column($goods, 'id'));        
 
-    return $gParser->TplFree($tpl, 'MAIN');
+    // Final
+    return MELBIS()->TplFinal($tpl, 'main');
 } 
 
 

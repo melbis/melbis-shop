@@ -1,3 +1,9 @@
 <ul class="list-group list-group-flush">
-    {ITEM}
+    {#INFO} 
+        <li class="list-group-item">
+            {NAME|html}:
+            {*VALUE_DEC}<b>{VALUE_DEC|nums:2}</b>{VALUE_DEC*}
+            {*!VALUE_DEC}<b>{VALUE_TXT|html}</b>{VALUE_DEC*}
+        </li>
+    {INFO#}
 </ul>

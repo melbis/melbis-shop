@@ -1,1 +1,18 @@
-{ITEM}
+{#MENU}
+    {*?NAME==-}
+        <li class="dropdown-divider"></li>
+    {NAME*}
+    {*?NAME!=-}
+        {*SUB}
+            <li class="dropdown-submenu">
+                <a class="dropdown-item dropdown-toggle" href="#" data-id="{ID}">{NAME|html}</a>
+                <ul class="dropdown-menu"></ul>
+            </li>        
+        {SUB*}
+        {*!SUB}
+            <li>
+                <a class="dropdown-item" href="{ID|$page_link:KIND_KEY,LINK}" data-id="{ID}">{NAME|html}</a>
+            </li>
+        {SUB*}
+    {NAME*}
+{MENU#}

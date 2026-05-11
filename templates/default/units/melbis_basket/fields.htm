@@ -1,1 +1,26 @@
-{FIELD}
+{#FIELDS}
+    {*FIELD_FOLDER}
+        <div class="bg-light p-2 mt-1">
+            <b>{FIELD_NAME|html}</b>
+        </div>    
+    {FIELD_FOLDER*}
+    {*!FIELD_FOLDER} 
+        {*FIXED_SET}
+            <div class="form-group ml-3">
+                <label>{FIELD_NAME|html}</label>
+                <input type="hidden" name="field{FIELD_ID}_text">
+                <select class="form-control" name="field{FIELD_ID}_id">
+                    {#VALUE_LIST} 
+                        <option value="{ID}">{NAME}</option>
+                    {VALUE_LIST#}
+                </select>
+            </div>        
+        {FIXED_SET*}                       
+        {*!FIXED_SET}   
+            <div class="form-group ml-4">
+                <label>{FIELD_NAME|html}</label>  
+                <input type="text" name="field{FIELD_ID}_text" class="form-control" value="{VALUE_TXT|html}">  
+            </div>
+        {FIXED_SET*}        
+    {FIELD_FOLDER*}
+{FIELDS#}

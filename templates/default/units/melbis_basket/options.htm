@@ -1,1 +1,19 @@
-{OPTION}
+{#OPTIONS}
+    {*FIXED_SET}
+        <div class="form-group ml-3">
+            <label>{OPTION_NAME|html}</label>
+            <input type="hidden" name="option{OPTION_ID}_text">
+            <select class="form-control" name="option{OPTION_ID}_id">
+                {#VALUE_LIST} 
+                    <option value="{ID}">{NAME}</option>
+                {VALUE_LIST#}
+            </select>
+        </div>        
+    {FIXED_SET*}                       
+    {*!FIXED_SET}   
+        <div class="form-group ml-4">
+            <label>{OPTION_NAME|html}</label>  
+            <input type="text" name="option{OPTION_ID}_text" class="form-control" value="{VALUE_NAME|html}">  
+        </div>
+    {FIXED_SET*}        
+{OPTIONS#}

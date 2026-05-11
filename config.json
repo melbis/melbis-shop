@@ -11,7 +11,7 @@
     "MELBIS_TIME_ZONE": "UTC",
     "MELBIS_LANG": "en",
     "MELBIS_CHARSET": "UTF-8",
-    "MELBIS_DESKTOP_CHARSET": "WIN1252",
+    "MELBIS_DESKTOP_CHARSET": "WIN1251",
     "MELBIS_CACHE": "False",
     "MELBIS_TEMPLATE": "default",
     "MELBIS_ROOT": "\/",

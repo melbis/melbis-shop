@@ -1,15 +1,13 @@
 {
     "description": "Goods features",
-    "parameters": "lang: str, id: int",
+    "parameters": "id: int",
     "tables": [
         "_info=1",
         "_info_value=1",
         "_store_info=1"
     ],
-    "includes": [
-        "melbis_inc_std.php=1"
-    ],
-    "cache_on": "1",
+    "includes": [],
+    "cache_on": "0",
     "cache_time": "100",
     "lazy_load": "0",
     "entry_point": "0",

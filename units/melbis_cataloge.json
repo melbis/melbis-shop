@@ -1,11 +1,13 @@
 {
     "description": "Cataloge menu",
-    "parameters": "lang: str",
+    "parameters": "",
     "tables": [
         "_topic=1"
     ],
-    "includes": [],
-    "cache_on": "1",
+    "includes": [
+        "melbis_inc_callback.php=1"
+    ],
+    "cache_on": "0",
     "cache_time": "2",
     "lazy_load": "0",
     "entry_point": "0",

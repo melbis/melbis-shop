@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.258 @ 2026-05-07
+ * @version 6.5.0.260 @ 2026-05-11
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -74,9 +74,12 @@ function MELBIS()
     
     if ( !$parser ) 
     {                 
+        // Database
         $db = new Melbis\MelbisShop\MySql('MELBIS_halt');
-        $db->Connect(__FILE__, __LINE__);
-        $parser = new Melbis\MelbisShop\Parser('MELBIS_halt', $db);    
+        $db->Connect(__FILE__, __LINE__); 
+                                            
+        // Parser
+        $parser = new Melbis\MelbisShop\Parser('MELBIS_halt', $db);
     }
     
     return $parser;

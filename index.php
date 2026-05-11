@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.258 @ 2026-05-07
+ * @version 6.5.0.260 @ 2026-05-11
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov 
@@ -9,27 +9,24 @@
 // Melbis start
 require 'units/melbis.php';
 
+// Define session
+MELBIS()->DefineSession('MELBIS_SHOP');            
+        
 // Define self constants
 MELBIS()->DefineSelfConst();
 
-// Define session
-MELBIS()->DefineSession('MELBIS_SHOP');
-
-// Define lang
-$lang_list = [ MELBIS_LANG ];
-$lang_get = $_GET['lang'] ?? MELBIS_LANG;
-$lang = ( in_array($lang_get, $lang_list) ) ? $lang_get : MELBIS_LANG;
-MELBIS()->LanguageSet($lang);
-
 // Entry point
-$entry_point = $_GET['mod'] ?? 'kasdim_base_page';
-$entry_param = [$lang, serialize($_GET), serialize($_POST)];
-
-// Lazy loading
 if ( isset($_GET['lazy']) ) 
 {    
+    // Lazy
     $entry_point = $_POST['mod'];
     $entry_param = $_POST['params'];
+}
+else 
+{
+    // Default
+    $entry_point = $_GET['mod'] ?? 'melbis_base_page';
+    $entry_param = [serialize($_GET), serialize($_POST)];
 }
 
 // Run

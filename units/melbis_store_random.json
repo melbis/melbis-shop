@@ -1,6 +1,6 @@
 {
     "description": "Get random goods from storage",
-    "parameters": "limit: int",
+    "parameters": "how: int",
     "tables": [
         "_store=1",
         "_topic=1",

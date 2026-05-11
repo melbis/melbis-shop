@@ -1,12 +1,15 @@
 {
     "description": "Get topic goods from storage",
-    "parameters": "topic_id: int",
+    "parameters": "id: int",
     "tables": [
         "_store=1",
         "_topic=1",
-        "_topic_store=1"
+        "_topic_store=1",
+        "_topic_sub=1"
     ],
-    "includes": [],
+    "includes": [
+        "melbis_inc_temp.php=1"
+    ],
     "cache_on": "0",
     "cache_time": "0",
     "lazy_load": "0",

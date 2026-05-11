@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.258 @ 2026-05-07
+ * @version 6.5.0.260 @ 2026-05-11
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -12,18 +12,11 @@
  **/
 function MELBIS_BASE_FOOTER($mVars)
 { 
-    global $gParser;
-    
     // Create 
-    $tpl = $gParser->TplCreate();    
+    $tpl = MELBIS()->TplCreate();   
     
-    // Lang tags    
-    MELBIS_INC_LANG_tags($tpl, __FUNCTION__);                                                                 
-    
-    // Final: return content
-    $gParser->TplParse($tpl, 'MAIN', 'main');   
-        
-    return $gParser->TplFree($tpl, 'MAIN');
+    // Main
+    return MELBIS()->TplFinal($tpl, 'main');
 } 
 
 

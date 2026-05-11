@@ -1,21 +1,21 @@
 <div class="card h-100">
-    <h4 class="card-header text-center">{NAME}</h4>
+    <h4 class="card-header text-center">{NAME|html}</h4>
     {MELBIS:melbis_store_image([ID],kDefault)}          
     <div class="card-body">
-        <p class="card-text">{INTRO}</p>
+        <p class="card-text">{INTRO|short|text}</p>
     </div>
-    {MELBIS:melbis_store_features([MS:PAGE:LANG],[ID])}
+    {MELBIS:melbis_store_features([ID])}
     <div class="card-footer ">        
         <div class="d-flex justify-content-around align-items-center">
             <div class="text-center">    
-                <p class="lead m-0">{PRICE}</p>
-                <p class="badge badge-warning m-0">{STATUS}</p>                                                                          
+                <p class="lead m-0">{PRICE_CURR|inum}</p>
+                <p class="badge badge-warning m-0">{STATUS_NAME|html}</p>                                                                          
             </div>
-            <button class="btn btn-primary melbis_btn_add" data-id="{ID}"><i class="fas fa-cart-plus"></i> Buy</button>
+            <button class="btn btn-primary melbis_btn_add" data-id="{ID}">Buy</button>
         </div>
     </div>       
     <div class="card-footer d-flex justify-content-between">  
-        <small class="text-muted">Updated {UPDATE}</small>
-        <span class="badge badge-info float-right">Code: {CODE}</span>
+        <small class="text-muted">Updated {UPDATE_TIME|idate}</small>
+        <span class="badge badge-info float-right">Code: {CODE|html}</span>
     </div>  
 </div>
