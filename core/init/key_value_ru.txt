@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.260 @ 2026-05-11
+ * @version 6.5.0.261 @ 2026-05-12
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -191,7 +191,7 @@ table={DBNICK}_key_value|id|value_txt
 195=<H6> Заголовок 6
 196=<A> Ссылка, якорь
 253=<table  border="1" width="100%" cellpadding="2" cellspacing="2"><tr><td>1</td><td>2</td></tr><tr><td>3</td><td>4</td></tr></table>
-257=
+257=<p>&nbsp;</p>
 261=По умолчанию
 262=Срочно
 263=Желательно
@@ -229,3 +229,12 @@ table={DBNICK}_key_value|id|value_txt
 297=Товары
 298=Теги
 299=MELBIS_INC_TRANSLATE_service
+300=<BLOCKQUOTE> Цитата
+301=<CODE> Код
+302=<SMALL> Уменьшенный
+303=<MARK> Маркировка
+304=<SUB> Нижний индекс
+305=<SUP> Верхний индекс
+306=<PRE> Преформатированный
+307=<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="https://www.youtube.com/embed/T2PCbVRM6hg?rel=0"></iframe></div><p><br></p>
+308=<IFRAME> Встроенный документ

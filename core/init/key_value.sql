@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.260 @ 2026-05-11
+ * @version 6.5.0.261 @ 2026-05-12
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -189,7 +189,7 @@ INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('1
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('194', 'HTML_TAG', 'h5', '1', '9');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('195', 'HTML_TAG', 'h6', '1', '10');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('196', 'HTML_TAG', 'a', '1', '4');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('253', 'HTML_TEMPLATE', 'Таблица', '0', '253');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('253', 'HTML_TEMPLATE', 'Table', '0', '253');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('257', 'HTML_OPTION', 'kContainer', '1', '257');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('261', 'TASK_KIND_KEY', 'kDefault', '1', '261');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('262', 'TASK_KIND_KEY', 'kUrgent', '1', '262');
@@ -228,4 +228,13 @@ INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('2
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('297', 'TRANS_TABLE_KEY', 'kStore', '0', '297');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('298', 'TRANS_TABLE_KEY', 'kTags', '0', '298');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('299', 'MODULE_TRANSLATE_LINE', 'melbis_inc_translate.php', '0', '299');
-UPDATE {DBNICK}_generator SET gen_value = 299 WHERE table_name = 'key_value';
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('300', 'HTML_TAG', 'blockquote', '1', '300');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('301', 'HTML_TAG', 'code', '1', '301');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('302', 'HTML_TAG', 'small', '1', '302');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('303', 'HTML_TAG', 'mark', '1', '303');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('304', 'HTML_TAG', 'sub', '1', '304');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('305', 'HTML_TAG', 'sup', '1', '305');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('306', 'HTML_TAG', 'pre', '1', '306');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('307', 'HTML_TEMPLATE', 'YouTube', '0', '307');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('308', 'HTML_TAG', 'iframe', '1', '308');
+UPDATE {DBNICK}_generator SET gen_value = 308 WHERE table_name = 'key_value';
