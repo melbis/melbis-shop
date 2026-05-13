@@ -8,17 +8,13 @@
 
 
 /** 
- * Function MELBIS_BASE_HEADER
+ * Function MELBIS_CRON
  **/
-function MELBIS_BASE_HEADER($mVars)
-{ 
-    // Create 
-    $tpl = MELBIS()->TplCreate();         
-        
-    // Main
-    return MELBIS()->TplFinal($tpl, 'main');
+function MELBIS_CRON($mVars)
+{               
+    // Final
+    return 'Done!';
 } 
-
 
 
 ?>

@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.261 @ 2026-05-12
+ * @version 6.5.0.263 @ 2026-05-13
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -228,7 +228,7 @@ table={DBNICK}_key_value|id|value_txt
 296=Разделы
 297=Товары
 298=Теги
-299=MELBIS_INC_TRANSLATE_service
+299=MELBIS_INC_LANG_translate
 300=<BLOCKQUOTE> Цитата
 301=<CODE> Код
 302=<SMALL> Уменьшенный

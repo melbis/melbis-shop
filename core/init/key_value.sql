@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.261 @ 2026-05-12
+ * @version 6.5.0.263 @ 2026-05-13
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -227,7 +227,7 @@ INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('2
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('296', 'TRANS_TABLE_KEY', 'kTopic', '0', '296');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('297', 'TRANS_TABLE_KEY', 'kStore', '0', '297');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('298', 'TRANS_TABLE_KEY', 'kTags', '0', '298');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('299', 'MODULE_TRANSLATE_LINE', 'melbis_inc_translate.php', '0', '299');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('299', 'MODULE_TRANSLATE_LINE', 'melbis_inc_lang.php', '0', '299');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('300', 'HTML_TAG', 'blockquote', '1', '300');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('301', 'HTML_TAG', 'code', '1', '301');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('302', 'HTML_TAG', 'small', '1', '302');

@@ -17,3 +17,5 @@ RewriteRule ^_[^/]*\.log$ - [F]
 # Lazy
 RewriteRule ^lazy/$ index.php?lazy [L,QSA]
 
+# Cron
+RewriteRule ^cron/$ cron.php [L,QSA]
