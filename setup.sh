@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "Start installation v26"
+echo "Start installation (v26)"
 
 
 wait_apt() {

@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+echo "Start melbis shop update (v12)"
+
 WORK_DIR="/var/melbis"
 if [ ! -d "$WORK_DIR" ]; then
     echo "Error: Directory $WORK_DIR not found."
@@ -22,15 +24,14 @@ docker compose pull
 echo "Starting containers..."
 docker compose up -d
 
-echo "Docker disk usage before cleanup:"
-docker system df
-
 echo "Cleaning up old Docker images and volumes..."
 docker image prune -af
 docker volume prune -f
 
-echo "Docker disk usage after cleanup:"
-docker system df
+echo "Updating OS packages..."
+export DEBIAN_FRONTEND=noninteractive
+apt-get update
+apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
 
 echo "================================================="
 echo "Update complete! Melbis Shop is back online."

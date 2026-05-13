@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "Start system verify (v7)"
+
 echo "================================================="
 echo " System Health Status"
 echo "================================================="
@@ -36,11 +38,6 @@ if [ -d "/var/melbis" ]; then
 else
     echo "Directory /var/melbis not found."
 fi
-echo ""
-
-# Show running containers
-echo "--- Docker Containers ---"
-cd /var/melbis 2>/dev/null && docker compose ps
 echo ""
 echo "================================================="
 echo "MELBIS_VERIFY_SUCCESSFUL"
