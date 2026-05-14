@@ -129,7 +129,7 @@ services:
   web:
     depends_on:
       - db
-    image: melbis/melbis-shop:edge
+    image: melbis/melbis-shop:v${melbis_version}
     volumes:
       - /var/melbis/www/:/var/www/html/
       - /var/www/html/core
