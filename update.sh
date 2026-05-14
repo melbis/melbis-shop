@@ -1,7 +1,11 @@
 #!/bin/bash
 set -e
 
-echo "Start melbis shop update (v12)"
+melbis_version=$1
+
+echo "Start melbis shop update (v14)"
+
+echo "Detected Melbis Version: $melbis_version"
 
 WORK_DIR="/var/melbis"
 if [ ! -d "$WORK_DIR" ]; then

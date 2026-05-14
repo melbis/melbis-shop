@@ -1,6 +1,10 @@
 #!/bin/bash
 
-echo "Start system verify (v7)"
+melbis_version=$1
+
+echo "Start system verify (v8)"
+
+echo "Detected Melbis Version: $melbis_version"
 
 echo "================================================="
 echo " System Health Status"

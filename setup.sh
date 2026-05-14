@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "Start installation (v26)"
+echo "Start installation (v27)"
 
 
 wait_apt() {
@@ -13,10 +13,13 @@ wait_apt() {
 }
 
 domain_name=$1
+melbis_version=$2
 if [ -z "$domain_name" ]; then
     echo "Error: Domain name is required."    
     exit 1
 fi
+
+echo "Detected Melbis Version: $melbis_version"
 
 echo "Cleaning up previous installation..."
 cd /var/melbis 2>/dev/null && docker compose down --volumes --remove-orphans 2>/dev/null || true

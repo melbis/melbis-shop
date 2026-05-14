@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.264 @ 2026-05-13
+ * @version 6.5.0.265 @ 2026-05-14
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -13,7 +13,7 @@ table={DBNICK}_oper|id|name
 84=Read messages
 85=Send message
 246=Check notifications
-281=Planner
+281=Scheduler
 282=Update settings
 283=Tasks
 284=Get
@@ -36,7 +36,7 @@ table={DBNICK}_oper|id|name
 177=Search query
 175=Advanced query
 231=Get order versions
-178=Edit
+178=Editing
 179=Customer search
 174=Update product information
 173=Perform order calculation
@@ -59,7 +59,7 @@ table={DBNICK}_oper|id|name
 17=Get
 18=Save
 68=Data exchange
-245=Check changes
+245=Change check
 35=Get products
 209=Advanced query
 60=Section products query
@@ -96,7 +96,7 @@ table={DBNICK}_oper|id|name
 242=Get
 243=Add
 244=Delete
-263=Observer
+263=Browser
 274=Update settings
 106=Get section products
 191=Find and get products
@@ -192,7 +192,7 @@ table={DBNICK}_oper|id|name
 14=Copy store
 15=Load store
 120=Development environment
-121=Work with files
+121=File operations
 122=Load list
 255=Search text in files
 217=Clear cache
@@ -223,7 +223,7 @@ table={DBNICK}_oper|id|name
 142=Add
 143=Rename
 144=Delete
-145=Catalog for images
+145=Directory for images
 146=Add
 147=Rename
 148=Delete
