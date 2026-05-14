@@ -1,0 +1,6 @@
+User-agent: *
+
+Disallow: /core/
+Disallow: /units/
+Disallow: /profiles/
+Disallow: /templates/

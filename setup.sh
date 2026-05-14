@@ -234,6 +234,7 @@ mv /tmp/melbis-shop-master/.htaccess /var/melbis/www/
 mv /tmp/melbis-shop-master/index.php /var/melbis/www/
 mv /tmp/melbis-shop-master/cron.php /var/melbis/www/
 mv /tmp/melbis-shop-master/admin.here /var/melbis/www/
+mv /tmp/melbis-shop-master/robots.txt /var/melbis/www/
 
 rm -rf /tmp/master.zip /tmp/melbis-shop-master
 
