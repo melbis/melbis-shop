@@ -10,12 +10,12 @@ RewriteEngine on
 # Deny config
 RewriteRule ^config.json$ - [F]
 
+# Deny cron
+RewriteRule ^cron.php$ - [F]
+
 # Deny Error logs
 RewriteCond %{QUERY_STRING} !your_pass_key
 RewriteRule ^_[^/]*\.log$ - [F]
 
 # Lazy
 RewriteRule ^lazy/$ index.php?lazy [L,QSA]
-
-# Cron
-RewriteRule ^cron/$ cron.php [L,QSA]

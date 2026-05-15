@@ -1,7 +1,9 @@
 {
     "description": "Cron jobs",
     "parameters": "",
-    "tables": [],
+    "tables": [
+        "_store=1"
+    ],
     "includes": [],
     "cache_on": "0",
     "cache_time": "0",

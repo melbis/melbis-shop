@@ -112,6 +112,7 @@ cat > /var/melbis/docker-compose.yml << EOF
 services:
   db:
     image: mysql:8.4
+    container_name: melbis_db
     environment:
       MYSQL_ROOT_PASSWORD: ${mysql_root_pw}
       MYSQL_DATABASE: melbis
@@ -130,6 +131,7 @@ services:
     depends_on:
       - db
     image: melbis/melbis-shop:v${melbis_version}
+    container_name: melbis_shop
     volumes:
       - /var/melbis/www/:/var/www/html/
       - /var/www/html/core
@@ -142,6 +144,7 @@ services:
 
   nginx:
     image: nginx:latest
+    container_name: melbis_proxy
     volumes:
       - /var/melbis/nginx.conf:/etc/nginx/nginx.conf
       - /var/melbis/certs:/etc/nginx/certs
@@ -307,7 +310,7 @@ CRON_JOB="0 3 * * * certbot renew --quiet && cp -Lf /etc/letsencrypt/live/${doma
 (crontab -l 2>/dev/null; echo "$CRON_JOB") | crontab -
 
 echo "Configuring melbis shop cron job..."
-APP_CRON="* * * * * /usr/bin/wget -qO /dev/null https://${domain_name}/cron/"
+APP_CRON="* * * * * /usr/bin/docker exec melbis_shop php /var/www/html/cron.php > /dev/null 2>&1"
 (crontab -l 2>/dev/null || true; echo "$APP_CRON") | crontab -
 
 echo "Configuring fail2ban..."
