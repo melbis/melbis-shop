@@ -22,6 +22,7 @@ fi
 echo "Detected Melbis Version: $melbis_version"
 
 echo "Cleaning up previous installation..."
+crontab -r
 cd /var/melbis 2>/dev/null && docker compose down --volumes --remove-orphans 2>/dev/null || true
 sleep 2
 if mountpoint -q /var/melbis/cache; then
