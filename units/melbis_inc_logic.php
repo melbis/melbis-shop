@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.274 @ 2026-05-17
+ * @version 6.5.0.275 @ 2026-05-18
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -36,14 +36,14 @@ function MELBIS_INC_LOGIC_order_create()
 {
     $now = MELBIS()->DateTime('now');  
     
-    $version =  array('order_id'        => null, 
-                      'user_id'         => null, 
-                      'client_id'       => null,  
-                      'date_time'       => $now, 
-                      'total_sum'       => 0,
-                      'order_code'      => '', 
-                      'version_id'      => null,
-                      'order_date_time' => $now 
+    $version =  array('order_id'            => null, 
+                      'user_id'             => null, 
+                      'client_id'           => null,  
+                      'date_time'           => $now, 
+                      'total_sum'           => 0,
+                      'order_code'          => '', 
+                      'order_version_id'    => null,
+                      'order_date_time'     => $now 
                       );
 
     // Client   
@@ -482,7 +482,7 @@ function MELBIS_INC_LOGIC_order_load($mOrderId)
     //------------           
     $command = "SELECT ov.*, 
                        o.code AS order_code, 
-                       o.version_id, 
+                       o.version_id AS order_version_id, 
                        o.date_time AS order_date_time
                   FROM {DBNICK}_orders o
                   JOIN {DBNICK}_orders_version ov 
@@ -493,8 +493,8 @@ function MELBIS_INC_LOGIC_order_load($mOrderId)
         'order_id' => $mOrderId
         ];                       
     $version = MELBIS()->SqlSelectFlat(__LINE__, $command, $param);
-    $version['_']['parent_version_id'] = $version['id'];
-    $version['_']['parameters'] = 'kDefault';
+    $version['parent_version_id'] = $version['id'];
+    $version['parameters'] = 'kDefault';
     $version_id = $version['id']; 
     unset($version['id']);    
                   
@@ -604,7 +604,7 @@ function MELBIS_INC_LOGIC_order_edit($mUserId, $mVersion)
             'order_id'  => $mVersion['order_id']
             ];
         $hash = MELBIS()->SqlSelectFlat(__LINE__, $command, $param);                
-        if ( $mVersion['_']['parent_version_id'] != $hash['version_id'] )
+        if ( $mVersion['parent_version_id'] != $hash['version_id'] )
         {
             $result['orders'][] = $mVersion['order_id'];
             $result['value'] = 'VERSION_ERROR';
