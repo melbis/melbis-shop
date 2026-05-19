@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.277 @ 2026-05-18
+ * @version 6.5.0.277 @ 2026-05-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -533,6 +533,7 @@ CREATE TABLE {DBNICK}_self_key_value (
    id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
    key_id	   INT UNSIGNED DEFAULT NULL,
    code 	      CHAR(100) DEFAULT '' NOT NULL,
+   prefix      CHAR(100) DEFAULT '' NOT NULL,
    name 	      CHAR(255) DEFAULT '' NOT NULL,
    descr	      MEDIUMTEXT DEFAULT ('') NOT NULL,
    mask_edit	CHAR(255) DEFAULT '' NOT NULL,

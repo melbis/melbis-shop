@@ -188,10 +188,10 @@ http {
             proxy_buffers               4 256k;
             proxy_busy_buffers_size     256k;
 
-            proxy_connect_timeout       100;
-            proxy_send_timeout          100;
-            proxy_read_timeout          100;
-            send_timeout                100;
+            proxy_connect_timeout       300;
+            proxy_send_timeout          300;
+            proxy_read_timeout          300;
+            send_timeout                300;
 
         }
     }
