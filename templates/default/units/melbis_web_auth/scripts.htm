@@ -1,0 +1,43 @@
+<script type="text/javascript">
+
+// Auth
+$('#melbis_form_auth').submit(function(event)
+{    
+    $('#melbis_form_auth button[type="submit"]').html('Please wait...').attr('disabled','disabled');      
+    $.post('{PAGE:MOD}',        
+        { 
+            form_auth: true,
+            login: $('#melbis_form_auth input[name="login"]').val(),
+            pass: $('#melbis_form_auth input[name="pass"]').val()
+        },
+        function(data) 
+        {                                                    
+            if ( data.result == 'ACCEPT'  )
+            {  
+                location.reload();                                
+            } 
+            else if ( data.result == 'DENIED' )
+            {      
+                bootbox.alert({
+                    title: 'Access denied',
+                    message: 'Sorry, you do not have access to this module!'                        
+                })                                             
+            }
+            else if ( data.result == 'WRONG' )
+            {      
+                bootbox.alert({
+                    title: 'Authentication fault',
+                    message: 'Sorry, but login or password is incorrect!'                        
+                })                                             
+            }     
+            $('#melbis_form_auth button[type="submit"]').html('Sign in').removeAttr('disabled');                             
+        },
+        'json'
+    );   
+    
+    event.preventDefault();
+    return false;
+});
+
+
+</script>

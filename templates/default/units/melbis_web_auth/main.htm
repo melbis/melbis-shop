@@ -1,0 +1,47 @@
+<script type="text/javascript"> var melbis_topic_id = 0 </script>
+                
+{MELBIS:melbis_base_header()}
+
+<main class="m-auto">
+    
+    <div class="card text-white bg-primary" style="min-width: 275px">
+        <h1 class="h4 card-header text-center px-5">User authorization</h1>
+        <form id="melbis_form_auth">
+            <div class="card-body bg-white text-dark text-center">
+                <img class="img-fluid" src="{PATH}/images/melbis_shop.png" style="max-width: 150px;">                
+                {*?PAGE:AUTH==START}
+                    <h4 class="mb-3 font-weight-normal text-center">Please sign in</h4>
+                        <label for="melbis_login" class="sr-only">Email address</label>
+                        <input type="text" name="login" id="melbis_login" class="form-control" placeholder="Login" required autofocus autocomplete="off">
+                        <label for="melbis_pass" class="sr-only">Password</label>
+                        <input type="password" name="pass" id="melbis_pass" class="form-control mt-2" placeholder="Password" required autocomplete="off">                               
+                    </div>
+                    <div class="card-footer bg-light text-muted text-right">
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>                                             
+                {PAGE:AUTH*}        
+                {*?PAGE:AUTH==DENIED}
+                    <div class="alert alert-warning">
+                        <h4 class="alert-heading">Access denied!</h4>
+                        <p>Please, contact to shop's administrator for get access to this module!</p>
+                    </div>                
+                {PAGE:AUTH*}    
+                {*?PAGE:AUTH==WRONG}
+                    <div class="alert alert-warning">
+                        <h4 class="alert-heading">Authentication fault!</h4>
+                        <p>Sorry, but login or password is incorrect!</p>
+                    </div>                
+                {PAGE:AUTH*}                
+            </div>
+        </form>  
+    </div> 
+    
+</main>
+
+{SCRIPTS}    
+
+{MELBIS:melbis_base_footer()}
+
+    
+    
+
+

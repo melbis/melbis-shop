@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.279 @ 2026-05-21
+ * @version 6.5.0.280 @ 2026-05-27
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -16,8 +16,6 @@ function MELBIS_BASE_PAGE($mVars)
         
     // Vars         
     $id = (int) ( $mVars['get']['topic_id'] ?? 0 ); 
-    $page = [];    
-    $page['year'] = MELBIS()->DateTime('now', 'Y');     
     
     // Define page
     $command = "SELECT *  
@@ -35,8 +33,7 @@ function MELBIS_BASE_PAGE($mVars)
         if ( $id == 0 )
         {
             // Index page
-            $page['id'] = 0;
-            $page['path'] = '/'; 
+            $page['id'] = 0;             
             $page['title'] = 'Home page';
             
             MELBIS()->TplParse($tpl, 'CONTENT', 'page_index');             
@@ -44,8 +41,7 @@ function MELBIS_BASE_PAGE($mVars)
         else
         {          
             // 404 Not found
-            $page['id'] = 0;
-            $page['path'] = '/?topic_id=-404'; 
+            $page['id'] = 0;             
             $page['title'] = '404 Not Found';
     
             // Header
@@ -58,8 +54,7 @@ function MELBIS_BASE_PAGE($mVars)
     else              
     {                           
         // Found   
-        $page['id'] = $topic['id'];           
-        $page['path'] = '/?topic_id='.$topic['id'];
+        $page['id'] = $topic['id'];                   
         $page['title'] = $topic['name'];     
 
         if ( $topic['kind_key'] == 'kText' )  
