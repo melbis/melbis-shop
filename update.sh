@@ -3,7 +3,7 @@ set -e
 
 melbis_version=$1
 
-echo "Start melbis shop update (v14)"
+echo "Start melbis shop update (v15)"
 
 echo "Detected Melbis Version: $melbis_version"
 
@@ -27,6 +27,7 @@ docker compose pull
 
 echo "Starting containers..."
 docker compose up -d
+docker exec melbis_shop chown -R www-data:www-data /var/www/html
 
 echo "Cleaning up old Docker images and volumes..."
 docker image prune -af

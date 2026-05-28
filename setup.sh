@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "Start installation (v27)"
+echo "Start installation (v28)"
 
 
 wait_apt() {
@@ -275,6 +275,7 @@ EOF
 echo "Starting Melbis Shop containers..."
 cd /var/melbis
 docker compose up -d
+docker exec melbis_shop chown -R www-data:www-data /var/www/html
 
 echo "Installing Certbot..."
 wait_apt && apt-get install -y certbot
