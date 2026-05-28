@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.280 @ 2026-05-27
+ * @version 6.5.0.281 @ 2026-05-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -30,7 +30,7 @@ function MELBIS_STORE_IMAGE($mVars)
         'key'   => $key
         ];
     $image = MELBIS()->SqlSelectEnumFlat(__LINE__, $command, 'id', $id, $param);                          
-      
+       
     // Image
     MELBIS()->TplAssign($tpl, $image);
 
