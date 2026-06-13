@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.284 @ 2026-06-13
+ * @version 6.5.0.285 @ 2026-06-13
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -1307,7 +1307,8 @@ CREATE TABLE {DBNICK}_store_info (
    KEY IDX1 (info_id),
    KEY IDX2 (value_id),
    KEY IDX3 (store_id, value_id),
-   KEY IDX4 (store_id, info_id, value_id)
+   KEY IDX4 (store_id, info_id, value_id),
+   KEY IDX5 (store_id, info_id, value_dec)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
