@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.288 @ 2026-06-13
+ * @version 6.5.0.289 @ 2026-06-15
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -13,8 +13,8 @@
 function MELBIS_CRON($mVars)
 {                   
     // Up limits            
-    set_time_limit(300);
-    ignore_user_abort(true);    
+    //set_time_limit(300);
+    //ignore_user_abort(true);    
 
     // Header
     header('Content-Type: text/plain; charset=utf-8'); 
