@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.290 @ 2026-06-15
+ * @version 6.5.0.291 @ 2026-06-27
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -37,8 +37,8 @@ function MELBIS_STORE_CARD($mVars)
     if ( empty($store) ) return '';        
     
     // Assign
-    MELBIS()->TplAssign($tpl, $store);
-                  
+    MELBIS()->TplAssign($tpl, $store);  
+    
     // Final
     return MELBIS()->TplFinal($tpl, 'main');
 } 
