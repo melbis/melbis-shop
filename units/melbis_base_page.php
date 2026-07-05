@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.298 @ 2026-07-04
+ * @version 6.5.0.298 @ 2026-07-05
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -36,7 +36,7 @@ function MELBIS_BASE_PAGE($mVars)
             $page['id'] = 0;             
             $page['title'] = 'Home page';
             
-            MELBIS()->TplParse($tpl, 'CONTENT', 'page_index');             
+            MELBIS()->TplParse($tpl, 'PAGE', 'page_index');             
         }
         else
         {          
@@ -48,7 +48,7 @@ function MELBIS_BASE_PAGE($mVars)
             header($_SERVER['SERVER_PROTOCOL']." 404 Not Found");           
                              
             // Content
-            MELBIS()->TplParse($tpl, 'CONTENT', 'page_404');
+            MELBIS()->TplParse($tpl, 'PAGE', 'page_404');
         } 
     }
     else              
@@ -82,13 +82,13 @@ function MELBIS_BASE_PAGE($mVars)
             {
                 // Content                     
                 MELBIS()->TplAssign($tpl, 'DESCR', $text['descr']);
-                MELBIS()->TplParse($tpl, 'CONTENT', 'page_text');
+                MELBIS()->TplParse($tpl, 'PAGE', 'page_text');
             }
         }
         elseif ( $topic['kind_key'] == 'kGoods' )  
         {           
             // Page goods
-            MELBIS()->TplParse($tpl, 'CONTENT', 'page_goods');        
+            MELBIS()->TplParse($tpl, 'PAGE', 'page_goods');        
         }
         else
         {
