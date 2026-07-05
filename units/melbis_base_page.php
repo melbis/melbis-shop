@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.301 @ 2026-07-05
+ * @version 6.5.0.303 @ 2026-07-05
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -100,8 +100,6 @@ function MELBIS_BASE_PAGE($mVars)
     // Save page data           
     MELBIS()->gVars['page'] = $page;      
     
-    MELBIS()->TplAssign($tpl, 'DATE', MELBIS()->DateTime('now'));  
-
     // Windows
     MELBIS()->TplParse($tpl, 'WINDOWS', 'windows');
                                     
