@@ -6,9 +6,7 @@
         "_key_value=1",
         "_store=1"
     ],
-    "includes": [
-        "melbis_inc.php=1"
-    ],
+    "includes": [],
     "cache_on": "0",
     "cache_time": "0",
     "lazy_load": "0",

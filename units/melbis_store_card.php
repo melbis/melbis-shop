@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.304 @ 2026-07-07
+ * @version 6.5.0.305 @ 2026-07-08
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -37,7 +37,9 @@ function MELBIS_STORE_CARD($mVars)
     if ( empty($store) ) return '';        
     
     // Assign
-    MELBIS()->TplAssign($tpl, $store);  
+    MELBIS()->TplAssign($tpl, $store); 
+    
+    MELBIS()->TplAssign($tpl, 'TEST', 'dima:ira'); 
     
     // Final
     return MELBIS()->TplFinal($tpl, 'main');
