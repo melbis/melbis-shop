@@ -1,0 +1,10 @@
+{
+    "info": "",
+    "source": "statics\/base\/bs\/bootstrap-table.css",
+    "bundle": [
+        {
+            "name": "base.css",
+            "prior": 2
+        }
+    ]
+}

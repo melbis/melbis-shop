@@ -1,4 +1,3 @@
-<script type="text/javascript">
 
 var melbis_detail_num = 0;
 var melbis_order = {ORDER};
@@ -172,4 +171,3 @@ function melbis_fmt_status(value, row)
     return res;
 }
 
-</script>

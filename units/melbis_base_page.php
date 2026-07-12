@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.310 @ 2026-07-11
+ * @version 6.5.0.315 @ 2026-07-12
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -100,12 +100,6 @@ function MELBIS_BASE_PAGE($mVars)
     // Save page data           
     MELBIS()->gVars['page'] = $page;      
     
-    // Windows
-    MELBIS()->TplParse($tpl, 'WINDOWS', 'windows');
-                                    
-    // Scripts
-    MELBIS()->TplParse($tpl, 'SCRIPTS', 'scripts');
-                
     // Final
     return MELBIS()->TplFinal($tpl, 'main');
 }   

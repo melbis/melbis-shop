@@ -1,0 +1,39 @@
+/***************************************************************************************************
+ * @version 6.5.0.315 @ 2026-07-12
+ * @copyright 2002-2026 Melbis
+ * @link https://melbis.com
+ * @author Dmytro Kasianov     
+ **************************************************************************************************/
+ 
+
+/* Melbis base */
+.melbis_css_max_width 
+{
+    max-width: 1500px; 
+}
+
+
+/* Bootbox */
+.bootbox.modal 
+{ 
+    top: 40% 
+}
+
+/* Dropdown menu */
+.dropdown-submenu {
+  position: relative;
+}
+
+.dropdown-submenu a::after {
+  transform: rotate(-90deg);
+  position: absolute;
+  right: 6px;
+  top: .8em;
+}
+
+.dropdown-submenu .dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-left: .1rem;
+  margin-right: .1rem;
+} 

@@ -1,0 +1,10 @@
+{
+    "info": "",
+    "source": "units\/melbis_web_sample\/scripts.js",
+    "bundle": [
+        {
+            "name": "melbis.auth.js",
+            "prior": 15
+        }
+    ]
+}

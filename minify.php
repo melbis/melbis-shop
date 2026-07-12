@@ -1,18 +1,16 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.310 @ 2026-07-11
+ * @version 6.5.0.315 @ 2026-07-12
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
  **************************************************************************************************/   
                                           
  
-switch (pathinfo($_POST['name'], PATHINFO_EXTENSION)) 
+switch ( pathinfo($_POST['name'], PATHINFO_EXTENSION) ) 
 {                        
     case 'js':                    
-        $code = preg_replace('#<script(.*?)>#is', '', $_POST['content']);    
-        $code = preg_replace('#</script>#is', '', $code);
-        $data = array('input' => $code);
+        $data = array('input' => $_POST['content']);
         $ch = curl_init();    
         curl_setopt($ch, CURLOPT_URL, 'https://www.toptal.com/developers/javascript-minifier/api/raw');
         curl_setopt($ch, CURLOPT_POST, true);

@@ -1,0 +1,10 @@
+{
+    "info": "",
+    "source": "units\/melbis_base_page\/scripts.js",
+    "bundle": [
+        {
+            "name": "melbis.js",
+            "prior": 15
+        }
+    ]
+}

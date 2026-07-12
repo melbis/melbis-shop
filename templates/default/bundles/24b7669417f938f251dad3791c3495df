@@ -1,0 +1,10 @@
+{
+    "info": "",
+    "source": "units\/melbis_cataloge_sub\/styles.css",
+    "bundle": [
+        {
+            "name": "melbis.css",
+            "prior": 10
+        }
+    ]
+}

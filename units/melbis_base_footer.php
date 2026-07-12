@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.310 @ 2026-07-11
+ * @version 6.5.0.315 @ 2026-07-12
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -12,8 +12,8 @@
  **/
 function MELBIS_BASE_FOOTER($mVars)
 { 
-    // Create 
-    $tpl = MELBIS()->TplCreate();        
+    // Create  
+    $tpl = MELBIS()->TplCreate();
     
     // Year
     MELBIS()->TplAssign($tpl, 'YEAR', MELBIS()->DateTime('now', 'Y'));    

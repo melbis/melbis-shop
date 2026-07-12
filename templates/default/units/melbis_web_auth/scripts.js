@@ -1,4 +1,3 @@
-<script type="text/javascript">
 
 // Auth
 $('#melbis_form_auth').submit(function(event)
@@ -40,4 +39,3 @@ $('#melbis_form_auth').submit(function(event)
 });
 
 
-</script>
