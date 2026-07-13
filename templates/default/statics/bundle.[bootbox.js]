@@ -1,9 +1,8 @@
-/*       Melbis Shop auto bundle report       */
-/*         Create: 2026-07-13 21:31:43        */
-
-/*   #2    bootstrap.js                     7 ln    81 kb    /templates/default/statics/base/bs/bootstrap.js               */
-/*   #3    bootstrap-table.js            8578 ln   322 kb    /templates/default/statics/base/bs/bootstrap-table.js         */
-/*   #4    bootbox.js                    1247 ln    39 kb    /templates/default/statics/base/bootbox.js                    */
+/* Melbis Shop auto bundle report */
+/*   Create: 2026-07-13 21:15:49  */
+/* [bootstrap.js]             lines: 7      size: 81kb    path: /templates/default/statics/base/bs/bootstrap.js  */
+/* [bootstrap-table.js]       lines: 8578   size: 322kb   path: /templates/default/statics/base/bs/bootstrap-table.js  */
+/* [bootbox.js]               lines: 1247   size: 39kb    path: /templates/default/statics/base/bootbox.js  */
 
 
 /*!

@@ -1,9 +1,8 @@
-/*       Melbis Shop auto bundle report       */
-/*         Create: 2026-07-13 21:31:43        */
-
-/*   #1    main.js                         32 ln     1 kb    /templates/default/statics/melbis/main.js                     */
-/*   #10   scripts.js                      57 ln     1 kb    /templates/default/units/melbis_cataloge/scripts.js           */
-/*   #15   scripts.js                      77 ln     3 kb    /templates/default/units/melbis_base_page/scripts.js          */
+/* Melbis Shop auto bundle report */
+/*   Create: 2026-07-13 21:15:49  */
+/* [main.js]                  lines: 32     size: 1kb     path: /templates/default/statics/melbis/main.js  */
+/* [scripts.js]               lines: 57     size: 1kb     path: /templates/default/units/melbis_cataloge/scripts.js  */
+/* [scripts.js]               lines: 77     size: 3kb     path: /templates/default/units/melbis_base_page/scripts.js  */
 
 
 /***************************************************************************************************

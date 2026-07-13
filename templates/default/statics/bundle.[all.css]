@@ -1,9 +1,8 @@
-/*       Melbis Shop auto bundle report       */
-/*         Create: 2026-07-13 21:31:43        */
-
-/*   #1    bootstrap.css                10332 ln   196 kb    /templates/default/statics/base/bs/bootstrap.css              */
-/*   #2    bootstrap-table.css            389 ln    11 kb    /templates/default/statics/base/bs/bootstrap-table.css        */
-/*   #3    all.css                       4617 ln    72 kb    /templates/default/statics/icons/all.css                      */
+/* Melbis Shop auto bundle report */
+/*   Create: 2026-07-13 21:15:49  */
+/* [bootstrap.css]            lines: 10332  size: 196kb   path: /templates/default/statics/base/bs/bootstrap.css  */
+/* [bootstrap-table.css]      lines: 389    size: 11kb    path: /templates/default/statics/base/bs/bootstrap-table.css  */
+/* [all.css]                  lines: 4617   size: 72kb    path: /templates/default/statics/icons/all.css  */
 
 
 /*!

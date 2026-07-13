@@ -1,3 +1,10 @@
+/*       Melbis Shop auto bundle report       */
+/*         Create: 2026-07-13 21:31:43        */
+
+/*   #10   scripts.js                      42 ln     1 kb    /templates/default/units/melbis_web_auth/scripts.js           */
+/*   #15   scripts.js                     174 ln     5 kb    /templates/default/units/melbis_web_sample/scripts.js         */
+
+
 
 // Auth
 $('#melbis_form_auth').submit(function(event)
