@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.320 @ 2026-07-13
+ * @version 6.5.0.321 @ 2026-07-15
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -13,7 +13,7 @@
 function MELBIS_STORE_CARD($mVars)
 { 
     // Create 
-    $tpl = MELBIS()->TplCreate();     
+    $tpl = MELBIS()->TplCreate();
     
     // Vars
     $id = $mVars['id'];

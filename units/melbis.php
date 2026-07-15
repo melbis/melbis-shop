@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.320 @ 2026-07-13
+ * @version 6.5.0.321 @ 2026-07-15
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -93,7 +93,10 @@ function MELBIS()
 function MELBIS_halt($mType, $mFile, $mError, $mInfo = '') 
 {
     // Vars
-    $config_exist = defined('MELBIS_TIME_ZONE');          
+    $config_exist = defined('MELBIS_TIME_ZONE');    
+    
+    // Melbis parser stop process
+    if ( function_exists('MELBIS') ) MELBIS()->Stop();  
     
     // Datetime                          
     $time_zone = $config_exist ? MELBIS_TIME_ZONE : 'UTC';    
