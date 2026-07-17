@@ -15,9 +15,11 @@ function MELBIS_INC_AUTH_router($mModule, $mVars)
     list($user_id, $result) = MELBIS_INC_AUTH_access($mModule, $mVars['post']); 
     
     // Save page vars   
-    MELBIS()->gVars['page']['auth'] = $result;
-    MELBIS()->gVars['page']['user_id'] = $user_id;
-    MELBIS()->gVars['page']['mod'] = '/?mod='.strtolower($mModule);
+    MELBIS()->GlobalAssign('PAGE', [
+        'auth'      => $result,
+        'user_id'   => $user_id,
+        'mod'       => '/?mod='.strtolower($mModule)
+        ]);
     
     // Auth form                         
     if ( isset($mVars['post']['form_auth']) ) 
@@ -231,7 +233,7 @@ function MELBIS_INC_AUTH_web_right($mUserId, $mModule)
  **/
 function MELBIS_INC_AUTH_web_key_prepare($mUserId)
 { 
-    // Clear
+    // Clear    
     MELBIS()->SqlDelete(__LINE__, '{DBNICK}_tmp_web_key', 'user_id', $mUserId);
             
     if ( MELBIS_INC_AUTH_command($mUserId, 'PUT_OUTSIDE_RIGHT') )

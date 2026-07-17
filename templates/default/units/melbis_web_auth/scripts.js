@@ -3,7 +3,7 @@
 $('#melbis_form_auth').submit(function(event)
 {    
     $('#melbis_form_auth button[type="submit"]').html('Please wait...').attr('disabled','disabled');      
-    $.post('{PAGE:MOD}',        
+    $.post(melbis_page_mod,        
         { 
             form_auth: true,
             login: $('#melbis_form_auth input[name="login"]').val(),

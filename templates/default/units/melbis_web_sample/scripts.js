@@ -1,11 +1,10 @@
 
 var melbis_detail_num = 0;
-var melbis_order = {ORDER};
 
 // System Logout
 $('#melbis_btn_logout').on('click', function()
 {
-    $.post('{PAGE:MOD}', { logout: true }, function() { location.reload(); }); 
+    $.post(melbis_page_mod, { logout: true }, function() { location.reload(); }); 
 });
 
 
@@ -29,7 +28,7 @@ function melbis_init_table()
         toolbar: '#melbis_toolbar_cataloge',
         detailView: true,                           
         detailFormatter: 'melbis_detail_cataloge',           
-        url: '{PAGE:MOD}',        
+        url: melbis_page_mod,        
         method: 'post',          
         contentType: 'application/x-www-form-urlencoded',
         queryParams: function (params)
@@ -80,7 +79,7 @@ function melbis_detail_goods_init(table_id, row_id)
     $('#melbis_detail_' + table_id).bootstrapTable({
         columns: columns,  
         toolbar: '#melbis_detail_toolbar_' + table_id,
-        url: '{PAGE:MOD}',        
+        url: melbis_page_mod,        
         method: 'post',          
         contentType: 'application/x-www-form-urlencoded',
         queryParams: function(p)

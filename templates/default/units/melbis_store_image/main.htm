@@ -1,9 +1,12 @@
-{*ID}
-    <img src="{UPLOAD_TIME|path}{FILE_NAME}" class="card-img-top p-2">
-{ID*}
-{*!ID}
+{*IMG}
+    <picture>
+        <source srcset="{IMG|webp}" type="image/webp">    
+        <img src="{IMG:UPLOAD_TIME|path}{IMG:FILE_NAME}" class="card-img-top p-2">
+    </picture>    
+{IMG*}
+{*!IMG}
     <svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false">        
         <rect width="100%" height="100%" fill="#55595c"></rect>
         <text x="35%" y="50%" fill="#eceeef">No image available</text>
     </svg>
-{ID*}                                                        
+{IMG*}                                                        

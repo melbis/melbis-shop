@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.321 @ 2026-07-15
+ * @version 6.5.0.322 @ 2026-07-17
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -24,15 +24,15 @@ function MELBIS_STORE_IMAGE($mVars)
     $command = "SELECT *
                   FROM {DBNICK}_files_store
                  WHERE kind_key = :KEY 
-                   AND elem_id IN ( $ids ) 
+                   AND elem_id IN ( $ids )               
                 ";                          
     $param = [    
         'key'   => $key
         ];
-    $image = MELBIS()->SqlSelectEnumFlat(__LINE__, $command, 'id', $id, $param);                          
-       
+    $image = MELBIS()->SqlSelectEnumFlat(__LINE__, $command, 'elem_id', $id, $param);                          
+               
     // Image
-    MELBIS()->TplAssign($tpl, $image);
+    MELBIS()->TplAssign($tpl, 'IMG', $image);
 
     // Final    
     return MELBIS()->TplFinal($tpl, 'main');

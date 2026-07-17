@@ -3,7 +3,11 @@
     
     {MELBIS:melbis_base_head()} 
     
-    <script defer src="{PATH}/statics/bundle.melbis.auth.js?{BUILD}"></script>
+    <script defer src="{PATH}/statics/bundle.melbis.auth.js?{BUILD}"></script> 
+    <script> 
+        var melbis_page_mod = {PAGE:MOD|js};
+        var melbis_order = JSON.parse({ORDER|js});        
+    </script>
     
     <body class="d-flex flex-column h-100">
         

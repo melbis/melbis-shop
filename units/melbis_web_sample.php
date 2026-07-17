@@ -39,12 +39,15 @@ function MELBIS_WEB_SAMPLE_default($mUserId, $mVars)
     }
     else
     {       
+        // Vars
+        MELBIS()->TplAssign($tpl, 'ORDER', '{}');
+        
         // Auth
         MELBIS()->TplParse($tpl, 'CONTENT', 'auth');
     }          
     
     // Save page data           
-    MELBIS()->gVars['page'] += $page;      
+    MELBIS()->GlobalAppend('PAGE', $page);          
                       
     // Final
     return MELBIS()->TplFinal($tpl, 'main');                       

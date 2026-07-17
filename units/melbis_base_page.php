@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.321 @ 2026-07-15
+ * @version 6.5.0.322 @ 2026-07-17
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -75,8 +75,8 @@ function MELBIS_BASE_PAGE($mVars)
             $text = MELBIS()->SqlSelectFlat(__LINE__, $command, $params);
             if ( !isset($text['id']) )
             {
-                // Error 
-                MELBIS_halt('CONTENT NOT FOUND', __FILE__.':'.__LINE__, '');
+                // Error                 
+                MELBIS()->Halt(__FILE__.':'.__LINE__, 'CONTENT NOT FOUND');
             }           
             else
             {
@@ -92,13 +92,13 @@ function MELBIS_BASE_PAGE($mVars)
         }
         else
         {
-            // Unknown page  
-            MELBIS_halt('UNKNOWN PAGE', __FILE__.':'.__LINE__, '');
+            // Unknown page        
+            MELBIS()->Halt(__FILE__.':'.__LINE__, 'UNKNOWN PAGE');            
         }                                
     }                                               
     
-    // Save page data           
-    MELBIS()->gVars['page'] = $page;      
+    // Save page data                 
+    MELBIS()->GlobalAssign('PAGE', $page);    
     
     // Final
     return MELBIS()->TplFinal($tpl, 'main');
