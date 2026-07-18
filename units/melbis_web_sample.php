@@ -47,7 +47,7 @@ function MELBIS_WEB_SAMPLE_default($mUserId, $mVars)
     }          
     
     // Save page data           
-    MELBIS()->GlobalAppend('PAGE', $page);          
+    MELBIS()->GlobalAppend('PAGE:TITLE', 'Sample Web module');              
                       
     // Final
     return MELBIS()->TplFinal($tpl, 'main');                       
