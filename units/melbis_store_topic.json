@@ -10,7 +10,7 @@
     "includes": [
         "melbis_inc_temp.php=1"
     ],
-    "cache_on": "0",
+    "cache_on": "1",
     "cache_time": "0",
     "lazy_load": "0",
     "entry_point": "0",
