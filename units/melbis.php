@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.330 @ 2026-07-21
+ * @version 6.5.0.331 @ 2026-07-22
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -147,9 +147,14 @@ function MELBIS_halt($mType, $mFile, $mError, $mInfo = '')
             }                        
         }           
         
-        $log .= "----------------------------\n\n";
-                
-        @file_put_contents($log_file, $log, FILE_APPEND | LOCK_EX);
+        $log .= "----------------------------\n\n";                   
+        
+        if ( file_exists($log_file) && filesize($log_file) > 1048576 )
+        {
+            @rename($log_file, __DIR__.'/../_error_front_old.log');
+        }
+
+        @file_put_contents($log_file, $log, FILE_APPEND | LOCK_EX);        
     }
     
     // Backup time
