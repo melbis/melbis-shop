@@ -1,16 +1,16 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.337 @ 2026-07-24
+ * @version 6.5.0.338 @ 2026-07-25
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov  
  **************************************************************************************************/
-
+ 
 
 /** 
- * Function MELBIS_INC_TEMP_topic_sub
+ * Function MELBIS_INC_WEB_TOPIC_sub
  **/
-function MELBIS_INC_TEMP_topic_sub($mId)
+function MELBIS_INC_WEB_TOPIC_sub($mId)
 { 
     $command = "create TEMPORARY TABLE {DBNICK}_topic_sub ENGINE=MEMORY
                 WITH RECURSIVE topic_sub AS (

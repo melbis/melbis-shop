@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.337 @ 2026-07-24
+ * @version 6.5.0.338 @ 2026-07-25
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -19,7 +19,7 @@ function MELBIS_STORE_TOPIC($mVars)
     $id = $mVars['id'];
     
     // Sub topic
-    MELBIS_INC_TEMP_topic_sub($id);  
+    MELBIS_INC_WEB_TOPIC_sub($id);  
     
     $command = "SELECT s.id 
                   FROM {DBNICK}_topic_sub t_sub
