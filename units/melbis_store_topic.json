@@ -1,6 +1,6 @@
 {
     "description": "Get topic goods from storage",
-    "parameters": "id: int",
+    "parameters": "",
     "tables": [
         "_store=1",
         "_topic=1",

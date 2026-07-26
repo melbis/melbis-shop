@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.338 @ 2026-07-25
+ * @version 6.5.0.340 @ 2026-07-26
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -13,8 +13,8 @@
 function MELBIS_CATALOGE_SUB($mVars)
 { 
     // Create 
-    $tpl = MELBIS()->TplCreate();
-            
+    $tpl = MELBIS()->TplCreate();   
+    
     // Vars               
     $id = !empty($mVars['id']) ? $mVars['id'] : (int) $mVars['post']['id'];   
     

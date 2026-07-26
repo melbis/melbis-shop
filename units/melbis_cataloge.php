@@ -1,18 +1,19 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.338 @ 2026-07-25
+ * @version 6.5.0.340 @ 2026-07-26
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
  **************************************************************************************************/
-
+      
+ 
 /** 
  * Function MELBIS_CATALOGE
  **/
 function MELBIS_CATALOGE($mVars)
 {
     // Create 
-    $tpl = MELBIS()->TplCreate();   
+    $tpl = MELBIS()->TplCreate();    
     
     // Find root
     $command = "SELECT id, tindex, tlevel

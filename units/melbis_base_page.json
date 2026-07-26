@@ -6,7 +6,9 @@
         "_topic=1",
         "_topic_store=1"
     ],
-    "includes": [],
+    "includes": [
+        "melbis_inc_web_callback.php=1"
+    ],
     "cache_on": "0",
     "cache_time": "0",
     "lazy_load": "0",

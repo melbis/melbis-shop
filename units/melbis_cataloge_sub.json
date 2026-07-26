@@ -4,9 +4,7 @@
     "tables": [
         "_topic=1"
     ],
-    "includes": [
-        "melbis_inc_callback.php=1"
-    ],
+    "includes": [],
     "cache_on": "0",
     "cache_time": "0",
     "lazy_load": "0",

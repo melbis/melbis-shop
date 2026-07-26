@@ -1,13 +1,22 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.338 @ 2026-07-25
+ * @version 6.5.0.330 @ 2026-07-21
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
- **************************************************************************************************/   
-                                          
- 
-switch ( pathinfo($_POST['name'], PATHINFO_EXTENSION) ) 
+ **************************************************************************************************/
+
+
+// The converter is called by the engine itself, so only local requests are allowed
+$ip = $_SERVER['REMOTE_ADDR'] ?? '';
+if ( $ip !== '127.0.0.1' && $ip !== '::1' )
+{
+    header('HTTP/1.1 403 Forbidden');
+    die('Only local allowed');
+}
+
+
+switch ( pathinfo($_POST['name'], PATHINFO_EXTENSION) )
 {                        
     case 'js':                    
         $data = array('input' => $_POST['content']);
