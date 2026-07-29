@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.350 @ 2026-07-29
+ * @version 6.5.0.351 @ 2026-07-29
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -105,9 +105,9 @@ function MELBIS_halt($mType, $mFile, $mError, $mInfo = '')
     // Save log      
     if ( file_exists(__DIR__.'/../error.save') )
     {                               
-        $log_path = __DIR__.'/../core/log/front';
+        $log_path = __DIR__.'/../core/log/melbis';
         if ( !is_dir($log_path) ) @mkdir($log_path, 0775, true);
-        $log_file = $log_path.'/error.log';
+        $log_file = $log_path.'/front.log';
         
         $url = $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];    
         $ip = $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['HTTP_X_REAL_IP'] ?? $_SERVER['REMOTE_ADDR'] ?? '';
