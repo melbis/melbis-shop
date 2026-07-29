@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "Start installation (v28)"
+echo "Start installation (v29)"
 
 
 wait_apt() {
@@ -29,7 +29,7 @@ if mountpoint -q /var/melbis/cache; then
     umount /var/melbis/cache 2>/dev/null || umount -f /var/melbis/cache 2>/dev/null || umount -l /var/melbis/cache
     sleep 1
 fi
-rm -rf /var/melbis/{db,www,certs,certbot,trick,logs,cache}
+rm -rf /var/melbis/{db,www,certs,certbot,trick,log,cache}
 rm -f /var/melbis/docker-compose.yml /var/melbis/nginx.conf /var/melbis/my.cnf /var/melbis/.credentials
 
 echo "Configuring systemd journal log limit to 200M..."
@@ -77,7 +77,7 @@ wait_apt && apt-get install -y docker-ce docker-ce-cli containerd.io docker-buil
 
 # Prepare file structure
 echo "Creating base directories..."
-mkdir -p /var/melbis/{db,www,certs,certbot,trick,logs/apache,logs/nginx}
+mkdir -p /var/melbis/{db,www,certs,certbot,trick,log}
 
 # Generate self-signed SSL certificate
 echo "Generating self-signed SSL certificate..."
@@ -93,7 +93,7 @@ fi
 
 echo "Configuring log rotation..."
 cat <<'EOF'> /etc/logrotate.d/melbis
-/var/melbis/logs/apache/*.log /var/melbis/logs/nginx/*.log {
+/var/melbis/log/*/*.log {
 daily
 rotate 7
 compress
@@ -138,7 +138,8 @@ services:
       - /var/www/html/core
       - /var/melbis/cache:/var/www/html/core/cache
       - /var/melbis/trick:/var/www/html/core/trick
-      - /var/melbis/logs/apache:/var/log/apache2
+      - /var/melbis/log:/var/www/html/core/log
+      - /var/melbis/log/apache:/var/log/apache2
     restart: always
     logging:
       driver: "none"
@@ -150,7 +151,7 @@ services:
       - /var/melbis/nginx.conf:/etc/nginx/nginx.conf
       - /var/melbis/certs:/etc/nginx/certs
       - /var/melbis/certbot:/etc/nginx/certbot
-      - /var/melbis/logs/nginx:/var/log/nginx
+      - /var/melbis/log/nginx:/var/log/nginx
     ports:
       - 80:80
       - 443:443
@@ -173,6 +174,11 @@ http {
         client_max_body_size 64M;
         ssl_certificate /etc/nginx/certs/fullchain.pem;
         ssl_certificate_key /etc/nginx/certs/privkey.pem;
+
+        # Real client IP from Cloudflare header (harmless when there is no CF)
+        real_ip_header CF-Connecting-IP;
+        set_real_ip_from 0.0.0.0/0;
+
         location /.well-known/ {
             root /etc/nginx/certbot;
         }

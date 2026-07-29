@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.348 @ 2026-07-29
+ * @version 6.5.0.350 @ 2026-07-29
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -105,7 +105,10 @@ function MELBIS_halt($mType, $mFile, $mError, $mInfo = '')
     // Save log      
     if ( file_exists(__DIR__.'/../error.save') )
     {                               
-        $log_file = __DIR__.'/../_error_front.log';
+        $log_path = __DIR__.'/../core/log/front';
+        if ( !is_dir($log_path) ) @mkdir($log_path, 0775, true);
+        $log_file = $log_path.'/error.log';
+        
         $url = $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];    
         $ip = $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['HTTP_X_REAL_IP'] ?? $_SERVER['REMOTE_ADDR'] ?? '';
         $agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
@@ -148,11 +151,6 @@ function MELBIS_halt($mType, $mFile, $mError, $mInfo = '')
         }           
         
         $log .= "----------------------------\n\n";                   
-        
-        if ( file_exists($log_file) && filesize($log_file) > 1048576 )
-        {
-            @rename($log_file, __DIR__.'/../_error_front_old.log');
-        }
 
         @file_put_contents($log_file, $log, FILE_APPEND | LOCK_EX);        
     }

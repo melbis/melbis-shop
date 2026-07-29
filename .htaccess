@@ -13,9 +13,9 @@ RewriteRule ^config.json$ - [F]
 # Deny cron
 RewriteRule ^cron.php$ - [F]
 
-# Deny Error logs
-RewriteCond %{QUERY_STRING} !your_pass_key
-RewriteRule ^_[^/]*\.log$ - [F]
+# Deny engine data
+RewriteRule \.log$ - [F]
+RewriteRule ^core/(cache|class|init|log|tmp|trick)/ - [F]
 
 # Lazy
 RewriteRule ^lazy/$ index.php?lazy [L,QSA]

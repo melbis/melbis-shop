@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.348 @ 2026-07-29
+ * @version 6.5.0.350 @ 2026-07-29
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -11,7 +11,7 @@
  * Function MELBIS_CATALOGE
  **/
 function MELBIS_CATALOGE($mVars)
-{
+{                      
     // Create 
     $tpl = MELBIS()->TplCreate();    
     

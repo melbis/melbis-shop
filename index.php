@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.348 @ 2026-07-29
+ * @version 6.5.0.350 @ 2026-07-29
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov 
@@ -28,6 +28,7 @@ else
     $entry_point = $_GET['mod'] ?? 'melbis_base_page';
     $entry_param = [serialize($_GET), serialize($_POST)];
 }
+
 
 // Run
 MELBIS()->Run($entry_point, $entry_param);
