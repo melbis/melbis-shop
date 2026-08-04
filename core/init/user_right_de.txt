@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.353 @ 2026-08-01
+ * @version 6.5.0.355 @ 2026-08-04
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -207,6 +207,10 @@ table={DBNICK}_oper|id|name
 133=Löschen
 249=Laden
 250=Speichern
+339=Katalog
+340=Hinzufügen
+341=Umbenennen
+342=Löschen
 130=PHP-Skripte
 134=Hinzufügen
 135=Umbenennen
@@ -223,6 +227,7 @@ table={DBNICK}_oper|id|name
 142=Hinzufügen
 143=Umbenennen
 144=Löschen
+338=Laden
 145=Katalog für Bilder
 146=Hinzufügen
 147=Umbenennen
@@ -233,7 +238,18 @@ table={DBNICK}_oper|id|name
 149=Datenbank
 150=Laden
 151=SQL-Anfrage
+335=Tabellen sperren
+336=Tabellen entsperren
+337=ID generieren
 86=Statistik aktualisieren
+347=KI-Assistent
+343=Projektdateien
+344=Dateien hinzufügen
+345=Dateien löschen
+346=Dateien laden
+348=Datenbank
+349=Daten lesen
+350=Daten ändern
 268=System
 5=Sperren
 6=Liste abrufen

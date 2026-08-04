@@ -1,5 +1,5 @@
 /*       Melbis Shop auto bundle report       */
-/*         Create: 2026-07-17 15:39:56        */
+/*         Create: 2026-08-03 17:55:32        */
 
 /*   #1    bootstrap.css                10332 ln   196 kb    /templates/default/statics/base/bs/bootstrap.css              */
 /*   #2    bootstrap-table.css            389 ln    11 kb    /templates/default/statics/base/bs/bootstrap-table.css        */
@@ -15316,8 +15316,8 @@ readers do not read off random characters that represent icons */
   font-style: normal;
   font-weight: 400;
   font-display: block;
-  src: url("icons/webfonts/fa-brands-400.eot");
-  src: url("icons/webfonts/fa-brands-400.eot?#iefix") format("embedded-opentype"), url("icons/webfonts/fa-brands-400.woff2") format("woff2"), url("icons/webfonts/fa-brands-400.woff") format("woff"), url("icons/webfonts/fa-brands-400.ttf") format("truetype"), url("icons/webfonts/fa-brands-400.svg#fontawesome") format("svg"); }
+  src: url("/templates/default/images/webfonts/fa-brands-400.eot");
+  src: url("/templates/default/images/webfonts/fa-brands-400.eot?#iefix") format("embedded-opentype"), url("/templates/default/images/webfonts/fa-brands-400.woff2") format("woff2"), url("/templates/default/images/webfonts/fa-brands-400.woff") format("woff"), url("/templates/default/images/webfonts/fa-brands-400.ttf") format("truetype"), url("/templates/default/images/webfonts/fa-brands-400.svg#fontawesome") format("svg"); }
 
 .fab {
   font-family: 'Font Awesome 5 Brands';
@@ -15327,8 +15327,8 @@ readers do not read off random characters that represent icons */
   font-style: normal;
   font-weight: 400;
   font-display: block;
-  src: url("icons/webfonts/fa-regular-400.eot");
-  src: url("icons/webfonts/fa-regular-400.eot?#iefix") format("embedded-opentype"), url("icons/webfonts/fa-regular-400.woff2") format("woff2"), url("icons/webfonts/fa-regular-400.woff") format("woff"), url("icons/webfonts/fa-regular-400.ttf") format("truetype"), url("icons/webfonts/fa-regular-400.svg#fontawesome") format("svg"); }
+  src: url("/templates/default/images/webfonts/fa-regular-400.eot");
+  src: url("/templates/default/images/webfonts/fa-regular-400.eot?#iefix") format("embedded-opentype"), url("/templates/default/images/webfonts/fa-regular-400.woff2") format("woff2"), url("/templates/default/images/webfonts/fa-regular-400.woff") format("woff"), url("/templates/default/images/webfonts/fa-regular-400.ttf") format("truetype"), url("/templates/default/images/webfonts/fa-regular-400.svg#fontawesome") format("svg"); }
 
 .far {
   font-family: 'Font Awesome 5 Free';
@@ -15338,8 +15338,8 @@ readers do not read off random characters that represent icons */
   font-style: normal;
   font-weight: 900;
   font-display: block;
-  src: url("icons/webfonts/fa-solid-900.eot");
-  src: url("icons/webfonts/fa-solid-900.eot?#iefix") format("embedded-opentype"), url("icons/webfonts/fa-solid-900.woff2") format("woff2"), url("icons/webfonts/fa-solid-900.woff") format("woff"), url("icons/webfonts/fa-solid-900.ttf") format("truetype"), url("icons/webfonts/fa-solid-900.svg#fontawesome") format("svg"); }
+  src: url("/templates/default/images/webfonts/fa-solid-900.eot");
+  src: url("/templates/default/images/webfonts/fa-solid-900.eot?#iefix") format("embedded-opentype"), url("/templates/default/images/webfonts/fa-solid-900.woff2") format("woff2"), url("/templates/default/images/webfonts/fa-solid-900.woff") format("woff"), url("/templates/default/images/webfonts/fa-solid-900.ttf") format("truetype"), url("/templates/default/images/webfonts/fa-solid-900.svg#fontawesome") format("svg"); }
 
 .fa,
 .fas {

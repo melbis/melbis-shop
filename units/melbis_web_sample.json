@@ -2,11 +2,11 @@
     "description": "Example for web-module",
     "parameters": "get: serial, post: serial",
     "tables": [
-        "_currency=1",
-        "_key_value=1",
-        "_store=1",
-        "_topic=1",
-        "_topic_store=1"
+        "currency=1",
+        "key_value=1",
+        "store=1",
+        "topic=1",
+        "topic_store=1"
     ],
     "includes": [
         "melbis_inc_auth.php=1"

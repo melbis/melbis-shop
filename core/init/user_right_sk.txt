@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.353 @ 2026-08-01
+ * @version 6.5.0.355 @ 2026-08-04
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -207,6 +207,10 @@ table={DBNICK}_oper|id|name
 133=Odstrániť
 249=Nahrať
 250=Uložiť
+339=Katalóg
+340=Pridať
+341=Premenovať
+342=Odstrániť
 130=PHP skripty
 134=Pridať
 135=Premenovať
@@ -223,6 +227,7 @@ table={DBNICK}_oper|id|name
 142=Pridať
 143=Premenovať
 144=Odstrániť
+338=Nahrať
 145=Katalóg pre obrázky
 146=Pridať
 147=Premenovať
@@ -233,7 +238,18 @@ table={DBNICK}_oper|id|name
 149=Databáza
 150=Nahrať
 151=SQL dopyt
+335=Uzamknúť tabuľky
+336=Odomknúť tabuľky
+337=Vygenerovať ID
 86=Aktualizovať štatistiku
+347=Asistent AI
+343=Súbory projektu
+344=Pridať súbory
+345=Odstrániť súbory
+346=Načítať súbory
+348=Databáza
+349=Čítanie údajov
+350=Zmena údajov
 268=Systém
 5=Zámky
 6=Získať zoznam

@@ -2,8 +2,8 @@
     "description": "",
     "parameters": "",
     "tables": [
-        "_topic=0",
-        "_topic_sub=0"
+        "topic=0",
+        "topic_sub=0"
     ],
     "includes": [],
     "cache_on": "1",

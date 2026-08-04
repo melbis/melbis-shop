@@ -2,9 +2,9 @@
     "description": "Goods features",
     "parameters": "id: int",
     "tables": [
-        "_info=1",
-        "_info_value=1",
-        "_store_info=1"
+        "info=1",
+        "info_value=1",
+        "store_info=1"
     ],
     "includes": [],
     "cache_on": "0",

@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.353 @ 2026-08-01
+ * @version 6.5.0.355 @ 2026-08-04
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -48,6 +48,7 @@ table={DBNICK}_key|id|name
 142=Multilingvism
 143=Limbă
 144=Tip
+152=Grupuri de fișiere
 145=Categorie
 146=Tip
 149=Date
@@ -79,6 +80,7 @@ table={DBNICK}_key|id|name
 86=Câmp
 73=Tip
 74=Spec.
+153=Grupuri de fișiere
 87=Valoare
 75=Tip
 76=Comenzi
@@ -88,8 +90,10 @@ table={DBNICK}_key|id|name
 88=Opțiuni comenzi
 77=Opțiune
 78=Tip
+154=Grupuri de fișiere
 84=Valoarea opțiunii
 79=Tip
+155=Grupuri de fișiere
 106=------------- Module apelate ---------------
 80=Comenzi
 81=Calculare
@@ -238,3 +242,15 @@ table={DBNICK}_key_value|id|value_txt
 306=<PRE> Preformatat
 307=<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="https://www.youtube.com/embed/T2PCbVRM6hg?rel=0"></iframe></div><p><br></p>
 308=<IFRAME> Document încorporat
+309=Fișier sursă
+310=Fișier din descriere
+311=Pictogramă implicită
+313=Fișier sursă
+314=Fișier din descriere
+315=Pictogramă implicită
+316=Fișier sursă
+317=Fișier din descriere
+318=Pictogramă implicită
+319=Fișier sursă
+320=Fișier din descriere
+321=Pictogramă implicită

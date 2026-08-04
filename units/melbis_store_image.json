@@ -2,7 +2,7 @@
     "description": "Print goods image",
     "parameters": "id: int, key: str",
     "tables": [
-        "_files_store=1"
+        "files_store=1"
     ],
     "includes": [],
     "cache_on": "0",

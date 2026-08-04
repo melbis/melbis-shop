@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.353 @ 2026-08-01
+ * @version 6.5.0.355 @ 2026-08-04
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -207,6 +207,10 @@ table={DBNICK}_oper|id|name
 133=Törlés
 249=Betöltés
 250=Mentés
+339=Katalógus
+340=Hozzáadás
+341=Átnevezés
+342=Törlés
 130=PHP-szkriptek
 134=Hozzáadás
 135=Átnevezés
@@ -223,6 +227,7 @@ table={DBNICK}_oper|id|name
 142=Hozzáadás
 143=Átnevezés
 144=Törlés
+338=Betöltés
 145=Képek katalógusa
 146=Hozzáadás
 147=Átnevezés
@@ -233,7 +238,18 @@ table={DBNICK}_oper|id|name
 149=Adatbázis
 150=Betöltés
 151=SQL-lekérdezés
+335=Táblák zárolása
+336=Táblák zárolásának feloldása
+337=ID generálása
 86=Statisztikák frissítése
+347=AI-asszisztens
+343=Projektfájlok
+344=Fájlok hozzáadása
+345=Fájlok törlése
+346=Fájlok betöltése
+348=Adatbázis
+349=Adatok olvasása
+350=Adatok módosítása
 268=Rendszer
 5=Zárolások
 6=Lista lekérése

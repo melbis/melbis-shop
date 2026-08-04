@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.353 @ 2026-08-01
+ * @version 6.5.0.355 @ 2026-08-04
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -48,6 +48,7 @@ table={DBNICK}_key|id|name
 142=Vícejazyčnost
 143=Jazyk
 144=Typ
+152=Skupiny souborů
 145=Kategorie
 146=Typ
 149=Data
@@ -79,6 +80,7 @@ table={DBNICK}_key|id|name
 86=Pole
 73=Typ
 74=Spec
+153=Skupiny souborů
 87=Hodnota
 75=Typ
 76=Objednávky
@@ -88,8 +90,10 @@ table={DBNICK}_key|id|name
 88=Možnosti objednávek
 77=Možnost
 78=Typ
+154=Skupiny souborů
 84=Hodnota možnosti
 79=Typ
+155=Skupiny souborů
 106=------------- Volané moduly ---------------
 80=Objednávky
 81=Kalkulace
@@ -238,3 +242,15 @@ table={DBNICK}_key_value|id|value_txt
 306=<PRE> Předformátovaný
 307=<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="https://www.youtube.com/embed/T2PCbVRM6hg?rel=0"></iframe></div><p><br></p>
 308=<IFRAME> Vložený dokument
+309=Zdrojový soubor
+310=Soubor z popisu
+311=Výchozí ikona
+313=Zdrojový soubor
+314=Soubor z popisu
+315=Výchozí ikona
+316=Zdrojový soubor
+317=Soubor z popisu
+318=Výchozí ikona
+319=Zdrojový soubor
+320=Soubor z popisu
+321=Výchozí ikona

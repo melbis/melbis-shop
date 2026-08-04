@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.353 @ 2026-08-01
+ * @version 6.5.0.355 @ 2026-08-04
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -48,6 +48,7 @@ table={DBNICK}_key|id|name
 142=Mehrsprachigkeit
 143=Sprache
 144=Typ
+152=Dateigruppen
 145=Kategorie
 146=Typ
 149=Daten
@@ -79,6 +80,7 @@ table={DBNICK}_key|id|name
 86=Feld
 73=Typ
 74=Spez.
+153=Dateigruppen
 87=Wert
 75=Typ
 76=Bestellungen
@@ -88,8 +90,10 @@ table={DBNICK}_key|id|name
 88=Bestelloptionen
 77=Option
 78=Typ
+154=Dateigruppen
 84=Optionswert
 79=Typ
+155=Dateigruppen
 106=------------- Aufrufbare Module ---------------
 80=Bestellungen
 81=Kalkulation
@@ -238,3 +242,15 @@ table={DBNICK}_key_value|id|value_txt
 306=<PRE> Vorformatiert
 307=<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="https://www.youtube.com/embed/T2PCbVRM6hg?rel=0"></iframe></div><p><br></p>
 308=<IFRAME> Eingebettetes Dokument
+309=Quelldatei
+310=Datei aus der Beschreibung
+311=Standard-Symbol
+313=Quelldatei
+314=Datei aus der Beschreibung
+315=Standard-Symbol
+316=Quelldatei
+317=Datei aus der Beschreibung
+318=Standard-Symbol
+319=Quelldatei
+320=Datei aus der Beschreibung
+321=Standard-Symbol

@@ -2,7 +2,7 @@
 
 melbis_version=$1
 
-echo "Start system verify (v8)"
+echo "Start system verify (v9)"
 
 echo "Detected Melbis Version: $melbis_version"
 
@@ -39,6 +39,7 @@ if [ -d "/var/melbis" ]; then
     du -sh /var/melbis/www/files 2>/dev/null || echo "0B    /var/melbis/www/files"    
     du -sh /var/melbis/cache 2>/dev/null || echo "0B    /var/melbis/cache"
     du -sh /var/melbis/trick 2>/dev/null || echo "0B    /var/melbis/trick"
+    du -sh /var/melbis/log 2>/dev/null || echo "0B    /var/melbis/log"
 else
     echo "Directory /var/melbis not found."
 fi

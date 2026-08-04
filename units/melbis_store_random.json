@@ -2,9 +2,9 @@
     "description": "Get random goods from storage",
     "parameters": "how: int",
     "tables": [
-        "_store=1",
-        "_topic=1",
-        "_topic_store=1"
+        "store=1",
+        "topic=1",
+        "topic_store=1"
     ],
     "includes": [],
     "cache_on": "0",

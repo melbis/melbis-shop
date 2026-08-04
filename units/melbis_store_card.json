@@ -2,9 +2,9 @@
     "description": "Goods card",
     "parameters": "id: int",
     "tables": [
-        "_currency=1",
-        "_key_value=1",
-        "_store=1"
+        "currency=1",
+        "key_value=1",
+        "store=1"
     ],
     "includes": [],
     "cache_on": "1",

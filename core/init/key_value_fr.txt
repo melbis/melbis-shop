@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.353 @ 2026-08-01
+ * @version 6.5.0.355 @ 2026-08-04
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -48,6 +48,7 @@ table={DBNICK}_key|id|name
 142=Multilinguisme
 143=Langue
 144=Type
+152=Groupes de fichiers
 145=Catégorie
 146=Type
 149=Données
@@ -79,6 +80,7 @@ table={DBNICK}_key|id|name
 86=Champ
 73=Type
 74=Spéc.
+153=Groupes de fichiers
 87=Valeur
 75=Type
 76=Commandes
@@ -88,8 +90,10 @@ table={DBNICK}_key|id|name
 88=Options des commandes
 77=Option
 78=Type
+154=Groupes de fichiers
 84=Valeur de l’option
 79=Type
+155=Groupes de fichiers
 106=------------- Modules appelés ---------------
 80=Commandes
 81=Calcul
@@ -238,3 +242,15 @@ table={DBNICK}_key_value|id|value_txt
 306=<PRE> Préformaté
 307=<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="https://www.youtube.com/embed/T2PCbVRM6hg?rel=0"></iframe></div><p><br></p>
 308=<IFRAME> Document intégré
+309=Fichier source
+310=Fichier de la description
+311=Icône par défaut
+313=Fichier source
+314=Fichier de la description
+315=Icône par défaut
+316=Fichier source
+317=Fichier de la description
+318=Icône par défaut
+319=Fichier source
+320=Fichier de la description
+321=Icône par défaut

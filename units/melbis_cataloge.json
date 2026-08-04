@@ -2,7 +2,7 @@
     "description": "Cataloge menu",
     "parameters": "",
     "tables": [
-        "_topic=1"
+        "topic=1"
     ],
     "includes": [],
     "cache_on": "0",

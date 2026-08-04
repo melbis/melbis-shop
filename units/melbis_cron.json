@@ -2,7 +2,7 @@
     "description": "Cron jobs",
     "parameters": "",
     "tables": [
-        "_store=1"
+        "store=1"
     ],
     "includes": [],
     "cache_on": "0",

@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.353 @ 2026-08-01
+ * @version 6.5.0.355 @ 2026-08-04
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -207,6 +207,10 @@ table={DBNICK}_oper|id|name
 133=Șterge
 249=Încarcă
 250=Salvează
+339=Catalog
+340=Adaugă
+341=Redenumește
+342=Șterge
 130=Scripturi PHP
 134=Adaugă
 135=Redenumește
@@ -223,6 +227,7 @@ table={DBNICK}_oper|id|name
 142=Adaugă
 143=Redenumește
 144=Șterge
+338=Încarcă
 145=Catalog pentru imagini
 146=Adaugă
 147=Redenumește
@@ -233,7 +238,18 @@ table={DBNICK}_oper|id|name
 149=Baza de date
 150=Încarcă
 151=Cerere SQL
+335=Blochează tabelele
+336=Deblochează tabelele
+337=Generează ID
 86=Actualizează statisticile
+347=Asistent AI
+343=Fișierele proiectului
+344=Adaugă fișiere
+345=Șterge fișiere
+346=Încarcă fișiere
+348=Baza de date
+349=Citirea datelor
+350=Modificarea datelor
 268=Sistem
 5=Blocări
 6=Obține lista

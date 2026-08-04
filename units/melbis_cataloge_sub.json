@@ -2,7 +2,7 @@
     "description": "Cataloge sub items",
     "parameters": "get: serial, post: serial, id: int",
     "tables": [
-        "_topic=1"
+        "topic=1"
     ],
     "includes": [],
     "cache_on": "0",

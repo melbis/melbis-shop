@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.353 @ 2026-08-01
+ * @version 6.5.0.355 @ 2026-08-04
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -19,6 +19,7 @@ function MELBIS_BASE_PAGE($mVars)
         
     // Vars         
     $id = (int) ( $mVars['get']['topic_id'] ?? 0 ); 
+    $store_id = (int) ( $mVars['get']['store_id'] ?? 0 );    
     
     // Define page
     $command = "SELECT *  

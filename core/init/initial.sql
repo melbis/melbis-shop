@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.353 @ 2026-08-01
+ * @version 6.5.0.355 @ 2026-08-04
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -47,6 +47,8 @@ INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('files_topic', 0)
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('files_store', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('files_order_option', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('files_order_option_value', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('files_web_key', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('files_web_key_value', 0);
 
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('field', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('field_value', 0);

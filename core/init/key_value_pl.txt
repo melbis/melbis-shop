@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.353 @ 2026-08-01
+ * @version 6.5.0.355 @ 2026-08-04
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -48,6 +48,7 @@ table={DBNICK}_key|id|name
 142=Wielojęzyczność
 143=Język
 144=Typ
+152=Grupy plików
 145=Kategoria
 146=Typ
 149=Dane
@@ -79,6 +80,7 @@ table={DBNICK}_key|id|name
 86=Pole
 73=Typ
 74=Specjalne
+153=Grupy plików
 87=Wartość
 75=Typ
 76=Zamówienia
@@ -88,8 +90,10 @@ table={DBNICK}_key|id|name
 88=Opcje zamówień
 77=Opcja
 78=Typ
+154=Grupy plików
 84=Wartość opcji
 79=Typ
+155=Grupy plików
 106=------------- Wywoływane moduły ---------------
 80=Zamówienia
 81=Kalkulacja
@@ -238,3 +242,15 @@ table={DBNICK}_key_value|id|value_txt
 306=<PRE> Preformatowany
 307=<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="https://www.youtube.com/embed/T2PCbVRM6hg?rel=0"></iframe></div><p><br></p>
 308=<IFRAME> Dokument osadzony
+309=Plik źródłowy
+310=Plik z opisu
+311=Domyślna ikona
+313=Plik źródłowy
+314=Plik z opisu
+315=Domyślna ikona
+316=Plik źródłowy
+317=Plik z opisu
+318=Domyślna ikona
+319=Plik źródłowy
+320=Plik z opisu
+321=Domyślna ikona

@@ -1,5 +1,5 @@
 /*       Melbis Shop auto bundle report       */
-/*         Create: 2026-07-17 15:39:56        */
+/*         Create: 2026-08-03 17:55:32        */
 
 /*   #1    main.js                         32 ln     1 kb    /templates/default/statics/melbis/main.js                     */
 /*   #10   scripts.js                      57 ln     1 kb    /templates/default/units/melbis_cataloge/scripts.js           */
@@ -7,7 +7,7 @@
 
 
 /***************************************************************************************************
- * @version 6.5.0.353 @ 2026-08-01
+ * @version 6.5.0.355 @ 2026-08-04
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov    
