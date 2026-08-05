@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.355 @ 2026-08-04
+ * @version 6.5.0.360 @ 2026-08-06
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -12,17 +12,21 @@ require_once('core/core.php');
 // Catch error control
 error_reporting(E_ALL);  
 ini_set('display_errors', 'off');      
-set_error_handler(function ($mError, $mMessage, $mFile, $mLine) 
-    {    
-        $error = error_reporting();
-        if ( $error !== 0 && $error != 4437 ) 
-            MELBIS_halt('PHP Runtime Exception', $mFile.' : '.$mLine, $mMessage); 
+set_error_handler(function ($mError, $mMessage, $mFile, $mLine)
+    {
+        // Level is suppressed by the current mask (@ operator or custom error_reporting)
+        if ( !(error_reporting() & $mError) ) return true;
+        MELBIS_halt('PHP Runtime Exception', $mFile.' : '.$mLine, $mMessage);
     });
 register_shutdown_function(function ()
     {
+        // Only levels that bypass set_error_handler: engine and compile-time fatals
+        $fatal = E_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR;
         $error = error_get_last();
-        if ( isset($error) && ( $error["type"] == E_ERROR || $error["type"] == E_WARNING || $error["type"] == E_PARSE ) )
-            MELBIS_halt('PHP Shutdown Exception', $error["file"].' : '.$error["line"], $error["message"]); 
+        if ( isset($error) && ( $error["type"] & $fatal ) )
+        {
+            MELBIS_halt('PHP Shutdown Exception', $error["file"].' : '.$error["line"], $error["message"]);
+        }
     });
 
 
