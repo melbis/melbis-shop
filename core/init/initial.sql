@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.360 @ 2026-08-06
+ * @version 6.5.0.370 @ 2026-08-10
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -15,6 +15,10 @@ INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('advert', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('advert_text', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('advert_goods', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('advert_link', 0);
+
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('agent_tool', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('agent_tool_param', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('agent_tool_right', 0);
 
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('lang', 1);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('trans', 0);

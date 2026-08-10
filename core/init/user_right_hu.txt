@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.360 @ 2026-08-06
+ * @version 6.5.0.370 @ 2026-08-10
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -182,6 +182,9 @@ table={DBNICK}_oper|id|name
 257=Modulok és opciók
 258=Lekérés
 259=Mentés
+417=MI-beállítások
+418=Lekérés
+419=Mentés
 8=Telepítés
 9=Adatok lekérése
 10=Adatok mentése
@@ -243,17 +246,32 @@ table={DBNICK}_oper|id|name
 337=ID generálása
 86=Statisztikák frissítése
 347=AI-asszisztens
-389=Konfiguráció lekérése
-391=Projektstruktúra lekérése
-388=Zárolási lista lekérése
-384=Gyorsítótár tisztításának végrehajtása
+408=Memória
+409=Lista lekérése
+410=Betöltés
+411=Mentés
+412=Törlés
+413=Teljes hozzáférés
+407=Eszközök
+415=Lista lekérése
+416=Végrehajtás
+351=Közvetlen hozzáférés
 343=Áruházfájlok
 344=Hozzáadás
 345=Törlés
 346=Betöltés
-351=Fejlesztési fájlok
-390=Lista lekérése
+348=Adatbázis
+349=Adatok olvasása
+350=Adatok módosítása
+388=Zárolási lista lekérése
+421=Fejlesztés
 383=Szöveg keresése fájlokban
+384=Gyorsítótár tisztításának végrehajtása
+414=Térkép
+389=Konfiguráció lekérése
+390=Lista lekérése
+391=Projektstruktúra lekérése
+392=Adatstruktúra lekérése
 403=Sablonkészlet
 404=Hozzáadás
 405=Átnevezés
@@ -292,10 +310,6 @@ table={DBNICK}_oper|id|name
 385=Fájlverziók
 386=Lista lekérése
 387=Tartalom lekérése
-348=Adatbázis
-392=Struktúra lekérése
-349=Adatok olvasása
-350=Adatok módosítása
 268=Rendszer
 5=Zárolások
 6=Lista lekérése
@@ -310,9 +324,6 @@ table={DBNICK}_oper|id|name
 
 table={DBNICK}_user|id|name
 1=Adminisztrátor
-2=Claude tanácsadó
-3=Claude fejlesztő
 
 table={DBNICK}_user_group|id|name
 1=Adminisztrátorok
-2=AI-asszisztensek

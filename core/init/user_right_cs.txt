@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.360 @ 2026-08-06
+ * @version 6.5.0.370 @ 2026-08-10
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -182,6 +182,9 @@ table={DBNICK}_oper|id|name
 257=Moduly a možnosti
 258=Získat
 259=Uložit
+417=Nastavení AI
+418=Získat
+419=Uložit
 8=Instalace
 9=Získat data
 10=Uložit data
@@ -243,17 +246,32 @@ table={DBNICK}_oper|id|name
 337=Vygenerovat ID
 86=Aktualizovat statistiku
 347=Asistent AI
-389=Získat konfiguraci
-391=Získat strukturu projektu
-388=Získat seznam zámků
-384=Provést vyčištění cache
+408=Paměť
+409=Získat seznam
+410=Načíst
+411=Uložit
+412=Odstranit
+413=Plný přístup
+407=Nástroje
+415=Získat seznam
+416=Provést
+351=Přímý přístup
 343=Soubory obchodu
 344=Přidat
 345=Odstranit
 346=Načíst
-351=Vývojové soubory
-390=Získat seznam
+348=Databáze
+349=Čtení dat
+350=Změna dat
+388=Získat seznam zámků
+421=Vývoj
 383=Vyhledávání textu v souborech
+384=Provést vyčištění cache
+414=Mapa
+389=Získat konfiguraci
+390=Získat seznam
+391=Získat strukturu projektu
+392=Získat strukturu dat
 403=Sada šablon
 404=Přidat
 405=Přejmenovat
@@ -292,10 +310,6 @@ table={DBNICK}_oper|id|name
 385=Verze souborů
 386=Získat seznam
 387=Získat obsah
-348=Databáze
-392=Získat strukturu
-349=Čtení dat
-350=Změna dat
 268=Systém
 5=Blokování
 6=Získat seznam
@@ -310,9 +324,6 @@ table={DBNICK}_oper|id|name
 
 table={DBNICK}_user|id|name
 1=Administrátor
-2=Claude konzultant
-3=Claude vývojář
 
 table={DBNICK}_user_group|id|name
 1=Administrátoři
-2=Asistenti AI

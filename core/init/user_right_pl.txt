@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.360 @ 2026-08-06
+ * @version 6.5.0.370 @ 2026-08-10
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -182,6 +182,9 @@ table={DBNICK}_oper|id|name
 257=Moduły i opcje
 258=Pobierz
 259=Zapisz
+417=Ustawienia AI
+418=Pobierz
+419=Zapisz
 8=Instalacja
 9=Pobierz dane
 10=Zapisz dane
@@ -243,17 +246,32 @@ table={DBNICK}_oper|id|name
 337=Wygeneruj ID
 86=Aktualizuj statystyki
 347=Asystent AI
-389=Pobierz konfigurację
-391=Pobierz strukturę projektu
-388=Pobierz listę blokad
-384=Wykonaj czyszczenie pamięci podręcznej
+408=Pamięć
+409=Pobierz listę
+410=Załaduj
+411=Zapisz
+412=Usuń
+413=Pełny dostęp
+407=Narzędzia
+415=Pobierz listę
+416=Wykonaj
+351=Dostęp bezpośredni
 343=Pliki sklepu
 344=Dodaj
 345=Usuń
 346=Załaduj
-351=Pliki programistyczne
-390=Pobierz listę
+348=Baza danych
+349=Odczyt danych
+350=Zmiana danych
+388=Pobierz listę blokad
+421=Programowanie
 383=Wyszukiwanie tekstu w plikach
+384=Wykonaj czyszczenie pamięci podręcznej
+414=Mapa
+389=Pobierz konfigurację
+390=Pobierz listę
+391=Pobierz strukturę projektu
+392=Pobierz strukturę danych
 403=Zestaw szablonów
 404=Dodaj
 405=Zmień nazwę
@@ -292,10 +310,6 @@ table={DBNICK}_oper|id|name
 385=Wersje plików
 386=Pobierz listę
 387=Pobierz zawartość
-348=Baza danych
-392=Pobierz strukturę
-349=Odczyt danych
-350=Zmiana danych
 268=System
 5=Blokady
 6=Pobierz listę
@@ -310,9 +324,6 @@ table={DBNICK}_oper|id|name
 
 table={DBNICK}_user|id|name
 1=Administrator
-2=Claude konsultant
-3=Claude programista
 
 table={DBNICK}_user_group|id|name
 1=Administratorzy
-2=Asystenci AI

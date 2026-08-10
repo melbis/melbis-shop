@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.360 @ 2026-08-06
+ * @version 6.5.0.370 @ 2026-08-10
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -303,6 +303,73 @@ CREATE TABLE {DBNICK}_user_task_note (
    PRIMARY KEY (id),
    KEY IDX1 (task_id),
    KEY IDX2 (user_id)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
+/**
+ * Table agent_memory
+ **/
+DROP TABLE IF EXISTS {DBNICK}_agent_memory;
+CREATE TABLE {DBNICK}_agent_memory (
+   id 		   INT UNSIGNED NOT NULL AUTO_INCREMENT,
+   user_id 	   INT UNSIGNED DEFAULT NULL,
+   name 	      CHAR(100) DEFAULT '' NOT NULL,
+   info 	      CHAR(255) DEFAULT '' NOT NULL,
+   body 	      MEDIUMTEXT DEFAULT ('') NOT NULL,
+   shared 	   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   edit_time	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,
+   PRIMARY KEY (id),
+   UNIQUE (user_id, name)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
+/**
+ * Table agent_tool
+ **/
+DROP TABLE IF EXISTS {DBNICK}_agent_tool;
+CREATE TABLE {DBNICK}_agent_tool (
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   name 	      CHAR(255) DEFAULT '' NOT NULL,
+   descr 	   MEDIUMTEXT DEFAULT ('') NOT NULL,
+   tindex 	   INT UNSIGNED DEFAULT '0' NOT NULL,
+   tlevel 	   INT UNSIGNED DEFAULT '0' NOT NULL,
+   absindex 	INT UNSIGNED DEFAULT '0' NOT NULL,
+   folder 	   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   use_unit 	CHAR(100) DEFAULT '' NOT NULL,
+   use_func 	CHAR(100) DEFAULT '' NOT NULL,
+   PRIMARY KEY (id),
+   KEY IDX1 (use_func)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
+/**
+ * Table agent_tool_param
+ **/
+DROP TABLE IF EXISTS {DBNICK}_agent_tool_param;
+CREATE TABLE {DBNICK}_agent_tool_param (
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   tool_id 	   INT UNSIGNED DEFAULT NULL,
+   command 	   CHAR(100) DEFAULT '' NOT NULL,
+   descr 	   MEDIUMTEXT DEFAULT ('') NOT NULL,
+   pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   PRIMARY KEY (id),
+   KEY IDX1 (tool_id)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
+/**
+ * Table agent_tool_right
+ **/
+DROP TABLE IF EXISTS {DBNICK}_agent_tool_right;
+CREATE TABLE {DBNICK}_agent_tool_right (
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   param_id 	INT UNSIGNED DEFAULT NULL,
+   user_id 	   INT UNSIGNED DEFAULT NULL,
+   group_id 	INT UNSIGNED DEFAULT NULL,
+   PRIMARY KEY (id),
+   KEY IDX1 (param_id),
+   KEY IDX2 (user_id),
+   KEY IDX3 (group_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 

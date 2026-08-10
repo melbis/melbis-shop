@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.360 @ 2026-08-06
+ * @version 6.5.0.370 @ 2026-08-10
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -101,7 +101,7 @@ INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('1
 INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('118', 'code 118', '106', '1', '92', '1');
 INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('116', 'MODULE_NOTIFICATION', '118', '2', '93', '0');
 INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('117', 'EVENT_NOTIFICATION', '118', '2', '94', '0');
-INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('150', 'code 150', '106', '1', '95', '0');
+INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('150', 'code 150', '106', '1', '95', '1');
 INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('151', 'MODULE_TRANSLATE_LINE', '150', '2', '96', '0');
 INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('8', 'FILES_KEY_VALUE', '0', '0', '97', '1');
 INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('66', 'code 66', '8', '1', '98', '1');

@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.360 @ 2026-08-06
+ * @version 6.5.0.370 @ 2026-08-10
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -182,6 +182,9 @@ table={DBNICK}_oper|id|name
 257=Module și opțiuni
 258=Obține
 259=Salvează
+417=Setări AI
+418=Obține
+419=Salvează
 8=Instalare
 9=Obține datele
 10=Salvează datele
@@ -243,17 +246,32 @@ table={DBNICK}_oper|id|name
 337=Generează ID
 86=Actualizează statisticile
 347=Asistent AI
-389=Obține configurația
-391=Obține structura proiectului
-388=Obține lista blocărilor
-384=Execută curățarea cache-ului
+408=Memorie
+409=Obține lista
+410=Încarcă
+411=Salvează
+412=Șterge
+413=Acces complet
+407=Instrumente
+415=Obține lista
+416=Execută
+351=Acces direct
 343=Fișierele magazinului
 344=Adaugă
 345=Șterge
 346=Încarcă
-351=Fișiere de dezvoltare
-390=Obține lista
+348=Baza de date
+349=Citirea datelor
+350=Modificarea datelor
+388=Obține lista blocărilor
+421=Dezvoltare
 383=Căutarea textului în fișiere
+384=Execută curățarea cache-ului
+414=Hartă
+389=Obține configurația
+390=Obține lista
+391=Obține structura proiectului
+392=Obține structura datelor
 403=Set de șabloane
 404=Adaugă
 405=Redenumește
@@ -292,10 +310,6 @@ table={DBNICK}_oper|id|name
 385=Versiuni ale fișierelor
 386=Obține lista
 387=Obține conținutul
-348=Baza de date
-392=Obține structura
-349=Citirea datelor
-350=Modificarea datelor
 268=Sistem
 5=Blocări
 6=Obține lista
@@ -310,9 +324,6 @@ table={DBNICK}_oper|id|name
 
 table={DBNICK}_user|id|name
 1=Administrator
-2=Claude consultant
-3=Claude dezvoltator
 
 table={DBNICK}_user_group|id|name
 1=Administratori
-2=Asistenți AI

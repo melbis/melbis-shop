@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "Start installation (v29)"
+echo "Start installation (v30)"
 
 
 wait_apt() {
@@ -243,6 +243,7 @@ mv /tmp/melbis-shop-master/units /var/melbis/www/
 mv /tmp/melbis-shop-master/.htaccess /var/melbis/www/
 mv /tmp/melbis-shop-master/index.php /var/melbis/www/
 mv /tmp/melbis-shop-master/cron.php /var/melbis/www/
+mv /tmp/melbis-shop-master/agent.php /var/melbis/www/
 mv /tmp/melbis-shop-master/admin.here /var/melbis/www/
 mv /tmp/melbis-shop-master/robots.txt /var/melbis/www/
 

@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.360 @ 2026-08-06
+ * @version 6.5.0.370 @ 2026-08-10
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -182,6 +182,9 @@ table={DBNICK}_oper|id|name
 257=Module und Optionen
 258=Abrufen
 259=Speichern
+417=KI-Einstellungen
+418=Abrufen
+419=Speichern
 8=Installation
 9=Daten abrufen
 10=Daten speichern
@@ -243,17 +246,32 @@ table={DBNICK}_oper|id|name
 337=ID generieren
 86=Statistik aktualisieren
 347=KI-Assistent
-389=Konfiguration abrufen
-391=Projektstruktur abrufen
-388=Sperrliste abrufen
-384=Cache-Bereinigung durchführen
+408=Speicher
+409=Liste abrufen
+410=Laden
+411=Speichern
+412=Löschen
+413=Vollzugriff
+407=Werkzeuge
+415=Liste abrufen
+416=Ausführen
+351=Direktzugriff
 343=Shop-Dateien
 344=Hinzufügen
 345=Löschen
 346=Laden
-351=Entwicklungsdateien
-390=Liste abrufen
+348=Datenbank
+349=Daten lesen
+350=Daten ändern
+388=Sperrliste abrufen
+421=Entwicklung
 383=Text in Dateien suchen
+384=Cache-Bereinigung durchführen
+414=Karte
+389=Konfiguration abrufen
+390=Liste abrufen
+391=Projektstruktur abrufen
+392=Datenstruktur abrufen
 403=Vorlagensatz
 404=Hinzufügen
 405=Umbenennen
@@ -292,10 +310,6 @@ table={DBNICK}_oper|id|name
 385=Dateiversionen
 386=Liste abrufen
 387=Inhalt abrufen
-348=Datenbank
-392=Struktur abrufen
-349=Daten lesen
-350=Daten ändern
 268=System
 5=Sperren
 6=Liste abrufen
@@ -310,9 +324,6 @@ table={DBNICK}_oper|id|name
 
 table={DBNICK}_user|id|name
 1=Administrator
-2=Claude-Berater
-3=Claude-Entwickler
 
 table={DBNICK}_user_group|id|name
 1=Administratoren
-2=KI-Assistenten

@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.360 @ 2026-08-06
+ * @version 6.5.0.370 @ 2026-08-10
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -182,6 +182,9 @@ table={DBNICK}_oper|id|name
 257=Moduli e opzioni
 258=Ottenere
 259=Salvare
+417=Impostazioni AI
+418=Ottenere
+419=Salvare
 8=Installazione
 9=Ottenere dati
 10=Salvare dati
@@ -243,17 +246,32 @@ table={DBNICK}_oper|id|name
 337=Genera ID
 86=Aggiornare statistiche
 347=Assistente IA
-389=Ottenere la configurazione
-391=Ottenere la struttura del progetto
-388=Ottenere elenco dei blocchi
-384=Eseguire pulizia cache
+408=Memoria
+409=Ottenere elenco
+410=Caricare
+411=Salvare
+412=Eliminare
+413=Accesso completo
+407=Strumenti
+415=Ottenere elenco
+416=Eseguire
+351=Accesso diretto
 343=File del negozio
 344=Aggiungere
 345=Eliminare
 346=Caricare
-351=File di sviluppo
-390=Ottenere elenco
+348=Database
+349=Lettura dei dati
+350=Modifica dei dati
+388=Ottenere elenco dei blocchi
+421=Sviluppo
 383=Ricerca testo nei file
+384=Eseguire pulizia cache
+414=Mappa
+389=Ottenere la configurazione
+390=Ottenere elenco
+391=Ottenere la struttura del progetto
+392=Ottenere la struttura dei dati
 403=Set di modelli
 404=Aggiungere
 405=Rinominare
@@ -292,10 +310,6 @@ table={DBNICK}_oper|id|name
 385=Versioni dei file
 386=Ottenere elenco
 387=Ottenere contenuto
-348=Database
-392=Ottenere la struttura
-349=Lettura dei dati
-350=Modifica dei dati
 268=Sistema
 5=Blocchi
 6=Ottenere elenco
@@ -310,9 +324,6 @@ table={DBNICK}_oper|id|name
 
 table={DBNICK}_user|id|name
 1=Amministratore
-2=Claude consulente
-3=Claude sviluppatore
 
 table={DBNICK}_user_group|id|name
 1=Amministratori
-2=Assistenti IA

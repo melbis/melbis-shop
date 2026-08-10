@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.360 @ 2026-08-06
+ * @version 6.5.0.370 @ 2026-08-10
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -182,6 +182,9 @@ table={DBNICK}_oper|id|name
 257=Modules and Options
 258=Get
 259=Save
+417=AI Settings
+418=Get
+419=Save
 8=Installation
 9=Get data
 10=Save data
@@ -243,17 +246,32 @@ table={DBNICK}_oper|id|name
 337=Generate ID
 86=Refresh Statistics
 347=AI Assistant
-389=Get configuration
-391=Get project structure
-388=Get lock list
-384=Clear cache
+408=Memory
+409=Get list
+410=Load
+411=Save
+412=Delete
+413=Full access
+407=Tools
+415=Get list
+416=Execute
+351=Direct access
 343=Store files
 344=Add
 345=Delete
 346=Load
-351=Development files
-390=Get list
+348=Database
+349=Read data
+350=Modify data
+388=Get lock list
+421=Development
 383=Search text in files
+384=Clear cache
+414=Map
+389=Get configuration
+390=Get list
+391=Get project structure
+392=Get data structure
 403=Template Set
 404=Add
 405=Rename
@@ -292,10 +310,6 @@ table={DBNICK}_oper|id|name
 385=File versions
 386=Get list
 387=Get content
-348=Database
-392=Get structure
-349=Read data
-350=Modify data
 268=System
 5=Locks
 6=Get list
@@ -310,9 +324,6 @@ table={DBNICK}_oper|id|name
 
 table={DBNICK}_user|id|name
 1=Administrator
-2=Claude Consultant
-3=Claude Developer
 
 table={DBNICK}_user_group|id|name
 1=Administrators
-2=AI Assistants

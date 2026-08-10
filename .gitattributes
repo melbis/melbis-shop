@@ -1,3 +1,8 @@
+# Everything here runs on the Linux server - sources, scripts, reference data.
+# One rule instead of a list of extensions: whatever is added later is LF too,
+# and text=auto still recognizes binaries and leaves them alone.
+* text=auto eol=lf
+
 # Exclude files from GitHub release zip
 .github/ export-ignore
 readme.md export-ignore

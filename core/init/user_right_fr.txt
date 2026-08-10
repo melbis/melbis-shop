@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.360 @ 2026-08-06
+ * @version 6.5.0.370 @ 2026-08-10
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -182,6 +182,9 @@ table={DBNICK}_oper|id|name
 257=Modules et options
 258=Obtenir
 259=Enregistrer
+417=Paramètres IA
+418=Obtenir
+419=Enregistrer
 8=Installation
 9=Obtenir les données
 10=Enregistrer les données
@@ -243,17 +246,32 @@ table={DBNICK}_oper|id|name
 337=Générer un ID
 86=Mettre à jour les statistiques
 347=Assistant IA
-389=Obtenir la configuration
-391=Obtenir la structure du projet
-388=Obtenir la liste des verrouillages
-384=Effectuer le nettoyage du cache
+408=Mémoire
+409=Obtenir la liste
+410=Charger
+411=Enregistrer
+412=Supprimer
+413=Accès complet
+407=Outils
+415=Obtenir la liste
+416=Exécuter
+351=Accès direct
 343=Fichiers de la boutique
 344=Ajouter
 345=Supprimer
 346=Charger
-351=Fichiers de développement
-390=Obtenir la liste
+348=Base de données
+349=Lecture des données
+350=Modification des données
+388=Obtenir la liste des verrouillages
+421=Développement
 383=Recherche de texte dans les fichiers
+384=Effectuer le nettoyage du cache
+414=Carte
+389=Obtenir la configuration
+390=Obtenir la liste
+391=Obtenir la structure du projet
+392=Obtenir la structure des données
 403=Ensemble de modèles
 404=Ajouter
 405=Renommer
@@ -292,10 +310,6 @@ table={DBNICK}_oper|id|name
 385=Versions des fichiers
 386=Obtenir la liste
 387=Obtenir le contenu
-348=Base de données
-392=Obtenir la structure
-349=Lecture des données
-350=Modification des données
 268=Système
 5=Verrouillages
 6=Obtenir la liste
@@ -310,9 +324,6 @@ table={DBNICK}_oper|id|name
 
 table={DBNICK}_user|id|name
 1=Administrateur
-2=Claude consultant
-3=Claude développeur
 
 table={DBNICK}_user_group|id|name
 1=Administrateurs
-2=Assistants IA
