@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.400 @ 2026-08-19
+ * @version 6.5.0.401 @ 2026-08-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -184,7 +184,7 @@ INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_
 INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('417', '267', '1', '175', '1', '', '2000-01-01', '2000-01-01 23:59:59');
 INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('418', '417', '2', '176', '0', 'GET_AGENT_OPTION', '2000-01-01', '2000-01-01 23:59:59');
 INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('419', '417', '2', '177', '0', 'PUT_AGENT_OPTION', '2000-01-01', '2000-01-01 23:59:59');
-INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('423', '417', '2', '178', '0', 'TOOL_EXPORT', '2000-01-01', '2000-01-01 23:59:59');
+INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('423', '417', '2', '178', '0', 'TOOL_AGENT_EXPORT', '2000-01-01', '2000-01-01 23:59:59');
 INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('8', '267', '1', '179', '1', '', '2000-01-01', '2000-01-01 23:59:59');
 INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('9', '8', '2', '180', '0', 'LOAD_SERVER_PARAMS', '2000-01-01', '2000-01-01 23:59:59');
 INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('10', '8', '2', '181', '0', 'SAVE_SERVER_PARAMS', '2000-01-01', '2000-01-01 23:59:59');
