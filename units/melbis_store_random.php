@@ -1,50 +1,51 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.370 @ 2026-08-10
+ * @version 6.5.0.400 @ 2026-08-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
  **************************************************************************************************/
 
+namespace MELBIS_STORE_RANDOM;
 
-/** 
- * Function MELBIS_STORE_RANDOM
+/**
+ * Function Main
  **/
-function MELBIS_STORE_RANDOM($mVars)
-{ 
-    // Create 
+function Main($mVars)
+{
+    // Create
     $tpl = MELBIS()->TplCreate();
-                       
+
     // Vars
     $how = $mVars['how'];
-    
-    // Get random goods
+
+    // Get random goods - RAND() scans the table, fine for a small catalogue
     $command = "SELECT s.id
                   FROM {DBNICK}_store s
                   JOIN {DBNICK}_topic_store ts
                     ON s.id = ts.store_id
                   JOIN {DBNICK}_topic t
-                    ON t.id = ts.topic_id                    
-                 WHERE s.no_visible = 0   
+                    ON t.id = ts.topic_id
+                 WHERE s.no_visible = 0
                    AND t.kind_key = 'kGoods'
               GROUP BY s.id
-              ORDER BY s.id
-                 LIMIT :HOW 
-                ";   
+              ORDER BY RAND()
+                 LIMIT :HOW
+                ";
     $param = [
         'how' => $how
-        ];                 
+        ];
     $goods = MELBIS()->SqlSelect(__LINE__, $command, $param);
 
     // Goods
-    MELBIS()->TplAssign($tpl, 'GOODS', $goods);   
-                                                         
-    // Save store for static      
-    MELBIS()->EnumSet('store', array_column($goods, 'id'));                
+    MELBIS()->TplAssign($tpl, 'GOODS', $goods);
+
+    // Save store for static
+    MELBIS()->EnumSet('store', array_column($goods, 'id'));
 
     // Final
     return MELBIS()->TplFinal($tpl, 'main');
-} 
+}
 
 
 

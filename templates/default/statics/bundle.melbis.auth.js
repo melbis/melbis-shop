@@ -1,8 +1,8 @@
 /*       Melbis Shop auto bundle report       */
-/*         Create: 2026-08-03 17:55:32        */
+/*         Create: 2026-08-15 22:26:44        */
 
 /*   #10   scripts.js                      42 ln     1 kb    /templates/default/units/melbis_web_auth/scripts.js           */
-/*   #15   scripts.js                     173 ln     5 kb    /templates/default/units/melbis_web_sample/scripts.js         */
+/*   #15   scripts.js                     171 ln     5 kb    /templates/default/units/melbis_web_sample/scripts.js         */
 
 
 
@@ -48,7 +48,6 @@ $('#melbis_form_auth').submit(function(event)
 
 
 
-
 var melbis_detail_num = 0;
 
 // System Logout
@@ -85,7 +84,7 @@ function melbis_init_table()
             {    
                 params = $.extend(params, 
                 { 
-                    func: 'get_cataloge', 
+                    func: 'GetCataloge', 
                 });
         
                 return params;
@@ -134,7 +133,7 @@ function melbis_detail_goods_init(table_id, row_id)
         contentType: 'application/x-www-form-urlencoded',
         queryParams: function(p)
             {
-                p.func = 'get_goods';
+                p.func = 'GetGoods';
                 p.id = row_id;                
                 return p;
             },              
@@ -219,4 +218,3 @@ function melbis_fmt_status(value, row)
     
     return res;
 }
-

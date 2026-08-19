@@ -1,18 +1,7 @@
 {
-    "description": "",
+    "description": "Web module authorization",
     "parameters": "",
-    "tables": [
-        "oper=1",
-        "oper_right=1",
-        "tmp_web_key=1",
-        "user=1",
-        "web_inside=1",
-        "web_inside_right=1",
-        "web_key=1",
-        "web_key_right=1",
-        "web_outside=1",
-        "web_outside_right=1"
-    ],
+    "tables": [],
     "includes": [],
     "cache_on": "1",
     "cache_time": "0",

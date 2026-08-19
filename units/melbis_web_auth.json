@@ -2,7 +2,9 @@
     "description": "Web auth module",
     "parameters": "",
     "tables": [],
-    "includes": [],
+    "includes": [
+        ""
+    ],
     "cache_on": "0",
     "cache_time": "0",
     "lazy_load": "0",

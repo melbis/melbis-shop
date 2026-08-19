@@ -1,11 +1,10 @@
 {
-    "description": "",
-    "parameters": "",
-    "tables": [
-        "topic=0",
-        "topic_sub=0"
+    "description": "Topic reading for the storefront",
+    "parameters": "TOPIC",
+    "tables": [],
+    "includes": [
+        ""
     ],
-    "includes": [],
     "cache_on": "1",
     "cache_time": "0",
     "lazy_load": "0",

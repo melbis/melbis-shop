@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.370 @ 2026-08-10
+ * @version 6.5.0.400 @ 2026-08-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -112,9 +112,9 @@ INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('6
 INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('123', 'HTML_TAG', '67', '2', '103', '0');
 INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('124', 'HTML_CLASS', '67', '2', '104', '0');
 INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('125', 'HTML_TEMPLATE', '67', '2', '105', '0');
-UPDATE {DBNICK}_generator SET gen_value = 155 WHERE table_name = 'key';
+UPDATE {DBNICK}_generator SET gen_value = 156 WHERE table_name = 'key';
 
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('1', 'INFO_KIND_KEY', 'kDefault', '1', '1');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('1', 'INFO_KIND_KEY', 'kDefault', '1', '2');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('3', 'FILES_INFO', 'kBase', '1', '1');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('4', 'FILES_INFO_VALUE', 'kBase', '1', '1');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('5', 'FILES_INFO', 'kDefault', '0', '4');
@@ -135,10 +135,10 @@ INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('4
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('41', 'TOPIC_ALT_KIND_KEY', 'kCenter', '0', '2');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('70', 'STORE_KIND_KEY', 'kDefault', '1', '70');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('71', 'STORE_TEMPL_KEY', 'kDefault', '1', '71');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('72', 'STORE_STATUS_KEY', 'kExist', '1', '72');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('73', 'STORE_STATUS_KEY', 'kAbsent', '1', '73');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('74', 'STORE_STATUS_KEY', 'kExistOrder', '0', '74');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('75', 'STORE_STATUS_KEY', 'kAbsentOrder', '0', '75');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('72', 'STORE_STATUS_KEY', 'kExist', '1', '1');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('73', 'STORE_STATUS_KEY', 'kAbsent', '1', '2');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('74', 'STORE_STATUS_KEY', 'kExistOrder', '0', '3');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('75', 'STORE_STATUS_KEY', 'kAbsentOrder', '0', '4');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('76', 'FILES_STORE', 'kBase', '1', '76');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('78', 'FILES_STORE', 'kDescr', '1', '78');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('79', 'FILES_STORE', 'kDefault', '0', '79');
@@ -161,9 +161,9 @@ INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('1
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('117', 'FIELD_VALUE_KIND_KEY', 'kDefault', '1', '117');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('120', 'ORDER_OPTION_KIND_KEY', 'kDefault', '1', '120');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('121', 'ORDER_OPTION_VALUE_KIND_KEY', 'kDefault', '1', '121');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('123', 'MODULE_ORDER_VERSION_CALC', 'melbis_inc_logic.php', '0', '123');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('125', 'MODULE_ORDER_VERSION_ADD', 'melbis_inc_logic.php', '0', '125');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('131', 'PARAM_KIND_KEY', 'kDefault', '1', '131');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('123', 'MODULE_ORDER_VERSION_CALC', 'melbis_inc_logic_order_calc.php', '0', '123');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('125', 'MODULE_ORDER_VERSION_ADD', 'melbis_inc_logic_order_edit.php', '0', '125');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('131', 'PARAM_KIND_KEY', 'kDefault', '1', '2');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('135', 'INFO_TYPE_KEY', 'kSet', '1', '135');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('137', 'INFO_TYPE_KEY', 'kDecimal', '1', '137');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('138', 'STORE_STATE_KEY', 'kDefault', '1', '138');
@@ -179,7 +179,7 @@ INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('1
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('156', 'FILES_BRAND', 'kDescr', '1', '156');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('157', 'FILES_BRAND', 'kDefault', '0', '157');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('159', 'ORDER_STORE_OPTION_KIND_KEY', 'kDefault', '1', '159');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('161', 'MODULE_NOTIFICATION', 'melbis_inc_logic.php', '0', '161');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('161', 'MODULE_NOTIFICATION', 'melbis_inc_logic_notify.php', '0', '161');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('163', 'EVENT_NOTIFICATION', 'kNewOrder', '0', '163');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('164', 'EVENT_NOTIFICATION', 'kNewClient', '0', '164');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('178', 'FILES_KEY_VALUE', 'kAttach', '1', '178');
@@ -247,10 +247,10 @@ INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('3
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('313', 'FILES_FIELD', 'kBase', '1', '313');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('314', 'FILES_FIELD', 'kDescr', '1', '314');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('315', 'FILES_FIELD', 'kDefault', '0', '315');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('316', 'FILES_ORDER_OPTION', 'kBase', '0', '316');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('317', 'FILES_ORDER_OPTION', 'kDescr', '0', '317');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('316', 'FILES_ORDER_OPTION', 'kBase', '1', '316');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('317', 'FILES_ORDER_OPTION', 'kDescr', '1', '317');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('318', 'FILES_ORDER_OPTION', 'kDefault', '0', '318');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('319', 'FILES_ORDER_OPTION_VALUE', 'kBase', '1', '319');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('320', 'FILES_ORDER_OPTION_VALUE', 'kDescr', '1', '320');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('321', 'FILES_ORDER_OPTION_VALUE', 'kDefault', '0', '321');
-UPDATE {DBNICK}_generator SET gen_value = 321 WHERE table_name = 'key_value';
+UPDATE {DBNICK}_generator SET gen_value = 397 WHERE table_name = 'key_value';

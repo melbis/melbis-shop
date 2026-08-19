@@ -1,37 +1,45 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.370 @ 2026-08-10
+ * @version 6.5.0.400 @ 2026-08-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
  **************************************************************************************************/
+                    
+namespace MELBIS_BASKET;  
 
+use MELBIS_INC_LOGIC_ORDER as LOGIC_ORDER;
+use MELBIS_INC_LOGIC_ORDER_CALC as LOGIC_CALC;
+use MELBIS_INC_LOGIC_ORDER_EDIT as LOGIC_EDIT;
+
+ 
 
 /** 
- * Function MELBIS_BASKET
+ * Function Main
  **/
-function MELBIS_BASKET($mVars)
+function Main($mVars)
 { 
-    return MELBIS()->UnitFunc($mVars['post']['func'], $mVars);  
+    return MELBIS()->UnitFunc($mVars['post']['func'] ?? '', $mVars);  
 } 
 
 
 /** 
- * Function MELBIS_BASKET_plus
+ * Function Plus
  **/
-function MELBIS_BASKET_plus($mVars)
+function Plus($mVars)
 { 
     // Vars
-    $store_id = (int) $mVars['post']['id'];
+    $store_id = (int) ( $mVars['post']['id'] ?? 0 );
+    if ( $store_id < 1 ) return '';
     
     // Get order    
-    $version = MELBIS()->SessionGetValue('order') ?? MELBIS_INC_LOGIC_order_create();
+    $version = MELBIS()->SessionGetValue('order') ?? LOGIC_ORDER\Create();
 
     // Add goods
-    $version = MELBIS_INC_LOGIC_order_goods_add($version, $store_id);
+    $version = LOGIC_ORDER\GoodsAdd($version, $store_id);
      
     // Calculate
-    $version = MELBIS_INC_LOGIC_order_calc(null, $version);
+    $version = LOGIC_CALC\Run(null, $version);
              
     // Save version
     MELBIS()->SessionSetValue('order', $version);    
@@ -41,34 +49,35 @@ function MELBIS_BASKET_plus($mVars)
 
 
 /** 
- * Function MELBIS_BASKET_minus
+ * Function Minus
  **/
-function MELBIS_BASKET_minus($mVars)
+function Minus($mVars)
 { 
     // Vars
-    $store_id = (int) $mVars['post']['id'];
+    $store_id = (int) ( $mVars['post']['id'] ?? 0 );
+    if ( $store_id < 1 ) return '';
     
     // Get version    
     $version = MELBIS()->SessionGetValue('order') ?? [];
 
     // Remove goods
-    $version = MELBIS_INC_LOGIC_order_goods_remove($version, $store_id);    
+    $version = LOGIC_ORDER\GoodsRemove($version, $store_id);    
     
     // Calculate
-    $version = MELBIS_INC_LOGIC_order_calc(null, $version);
+    $version = LOGIC_CALC\Run(null, $version);
              
     // Save version
-    MELBIS()->SessionSetValue('order', $version);        
+    MELBIS()->SessionSetValue('order', $version);            
                                
     // Return goods list
-    return MELBIS_BASKET_goods($mVars);     
+    return Goods($mVars);     
 } 
 
 
 /** 
- * Function MELBIS_BASKET_goods
+ * Function Goods
  **/
-function MELBIS_BASKET_goods($mVars)
+function Goods($mVars)
 { 
     // Vars    
     $version = MELBIS()->SessionGetValue('order') ?? [];                                 
@@ -84,9 +93,9 @@ function MELBIS_BASKET_goods($mVars)
 
 
 /** 
- * Function MELBIS_BASKET_fields
+ * Function Fields
  **/
-function MELBIS_BASKET_fields($mVars)
+function Fields($mVars)
 {     
     // Vars    
     $version = MELBIS()->SessionGetValue('order') ?? []; 
@@ -100,32 +109,23 @@ function MELBIS_BASKET_fields($mVars)
     // Fields
     $client_fields = $version['client'];                                    
                   
-    $command = "SELECT f.id AS field_id, 
-                       f.fixed_set, 
-                       COUNT(fv.id) AS has_value 
-                  FROM {DBNICK}_field f
-             LEFT JOIN {DBNICK}_field_value fv
-                    ON fv.field_id = f.id
-              GROUP BY f.id      
-                ";              
-    $fields = MELBIS()->SqlSelect(__LINE__, $command);     
-    $fields = array_column($fields, null, 'field_id');
+    // The registry answers every field with its values at once, in the order of the shop
+    $field_set = array_column(MELBIS()->SysFieldValues(), null, 'id');
+    
     foreach ( $client_fields as &$row ) 
     {              
-        $row = array_merge($row, $fields[$row['field_id']] ?? []);                             
-        if ( $row['has_value'] )
-        {        
-            $command = "SELECT *
-                          FROM {DBNICK}_field_value
-                         WHERE field_id = :FIELD_ID 
-                      ORDER BY pos    
-                    ";                      
-            $param = [
-                'field_id' => $row['field_id']
-                ];        
-            $row['value_list'] = MELBIS()->SqlSelect(__LINE__, $command, $param);        
+        $field = $field_set[$row['field_id']] ?? [];
+        $row['fixed_set'] = $field['fixed_set'] ?? 0;
+        $row['value_list'] = $field['value'] ?? [];
+        
+        // The value the order holds is the one the list has to show as chosen
+        foreach ( $row['value_list'] as &$value ) 
+        {
+            $value['is_selected'] = ( $value['id'] == $row['value_id'] );
         }
+        unset($value);
     }    
+    unset($row);
     
     MELBIS()->TplAssign($tpl, 'FIELDS', $client_fields);    
                                                               
@@ -135,9 +135,9 @@ function MELBIS_BASKET_fields($mVars)
 
 
 /** 
- * Function MELBIS_BASKET_options
+ * Function Options
  **/
-function MELBIS_BASKET_options($mVars)
+function Options($mVars)
 { 
     // Vars    
     $version = MELBIS()->SessionGetValue('order') ?? [];  
@@ -151,32 +151,23 @@ function MELBIS_BASKET_options($mVars)
     // Options
     $order_options = $version['option'];                                    
                   
-    $command = "SELECT oo.id AS option_id, 
-                       oo.fixed_set, 
-                       COUNT(oov.id) AS has_value 
-                  FROM {DBNICK}_order_option oo
-             LEFT JOIN {DBNICK}_order_option_value oov
-                    ON oov.option_id = oo.id
-              GROUP BY oo.id      
-                ";              
-    $options = MELBIS()->SqlSelect(__LINE__, $command);     
-    $options = array_column($options, null, 'option_id');
+    // The registry answers every option with its values at once, in the order of the shop
+    $option_set = array_column(MELBIS()->SysOrderOptionValues(), null, 'id');
+    
     foreach ( $order_options as &$row ) 
     {              
-        $row = array_merge($row, $options[$row['option_id']] ?? []);                             
-        if ( $row['has_value'] )
-        {        
-            $command = "SELECT *
-                          FROM {DBNICK}_order_option_value
-                         WHERE option_id = :OPTION_ID 
-                      ORDER BY pos    
-                    ";                      
-            $param = [
-                'option_id' => $row['option_id']
-                ];        
-            $row['value_list'] = MELBIS()->SqlSelect(__LINE__, $command, $param);        
+        $option = $option_set[$row['option_id']] ?? [];
+        $row['fixed_set'] = $option['fixed_set'] ?? 0;
+        $row['value_list'] = $option['value'] ?? [];
+        
+        // The value the order holds is the one the list has to show as chosen
+        foreach ( $row['value_list'] as &$value ) 
+        {
+            $value['is_selected'] = ( $value['id'] == $row['value_id'] );
         }
+        unset($value);
     }    
+    unset($row);
     
     MELBIS()->TplAssign($tpl, 'OPTIONS', $order_options);    
                                                               
@@ -186,16 +177,18 @@ function MELBIS_BASKET_options($mVars)
 
 
 /** 
- * Function MELBIS_BASKET_save
+ * Function Save
  **/
-function MELBIS_BASKET_save($mVars)
+function Save($mVars)
 { 
     // Vars
     $data['result'] = 'OK';
     $data['message'] = '';    
     
-    // Vars    
+    // Vars - an order not started yet holds no lists at all    
     $version = MELBIS()->SessionGetValue('order') ?? [];  
+    $version['client'] = $version['client'] ?? [];
+    $version['option'] = $version['option'] ?? [];
     
     // Update fields     
     foreach ( $version['client'] as &$row )
@@ -218,7 +211,7 @@ function MELBIS_BASKET_save($mVars)
     unset($row);
     
     // Calculate
-    $version = MELBIS_INC_LOGIC_order_calc(null, $version);
+    $version = LOGIC_CALC\Run(null, $version);
     
     // Save version
     MELBIS()->SessionSetValue('order', $version);                                          
@@ -241,8 +234,8 @@ function MELBIS_BASKET_save($mVars)
         return json_encode($data);  
     }     
     
-    // Create order    
-    $result = MELBIS_INC_LOGIC_order_edit(null, $version);
+    // Create order                
+    $result = LOGIC_EDIT\Run(null, $version);
     
     // Error exists?
     if ( $result['value'] != 'OK' )

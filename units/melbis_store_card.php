@@ -1,48 +1,54 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.370 @ 2026-08-10
+ * @version 6.5.0.400 @ 2026-08-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
  **************************************************************************************************/
-  
 
-/** 
- * Function MELBIS_STORE_CARD
+namespace MELBIS_STORE_CARD;
+
+use MELBIS_INC_LOGIC_COMMON as LOGIC_COMMON;
+
+/**
+ * Function Main
  **/
-function MELBIS_STORE_CARD($mVars)
-{ 
-    // Create 
+function Main($mVars)
+{
+    // Create
     $tpl = MELBIS()->TplCreate();
-    
+
     // Vars
     $id = $mVars['id'];
-    $ids = MELBIS()->EnumGet('store', $id);            
-    
-    // Get goods                      
-    $command = "SELECT s.id, s.name, s.intro, s.update_time,
-                       IF(s.code_shop <> '', s.code_shop, s.id) AS code,
-                       IF(c.id IS NULL, s.price, 
-                        IF(c.division = 0, s.price*c.multiplex,
-                         IF(c.multiplex <> 0, s.price/c.multiplex, 0))) AS price_curr,
-                       kv.value_txt status_name                            
+
+    // Every goods id the page has collected - one query serves all the cards
+    $ids = MELBIS()->EnumGet('store', $id);
+
+    // Get goods - the key and the currency stay raw, the view and the logic convert
+    $command = "SELECT s.id, 
+                       s.name, 
+                       s.intro,       
+                       s.status_key,
+                       s.price, 
+                       s.price_curr_id,
+                       s.update_time,                        
+                       IF(s.code_shop <> '', s.code_shop, s.id) AS code
                   FROM {DBNICK}_store s
-             LEFT JOIN {DBNICK}_currency c
-                    ON c.id = s.price_curr_id             
-             LEFT JOIN {DBNICK}_key_value kv
-                    ON ( s.status_key = kv.key_name AND kv.key_code = 'STORE_STATUS_KEY' )                                  
-                 WHERE s.id IN ( $ids )                               
-                ";               
-    $store = MELBIS()->SqlSelectEnumFlat(__LINE__, $command, 'id', $id);    
-    if ( empty($store) ) return '';        
-    
+                 WHERE s.id IN ( $ids )
+                ";
+    $store = MELBIS()->SqlSelectEnumFlat(__LINE__, $command, 'id', $id);
+    if ( empty($store) ) return '';
+
+    // Price
+    $store['price_curr'] = LOGIC_COMMON\Price($store['price'], $store['price_curr_id']);
+
     // Assign
-    MELBIS()->TplAssign($tpl, $store);     
-    
+    MELBIS()->TplAssign($tpl, $store);
+
     // Final
     return MELBIS()->TplFinal($tpl, 'main');
-} 
-  
+}
+
 
 
 ?>

@@ -1,30 +1,52 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.370 @ 2026-08-10
+ * @version 6.5.0.400 @ 2026-08-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
  **************************************************************************************************/
-     
+
+namespace MELBIS_INC_WEB_CALLBACK;
+
 /** 
- * Function MELBIS_INC_WEB_CALLBACK
+ * Function Define
+ * Every entry point that draws these tags calls it at its own top level
  **/
-function MELBIS_INC_WEB_CALLBACK()
+function Define()
 {        
     // Register 
-    MELBIS()->DefineCallback('page_link', 'MELBIS_INC_WEB_CALLBACK_page_link');
+    MELBIS()->DefineCallback('TopicLink', TopicLink(...));
+    MELBIS()->DefineCallback('StoreLink', StoreLink(...));
+    MELBIS()->DefineCallback('StatusName', StatusName(...));
 }       
 
  
 
 /** 
- * Function MELBIS_INC_WEB_CALLBACK_page_link
+ * Function TopicLink
  **/
-function MELBIS_INC_WEB_CALLBACK_page_link($mVars)
+function TopicLink($mVars)
 { 
     $link = ( $mVars['kind_key'] == 'kLink' ) ? $mVars['link'] : '/?topic_id='.$mVars['id'];
     
     return $link;
+} 
+
+/** 
+ * Function StoreLink
+ **/
+function StoreLink($mVars)
+{ 
+    return '/?store_id='.$mVars[0];
+} 
+
+/** 
+ * Function StatusName
+ **/
+function StatusName($mVars)
+{ 
+    // The status of a goods is a key - its word lives in the base settings    
+    return MELBIS()->SysKeyValues('STORE_STATUS_KEY')[$mVars[0]] ?? '';
 } 
 
 

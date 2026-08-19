@@ -1,42 +1,45 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.370 @ 2026-08-10
+ * @version 6.5.0.400 @ 2026-08-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
  **************************************************************************************************/
 
+namespace MELBIS_STORE_IMAGE;
 
-/** 
- * Function MELBIS_STORE_IMAGE
+/**
+ * Function Main
  **/
-function MELBIS_STORE_IMAGE($mVars)
-{ 
-    // Create 
-    $tpl = MELBIS()->TplCreate();              
-        
+function Main($mVars)
+{
+    // Create
+    $tpl = MELBIS()->TplCreate();
+
     // Vars
-    $key = $mVars['key'];                            
+    $key = $mVars['key'];
     $id = $mVars['id'];
-    $ids = MELBIS()->EnumGet('store', $id);                          
-    
-    // Get image           
-    $command = "SELECT *
+
+    // Every goods id the page has collected - one query serves all the cards
+    $ids = MELBIS()->EnumGet('store', $id);
+
+    // Get image - elem_id keys the enum, the other two are what the view prints
+    $command = "SELECT elem_id, upload_time, file_name
                   FROM {DBNICK}_files_store
-                 WHERE kind_key = :KEY 
-                   AND elem_id IN ( $ids )               
-                ";                          
-    $param = [    
+                 WHERE kind_key = :KEY
+                   AND elem_id IN ( $ids )
+                ";
+    $param = [
         'key'   => $key
         ];
-    $image = MELBIS()->SqlSelectEnumFlat(__LINE__, $command, 'elem_id', $id, $param);                          
-               
+    $image = MELBIS()->SqlSelectEnumFlat(__LINE__, $command, 'elem_id', $id, $param);
+
     // Image
     MELBIS()->TplAssign($tpl, 'IMG', $image);
 
-    // Final    
+    // Final
     return MELBIS()->TplFinal($tpl, 'main');
-} 
+}
 
 
 

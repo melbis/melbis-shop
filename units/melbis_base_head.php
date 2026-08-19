@@ -1,21 +1,22 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.370 @ 2026-08-10
+ * @version 6.5.0.400 @ 2026-08-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
  **************************************************************************************************/
 
+namespace MELBIS_BASE_HEAD;
 
 /** 
- * Function MELBIS_BASE_HEAD
+ * Function Main
  **/
-function MELBIS_BASE_HEAD($mVars)
+function Main($mVars)
 { 
     // Create 
     $tpl = MELBIS()->TplCreate();   
     
-    // Main
+    // Final
     return MELBIS()->TplFinal($tpl, 'main');
 } 
 

@@ -1,0 +1,10 @@
+<h5 class="mt-4">Характеристики</h5>
+<ul class="list-group list-group-flush">
+    {#INFO}
+        <li class="list-group-item d-flex justify-content-between">
+            <span>{NAME|html}</span>
+            {*VALUE_DEC}<b>{VALUE_DEC|inums:2}</b>{VALUE_DEC*}
+            {*!VALUE_DEC}<b>{VALUE_TXT|html}</b>{VALUE_DEC*}
+        </li>
+    {INFO#}
+</ul>

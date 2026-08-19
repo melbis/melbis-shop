@@ -1,4 +1,3 @@
-
 var melbis_detail_num = 0;
 
 // System Logout
@@ -35,7 +34,7 @@ function melbis_init_table()
             {    
                 params = $.extend(params, 
                 { 
-                    func: 'get_cataloge', 
+                    func: 'GetCataloge', 
                 });
         
                 return params;
@@ -84,7 +83,7 @@ function melbis_detail_goods_init(table_id, row_id)
         contentType: 'application/x-www-form-urlencoded',
         queryParams: function(p)
             {
-                p.func = 'get_goods';
+                p.func = 'GetGoods';
                 p.id = row_id;                
                 return p;
             },              
@@ -169,4 +168,3 @@ function melbis_fmt_status(value, row)
     
     return res;
 }
-

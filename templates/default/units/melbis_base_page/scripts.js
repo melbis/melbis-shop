@@ -1,13 +1,12 @@
-
 // Basket
 //-------
 
-// Add to basket
-$('.melbis_goods').on('click', '.melbis_btn_add', function(event)
+// Add to basket - the button carries its goods, so the markup around it is free
+$(document).on('click', '.melbis_btn_add', function(event)
 {
-    var name = $(this).parents('.card').find('h4').text();
+    var name = $(this).data('name');
     $.post('/?mod=melbis_basket',        
-        { func: 'plus', id: $(this).data('id') },
+        { func: 'Plus', id: $(this).data('id') },
         function(data) 
         {             
             $('#melbis_win_basket .modal-body').html('<p>' + name + '</p><p>Product has been successfully added to your cart!</p>');
@@ -20,7 +19,7 @@ $('.melbis_goods').on('click', '.melbis_btn_add', function(event)
 $('#melbis_win_checkout').on('click', '.melbis_btn_remove', function(event)
 {    
     $.post('/?mod=melbis_basket',        
-        { func: 'minus', id: $(this).data('id') },
+        { func: 'Minus', id: $(this).data('id') },
         function(data) 
         {                                     
             $('#melbis_order_goods').html(data);                           
@@ -42,9 +41,9 @@ $('#melbis_win_checkout').on('show.bs.modal', function (event)
     $('#melbis_order_fields').html('<li class="d-flex justify-content-center"><div class="spinner-border m-3"><span class="sr-only"></span></div></li>');
     $('#melbis_order_goods').html('<li class="d-flex justify-content-center"><div class="spinner-border m-3"><span class="sr-only"></span></div></li>');
     $('#melbis_order_options').html('<li class="d-flex justify-content-center"><div class="spinner-border m-3"><span class="sr-only"></span></div></li>');
-    $.post('/?mod=melbis_basket', { func: 'fields' }, function(data) { $('#melbis_order_fields').html(data); } );
-    $.post('/?mod=melbis_basket', { func: 'goods' }, function(data) { $('#melbis_order_goods').html(data); } );
-    $.post('/?mod=melbis_basket', { func: 'options' }, function(data) { $('#melbis_order_options').html(data); } );       
+    $.post('/?mod=melbis_basket', { func: 'Fields' }, function(data) { $('#melbis_order_fields').html(data); } );
+    $.post('/?mod=melbis_basket', { func: 'Goods' }, function(data) { $('#melbis_order_goods').html(data); } );
+    $.post('/?mod=melbis_basket', { func: 'Options' }, function(data) { $('#melbis_order_options').html(data); } );       
 });
 
 
@@ -57,7 +56,7 @@ $('#melbis_btn_finish').on('click', function(event)
     }
         
     var form = $('#melbis_form_order').melbis_serial();
-    form.func = 'save';
+    form.func = 'Save';
     $.post('/?mod=melbis_basket', form, function(data) 
         {                     
             if ( data.result != 'OK' )
@@ -73,4 +72,3 @@ $('#melbis_btn_finish').on('click', function(event)
         }, 
         'json');                
 });
-

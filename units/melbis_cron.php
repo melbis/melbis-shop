@@ -1,16 +1,17 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.370 @ 2026-08-10
+ * @version 6.5.0.400 @ 2026-08-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
  **************************************************************************************************/
-                          
+
+namespace MELBIS_CRON;
 
 /** 
- * Function MELBIS_CRON
+ * Function Main
  **/
-function MELBIS_CRON($mVars)
+function Main($mVars)
 {                          
     // Header
     header('Content-Type: text/plain; charset=utf-8');

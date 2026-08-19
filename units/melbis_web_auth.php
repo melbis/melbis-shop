@@ -1,15 +1,20 @@
 <?php
-        
+/***************************************************************************************************
+ * @version 6.5.0.400 @ 2026-08-19
+ * @copyright 2002-2026 Melbis
+ * @link https://melbis.com
+ * @author Dmytro Kasianov
+ **************************************************************************************************/
+
+namespace MELBIS_WEB_AUTH;
+
 /** 
- * Function MELBIS_WEB_AUTH
+ * Function Main
  **/
-function MELBIS_WEB_AUTH($mVars)
+function Main($mVars)
 { 
     // Create 
     $tpl = MELBIS()->TplCreate();     
-        
-    // Scripts
-    MELBIS()->TplParse($tpl, 'SCRIPTS', 'scripts');                                                     
                
     // Final
     return MELBIS()->TplFinal($tpl, 'main');

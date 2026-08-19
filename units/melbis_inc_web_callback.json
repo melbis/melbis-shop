@@ -1,6 +1,6 @@
 {
-    "description": "",
-    "parameters": "",
+    "description": "Callback template functions",
+    "parameters": "CALLBACK",
     "tables": [],
     "includes": [],
     "cache_on": "1",

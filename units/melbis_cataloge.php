@@ -1,48 +1,32 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.370 @ 2026-08-10
+ * @version 6.5.0.400 @ 2026-08-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
  **************************************************************************************************/
-      
- 
+
+namespace MELBIS_CATALOGE;
+
+use MELBIS_INC_WEB_TOPIC as TOPIC;
+
 /** 
- * Function MELBIS_CATALOGE
+ * Function Main
  **/
-function MELBIS_CATALOGE($mVars)
+function Main($mVars)
 {                      
     // Create 
     $tpl = MELBIS()->TplCreate();    
     
-    // Find root
-    $command = "SELECT id, tindex, tlevel
+    // Find root - the catalogue starts from the section marked kFirst
+    $command = "SELECT id, tlevel
                   FROM {DBNICK}_topic
                  WHERE kind_key = 'kFirst'              
                ";                    
     $root = MELBIS()->SqlSelectFlat(__LINE__, $command);         
         
-    // Get item
-    $command = "SELECT t.id, t.name, t.kind_key, t.link, t_s.sub                       
-                  FROM {DBNICK}_topic t                                                                           
-             LEFT JOIN ( SELECT tindex, COUNT(*) AS sub 
-                           FROM {DBNICK}_topic
-                          WHERE no_visible = 0
-                            AND tlevel = :TLEVEL
-                       GROUP BY tindex
-                       ) AS t_s 
-                    ON t.id = t_s.tindex                                                            
-                 WHERE t.tindex = :TINDEX
-                   AND t.no_visible = 0                                                                
-              ORDER BY t.absindex   
-                ";                                       
-    $param = [ 
-        'tlevel' => $root['tlevel'] + 2, 
-        'tindex' => $root['id'] 
-        ];                
-    $menu = MELBIS()->SqlSelect(__LINE__, $command, $param);
-    
     // Menu        
+    $menu = TOPIC\Menu($root['id'], $root['tlevel']);
     MELBIS()->TplAssign($tpl, 'MENU', $menu);              
     
     // Final    

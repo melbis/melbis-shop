@@ -1,14 +1,11 @@
 {
     "description": "Basket actions",
     "parameters": "get: serial, post: serial",
-    "tables": [
-        "field=1",
-        "field_value=1",
-        "order_option=1",
-        "order_option_value=1"
-    ],
+    "tables": [],
     "includes": [
-        "melbis_inc_logic.php=1"
+        "melbis_inc_logic_order.php=1",
+        "melbis_inc_logic_order_calc.php=1",
+        "melbis_inc_logic_order_edit.php=1"
     ],
     "cache_on": "0",
     "cache_time": "0",

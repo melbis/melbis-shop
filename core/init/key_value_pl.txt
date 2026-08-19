@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.370 @ 2026-08-10
+ * @version 6.5.0.400 @ 2026-08-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -115,7 +115,7 @@ table={DBNICK}_key|id|name
 125=Szablony
 
 table={DBNICK}_key_value|id|value_txt
-1=Domyślnie
+1=kDefault
 3=Plik źródłowy
 4=Plik źródłowy
 5=Domyślna ikona
@@ -162,8 +162,8 @@ table={DBNICK}_key_value|id|value_txt
 117=Domyślnie
 120=Domyślnie
 121=Domyślnie
-123=MELBIS_INC_LOGIC_order_calc
-125=MELBIS_INC_LOGIC_order_edit
+123=MELBIS_INC_LOGIC_ORDER_CALC\Run
+125=MELBIS_INC_LOGIC_ORDER_EDIT\Run
 131=Domyślnie
 135=Zestaw wartości
 137=Liczba
@@ -180,7 +180,7 @@ table={DBNICK}_key_value|id|value_txt
 156=Plik z opisu
 157=Domyślna ikona
 159=Domyślnie
-161=MELBIS_INC_LOGIC_notify_events
+161=MELBIS_INC_LOGIC_NOTIFY\Run
 163=Nowe zamówienie
 164=Nowy klient
 178=Dodatkowy plik
@@ -232,7 +232,7 @@ table={DBNICK}_key_value|id|value_txt
 296=Sekcje
 297=Towary
 298=Tagi
-299=MELBIS_INC_LANG_translate
+299=MELBIS_INC_LANG\Translate
 300=<BLOCKQUOTE> Cytat
 301=<CODE> Kod
 302=<SMALL> Pomniejszony

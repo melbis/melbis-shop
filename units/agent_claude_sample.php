@@ -1,17 +1,18 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.370 @ 2026-08-10
+ * @version 6.5.0.400 @ 2026-08-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
  **************************************************************************************************/
 
+namespace AGENT_CLAUDE_SAMPLE;
 
 /**
- * Function AGENT_CLAUDE_SAMPLE
+ * Function Main
  * Says what the entry point hands a module: the names it got and what it can do with them
  **/
-function AGENT_CLAUDE_SAMPLE($mVars)
+function Main($mVars)
 {
     $post = $mVars['post'] ?? [];
 

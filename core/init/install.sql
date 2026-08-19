@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.370 @ 2026-08-10
+ * @version 6.5.0.400 @ 2026-08-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -335,10 +335,26 @@ CREATE TABLE {DBNICK}_agent_tool (
    tlevel 	   INT UNSIGNED DEFAULT '0' NOT NULL,
    absindex 	INT UNSIGNED DEFAULT '0' NOT NULL,
    folder 	   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
-   use_unit 	CHAR(100) DEFAULT '' NOT NULL,
-   use_func 	CHAR(100) DEFAULT '' NOT NULL,
+   unit 	      CHAR(100) DEFAULT '' NOT NULL,
    PRIMARY KEY (id),
-   KEY IDX1 (use_func)
+   KEY IDX1 (tindex),
+   KEY IDX2 (absindex),
+   KEY IDX3 (unit)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
+/**
+ * Table agent_tool_command
+ **/
+DROP TABLE IF EXISTS {DBNICK}_agent_tool_command;
+CREATE TABLE {DBNICK}_agent_tool_command (
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   tool_id 	   INT UNSIGNED DEFAULT NULL,
+   name 	      CHAR(100) DEFAULT '' NOT NULL,
+   descr 	   MEDIUMTEXT DEFAULT ('') NOT NULL,
+   pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   PRIMARY KEY (id),
+   KEY IDX1 (tool_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -348,12 +364,15 @@ CREATE TABLE {DBNICK}_agent_tool (
 DROP TABLE IF EXISTS {DBNICK}_agent_tool_param;
 CREATE TABLE {DBNICK}_agent_tool_param (
    id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
-   tool_id 	   INT UNSIGNED DEFAULT NULL,
-   command 	   CHAR(100) DEFAULT '' NOT NULL,
+   command_id 	INT UNSIGNED DEFAULT NULL,
+   name 	      CHAR(100) DEFAULT '' NOT NULL,
    descr 	   MEDIUMTEXT DEFAULT ('') NOT NULL,
+   value_type 	CHAR(20) DEFAULT 'str' NOT NULL,
+   value_req 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   value_def 	CHAR(255) DEFAULT '' NOT NULL,
    pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY IDX1 (tool_id)
+   KEY IDX1 (command_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -363,11 +382,11 @@ CREATE TABLE {DBNICK}_agent_tool_param (
 DROP TABLE IF EXISTS {DBNICK}_agent_tool_right;
 CREATE TABLE {DBNICK}_agent_tool_right (
    id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
-   param_id 	INT UNSIGNED DEFAULT NULL,
+   command_id 	INT UNSIGNED DEFAULT NULL,
    user_id 	   INT UNSIGNED DEFAULT NULL,
    group_id 	INT UNSIGNED DEFAULT NULL,
    PRIMARY KEY (id),
-   KEY IDX1 (param_id),
+   KEY IDX1 (command_id),
    KEY IDX2 (user_id),
    KEY IDX3 (group_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};

@@ -1,9 +1,17 @@
 <?php
+/***************************************************************************************************
+ * @version 6.5.0.400 @ 2026-08-19
+ * @copyright 2002-2026 Melbis
+ * @link https://melbis.com
+ * @author Dmytro Kasianov
+ **************************************************************************************************/
+
+namespace MELBIS_INC_AUTH;
 
 /** 
- * Function MELBIS_INC_AUTH_router
+ * Function Router
  **/
-function MELBIS_INC_AUTH_router($mModule, $mVars)
+function Router($mModule, $mVars)
 { 
     // Logout?
     if ( isset($mVars['post']['logout']) )
@@ -12,7 +20,7 @@ function MELBIS_INC_AUTH_router($mModule, $mVars)
     }           
         
     // Auth user and verify access for module          
-    list($user_id, $result) = MELBIS_INC_AUTH_access($mModule, $mVars['post']); 
+    list($user_id, $result) = Access($mModule, $mVars['post']); 
     
     // Save page vars   
     MELBIS()->GlobalAssign('PAGE', [
@@ -27,38 +35,28 @@ function MELBIS_INC_AUTH_router($mModule, $mVars)
         return json_encode(['result' => $result]);
     }                                           
     
-    // Function switcher
-    $func = $mVars['post']['func'] ?? 'default';       
-    if ( function_exists($mModule.'_'.$func) )
-    {
-        if ( $func == 'default' )
-        {
-            return call_user_func($mModule.'_'.$func, $user_id, $mVars);     
-        }                                                             
-        else
-        {
-            if  ( !is_null($user_id) && $result == 'ACCEPT' )
-            {
-                return call_user_func($mModule.'_'.$func, $user_id, $mVars);            
-            }
-            else
-            {
-                return 'Access denied';
-            }
-        }            
-    }  
-    else 
+    // Function switcher - no func posted means draw the page of the module
+    $func = $mVars['post']['func'] ?? 'Page';       
+    if ( !function_exists($mModule.'\\'.$func) && !function_exists($mModule.'_'.$func) )
     {
         return 'Function '.urlencode($func).' is absent';
-    }   
+    }
+    
+    if ( $func != 'Page' && ( is_null($user_id) || $result != 'ACCEPT' ) )
+    {
+        return 'Access denied';
+    }
+    
+    // A name that came as data - only UnitFunc knows the running unit
+    return MELBIS()->UnitFunc($func, $user_id, $mVars);
 } 
 
 
 /** 
- * Function MELBIS_INC_AUTH_access    
+ * Function Access    
  * Authorization user for web or application
  **/
-function MELBIS_INC_AUTH_access($mModule, $mPost)
+function Access($mModule, $mPost)
 { 
     // User module auth              
     $user = MELBIS()->SessionGetValue('melbis_user'); 
@@ -72,7 +70,7 @@ function MELBIS_INC_AUTH_access($mModule, $mPost)
         if ( isset($user['id']) )
         {
             // Test module access            
-            if ( MELBIS_INC_AUTH_web_right($user['id'], $mModule) )
+            if ( WebRight($user['id'], $mModule) )
             {
                 // Accept access, save it
                 $user['allow'][$mModule] = true;
@@ -91,18 +89,20 @@ function MELBIS_INC_AUTH_access($mModule, $mPost)
             // Not auth yet
             if ( isset($mPost['login']) )
             {                   
-                // Try auth user           
+                // Try auth user - the door answers zero for every kind of refusal           
                 if ( isset($mPost['pass']) ) $mPost['pass_code'] = md5($mPost['pass']);
-                $user['id'] = MELBIS_INC_AUTH_login($mPost['login'], $mPost['pass_code']);
-                if ( is_null($user['id']) )
+                $user_id = MELBIS()->SysUserLoginCheck($mPost['login'], $mPost['pass_code'] ?? '');
+                if ( $user_id < 1 )
                 {
                     // Wrong
                     return [null, 'WRONG'];
                 }
                 else
                 {   
+                    $user['id'] = $user_id;
+                    
                     // Test module access
-                    if ( MELBIS_INC_AUTH_web_right($user['id'], $mModule) )
+                    if ( WebRight($user['id'], $mModule) )
                     {                                            
                         // Accept access                             
                         $user['allow'][$mModule] = true;
@@ -127,189 +127,20 @@ function MELBIS_INC_AUTH_access($mModule, $mPost)
 
 
 /** 
- * Function MELBIS_INC_AUTH_login
- * Authorization user by login and password
- **/
-function MELBIS_INC_AUTH_login($mLogin, $mPass)
-{ 
-    $command = "SELECT id                                                                                                                                                                               
-                  FROM {DBNICK}_user
-                 WHERE login = :LOGIN     
-                   AND pass_code = :PASS  
-                   AND is_blocked = 0       
-               ";
-    $param = [
-        'login' => $mLogin,
-        'pass'  => $mPass
-        ];               
-    $user = MELBIS()->SqlSelectStaticFlat(__LINE__, $command, $param);
-            
-    return $user['id'] ?? null;
-} 
-
-
-/** 
- * Function MELBIS_INC_AUTH_command
- * Verify user access to command 
- **/   
-function MELBIS_INC_AUTH_command($mUserId, $mCommand)
-{
-    if ( $mUserId != 1 )
-    {
-        $command = "SELECT or.id
-                      FROM {DBNICK}_oper o
-                      JOIN {DBNICK}_oper_right `or`
-                        ON or.oper_id = o.id
-                 LEFT JOIN {DBNICK}_user u
-                        ON ( u.group_id = or.group_id OR u.add_group_id = or.group_id )
-                     WHERE o.command = :COMMAND
-                       AND ( or.user_id = :USER_ID OR u.id = :USER_ID )
-                   ";                                 
-        $param = [
-            'command'   => $mCommand,
-            'user_id'   => $mUserId
-            ];    
-        $right = MELBIS()->SqlSelectFlat(__LINE__, $command, $param);        
-
-        return isset($right['id']);
-    }
-    else 
-    {
-        return true;
-    }                      
-}  
-
-
-/** 
- * Function MELBIS_INC_AUTH_web_right 
+ * Function WebRight 
  * Verify user rights for inside or outside module
  **/
-function MELBIS_INC_AUTH_web_right($mUserId, $mModule)
+function WebRight($mUserId, $mModule)
 { 
-    // User has super access? 
-    if ( MELBIS_INC_AUTH_command($mUserId, 'PUT_OUTSIDE_RIGHT') )
-    {
-        return true;
-    }        
-    
-    // User module access         
     if ( stripos($mModule, 'INSIDE') !== false ) 
     {        
-        $command = "SELECT wir.id
-                      FROM {DBNICK}_web_inside wi
-                      JOIN {DBNICK}_web_inside_right wir
-                        ON wir.inside_id = wi.id
-                 LEFT JOIN {DBNICK}_user u
-                        ON ( u.group_id = wir.group_id OR u.add_group_id = wir.group_id )
-                     WHERE wi.skey = :MODULE 
-                       AND ( wir.user_id = :USER_ID OR u.id = :USER_ID OR wi.auth = 0 )
-                   ";
+        return MELBIS()->SysWebInRight($mUserId, $mModule);
     }
-    else 
-    {        
-        $command = "SELECT wor.id
-                      FROM {DBNICK}_web_outside wo
-                      JOIN {DBNICK}_web_outside_right wor
-                        ON wor.outside_id = wo.id
-                 LEFT JOIN {DBNICK}_user u
-                        ON ( u.group_id = wor.group_id OR u.add_group_id = wor.group_id )
-                     WHERE wo.skey = :MODULE 
-                       AND ( wor.user_id = :USER_ID OR u.id = :USER_ID  OR wo.auth = 0 )
-                   ";
+    else
+    {    
+        return MELBIS()->SysWebOutRight($mUserId, $mModule);
     }
-    $param = [
-        'module'    => $mModule,
-        'user_id'   => $mUserId
-        ];                  
-    $right = MELBIS()->SqlSelectFlat(__LINE__, $command, $param);
-    
-    return isset($right['id']);
 } 
-    
-
-/** 
- * Function MELBIS_INC_AUTH_web_key_prepare
- * Prepare user rights for web_key
- **/
-function MELBIS_INC_AUTH_web_key_prepare($mUserId)
-{ 
-    // Clear    
-    MELBIS()->SqlDelete(__LINE__, '{DBNICK}_tmp_web_key', 'user_id', $mUserId);
-            
-    if ( MELBIS_INC_AUTH_command($mUserId, 'PUT_OUTSIDE_RIGHT') )
-    {
-        // No Limits
-        $command = "INSERT INTO {DBNICK}_tmp_web_key
-                    SELECT id, :USER_ID, 1, 1, 1
-                      FROM {DBNICK}_web_key
-                   ";                                  
-        $param = [ 
-            'user_id'   => $mUserId 
-            ];                   
-        MELBIS()->SqlQuery(__LINE__, $command, $param); 
-    }
-    else 
-    {       
-        // Limit by rights                   
-        $command = "INSERT INTO {DBNICK}_tmp_web_key 
-                    SELECT wkr.web_key_id, :USER_ID, 
-                           MAX(wkr.for_read), 
-                           MAX(wkr.for_write), 
-                           MAX(wkr.for_remove) 
-                      FROM {DBNICK}_web_key_right wkr
-                 LEFT JOIN {DBNICK}_user u
-                        ON ( u.group_id = wkr.group_id OR u.add_group_id = wkr.group_id )
-                     WHERE ( wkr.user_id = :USER_ID OR u.id = :USER_ID )                           
-                  GROUP BY wkr.web_key_id
-                   ";
-        $param = [ 
-            'user_id'   => $mUserId 
-            ];                   
-        MELBIS()->SqlQuery(__LINE__, $command, $param); 
-    }
-
-    return true;                          
-}     
-
-
-
-/** 
- * Function MELBIS_INC_AUTH_web_key_access    
- * Verify user access to web_key
- **/
-function MELBIS_INC_AUTH_web_key_access($mUserId, $mKey, $mFor)
-{ 
-    switch ( $mFor ) 
-    {
-        case 'read':
-            $action = 'twk.for_read = 1';
-            break;    
-        case 'write':
-            $action = 'twk.for_write = 1';
-            break;    
-        case 'remove':
-            $action = 'twk.for_remove = 1';
-            break;
-        default:
-            $action = 'true';    
-    }
-           
-    $command = "SELECT wk.id                         
-                  FROM {DBNICK}_web_key wk
-                  JOIN {DBNICK}_tmp_web_key twk
-                    ON twk.id = wk.id
-                   AND twk.user_id = :USER_ID
-                   AND $action                                                                                                                  
-                 WHERE wk.skey = :KEY                                                                       
-               ";             
-    $param = [
-        'user_id'   => $mUserId,
-        'key'       => $mKey
-        ];                  
-    $right = MELBIS()->SqlSelectFlat(__LINE__, $command, $param);
-    
-    return isset($right['id']);
-}
  
 
 ?>

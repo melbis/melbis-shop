@@ -1,23 +1,32 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.370 @ 2026-08-10
+ * @version 6.5.0.400 @ 2026-08-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
  **************************************************************************************************/
 
+namespace MELBIS_CATALOGE_SUB;
+
+use MELBIS_INC_WEB_TOPIC as TOPIC;
+use MELBIS_INC_WEB_CALLBACK as CALLBACK;
+
+// Define Callback - the ajax call is an entry point of its own
+CALLBACK\Define(); 
+
 
 /** 
- * Function MELBIS_CATALOGE_SUB
+ * Function Main
  **/
-function MELBIS_CATALOGE_SUB($mVars)
+function Main($mVars)
 { 
     // Create 
     $tpl = MELBIS()->TplCreate();   
     
-    // Vars               
-    $id = !empty($mVars['id']) ? $mVars['id'] : (int) $mVars['post']['id'];   
+    // Vars - from a template the id comes as a parameter, over AJAX in the post               
+    $id = !empty($mVars['id']) ? $mVars['id'] : (int) ( $mVars['post']['id'] ?? 0 );   
     
+    // Find root - the section whose children are asked for
     $command = "SELECT id, tlevel
                   FROM {DBNICK}_topic
                  WHERE id = :ID 
@@ -28,27 +37,8 @@ function MELBIS_CATALOGE_SUB($mVars)
     $root = MELBIS()->SqlSelectFlat(__LINE__, $command, $param);    
     if ( !isset($root['id']) ) return '';       
         
-    // Get menu items     
-    $command = "SELECT t.id, t.name, t.kind_key, t.link, t_s.sub
-                  FROM {DBNICK}_topic t                                                                           
-             LEFT JOIN ( SELECT tindex, COUNT(*) AS sub 
-                           FROM {DBNICK}_topic
-                          WHERE no_visible = '0'
-                            AND tlevel = :TLEVEL                                
-                       GROUP BY tindex
-                       ) AS t_s 
-                    ON t.id = t_s.tindex                                                            
-                 WHERE t.tindex = :TINDEX
-                   AND t.no_visible = '0'                                                                
-              ORDER BY t.absindex                
-                ";                                        
-    $param = [
-        'tlevel' => $root['tlevel'] + 2,
-        'tindex' => $root['id']
-        ];                
-    $menu = MELBIS()->SqlSelect(__LINE__, $command, $param); 
-    
     // Menu
+    $menu = TOPIC\Menu($root['id'], $root['tlevel']);
     MELBIS()->TplAssign($tpl, 'MENU', $menu);
     
     // Final

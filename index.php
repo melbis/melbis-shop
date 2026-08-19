@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.370 @ 2026-08-10
+ * @version 6.5.0.400 @ 2026-08-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov 
@@ -29,6 +29,13 @@ else
     $entry_param = [serialize($_GET), serialize($_POST)];
 }
 
+// No AI
+if ( strncasecmp($entry_point, 'agent_', 6) == 0 )
+{
+    header('HTTP/1.1 403 Forbidden');
+
+    exit('ACCESS_DENIED');
+}
 
 // Run
 MELBIS()->Run($entry_point, $entry_param);

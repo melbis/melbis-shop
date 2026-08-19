@@ -1,18 +1,18 @@
 <div class="card h-100">
-    <h4 class="card-header text-center"><a href="/?store_id={ID}">{NAME|html}</a></h4>
+    <h4 class="card-header text-center"><a href="{ID|$StoreLink}">{NAME|html}</a></h4>
     {MELBIS:melbis_store_image([ID],kDefault)}          
     <div class="card-body">
         <p class="card-text">{INTRO|short|text}</p>
     </div>
-    {MELBIS:melbis_store_features([ID])}          
+    {MELBIS:melbis_store_features([ID],kTopic)}          
 
     <div class="card-footer ">        
         <div class="d-flex justify-content-around align-items-center">
             <div class="text-center">    
                 <p class="lead m-0">{PRICE_CURR|inum}</p>
-                <p class="badge badge-warning m-0">{STATUS_NAME|html}</p>                                                                          
+                <p class="badge badge-warning m-0">{STATUS_KEY|$StatusName|html}</p>                                                                          
             </div>
-            <button class="btn btn-primary melbis_btn_add" data-id="{ID}"><i class="fa fa-cart-plus"></i> Buy</button>
+            <button class="btn btn-primary melbis_btn_add" data-id="{ID}" data-name="{NAME|html}"><i class="fa fa-cart-plus"></i> Buy</button>
         </div>
     </div>       
     <div class="card-footer d-flex justify-content-between">  

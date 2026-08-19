@@ -1,21 +1,26 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.370 @ 2026-08-10
+ * @version 6.5.0.400 @ 2026-08-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
  **************************************************************************************************/
- 
-// Register
-MELBIS_INC_WEB_CALLBACK(); 
+
+namespace MELBIS_BASE_PAGE;
+
+use MELBIS_INC_WEB_CALLBACK as CALLBACK;
+
+// Define Callback  
+CALLBACK\Define(); 
+
 
 /** 
- * Function MELBIS_BASE_PAGE
+ * Function Main
  **/
-function MELBIS_BASE_PAGE($mVars)
+function Main($mVars)
 { 
     // Create 
-    $tpl = MELBIS()->TplCreate();    
+    $tpl = MELBIS()->TplCreate();        
         
     // Vars         
     $id = (int) ( $mVars['get']['topic_id'] ?? 0 ); 
@@ -128,8 +133,8 @@ function MELBIS_BASE_PAGE($mVars)
             }
             elseif ( $topic['kind_key'] == 'kGoods' )  
             {           
-                // Page goods
-                MELBIS()->TplParse($tpl, 'PAGE', 'page_goods');        
+                // Page topic
+                MELBIS()->TplParse($tpl, 'PAGE', 'page_topic');        
             }
             else
             {

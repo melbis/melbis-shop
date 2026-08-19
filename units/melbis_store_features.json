@@ -1,14 +1,16 @@
 {
     "description": "Goods features",
-    "parameters": "id: int",
+    "parameters": "id: int, place: fix=kTopic|kGoods",
     "tables": [
         "info=1",
         "info_value=1",
         "store_info=1"
     ],
-    "includes": [],
+    "includes": [
+        ""
+    ],
     "cache_on": "0",
-    "cache_time": "100",
+    "cache_time": "0",
     "lazy_load": "0",
     "entry_point": "0",
     "trick_on": "0",

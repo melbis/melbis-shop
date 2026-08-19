@@ -1,38 +1,46 @@
 <?php
+/***************************************************************************************************
+ * @version 6.5.0.400 @ 2026-08-19
+ * @copyright 2002-2026 Melbis
+ * @link https://melbis.com
+ * @author Dmytro Kasianov
+ **************************************************************************************************/
+
+namespace MELBIS_WEB_SAMPLE;
+
+use MELBIS_INC_AUTH as AUTH;
+use MELBIS_INC_WEB_CALLBACK as CALLBACK;
+use MELBIS_INC_LOGIC_COMMON as LOGIC_COMMON;
+
+// Define Callback - the module draws the header of the shop, so it needs them
+CALLBACK\Define(); 
+
 
 /** 
- * Function MELBIS_WEB_SAMPLE
+ * Function Main
  **/
-function MELBIS_WEB_SAMPLE($mVars)
+function Main($mVars)
 { 
-    return MELBIS_INC_AUTH_router(MELBIS()->UnitName(), $mVars);
+    return AUTH\Router(MELBIS()->UnitName(), $mVars);
 } 
 
+
 /** 
- * Function MELBIS_WEB_SAMPLE_default
+ * Function Page
  **/
-function MELBIS_WEB_SAMPLE_default($mUserId, $mVars)
+function Page($mUserId, $mVars)
 {        
     // Create 
     $tpl = MELBIS()->TplCreate(); 
-        
-    // Vars                 
-    $page['title'] = 'Sample Web module';   
     
     // Auth                
     if ( $mUserId > 0 )      
     {    
-        // Prepare
-        MELBIS_INC_AUTH_web_key_prepare($mUserId);
-        
         // Demo post vars
         MELBIS()->TplAssign($tpl, 'VARS', var_export($mVars, true));                
                                                                     
         // Demo Order change back                
         MELBIS()->TplAssign($tpl, 'ORDER', $mVars['post']['order'] ?? '{}');                
-        
-        // Scripts
-        MELBIS()->TplParse($tpl, 'SCRIPTS', 'scripts');       
                       
         // Page
         MELBIS()->TplParse($tpl, 'CONTENT', 'page');                   
@@ -55,9 +63,9 @@ function MELBIS_WEB_SAMPLE_default($mUserId, $mVars)
 
 
 /** 
- * Function MELBIS_WEB_SAMPLE_get_cataloge
+ * Function GetCataloge
  **/
-function MELBIS_WEB_SAMPLE_get_cataloge($mUserId, $mVars)
+function GetCataloge($mUserId, $mVars)
 {                                            
     // Vars
     $limit = (int) $mVars['post']['limit'];
@@ -80,9 +88,9 @@ function MELBIS_WEB_SAMPLE_get_cataloge($mUserId, $mVars)
 
 
 /** 
- * Function MELBIS_WEB_SAMPLE_get_goods
+ * Function GetGoods
  **/
-function MELBIS_WEB_SAMPLE_get_goods($mUserId, $mVars)
+function GetGoods($mUserId, $mVars)
 { 
     // Vars
     $topic_id = (int) $mVars['post']['id'];     
@@ -99,23 +107,16 @@ function MELBIS_WEB_SAMPLE_get_goods($mUserId, $mVars)
         $cond .= " AND ( s.id = :KEY_INT OR s.code_shop LIKE :KEY_LIKE OR s.name LIKE :KEY_LIKE ) "; 
     }            
                         
-    // Get data      
+    // Get data - the price comes raw, in the currency of its own      
     $command = "SELECT s.id, 
                        s.code_shop, 
                        s.name, 
                        s.status_key, 
-                       kv_s.value_txt AS status_name,                                                                     
-                       IF(c.id IS NULL, s.price, 
-                        IF(c.division = 0, s.price*c.multiplex,
-                         IF(c.multiplex <> 0, s.price/c.multiplex, 0))) AS price
+                       s.price, 
+                       s.price_curr_id
                   FROM {DBNICK}_store s
                   JOIN {DBNICK}_topic_store ts
                     ON s.id = ts.store_id 
-             LEFT JOIN {DBNICK}_key_value kv_s
-                    ON s.status_key = kv_s.key_name 
-                   AND kv_s.key_code = 'STORE_STATUS_KEY'                   
-             LEFT JOIN {DBNICK}_currency c
-                    ON s.price_curr_id = c.id
                  WHERE ts.topic_id = :TOPIC_ID
                        $cond                  
               ORDER BY $sort                 
@@ -124,9 +125,17 @@ function MELBIS_WEB_SAMPLE_get_goods($mUserId, $mVars)
         'topic_id'  => $topic_id,
         'key_int'   => (int) $search,
         'key_like'  => '%'.$search.'%'  
-        ];
-                  
+        ];                  
     $data = MELBIS()->SqlSelectLimit(__LINE__, $command, $offset, $limit, $param);
+    
+    // Calc                   
+    $status = MELBIS()->SysKeyValues('STORE_STATUS_KEY');
+    foreach ( $data['rows'] as &$row )
+    {
+        $row['price'] = LOGIC_COMMON\Price($row['price'], $row['price_curr_id']);
+        $row['status_name'] = $status[$row['status_key']] ?? '';
+    }
+    unset($row);
     
     return json_encode($data);                            
 }  

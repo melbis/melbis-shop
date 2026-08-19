@@ -6,7 +6,9 @@
         "key_value=1",
         "store=1"
     ],
-    "includes": [],
+    "includes": [
+        "melbis_inc_logic_common.php=1"
+    ],
     "cache_on": "1",
     "cache_time": "0",
     "lazy_load": "0",
