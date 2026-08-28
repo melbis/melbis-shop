@@ -1,9 +1,15 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.402 @ 2026-08-20
+ * @version 6.5.0.410 @ 2026-08-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
+ **************************************************************************************************
+ *
+ * Router   - Signs in, out, or answers
+ * Access   - Whether this person enters
+ * WebRight - The right of a module
+ *
  **************************************************************************************************/
 
 namespace MELBIS_INC_AUTH;
@@ -19,7 +25,7 @@ function Router($mModule, $mVars)
         MELBIS()->SessionRemoveValue('melbis_user');
     }           
         
-    // Auth user and verify access for module          
+    // Auth and verify the access
     list($user_id, $result) = Access($mModule, $mVars['post']); 
     
     // Save page vars   
@@ -35,7 +41,7 @@ function Router($mModule, $mVars)
         return json_encode(['result' => $result]);
     }                                           
     
-    // Function switcher - no func posted means draw the page of the module
+    // Function switcher, or page
     $func = $mVars['post']['func'] ?? 'Page';       
     if ( !function_exists($mModule.'\\'.$func) && !function_exists($mModule.'_'.$func) )
     {
@@ -47,14 +53,13 @@ function Router($mModule, $mVars)
         return 'Access denied';
     }
     
-    // A name that came as data - only UnitFunc knows the running unit
+    // A name given as data
     return MELBIS()->UnitFunc($func, $user_id, $mVars);
 } 
 
 
 /** 
  * Function Access    
- * Authorization user for web or application
  **/
 function Access($mModule, $mPost)
 { 
@@ -89,7 +94,7 @@ function Access($mModule, $mPost)
             // Not auth yet
             if ( isset($mPost['login']) )
             {                   
-                // Try auth user - the door answers zero for every kind of refusal           
+                // Try auth, zero means no
                 if ( isset($mPost['pass']) ) $mPost['pass_code'] = md5($mPost['pass']);
                 $user_id = MELBIS()->SysUserLoginCheck($mPost['login'], $mPost['pass_code'] ?? '');
                 if ( $user_id < 1 )
@@ -128,7 +133,6 @@ function Access($mModule, $mPost)
 
 /** 
  * Function WebRight 
- * Verify user rights for inside or outside module
  **/
 function WebRight($mUserId, $mModule)
 { 

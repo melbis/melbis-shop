@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.402 @ 2026-08-20
+ * @version 6.5.0.410 @ 2026-08-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -27,6 +27,9 @@ table={DBNICK}_oper|id|name
 98=Rabatte
 99=Abrufen
 100=Speichern
+437=Steuern
+438=Abrufen
+439=Speichern
 26=Lieferanten
 27=Abrufen
 28=Speichern
@@ -53,6 +56,14 @@ table={DBNICK}_oper|id|name
 232=Marken
 233=Abrufen
 234=Speichern
+263=Browser
+274=Einstellungen aktualisieren
+432=Primär
+434=Produkte des Bereichs abrufen
+436=Erweiterte Produktabfrage
+433=Sekundär
+106=Produkte des Bereichs abrufen
+191=Erweiterte Produktabfrage
 16=Beschreibungen
 248=Persönlicher Bereich
 210=Einstellungen aktualisieren
@@ -96,10 +107,6 @@ table={DBNICK}_oper|id|name
 242=Abrufen
 243=Hinzufügen
 244=Löschen
-263=Browser
-274=Einstellungen aktualisieren
-106=Produkte des Bereichs abrufen
-191=Produkte finden und abrufen
 265=Struktur
 32=Katalog
 219=Schnellzugriff
@@ -262,10 +269,11 @@ table={DBNICK}_oper|id|name
 345=Löschen
 346=Laden
 348=Datenbank
-388=Sperrliste abrufen
 392=Datenstruktur abrufen
 349=Daten lesen
 350=Daten ändern
+388=Sperrliste abrufen
+440=Tabellensperren aufheben
 421=Entwicklung
 384=Cache-Bereinigung durchführen
 389=Konfiguration abrufen
@@ -285,9 +293,5 @@ table={DBNICK}_oper|id|name
 318=Profile
 319=Abrufen
 320=Speichern
-
-table={DBNICK}_user|id|name
 1=Administrator
-
-table={DBNICK}_user_group|id|name
 1=Administratoren

@@ -1,0 +1,14 @@
+/************************************************************************************************************
+ * @version 6.5.0.410 @ 2026-08-28
+ * @copyright 2002-2026 Melbis
+ * @link https://melbis.com
+ * @author Dmytro Kasianov
+ ************************************************************************************************************/
+
+table={DBNICK}_user_filter_param|id|name
+1=Supplier warehouses
+2=Product parameters
+3=Parameter values
+4=Attributes
+5=Attribute values
+6=Tax Groups

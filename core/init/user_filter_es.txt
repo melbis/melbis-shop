@@ -1,0 +1,26 @@
+/************************************************************************************************************
+ * @version 6.5.0.410 @ 2026-08-28
+ * @copyright 2002-2026 Melbis
+ * @link https://melbis.com
+ * @author Dmytro Kasianov
+ ************************************************************************************************************/
+
+table={DBNICK}_user_filter|id|name
+1=Existencias en el almacén (de y a)
+2=Existencias no distribuidas por almacenes
+3=Las existencias no coinciden con los almacenes
+4=Productos sin foto
+5=Duplicados por código de fabricante
+6=Sin actualizar durante N días
+7=Sin grupo de impuestos
+8=Con parámetro (valor de y a)
+9=Con valor de característica
+10=Sin característica
+11=En un grupo de impuestos
+12=Ventas desde el almacén
+13=Importe del pedido (de y a)
+14=Pedidos con un producto (código de tienda)
+15=Pedidos con cambios (versiones desde)
+16=Clientes sin pedidos
+17=Compraron por un importe total (desde)
+18=Sin comprar durante N días

@@ -1,9 +1,14 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.402 @ 2026-08-20
+ * @version 6.5.0.410 @ 2026-08-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov  
+ **************************************************************************************************
+ *
+ * Sub  - The sections under each
+ * Menu - The sections of one menu
+ *
  **************************************************************************************************/
  
 namespace MELBIS_INC_WEB_TOPIC; 
@@ -36,7 +41,7 @@ function Sub($mId)
  **/
 function Menu($mId, $mLevel)
 { 
-    // Sections right under the one given - tlevel steps by two; sub counts children
+    // The sections right under it
     $command = "SELECT t.id, t.name, t.kind_key, t.link, t_s.sub                       
                   FROM {DBNICK}_topic t                                                                           
              LEFT JOIN ( SELECT tindex, COUNT(*) AS sub 

@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.402 @ 2026-08-20
+ * @version 6.5.0.410 @ 2026-08-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -27,6 +27,9 @@ table={DBNICK}_oper|id|name
 98=Discounts
 99=Get
 100=Save
+437=Taxes
+438=Get
+439=Save
 26=Suppliers
 27=Get
 28=Save
@@ -53,6 +56,14 @@ table={DBNICK}_oper|id|name
 232=Brands
 233=Get
 234=Save
+263=Browser
+274=Refresh Settings
+432=Main
+434=Get section products
+436=Advanced Product Query
+433=Auxiliary
+106=Get section products
+191=Advanced Product Query
 16=Descriptions
 248=Personal Section
 210=Refresh Settings
@@ -96,10 +107,6 @@ table={DBNICK}_oper|id|name
 242=Get
 243=Add
 244=Delete
-263=Browser
-274=Refresh Settings
-106=Get section products
-191=Find and get products
 265=Structure
 32=Catalog
 219=Quick access
@@ -262,10 +269,11 @@ table={DBNICK}_oper|id|name
 345=Delete
 346=Load
 348=Database
-388=Get lock list
 392=Get data structure
 349=Read data
 350=Modify data
+388=Get lock list
+440=Release table locks
 421=Development
 384=Clear cache
 389=Get configuration
@@ -285,9 +293,5 @@ table={DBNICK}_oper|id|name
 318=Profiles
 319=Get
 320=Save
-
-table={DBNICK}_user|id|name
 1=Administrator
-
-table={DBNICK}_user_group|id|name
 1=Administrators

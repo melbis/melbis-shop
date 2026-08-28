@@ -1,26 +1,9 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.402 @ 2026-08-20
+ * @version 6.5.0.410 @ 2026-08-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
- **************************************************************************************************
- *
- * CmdList        - Reads the providers, their groups, the option tree and what is set on each
- * CmdAdd         - Adds a provider at the end of the list
- * CmdUpdate      - Changes the given columns of providers, by id
- * CmdRemove      - Deletes providers by id and empties provider_id on the goods and currencies
- * CmdPos         - Reorders the list by POS, MOVE or SORT
- * CmdGroupAdd    - Adds a group at the end of the list
- * CmdGroupUpdate - Changes the given columns of groups, by id
- * CmdGroupRemove - Deletes groups by id, refusing while providers stand in them
- * CmdGroupPos    - Reorders the groups by POS, MOVE or SORT
- * CmdKeyAdd      - Sets an option on providers, one row of provider_key_set on each
- * CmdKeyUpdate   - Changes the given columns of option rows, by id
- * CmdKeyRemove   - Deletes option rows by id
- *
- * The option tree (provider_key, provider_key_value) belongs to the program: read, never written
- *
  **************************************************************************************************/
 
 
@@ -28,69 +11,26 @@
 namespace MELBIS_AGENT_PROVIDER;
 
 // Libraries
-use MELBIS_INC_AGENT_UTIL as UTIL;
-
-// The columns a call may write into a provider
-const FIELDS_PROVIDER = "skey, group_id, name, kind_key, state_key, params, manager, phones,
-                         emails, store, serv_addr, serv_phone, notice, pos";
-
-// The columns a call may write into a group
-const FIELDS_GROUP = "skey, name, pos";
-
-// The columns a call may write into an option row
-const FIELDS_KEY = "key_id, value_id, value_txt";
+use MELBIS_INC_AGENT_TABLE as TABLE;
 
 
 /**
- * Function CmdList
+ * Function CmdListCut
  **/
-function CmdList($mUserId, $mParam)
+function CmdListCut($mUserId, $mParam)
 {
-    $gate = UTIL\RightOper($mUserId, 'GET_PROVIDER', 'Reading the providers');
-    if ( $gate !== true ) return $gate;
+    return TABLE\Read('provider_group', ['provider']);
+}
 
-    $command = "SELECT *
-                  FROM {DBNICK}_provider
-              ORDER BY pos
-               ";
-    $providers = MELBIS()->SqlSelect(__LINE__, $command);
 
-    $command = "SELECT *
-                  FROM {DBNICK}_provider_group
-              ORDER BY pos
-               ";
-    $groups = MELBIS()->SqlSelect(__LINE__, $command);
+/**
+ * Function CmdListFull
+ **/
+function CmdListFull($mUserId, $mParam)
+{
+    $more = ['provider', 'provider_stock', 'provider_key_set', 'provider_stock_key_set'];
 
-    $command = "SELECT *
-                  FROM {DBNICK}_provider_key
-              ORDER BY absindex
-               ";
-    $keys = MELBIS()->SqlSelect(__LINE__, $command);
-
-    $command = "SELECT *
-                  FROM {DBNICK}_provider_key_value
-              ORDER BY key_id, pos
-               ";
-    $values = MELBIS()->SqlSelect(__LINE__, $command);
-
-    $command = "SELECT *
-                  FROM {DBNICK}_provider_key_set
-              ORDER BY provider_id, id
-               ";
-    $sets = MELBIS()->SqlSelect(__LINE__, $command);
-
-    return [
-        'result'  => true,
-        'message' => count($providers).' providers, '.count($groups).' groups, '.count($keys).
-                     ' options, '.count($sets).' option rows set',
-        'tables'  => [
-            'provider'           => $providers,
-            'provider_group'     => $groups,
-            'provider_key'       => $keys,
-            'provider_key_value' => $values,
-            'provider_key_set'   => $sets
-            ]
-        ];
+    return TABLE\Read('provider_group', $more);
 }
 
 
@@ -99,32 +39,7 @@ function CmdList($mUserId, $mParam)
  **/
 function CmdAdd($mUserId, $mParam)
 {
-    $gate = UTIL\RightOper($mUserId, 'PUT_PROVIDER', 'Adding a provider');
-    if ( $gate !== true ) return $gate;
-
-    $fields = UTIL\Only($mParam, FIELDS_PROVIDER);
-
-    $tables = ['{DBNICK}_provider'];
-    $lock = UTIL\TablesLock($tables);
-    if ( !$lock['result'] ) return $lock;
-
-    $command = "SELECT MAX(pos)
-                  FROM {DBNICK}_provider
-               ";
-    $last = MELBIS()->SqlSelectValue(__LINE__, $command, 0);
-
-    $row = $fields;
-    $row['id'] = MELBIS()->SqlGenId('provider');
-    if ( !isset($row['pos']) ) $row['pos'] = $last + 1;
-    MELBIS()->SqlInsert(__LINE__, '{DBNICK}_provider', $row);
-
-    UTIL\TablesUnlock($tables);
-
-    return [
-        'result'  => true,
-        'id'      => $row['id'],
-        'message' => 'The provider ['.$mParam['name'].'] is in the list, id '.$row['id']
-        ];
+    return TABLE\Add($mUserId, 'provider', $mParam);
 }
 
 
@@ -133,49 +48,7 @@ function CmdAdd($mUserId, $mParam)
  **/
 function CmdUpdate($mUserId, $mParam)
 {
-    $gate = UTIL\RightOper($mUserId, 'PUT_PROVIDER', 'Changing a provider');
-    if ( $gate !== true ) return $gate;
-
-    $ids = UTIL\Exists('provider', $mParam['id']);
-    $lost = array_diff($mParam['id'], $ids);
-    if ( count($lost) > 0 )
-    {
-        $list = implode(', ', $lost);
-
-        return [
-            'result'  => false,
-            'message' => 'No providers ['.$list.'] in the store - CmdList answers them'
-            ];
-    }
-
-    $fields = UTIL\Only($mParam, FIELDS_PROVIDER);
-    if ( count($fields) == 0 )
-    {
-        return [
-            'result'  => false,
-            'message' => 'Nothing was named to change'
-            ];
-    }
-
-    $tables = ['{DBNICK}_provider'];
-    $lock = UTIL\TablesLock($tables);
-    if ( !$lock['result'] ) return $lock;
-
-    foreach ( $ids as $id )
-    {
-        $row = $fields;
-        $row['id'] = $id;
-        MELBIS()->SqlUpdate(__LINE__, '{DBNICK}_provider', $row, 'id');
-    }
-
-    UTIL\TablesUnlock($tables);
-
-    $changed = implode(', ', array_keys($fields));
-
-    return [
-        'result'  => true,
-        'message' => count($ids).' provider(s) changed: '.$changed
-        ];
+    return TABLE\Update($mUserId, 'provider', $mParam['id'], $mParam);
 }
 
 
@@ -184,84 +57,7 @@ function CmdUpdate($mUserId, $mParam)
  **/
 function CmdRemove($mUserId, $mParam)
 {
-    $gate = UTIL\RightOper($mUserId, 'PUT_PROVIDER', 'Removing a provider');
-    if ( $gate !== true ) return $gate;
-
-    $ids = UTIL\Exists('provider', $mParam['id']);
-    $lost = array_diff($mParam['id'], $ids);
-    if ( count($lost) > 0 )
-    {
-        $list = implode(', ', $lost);
-
-        return [
-            'result'  => false,
-            'message' => 'No providers ['.$list.'] in the store'
-            ];
-    }
-
-    $list = implode(',', $ids);
-
-    // Counts the goods pointing at them: they lose the provider, and the answer says how many
-    $command = "SELECT COUNT(*)
-                  FROM {DBNICK}_store
-                 WHERE provider_id IN ( $list )
-               ";
-    $goods = (int)MELBIS()->SqlSelectValue(__LINE__, $command, 0);
-
-    $command = "SELECT COUNT(*)
-                  FROM {DBNICK}_currency
-                 WHERE provider_id IN ( $list )
-               ";
-    $currencies = (int)MELBIS()->SqlSelectValue(__LINE__, $command, 0);
-
-    if ( ( $goods > 0 || $currencies > 0 ) && !$mParam['recursive'] )
-    {
-        return [
-            'result'  => false,
-            'message' => $goods.' goods and '.$currencies.' currency(ies) point at those '.
-                         'providers and will be left without one. Say recursive to go on'
-            ];
-    }
-
-    $tables = ['{DBNICK}_provider', '{DBNICK}_store', '{DBNICK}_currency'];
-    $lock = UTIL\TablesLock($tables);
-    if ( !$lock['result'] ) return $lock;
-
-    // Empties provider_id by an update: no sweep of the engine knows this tie
-    $command = "UPDATE {DBNICK}_store
-                   SET provider_id = NULL
-                 WHERE provider_id IN ( $list )
-               ";
-    MELBIS()->SqlQuery(__LINE__, $command);
-
-    $command = "UPDATE {DBNICK}_currency
-                   SET provider_id = NULL
-                 WHERE provider_id IN ( $list )
-               ";
-    MELBIS()->SqlQuery(__LINE__, $command);
-
-    $command = "DELETE
-                  FROM {DBNICK}_provider
-                 WHERE id IN ( $list )
-               ";
-    MELBIS()->SqlQuery(__LINE__, $command);
-
-    UTIL\TablesUnlock($tables);
-
-    // Sweeps what pointed at the providers, by the map of the engine
-    $swept = UTIL\DependSweep('provider');
-
-    $message = count($ids).' provider(s) gone';
-    if ( $goods > 0 || $currencies > 0 )
-    {
-        $message .= '; '.$goods.' goods and '.$currencies.' currency(ies) are without one now';
-    }
-    $message .= UTIL\DependSaid($swept);
-
-    return [
-        'result'  => true,
-        'message' => $message
-        ];
+    return TABLE\Remove($mUserId, 'provider', $mParam['id'], $mParam);
 }
 
 
@@ -270,24 +66,7 @@ function CmdRemove($mUserId, $mParam)
  **/
 function CmdPos($mUserId, $mParam)
 {
-    $gate = UTIL\RightOper($mUserId, 'PUT_PROVIDER', 'Shaping the order of the providers');
-    if ( $gate !== true ) return $gate;
-
-    $tables = ['{DBNICK}_provider'];
-    $lock = UTIL\TablesLock($tables);
-    if ( !$lock['result'] ) return $lock;
-
-    // The whole table is one list here, so nothing narrows the scope
-    $done = UTIL\Pos('provider', [], $mParam['type'], $mParam['data'] ?? []);
-
-    UTIL\TablesUnlock($tables);
-
-    if ( !$done['result'] ) return $done;
-
-    return [
-        'result'  => true,
-        'message' => 'The providers: '.$done['said'].', '.$done['moved'].' row(s) moved'
-        ];
+    return TABLE\Pos($mUserId, 'provider', [], $mParam);
 }
 
 
@@ -296,32 +75,7 @@ function CmdPos($mUserId, $mParam)
  **/
 function CmdGroupAdd($mUserId, $mParam)
 {
-    $gate = UTIL\RightOper($mUserId, 'PUT_PROVIDER', 'Shaping the groups of the providers');
-    if ( $gate !== true ) return $gate;
-
-    $fields = UTIL\Only($mParam, FIELDS_GROUP);
-
-    $tables = ['{DBNICK}_provider_group'];
-    $lock = UTIL\TablesLock($tables);
-    if ( !$lock['result'] ) return $lock;
-
-    $command = "SELECT MAX(pos)
-                  FROM {DBNICK}_provider_group
-               ";
-    $last = MELBIS()->SqlSelectValue(__LINE__, $command, 0);
-
-    $row = $fields;
-    $row['id'] = MELBIS()->SqlGenId('provider_group');
-    if ( !isset($row['pos']) ) $row['pos'] = $last + 1;
-    MELBIS()->SqlInsert(__LINE__, '{DBNICK}_provider_group', $row);
-
-    UTIL\TablesUnlock($tables);
-
-    return [
-        'result'  => true,
-        'id'      => $row['id'],
-        'message' => 'The group ['.$row['id'].'] is in the list'
-        ];
+    return TABLE\Add($mUserId, 'provider_group', $mParam);
 }
 
 
@@ -330,49 +84,7 @@ function CmdGroupAdd($mUserId, $mParam)
  **/
 function CmdGroupUpdate($mUserId, $mParam)
 {
-    $gate = UTIL\RightOper($mUserId, 'PUT_PROVIDER', 'Shaping the groups of the providers');
-    if ( $gate !== true ) return $gate;
-
-    $ids = UTIL\Exists('provider_group', $mParam['id']);
-    $lost = array_diff($mParam['id'], $ids);
-    if ( count($lost) > 0 )
-    {
-        $list = implode(', ', $lost);
-
-        return [
-            'result'  => false,
-            'message' => 'No groups ['.$list.'] in the store'
-            ];
-    }
-
-    $fields = UTIL\Only($mParam, FIELDS_GROUP);
-    if ( count($fields) == 0 )
-    {
-        return [
-            'result'  => false,
-            'message' => 'Nothing was named to change'
-            ];
-    }
-
-    $tables = ['{DBNICK}_provider_group'];
-    $lock = UTIL\TablesLock($tables);
-    if ( !$lock['result'] ) return $lock;
-
-    foreach ( $ids as $id )
-    {
-        $row = $fields;
-        $row['id'] = $id;
-        MELBIS()->SqlUpdate(__LINE__, '{DBNICK}_provider_group', $row, 'id');
-    }
-
-    UTIL\TablesUnlock($tables);
-
-    $changed = implode(', ', array_keys($fields));
-
-    return [
-        'result'  => true,
-        'message' => count($ids).' group(s) changed: '.$changed
-        ];
+    return TABLE\Update($mUserId, 'provider_group', $mParam['id'], $mParam);
 }
 
 
@@ -381,55 +93,7 @@ function CmdGroupUpdate($mUserId, $mParam)
  **/
 function CmdGroupRemove($mUserId, $mParam)
 {
-    $gate = UTIL\RightOper($mUserId, 'PUT_PROVIDER', 'Shaping the groups of the providers');
-    if ( $gate !== true ) return $gate;
-
-    $ids = UTIL\Exists('provider_group', $mParam['id']);
-    $lost = array_diff($mParam['id'], $ids);
-    if ( count($lost) > 0 )
-    {
-        $list = implode(', ', $lost);
-
-        return [
-            'result'  => false,
-            'message' => 'No groups ['.$list.'] in the store'
-            ];
-    }
-
-    $list = implode(',', $ids);
-
-    // Counts the providers standing in those groups: a group with any of them is not deleted
-    $command = "SELECT COUNT(*)
-                  FROM {DBNICK}_provider
-                 WHERE group_id IN ( $list )
-               ";
-    $stand = (int)MELBIS()->SqlSelectValue(__LINE__, $command, 0);
-
-    if ( $stand > 0 )
-    {
-        return [
-            'result'  => false,
-            'message' => $stand.' provider(s) stand in those groups and would be left without one '.
-                         '- move them first, CmdUpdate with group_id'
-            ];
-    }
-
-    $tables = ['{DBNICK}_provider_group'];
-    $lock = UTIL\TablesLock($tables);
-    if ( !$lock['result'] ) return $lock;
-
-    $command = "DELETE
-                  FROM {DBNICK}_provider_group
-                 WHERE id IN ( $list )
-               ";
-    MELBIS()->SqlQuery(__LINE__, $command);
-
-    UTIL\TablesUnlock($tables);
-
-    return [
-        'result'  => true,
-        'message' => count($ids).' group(s) gone'
-        ];
+    return TABLE\Remove($mUserId, 'provider_group', $mParam['id'], $mParam);
 }
 
 
@@ -438,24 +102,46 @@ function CmdGroupRemove($mUserId, $mParam)
  **/
 function CmdGroupPos($mUserId, $mParam)
 {
-    $gate = UTIL\RightOper($mUserId, 'PUT_PROVIDER', 'Shaping the groups of the providers');
-    if ( $gate !== true ) return $gate;
+    return TABLE\Pos($mUserId, 'provider_group', [], $mParam);
+}
 
-    $tables = ['{DBNICK}_provider_group'];
-    $lock = UTIL\TablesLock($tables);
-    if ( !$lock['result'] ) return $lock;
 
-    // The whole table is one list here, so nothing narrows the scope
-    $done = UTIL\Pos('provider_group', [], $mParam['type'], $mParam['data'] ?? []);
+/**
+ * Function CmdStockAdd
+ **/
+function CmdStockAdd($mUserId, $mParam)
+{
+    return TABLE\Add($mUserId, 'provider_stock', $mParam);
+}
 
-    UTIL\TablesUnlock($tables);
 
-    if ( !$done['result'] ) return $done;
+/**
+ * Function CmdStockUpdate
+ **/
+function CmdStockUpdate($mUserId, $mParam)
+{
+    return TABLE\Update($mUserId, 'provider_stock', $mParam['id'], $mParam);
+}
 
-    return [
-        'result'  => true,
-        'message' => 'The groups: '.$done['said'].', '.$done['moved'].' row(s) moved'
-        ];
+
+/**
+ * Function CmdStockRemove
+ **/
+function CmdStockRemove($mUserId, $mParam)
+{
+    return TABLE\Remove($mUserId, 'provider_stock', $mParam['id'], $mParam);
+}
+
+
+/**
+ * Function CmdStockPos
+ **/
+function CmdStockPos($mUserId, $mParam)
+{
+    // The warehouses of one provider
+    $scope['provider_id'] = $mParam['provider_id'];
+
+    return TABLE\Pos($mUserId, 'provider_stock', $scope, $mParam);
 }
 
 
@@ -464,45 +150,7 @@ function CmdGroupPos($mUserId, $mParam)
  **/
 function CmdKeyAdd($mUserId, $mParam)
 {
-    $gate = UTIL\RightOper($mUserId, 'PUT_PROVIDER', 'Setting an option of a provider');
-    if ( $gate !== true ) return $gate;
-
-    $ids = UTIL\Exists('provider', $mParam['provider_id']);
-    $lost = array_diff($mParam['provider_id'], $ids);
-    if ( count($lost) > 0 )
-    {
-        $list = implode(', ', $lost);
-
-        return [
-            'result'  => false,
-            'message' => 'No providers ['.$list.'] in the store'
-            ];
-    }
-
-    // The option and its value belong to the tree of this family, and a stray id is refused
-    $option = UTIL\OptionPair('provider', $mParam);
-    if ( $option !== true ) return $option;
-
-    $fields = UTIL\Only($mParam, FIELDS_KEY);
-
-    $tables = ['{DBNICK}_provider_key_set'];
-    $lock = UTIL\TablesLock($tables);
-    if ( !$lock['result'] ) return $lock;
-
-    foreach ( $ids as $id )
-    {
-        $row = $fields;
-        $row['id'] = MELBIS()->SqlGenId('provider_key_set');
-        $row['provider_id'] = $id;
-        MELBIS()->SqlInsert(__LINE__, '{DBNICK}_provider_key_set', $row);
-    }
-
-    UTIL\TablesUnlock($tables);
-
-    return [
-        'result'  => true,
-        'message' => count($ids).' row(s) of provider_key_set set'
-        ];
+    return TABLE\KeySetAdd($mUserId, 'provider', $mParam['provider_id'], $mParam);
 }
 
 
@@ -511,62 +159,7 @@ function CmdKeyAdd($mUserId, $mParam)
  **/
 function CmdKeyUpdate($mUserId, $mParam)
 {
-    $gate = UTIL\RightOper($mUserId, 'PUT_PROVIDER', 'Setting an option of a provider');
-    if ( $gate !== true ) return $gate;
-
-    $ids = UTIL\Exists('provider_key_set', $mParam['id']);
-    $lost = array_diff($mParam['id'], $ids);
-    if ( count($lost) > 0 )
-    {
-        $list = implode(', ', $lost);
-
-        return [
-            'result'  => false,
-            'message' => 'No rows ['.$list.'] in provider_key_set'
-            ];
-    }
-
-    // The pair as it will stand after the change: a row keeps whatever the call left unsaid
-    $list = implode(',', $ids);
-    $command = "SELECT id, key_id, value_id
-                  FROM {DBNICK}_provider_key_set
-                 WHERE id IN ( $list )
-               ";
-    $was_set = MELBIS()->SqlSelect(__LINE__, $command);
-    foreach ( $was_set as $was )
-    {
-        $option = UTIL\OptionPair('provider', $mParam, $was);
-        if ( $option !== true ) return $option;
-    }
-
-    $fields = UTIL\Only($mParam, FIELDS_KEY);
-    if ( count($fields) == 0 )
-    {
-        return [
-            'result'  => false,
-            'message' => 'Nothing was named to change'
-            ];
-    }
-
-    $tables = ['{DBNICK}_provider_key_set'];
-    $lock = UTIL\TablesLock($tables);
-    if ( !$lock['result'] ) return $lock;
-
-    foreach ( $ids as $id )
-    {
-        $row = $fields;
-        $row['id'] = $id;
-        MELBIS()->SqlUpdate(__LINE__, '{DBNICK}_provider_key_set', $row, 'id');
-    }
-
-    UTIL\TablesUnlock($tables);
-
-    $changed = implode(', ', array_keys($fields));
-
-    return [
-        'result'  => true,
-        'message' => count($ids).' option row(s) changed: '.$changed
-        ];
+    return TABLE\KeySetUpdate($mUserId, 'provider', $mParam['id'], $mParam);
 }
 
 
@@ -575,43 +168,34 @@ function CmdKeyUpdate($mUserId, $mParam)
  **/
 function CmdKeyRemove($mUserId, $mParam)
 {
-    $gate = UTIL\RightOper($mUserId, 'PUT_PROVIDER', 'Setting an option of a provider');
-    if ( $gate !== true ) return $gate;
-
-    $ids = UTIL\Exists('provider_key_set', $mParam['id']);
-    $lost = array_diff($mParam['id'], $ids);
-    if ( count($lost) > 0 )
-    {
-        $list = implode(', ', $lost);
-
-        return [
-            'result'  => false,
-            'message' => 'No rows ['.$list.'] in provider_key_set'
-            ];
-    }
-
-    $list = implode(',', $ids);
-
-    $tables = ['{DBNICK}_provider_key_set'];
-    $lock = UTIL\TablesLock($tables);
-    if ( !$lock['result'] ) return $lock;
-
-    $command = "DELETE
-                  FROM {DBNICK}_provider_key_set
-                 WHERE id IN ( $list )
-               ";
-    MELBIS()->SqlQuery(__LINE__, $command);
-
-    UTIL\TablesUnlock($tables);
-
-    return [
-        'result'  => true,
-        'message' => count($ids).' option row(s) gone'
-        ];
+    return TABLE\KeySetRemove($mUserId, 'provider', $mParam['id']);
 }
 
 
+/**
+ * Function CmdStockKeyAdd
+ **/
+function CmdStockKeyAdd($mUserId, $mParam)
+{
+    return TABLE\KeySetAdd($mUserId, 'provider_stock', $mParam['provider_stock_id'], $mParam);
+}
 
 
+/**
+ * Function CmdStockKeyUpdate
+ **/
+function CmdStockKeyUpdate($mUserId, $mParam)
+{
+    return TABLE\KeySetUpdate($mUserId, 'provider_stock', $mParam['id'], $mParam);
+}
+
+
+/**
+ * Function CmdStockKeyRemove
+ **/
+function CmdStockKeyRemove($mUserId, $mParam)
+{
+    return TABLE\KeySetRemove($mUserId, 'provider_stock', $mParam['id']);
+}
 
 ?>

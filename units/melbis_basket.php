@@ -1,18 +1,27 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.402 @ 2026-08-20
+ * @version 6.5.0.410 @ 2026-08-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
+ **************************************************************************************************
+ *
+ * Main    - Runs what the form names
+ * Plus    - Puts a goods in
+ * Minus   - Takes a goods out
+ * Goods   - Prints the basket goods
+ * Fields  - Prints the buyer fields
+ * Options - Prints the order options
+ * Save    - Counts and saves the order
+ *
  **************************************************************************************************/
                     
 namespace MELBIS_BASKET;  
 
 use MELBIS_INC_LOGIC_ORDER as LOGIC_ORDER;
-use MELBIS_INC_LOGIC_ORDER_CALC as LOGIC_CALC;
-use MELBIS_INC_LOGIC_ORDER_EDIT as LOGIC_EDIT;
+use MELBIS_INC_LOGIC_ORDER_CALC as LOGIC_ORDER_CALC;
+use MELBIS_INC_LOGIC_ORDER_EDIT as LOGIC_ORDER_EDIT;
 
- 
 
 /** 
  * Function Main
@@ -39,7 +48,7 @@ function Plus($mVars)
     $version = LOGIC_ORDER\GoodsAdd($version, $store_id);
      
     // Calculate
-    $version = LOGIC_CALC\Run(null, $version);
+    $version = LOGIC_ORDER_CALC\Run(null, $version);
              
     // Save version
     MELBIS()->SessionSetValue('order', $version);    
@@ -64,7 +73,7 @@ function Minus($mVars)
     $version = LOGIC_ORDER\GoodsRemove($version, $store_id);    
     
     // Calculate
-    $version = LOGIC_CALC\Run(null, $version);
+    $version = LOGIC_ORDER_CALC\Run(null, $version);
              
     // Save version
     MELBIS()->SessionSetValue('order', $version);            
@@ -109,7 +118,7 @@ function Fields($mVars)
     // Fields
     $client_fields = $version['client'];                                    
                   
-    // The registry answers every field with its values at once, in the order of the shop
+    // The registry answers every field
     $field_set = array_column(MELBIS()->SysFieldValues(), null, 'id');
     
     foreach ( $client_fields as &$row ) 
@@ -118,7 +127,7 @@ function Fields($mVars)
         $row['fixed_set'] = $field['fixed_set'] ?? 0;
         $row['value_list'] = $field['value'] ?? [];
         
-        // The value the order holds is the one the list has to show as chosen
+        // The value the order holds
         foreach ( $row['value_list'] as &$value ) 
         {
             $value['is_selected'] = ( $value['id'] == $row['value_id'] );
@@ -151,7 +160,7 @@ function Options($mVars)
     // Options
     $order_options = $version['option'];                                    
                   
-    // The registry answers every option with its values at once, in the order of the shop
+    // The registry answers every option
     $option_set = array_column(MELBIS()->SysOrderOptionValues(), null, 'id');
     
     foreach ( $order_options as &$row ) 
@@ -160,7 +169,7 @@ function Options($mVars)
         $row['fixed_set'] = $option['fixed_set'] ?? 0;
         $row['value_list'] = $option['value'] ?? [];
         
-        // The value the order holds is the one the list has to show as chosen
+        // The value the order holds
         foreach ( $row['value_list'] as &$value ) 
         {
             $value['is_selected'] = ( $value['id'] == $row['value_id'] );
@@ -185,7 +194,7 @@ function Save($mVars)
     $data['result'] = 'OK';
     $data['message'] = '';    
     
-    // Vars - an order not started yet holds no lists at all    
+    // An order unstarted holds nothing
     $version = MELBIS()->SessionGetValue('order') ?? [];  
     $version['client'] = $version['client'] ?? [];
     $version['option'] = $version['option'] ?? [];
@@ -211,7 +220,7 @@ function Save($mVars)
     unset($row);
     
     // Calculate
-    $version = LOGIC_CALC\Run(null, $version);
+    $version = LOGIC_ORDER_CALC\Run(null, $version);
     
     // Save version
     MELBIS()->SessionSetValue('order', $version);                                          
@@ -235,7 +244,7 @@ function Save($mVars)
     }     
     
     // Create order                
-    $result = LOGIC_EDIT\Run(null, $version);
+    $result = LOGIC_ORDER_EDIT\Run(null, $version);
     
     // Error exists?
     if ( $result['value'] != 'OK' )

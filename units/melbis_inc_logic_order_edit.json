@@ -1,6 +1,6 @@
 {
     "description": "Add Order version",
-    "parameters": "",
+    "parameters": "LOGIC_ORDER_EDIT",
     "tables": [],
     "includes": [
         "melbis_inc_logic_order.php=1"

@@ -1,0 +1,14 @@
+/************************************************************************************************************
+ * @version 6.5.0.410 @ 2026-08-28
+ * @copyright 2002-2026 Melbis
+ * @link https://melbis.com
+ * @author Dmytro Kasianov
+ ************************************************************************************************************/
+
+table={DBNICK}_user_filter_param|id|name
+1=Entrepôts des fournisseurs
+2=Paramètres du produit
+3=Valeurs des paramètres
+4=Caractéristiques
+5=Valeurs des caractéristiques
+6=Groupes de taxes

@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.402 @ 2026-08-20
+ * @version 6.5.0.410 @ 2026-08-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -255,6 +255,21 @@ CREATE TABLE {DBNICK}_user_filter (
 
 
 /**
+ * Table user_filter_param
+ **/
+DROP TABLE IF EXISTS {DBNICK}_user_filter_param;
+CREATE TABLE {DBNICK}_user_filter_param (
+   id 		INT UNSIGNED DEFAULT '0' NOT NULL,
+   alias 	CHAR(32) DEFAULT '' NOT NULL,
+   name 	   CHAR(255) DEFAULT '' NOT NULL,
+   sql_txt	MEDIUMTEXT DEFAULT ('') NOT NULL,
+   pos	 	INT UNSIGNED DEFAULT '0' NOT NULL,
+   PRIMARY KEY (id),
+   KEY IDX1 (alias)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
+/**
  * Table user_file_version
  **/
 DROP TABLE IF EXISTS {DBNICK}_user_file_version;
@@ -303,6 +318,106 @@ CREATE TABLE {DBNICK}_user_task_note (
    PRIMARY KEY (id),
    KEY IDX1 (task_id),
    KEY IDX2 (user_id)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
+/**
+ * Table user_key
+ **/
+DROP TABLE IF EXISTS {DBNICK}_user_key;
+CREATE TABLE {DBNICK}_user_key (
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   skey 	      CHAR(32) DEFAULT '' NOT NULL,
+   name 	      CHAR(255) DEFAULT '' NOT NULL,
+   tindex 	   INT UNSIGNED DEFAULT '0' NOT NULL,
+   tlevel 	   INT UNSIGNED DEFAULT '0' NOT NULL,
+   absindex 	INT UNSIGNED DEFAULT '0' NOT NULL,
+   folder 	   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   descr	      MEDIUMTEXT DEFAULT ('') NOT NULL,
+   mask_edit	CHAR(255) DEFAULT '' NOT NULL,
+   PRIMARY KEY (id)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
+/**
+ * Table user_key_value
+ **/
+DROP TABLE IF EXISTS {DBNICK}_user_key_value;
+CREATE TABLE {DBNICK}_user_key_value (
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   skey 	      CHAR(32) DEFAULT '' NOT NULL,
+   key_id	   INT UNSIGNED DEFAULT NULL,
+   name 	      CHAR(255) DEFAULT '' NOT NULL,
+   pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   PRIMARY KEY (id),
+   KEY IDX1 (key_id)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
+/**
+ * Table user_key_set
+ **/
+DROP TABLE IF EXISTS {DBNICK}_user_key_set;
+CREATE TABLE {DBNICK}_user_key_set (
+   id 		      INT UNSIGNED DEFAULT '0' NOT NULL,
+   user_id	      INT UNSIGNED DEFAULT NULL,
+   key_id	      INT UNSIGNED DEFAULT NULL,
+   value_id	      INT UNSIGNED DEFAULT NULL,
+   value_txt 	   MEDIUMTEXT DEFAULT ('') NOT NULL,
+   PRIMARY KEY (id),
+   KEY IDX1 (user_id),
+   KEY IDX2 (key_id),
+   KEY IDX3 (value_id)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
+/**
+ * Table user_group_key
+ **/
+DROP TABLE IF EXISTS {DBNICK}_user_group_key;
+CREATE TABLE {DBNICK}_user_group_key (
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   skey 	      CHAR(32) DEFAULT '' NOT NULL,
+   name 	      CHAR(255) DEFAULT '' NOT NULL,
+   tindex 	   INT UNSIGNED DEFAULT '0' NOT NULL,
+   tlevel 	   INT UNSIGNED DEFAULT '0' NOT NULL,
+   absindex 	INT UNSIGNED DEFAULT '0' NOT NULL,
+   folder 	   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   descr	      MEDIUMTEXT DEFAULT ('') NOT NULL,
+   mask_edit	CHAR(255) DEFAULT '' NOT NULL,
+   PRIMARY KEY (id)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
+/**
+ * Table user_group_key_value
+ **/
+DROP TABLE IF EXISTS {DBNICK}_user_group_key_value;
+CREATE TABLE {DBNICK}_user_group_key_value (
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   skey 	      CHAR(32) DEFAULT '' NOT NULL,
+   key_id	   INT UNSIGNED DEFAULT NULL,
+   name 	      CHAR(255) DEFAULT '' NOT NULL,
+   pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   PRIMARY KEY (id),
+   KEY IDX1 (key_id)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
+/**
+ * Table user_group_key_set
+ **/
+DROP TABLE IF EXISTS {DBNICK}_user_group_key_set;
+CREATE TABLE {DBNICK}_user_group_key_set (
+   id 		      INT UNSIGNED DEFAULT '0' NOT NULL,
+   user_group_id      INT UNSIGNED DEFAULT NULL,
+   key_id	      INT UNSIGNED DEFAULT NULL,
+   value_id	      INT UNSIGNED DEFAULT NULL,
+   value_txt 	   MEDIUMTEXT DEFAULT ('') NOT NULL,
+   PRIMARY KEY (id),
+   KEY IDX1 (user_group_id),
+   KEY IDX2 (key_id),
+   KEY IDX3 (value_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -490,6 +605,56 @@ CREATE TABLE {DBNICK}_topic_filter (
 
 
 /**
+ * Table topic_filter_key
+ **/
+DROP TABLE IF EXISTS {DBNICK}_topic_filter_key;
+CREATE TABLE {DBNICK}_topic_filter_key (
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   skey 	      CHAR(32) DEFAULT '' NOT NULL,
+   name 	      CHAR(255) DEFAULT '' NOT NULL,
+   tindex 	   INT UNSIGNED DEFAULT '0' NOT NULL,
+   tlevel 	   INT UNSIGNED DEFAULT '0' NOT NULL,
+   absindex 	INT UNSIGNED DEFAULT '0' NOT NULL,
+   folder 	   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   descr	      MEDIUMTEXT DEFAULT ('') NOT NULL,
+   mask_edit	CHAR(255) DEFAULT '' NOT NULL,
+   PRIMARY KEY (id)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
+/**
+ * Table topic_filter_key_value
+ **/
+DROP TABLE IF EXISTS {DBNICK}_topic_filter_key_value;
+CREATE TABLE {DBNICK}_topic_filter_key_value (
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   skey 	      CHAR(32) DEFAULT '' NOT NULL,
+   key_id	   INT UNSIGNED DEFAULT NULL,
+   name 	      CHAR(255) DEFAULT '' NOT NULL,
+   pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   PRIMARY KEY (id),
+   KEY IDX1 (key_id)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
+/**
+ * Table topic_filter_key_set
+ **/
+DROP TABLE IF EXISTS {DBNICK}_topic_filter_key_set;
+CREATE TABLE {DBNICK}_topic_filter_key_set (
+   id 		      INT UNSIGNED DEFAULT '0' NOT NULL,
+   topic_filter_id    INT UNSIGNED DEFAULT NULL,
+   key_id	      INT UNSIGNED DEFAULT NULL,
+   value_id	      INT UNSIGNED DEFAULT NULL,
+   value_txt 	   MEDIUMTEXT DEFAULT ('') NOT NULL,
+   PRIMARY KEY (id),
+   KEY IDX1 (topic_filter_id),
+   KEY IDX2 (key_id),
+   KEY IDX3 (value_id)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
+/**
  * Table topic_right
  **/
 DROP TABLE IF EXISTS {DBNICK}_topic_right;
@@ -501,6 +666,7 @@ CREATE TABLE {DBNICK}_topic_right (
    for_frame	   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    for_price	   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    for_ctrl	      TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   for_browse	   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY IDX1 (topic_id),
    KEY IDX2 (user_id),
@@ -811,6 +977,72 @@ CREATE TABLE {DBNICK}_provider_key_set (
 
 
 /**
+ * Table provider_stock
+ **/
+DROP TABLE IF EXISTS {DBNICK}_provider_stock;
+CREATE TABLE {DBNICK}_provider_stock (
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   skey 	      CHAR(32) DEFAULT '' NOT NULL,
+   provider_id 	INT UNSIGNED DEFAULT NULL,
+   name 	      CHAR(255) DEFAULT '' NOT NULL,
+   kind_key 	CHAR(100) DEFAULT '' NOT NULL,
+   pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   PRIMARY KEY (id),
+   KEY IDX1 (provider_id),
+   KEY IDX2 (kind_key)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+/**
+ * Table provider_stock_key
+ **/
+DROP TABLE IF EXISTS {DBNICK}_provider_stock_key;
+CREATE TABLE {DBNICK}_provider_stock_key (
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   skey 	      CHAR(32) DEFAULT '' NOT NULL,
+   name 	      CHAR(255) DEFAULT '' NOT NULL,
+   tindex 	   INT UNSIGNED DEFAULT '0' NOT NULL,
+   tlevel 	   INT UNSIGNED DEFAULT '0' NOT NULL,
+   absindex 	INT UNSIGNED DEFAULT '0' NOT NULL,
+   folder 	   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   descr	      MEDIUMTEXT DEFAULT ('') NOT NULL,
+   mask_edit	CHAR(255) DEFAULT '' NOT NULL,
+   PRIMARY KEY (id)   
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
+/**
+ * Table provider_stock_key_value
+ **/
+DROP TABLE IF EXISTS {DBNICK}_provider_stock_key_value;
+CREATE TABLE {DBNICK}_provider_stock_key_value (
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   skey 	      CHAR(32) DEFAULT '' NOT NULL,
+   key_id	   INT UNSIGNED DEFAULT NULL,
+   name 	      CHAR(255) DEFAULT '' NOT NULL,
+   pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   PRIMARY KEY (id),
+   KEY IDX1 (key_id)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
+/**
+ * Table provider_stock_key_set
+ **/
+DROP TABLE IF EXISTS {DBNICK}_provider_stock_key_set;
+CREATE TABLE {DBNICK}_provider_stock_key_set (
+   id 		      INT UNSIGNED DEFAULT '0' NOT NULL,
+   provider_stock_id INT UNSIGNED DEFAULT NULL,
+   key_id	      INT UNSIGNED DEFAULT NULL,
+   value_id	      INT UNSIGNED DEFAULT NULL,
+   value_txt 	   MEDIUMTEXT DEFAULT ('') NOT NULL,
+   PRIMARY KEY (id),
+   KEY IDX1 (provider_stock_id),
+   KEY IDX2 (key_id),
+   KEY IDX3 (value_id)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
+/**
  * Table info
  **/
 DROP TABLE IF EXISTS {DBNICK}_info;
@@ -965,6 +1197,132 @@ CREATE TABLE {DBNICK}_info_key_set (
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
+
+
+/**
+ * Table tax_area
+ **/
+DROP TABLE IF EXISTS {DBNICK}_tax_area;
+CREATE TABLE {DBNICK}_tax_area (
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   skey 	      CHAR(32) DEFAULT '' NOT NULL,
+   name 	      CHAR(255) DEFAULT '' NOT NULL,
+   tindex 	   INT UNSIGNED DEFAULT '0' NOT NULL,
+   tlevel 	   INT UNSIGNED DEFAULT '0' NOT NULL,
+   absindex 	INT UNSIGNED DEFAULT '0' NOT NULL,
+   folder 	   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   code 	      CHAR(100) DEFAULT '' NOT NULL,
+   kind_key 	CHAR(100) DEFAULT '' NOT NULL,
+   type_key 	CHAR(100) DEFAULT '' NOT NULL,
+   params 	   CHAR(255) DEFAULT '' NOT NULL,
+   PRIMARY KEY (id),
+   KEY IDX1 (tindex),
+   KEY IDX2 (absindex),
+   KEY IDX3 (kind_key)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
+/**
+ * Table tax_group
+ **/
+DROP TABLE IF EXISTS {DBNICK}_tax_group;
+CREATE TABLE {DBNICK}_tax_group (
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   skey 	      CHAR(32) DEFAULT '' NOT NULL,
+   name 	      CHAR(255) DEFAULT '' NOT NULL,
+   pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   PRIMARY KEY (id)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
+/**
+ * Table tax_rate
+ **/
+DROP TABLE IF EXISTS {DBNICK}_tax_rate;
+CREATE TABLE {DBNICK}_tax_rate (
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   group_id	   INT UNSIGNED DEFAULT NULL,
+   kind_key 	CHAR(100) DEFAULT '' NOT NULL,
+   name 	      CHAR(255) DEFAULT '' NOT NULL,
+   rate_proc	DECIMAL(10,4) DEFAULT '0' NOT NULL,
+   rate_sum	   DECIMAL(10,2) DEFAULT '0' NOT NULL,
+   rate_sum_curr_id INT UNSIGNED DEFAULT NULL,
+   pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   PRIMARY KEY (id),
+   KEY IDX1 (group_id),
+   KEY IDX2 (kind_key)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
+/**
+ * Table tax_rule
+ **/
+DROP TABLE IF EXISTS {DBNICK}_tax_rule;
+CREATE TABLE {DBNICK}_tax_rule (
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   area_id	   INT UNSIGNED DEFAULT NULL,
+   rate_id	   INT UNSIGNED DEFAULT NULL,
+   rule_key 	CHAR(100) DEFAULT '' NOT NULL,
+   rule_custom	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   rule_proc	DECIMAL(10,4) DEFAULT '0' NOT NULL,
+   rule_sum	   DECIMAL(10,2) DEFAULT '0' NOT NULL,
+   rule_sum_curr_id INT UNSIGNED DEFAULT NULL,
+   PRIMARY KEY (id),
+   KEY IDX1 (area_id),
+   KEY IDX2 (rate_id)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
+/**
+ * Table tax_area_key
+ **/
+DROP TABLE IF EXISTS {DBNICK}_tax_area_key;
+CREATE TABLE {DBNICK}_tax_area_key (
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   skey 	      CHAR(32) DEFAULT '' NOT NULL,
+   name 	      CHAR(255) DEFAULT '' NOT NULL,
+   tindex 	   INT UNSIGNED DEFAULT '0' NOT NULL,
+   tlevel 	   INT UNSIGNED DEFAULT '0' NOT NULL,
+   absindex 	INT UNSIGNED DEFAULT '0' NOT NULL,
+   folder 	   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   descr	      MEDIUMTEXT DEFAULT ('') NOT NULL,
+   mask_edit	CHAR(255) DEFAULT '' NOT NULL,
+   PRIMARY KEY (id)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
+/**
+ * Table tax_area_key_value
+ **/
+DROP TABLE IF EXISTS {DBNICK}_tax_area_key_value;
+CREATE TABLE {DBNICK}_tax_area_key_value (
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   skey 	      CHAR(32) DEFAULT '' NOT NULL,
+   key_id	   INT UNSIGNED DEFAULT NULL,
+   name 	      CHAR(255) DEFAULT '' NOT NULL,
+   pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   PRIMARY KEY (id),
+   KEY IDX1 (key_id)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
+/**
+ * Table tax_area_key_set
+ **/
+DROP TABLE IF EXISTS {DBNICK}_tax_area_key_set;
+CREATE TABLE {DBNICK}_tax_area_key_set (
+   id 		      INT UNSIGNED DEFAULT '0' NOT NULL,
+   tax_area_id        INT UNSIGNED DEFAULT NULL,
+   key_id	      INT UNSIGNED DEFAULT NULL,
+   value_id	      INT UNSIGNED DEFAULT NULL,
+   value_txt 	   MEDIUMTEXT DEFAULT ('') NOT NULL,
+   PRIMARY KEY (id),
+   KEY IDX1 (tax_area_id),
+   KEY IDX2 (key_id),
+   KEY IDX3 (value_id)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
 /**
  * Table currency
  **/
@@ -1029,6 +1387,55 @@ CREATE TABLE {DBNICK}_param (
    KEY IDX1 (kind_key)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
+/**
+ * Table param_key
+ **/
+DROP TABLE IF EXISTS {DBNICK}_param_key;
+CREATE TABLE {DBNICK}_param_key (
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   skey 	      CHAR(32) DEFAULT '' NOT NULL,
+   name 	      CHAR(255) DEFAULT '' NOT NULL,
+   tindex 	   INT UNSIGNED DEFAULT '0' NOT NULL,
+   tlevel 	   INT UNSIGNED DEFAULT '0' NOT NULL,
+   absindex 	INT UNSIGNED DEFAULT '0' NOT NULL,
+   folder 	   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   descr	      MEDIUMTEXT DEFAULT ('') NOT NULL,
+   mask_edit	CHAR(255) DEFAULT '' NOT NULL,
+   PRIMARY KEY (id)   
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
+/**
+ * Table param_key_value
+ **/
+DROP TABLE IF EXISTS {DBNICK}_param_key_value;
+CREATE TABLE {DBNICK}_param_key_value (
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   skey 	      CHAR(32) DEFAULT '' NOT NULL,
+   key_id	   INT UNSIGNED DEFAULT NULL,
+   name 	      CHAR(255) DEFAULT '' NOT NULL,
+   pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   PRIMARY KEY (id),
+   KEY IDX1 (key_id)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
+/**
+ * Table param_key_set
+ **/
+DROP TABLE IF EXISTS {DBNICK}_param_key_set;
+CREATE TABLE {DBNICK}_param_key_set (
+   id 		      INT UNSIGNED DEFAULT '0' NOT NULL,
+   param_id	   INT UNSIGNED DEFAULT NULL,
+   key_id	      INT UNSIGNED DEFAULT NULL,
+   value_id	      INT UNSIGNED DEFAULT NULL,
+   value_txt 	   MEDIUMTEXT DEFAULT ('') NOT NULL,
+   PRIMARY KEY (id),
+   KEY IDX1 (param_id),
+   KEY IDX2 (key_id),
+   KEY IDX3 (value_id)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
 
 /**
  * Table param_value
@@ -1038,12 +1445,65 @@ CREATE TABLE {DBNICK}_param_value (
    id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
    skey 	      CHAR(32) DEFAULT '' NOT NULL,
    param_id	   INT UNSIGNED DEFAULT NULL,
+   groupe 	      CHAR(255) DEFAULT '' NOT NULL,
    name 	      CHAR(255) DEFAULT '' NOT NULL,
+   kind_key 	CHAR(100) DEFAULT '' NOT NULL,
    set_sum 	   DECIMAL(10,2) DEFAULT '0' NOT NULL,
    sum_curr_id INT UNSIGNED DEFAULT NULL,
    pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY IDX1 (param_id)
+   KEY IDX1 (param_id),
+   KEY IDX2 (kind_key)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
+/**
+ * Table param_value_key
+ **/
+DROP TABLE IF EXISTS {DBNICK}_param_value_key;
+CREATE TABLE {DBNICK}_param_value_key (
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   skey 	      CHAR(32) DEFAULT '' NOT NULL,
+   name 	      CHAR(255) DEFAULT '' NOT NULL,
+   tindex 	   INT UNSIGNED DEFAULT '0' NOT NULL,
+   tlevel 	   INT UNSIGNED DEFAULT '0' NOT NULL,
+   absindex 	INT UNSIGNED DEFAULT '0' NOT NULL,
+   folder 	   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   descr	      MEDIUMTEXT DEFAULT ('') NOT NULL,
+   mask_edit	CHAR(255) DEFAULT '' NOT NULL,
+   PRIMARY KEY (id)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
+/**
+ * Table param_value_key_value
+ **/
+DROP TABLE IF EXISTS {DBNICK}_param_value_key_value;
+CREATE TABLE {DBNICK}_param_value_key_value (
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   skey 	      CHAR(32) DEFAULT '' NOT NULL,
+   key_id	   INT UNSIGNED DEFAULT NULL,
+   name 	      CHAR(255) DEFAULT '' NOT NULL,
+   pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   PRIMARY KEY (id),
+   KEY IDX1 (key_id)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
+/**
+ * Table param_value_key_set
+ **/
+DROP TABLE IF EXISTS {DBNICK}_param_value_key_set;
+CREATE TABLE {DBNICK}_param_value_key_set (
+   id 		      INT UNSIGNED DEFAULT '0' NOT NULL,
+   param_value_id INT UNSIGNED DEFAULT NULL,
+   key_id	      INT UNSIGNED DEFAULT NULL,
+   value_id	      INT UNSIGNED DEFAULT NULL,
+   value_txt 	   MEDIUMTEXT DEFAULT ('') NOT NULL,
+   PRIMARY KEY (id),
+   KEY IDX1 (param_value_id),
+   KEY IDX2 (key_id),
+   KEY IDX3 (value_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -1261,6 +1721,56 @@ CREATE TABLE {DBNICK}_advert_link (
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
+/**
+ * Table advert_key
+ **/
+DROP TABLE IF EXISTS {DBNICK}_advert_key;
+CREATE TABLE {DBNICK}_advert_key (
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   skey 	      CHAR(32) DEFAULT '' NOT NULL,
+   name 	      CHAR(255) DEFAULT '' NOT NULL,
+   tindex 	   INT UNSIGNED DEFAULT '0' NOT NULL,
+   tlevel 	   INT UNSIGNED DEFAULT '0' NOT NULL,
+   absindex 	INT UNSIGNED DEFAULT '0' NOT NULL,
+   folder 	   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   descr	      MEDIUMTEXT DEFAULT ('') NOT NULL,
+   mask_edit	CHAR(255) DEFAULT '' NOT NULL,
+   PRIMARY KEY (id)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
+/**
+ * Table advert_key_value
+ **/
+DROP TABLE IF EXISTS {DBNICK}_advert_key_value;
+CREATE TABLE {DBNICK}_advert_key_value (
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   skey 	      CHAR(32) DEFAULT '' NOT NULL,
+   key_id	   INT UNSIGNED DEFAULT NULL,
+   name 	      CHAR(255) DEFAULT '' NOT NULL,
+   pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   PRIMARY KEY (id),
+   KEY IDX1 (key_id)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
+/**
+ * Table advert_key_set
+ **/
+DROP TABLE IF EXISTS {DBNICK}_advert_key_set;
+CREATE TABLE {DBNICK}_advert_key_set (
+   id 		      INT UNSIGNED DEFAULT '0' NOT NULL,
+   advert_id          INT UNSIGNED DEFAULT NULL,
+   key_id	      INT UNSIGNED DEFAULT NULL,
+   value_id	      INT UNSIGNED DEFAULT NULL,
+   value_txt 	   MEDIUMTEXT DEFAULT ('') NOT NULL,
+   PRIMARY KEY (id),
+   KEY IDX1 (advert_id),
+   KEY IDX2 (key_id),
+   KEY IDX3 (value_id)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
 
 
 /****************************************************************
@@ -1296,6 +1806,7 @@ CREATE TABLE {DBNICK}_store (
    relate_id	   BIGINT UNSIGNED DEFAULT '0' NOT NULL,
    rating 	      TINYINT DEFAULT '0' NOT NULL,
    disc_group_id  INT UNSIGNED DEFAULT NULL,
+   tax_group_id   INT UNSIGNED DEFAULT NULL,
    how 		      INT DEFAULT '0' NOT NULL,
    pprice 	      DECIMAL(10,2) DEFAULT '0' NOT NULL,
    pprice_curr_id INT UNSIGNED DEFAULT NULL,
@@ -1395,6 +1906,22 @@ CREATE TABLE {DBNICK}_store_info (
    KEY IDX3 (store_id, value_id),
    KEY IDX4 (store_id, info_id, value_id),
    KEY IDX5 (store_id, info_id, value_dec)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
+/**
+ * Table store_stock
+ **/
+DROP TABLE IF EXISTS {DBNICK}_store_stock;
+CREATE TABLE {DBNICK}_store_stock (
+   id 		      BIGINT UNSIGNED DEFAULT '0' NOT NULL,
+   store_id 	   BIGINT UNSIGNED DEFAULT NULL,
+   provider_stock_id INT UNSIGNED DEFAULT NULL,
+   how 		      INT DEFAULT '0' NOT NULL,
+   params 	      CHAR(255) DEFAULT '' NOT NULL,
+   PRIMARY KEY (id),
+   KEY IDX1 (store_id),
+   KEY IDX2 (provider_stock_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -2060,6 +2587,7 @@ CREATE TABLE {DBNICK}_orders_store (
    version_id 		   BIGINT UNSIGNED DEFAULT NULL,
    store_id 		   BIGINT UNSIGNED DEFAULT NULL,   
    store_provider_id INT UNSIGNED DEFAULT NULL,
+   store_stock_id    INT UNSIGNED DEFAULT NULL,
    store_brand_id 	INT UNSIGNED DEFAULT NULL,
    store_pprice 	   DECIMAL(10,2) DEFAULT '0' NOT NULL,
    store_rprice 	   DECIMAL(10,2) DEFAULT '0' NOT NULL,

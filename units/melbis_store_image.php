@@ -1,9 +1,13 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.402 @ 2026-08-20
+ * @version 6.5.0.410 @ 2026-08-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
+ **************************************************************************************************
+ *
+ * Main - Prints a goods picture
+ *
  **************************************************************************************************/
 
 namespace MELBIS_STORE_IMAGE;
@@ -20,10 +24,10 @@ function Main($mVars)
     $key = $mVars['key'];
     $id = $mVars['id'];
 
-    // Every goods id the page has collected - one query serves all the cards
+    // Every id the page collected
     $ids = MELBIS()->EnumGet('store', $id);
 
-    // Get image - elem_id keys the enum, the other two are what the view prints
+    // Get image, elem_id keys it
     $command = "SELECT elem_id, upload_time, file_name
                   FROM {DBNICK}_files_store
                  WHERE kind_key = :KEY

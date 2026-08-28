@@ -1,9 +1,13 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.402 @ 2026-08-20
+ * @version 6.5.0.410 @ 2026-08-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
+ **************************************************************************************************
+ *
+ * Main - Prints the menu of sections
+ *
  **************************************************************************************************/
 
 namespace MELBIS_CATALOGE;
@@ -18,7 +22,7 @@ function Main($mVars)
     // Create 
     $tpl = MELBIS()->TplCreate();    
     
-    // Find root - the catalogue starts from the section marked kFirst
+    // Find root - kFirst
     $command = "SELECT id, tlevel
                   FROM {DBNICK}_topic
                  WHERE kind_key = 'kFirst'              

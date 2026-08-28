@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.402 @ 2026-08-20
+ * @version 6.5.0.410 @ 2026-08-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -15,6 +15,9 @@ INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('advert', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('advert_text', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('advert_goods', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('advert_link', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('advert_key', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('advert_key_value', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('advert_key_set', 0);
 
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('agent_tool', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('agent_tool_command', 0);
@@ -40,6 +43,13 @@ INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('client_rules', 0
 
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('disc_group', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('disc_rate', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('tax_area', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('tax_area_key', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('tax_area_key_value', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('tax_area_key_set', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('tax_group', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('tax_rate', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('tax_rule', 0);
 
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('files_advert_text', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('files_lang', 0);
@@ -88,21 +98,31 @@ INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('info_key_value',
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('info_key_set', 0);
 
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('param', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('param_key', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('param_key_value', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('param_key_set', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('param_value', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('param_value_key', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('param_value_key_value', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('param_value_key_set', 0);
 
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('provider', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('provider_group', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('provider_key', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('provider_key_value', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('provider_key_set', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('provider_stock', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('provider_stock_key', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('provider_stock_key_value', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('provider_stock_key_set', 0);
 
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('report', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('report_right', 0);
 
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('store', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('store_param', 0);
-INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('store_set', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('store_clann', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('store_stock', 0);
 
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('self_key', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('self_key_right', 0);
@@ -113,6 +133,9 @@ INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('topic_store', 0)
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('topic_right', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('topic_alt', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('topic_filter', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('topic_filter_key', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('topic_filter_key_value', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('topic_filter_key_set', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('topic_key', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('topic_key_value', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('topic_key_set', 0);
@@ -120,6 +143,13 @@ INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('topic_key_set', 
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('user', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('user_group', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('user_filter', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('user_filter_param', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('user_key', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('user_key_value', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('user_key_set', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('user_group_key', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('user_group_key_value', 0);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('user_group_key_set', 0);
 
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('web_outside', 5);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('web_outside_right', 0);

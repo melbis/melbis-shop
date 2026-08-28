@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.402 @ 2026-08-20
+ * @version 6.5.0.410 @ 2026-08-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -27,6 +27,8 @@ table={DBNICK}_key|id|name
 137=Suppliers
 138=Type
 139=State
+159=Default
+160=Type
 108=Brands
 109=Type
 110=File groups
@@ -40,8 +42,18 @@ table={DBNICK}_key|id|name
 5=File groups
 92=Parameters
 93=Type
+157=Value
+158=Type
 50=Discounts
 51=Type
+161=Taxes
+162=Area
+163=Type
+164=Structure
+165=Rate
+166=Type
+167=Rule
+168=Type
 94=------------------ Components --------------------
 91=Product filters
 69=Type
@@ -113,8 +125,6 @@ table={DBNICK}_key|id|name
 123=Tags
 124=Classes
 125=Templates
-
-table={DBNICK}_key_value|id|value_txt
 1=kDefault
 3=Source file
 4=Source file
@@ -254,3 +264,10 @@ table={DBNICK}_key_value|id|value_txt
 319=Source file
 320=File from description
 321=Default icon
+398=Default
+399=Default
+400=Default
+401=Country
+402=State
+403=Default
+404=Default

@@ -1,9 +1,13 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.402 @ 2026-08-20
+ * @version 6.5.0.410 @ 2026-08-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
+ **************************************************************************************************
+ *
+ * Main - Prints a goods page
+ *
  **************************************************************************************************/
 
 namespace MELBIS_PAGE_STORE;
@@ -21,7 +25,7 @@ function Main($mVars)
     // Vars
     $id = $mVars['id'];
 
-    // Get goods - status_key stays a key, the view turns it into a word
+    // Get goods, the view words
     $command = "SELECT s.id, s.name, s.intro, s.descr, s.how, s.update_time, s.status_key,
                        s.price, s.price_curr_id,
                        IF(s.code_shop <> '', s.code_shop, s.id) AS code,

@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.402 @ 2026-08-20
+ * @version 6.5.0.410 @ 2026-08-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -27,6 +27,9 @@ table={DBNICK}_oper|id|name
 98=Rabaty
 99=Pobierz
 100=Zapisz
+437=Podatki
+438=Pobierz
+439=Zapisz
 26=Dostawcy
 27=Pobierz
 28=Zapisz
@@ -53,6 +56,14 @@ table={DBNICK}_oper|id|name
 232=Marki
 233=Pobierz
 234=Zapisz
+263=Przeglądarka
+274=Odśwież ustawienia
+432=Główny
+434=Pobierz produkty sekcji
+436=Rozszerzone zapytanie o produkty
+433=Pomocniczy
+106=Pobierz produkty sekcji
+191=Rozszerzone zapytanie o produkty
 16=Opisy
 248=Sekcja osobista
 210=Aktualizuj ustawienia
@@ -96,10 +107,6 @@ table={DBNICK}_oper|id|name
 242=Pobierz
 243=Dodaj
 244=Usuń
-263=Przeglądarka
-274=Aktualizuj ustawienia
-106=Pobierz produkty sekcji
-191=Znajdź i pobierz produkty
 265=Struktura
 32=Katalog
 219=Szybki dostęp
@@ -262,10 +269,11 @@ table={DBNICK}_oper|id|name
 345=Usuń
 346=Załaduj
 348=Baza danych
-388=Pobierz listę blokad
 392=Pobierz strukturę danych
 349=Odczyt danych
 350=Zmiana danych
+388=Pobierz listę blokad
+440=Zdejmij blokady tabel
 421=Programowanie
 384=Wykonaj czyszczenie pamięci podręcznej
 389=Pobierz konfigurację
@@ -285,9 +293,5 @@ table={DBNICK}_oper|id|name
 318=Profile
 319=Pobierz
 320=Zapisz
-
-table={DBNICK}_user|id|name
 1=Administrator
-
-table={DBNICK}_user_group|id|name
 1=Administratorzy

@@ -1,9 +1,16 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.402 @ 2026-08-20
+ * @version 6.5.0.410 @ 2026-08-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
+ **************************************************************************************************
+ *
+ * Main        - Runs through the auth door
+ * Page        - Prints the module page
+ * GetCataloge - Answers a page of sections
+ * GetGoods    - Answers a page of goods
+ *
  **************************************************************************************************/
 
 namespace MELBIS_WEB_SAMPLE;
@@ -12,7 +19,7 @@ use MELBIS_INC_AUTH as AUTH;
 use MELBIS_INC_WEB_CALLBACK as CALLBACK;
 use MELBIS_INC_LOGIC_COMMON as LOGIC_COMMON;
 
-// Define Callback - the module draws the header of the shop, so it needs them
+// Define Callback, the header
 CALLBACK\Define(); 
 
 
@@ -107,7 +114,7 @@ function GetGoods($mUserId, $mVars)
         $cond .= " AND ( s.id = :KEY_INT OR s.code_shop LIKE :KEY_LIKE OR s.name LIKE :KEY_LIKE ) "; 
     }            
                         
-    // Get data - the price comes raw, in the currency of its own      
+    // Get data, the price raw
     $command = "SELECT s.id, 
                        s.code_shop, 
                        s.name, 

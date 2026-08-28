@@ -1,9 +1,13 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.402 @ 2026-08-20
+ * @version 6.5.0.410 @ 2026-08-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
+ **************************************************************************************************
+ *
+ * Main - Prints goods taken at random
+ *
  **************************************************************************************************/
 
 namespace MELBIS_STORE_RANDOM;
@@ -19,7 +23,7 @@ function Main($mVars)
     // Vars
     $how = $mVars['how'];
 
-    // Get random goods - RAND() scans the table, fine for a small catalogue
+    // Get random, RAND scans
     $command = "SELECT s.id
                   FROM {DBNICK}_store s
                   JOIN {DBNICK}_topic_store ts

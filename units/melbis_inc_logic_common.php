@@ -1,21 +1,20 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.402 @ 2026-08-20
+ * @version 6.5.0.410 @ 2026-08-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
  **************************************************************************************************
- * 
- * Rate     - Rate of a currency against the base one
- * Price    - A sum written in a currency, brought to the base one
- * 
+ *
+ * Rate  - The rate of one currency
+ * Price - A sum in shop money
+ *
  **************************************************************************************************/
 
 namespace MELBIS_INC_LOGIC_COMMON;
 
 /** 
  * Function Rate
- * Rate of a currency against the base one, by the id a row points at
  **/   
 function Rate($mCurrId)
 {
@@ -32,7 +31,6 @@ function Rate($mCurrId)
 
 /** 
  * Function Price
- * A sum written in a currency, brought to the base one
  **/   
 function Price($mSum, $mCurrId)
 {

@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.402 @ 2026-08-20
+ * @version 6.5.0.410 @ 2026-08-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -27,6 +27,8 @@ table={DBNICK}_key|id|name
 137=Dostawcy
 138=Typ
 139=Stan
+159=Domyślnie
+160=Typ
 108=Marki
 109=Typ
 110=Grupy plików
@@ -40,8 +42,18 @@ table={DBNICK}_key|id|name
 5=Grupy plików
 92=Parametry
 93=Typ
+157=Wartość
+158=Typ
 50=Rabaty
 51=Typ
+161=Podatki
+162=Obszar
+163=Typ
+164=Struktura
+165=Stawka
+166=Typ
+167=Reguła
+168=Typ
 94=------------------ Komponenty --------------------
 91=Filtry towarów
 69=Typ
@@ -113,8 +125,6 @@ table={DBNICK}_key|id|name
 123=Tagi
 124=Klasy
 125=Szablony
-
-table={DBNICK}_key_value|id|value_txt
 1=kDefault
 3=Plik źródłowy
 4=Plik źródłowy
@@ -254,3 +264,10 @@ table={DBNICK}_key_value|id|value_txt
 319=Plik źródłowy
 320=Plik z opisu
 321=Domyślna ikona
+398=Domyślnie
+399=Domyślnie
+400=Domyślnie
+401=Kraj
+402=Stan
+403=Domyślnie
+404=Domyślnie

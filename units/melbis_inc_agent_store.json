@@ -1,9 +1,12 @@
 {
-    "description": "",
-    "parameters": "",
+    "description": "Reads and rights of the goods",
+    "parameters": "STORE",
     "tables": [],
-    "includes": [],
-    "cache_on": "0",
+    "includes": [
+        "melbis_inc_agent_query.php=1",
+        "melbis_inc_agent_system.php=1"
+    ],
+    "cache_on": "1",
     "cache_time": "0",
     "lazy_load": "0",
     "entry_point": "0",

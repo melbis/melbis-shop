@@ -1,0 +1,26 @@
+/************************************************************************************************************
+ * @version 6.5.0.410 @ 2026-08-28
+ * @copyright 2002-2026 Melbis
+ * @link https://melbis.com
+ * @author Dmytro Kasianov
+ ************************************************************************************************************/
+
+table={DBNICK}_user_filter|id|name
+1=Quantity in warehouse (from and to)
+2=Availability not spread over the warehouses
+3=Availability disagrees with the warehouses
+4=Products without a photo
+5=Duplicates by manufacturer code
+6=Not updated for N days
+7=Without a tax group
+8=With a parameter (value from and to)
+9=With an attribute value
+10=Without an attribute
+11=In a tax group
+12=Sales from a warehouse
+13=Order amount (from and to)
+14=Orders with a product (store code)
+15=Orders with edits (versions from)
+16=Customers without orders
+17=Bought for a total amount (from)
+18=Have not bought for N days

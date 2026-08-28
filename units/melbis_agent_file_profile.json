@@ -1,10 +1,10 @@
 {
-    "description": "",
+    "description": "Picture profiles",
     "parameters": "",
     "tables": [],
     "includes": [
         "melbis_inc_agent_file.php=1",
-        "melbis_inc_agent_util.php=1"
+        "melbis_inc_agent_table.php=1"
     ],
     "cache_on": "0",
     "cache_time": "0",

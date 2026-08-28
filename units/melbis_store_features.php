@@ -1,9 +1,13 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.402 @ 2026-08-20
+ * @version 6.5.0.410 @ 2026-08-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
+ **************************************************************************************************
+ *
+ * Main - Prints the goods features
+ *
  **************************************************************************************************/
 
 namespace MELBIS_STORE_FEATURES;
@@ -16,16 +20,16 @@ function Main($mVars)
     // Create
     $tpl = MELBIS()->TplCreate();
 
-    // Vars - the place decides which features belong here and how they print
+    // Vars - the place decides
     $id = $mVars['id'];
     $place = $mVars['place'];
     $in_place = ( $place == 'kGoods' ) ? 'i.in_goods' : 'i.in_topic';
     $view = ( $place == 'kGoods' ) ? 'goods' : 'topic';
 
-    // Every goods id the page has collected - one query serves all the cards
+    // Every id the page collected
     $ids = MELBIS()->EnumGet('store', $id);
 
-    // Get features - each type fills its own column, the view prints the filled one
+    // Get features, column per type
     $command = "SELECT si.store_id, i.name,
                        CASE WHEN i.type_key = 'kDecimal' THEN ANY_VALUE(si.value_dec)
                         END AS value_dec,

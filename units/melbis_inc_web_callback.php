@@ -1,23 +1,29 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.402 @ 2026-08-20
+ * @version 6.5.0.410 @ 2026-08-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
+ **************************************************************************************************
+ *
+ * Define     - Declares the template callbacks
+ * TopicLink  - The address of a section
+ * StoreLink  - The address of a goods
+ * StatusName - The status of a goods
+ *
  **************************************************************************************************/
 
 namespace MELBIS_INC_WEB_CALLBACK;
 
 /** 
  * Function Define
- * Every entry point that draws these tags calls it at its own top level
  **/
 function Define()
 {        
     // Register 
-    MELBIS()->DefineCallback('TopicLink', TopicLink(...));
-    MELBIS()->DefineCallback('StoreLink', StoreLink(...));
-    MELBIS()->DefineCallback('StatusName', StatusName(...));
+    MELBIS()->DefineCallback('TopicLink');
+    MELBIS()->DefineCallback('StoreLink');
+    MELBIS()->DefineCallback('StatusName');
 }       
 
  
@@ -45,7 +51,7 @@ function StoreLink($mVars)
  **/
 function StatusName($mVars)
 { 
-    // The status of a goods is a key - its word lives in the base settings    
+    // A key, worded in settings
     return MELBIS()->SysKeyValues('STORE_STATUS_KEY')[$mVars[0]] ?? '';
 } 
 

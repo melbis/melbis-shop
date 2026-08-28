@@ -1,0 +1,26 @@
+/************************************************************************************************************
+ * @version 6.5.0.410 @ 2026-08-28
+ * @copyright 2002-2026 Melbis
+ * @link https://melbis.com
+ * @author Dmytro Kasianov
+ ************************************************************************************************************/
+
+table={DBNICK}_user_filter|id|name
+1=Stan w magazynie (od i do)
+2=Dostępność nierozłożona na magazyny
+3=Dostępność rozbieżna z magazynami
+4=Towary bez zdjęcia
+5=Duplikaty według kodu producenta
+6=Nieaktualizowane od N dni
+7=Bez grupy podatków
+8=Z parametrem (wartość od i do)
+9=Z wartością charakterystyki
+10=Bez charakterystyki
+11=W grupie podatków
+12=Sprzedaż z magazynu
+13=Suma zamówienia (od i do)
+14=Zamówienia z towarem (kod w sklepie)
+15=Zamówienia z poprawkami (wersji od)
+16=Klienci bez zamówień
+17=Kupili na łączną sumę (od)
+18=Nie kupowali od N dni

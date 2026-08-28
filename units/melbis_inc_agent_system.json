@@ -1,19 +1,7 @@
 {
-    "description": "",
-    "parameters": "UTIL, AGENT_UTIL",
-    "tables": [
-        "$dependent=1",
-        "$mTable=1",
-        "$right=1",
-        "currency=1",
-        "info_value=1",
-        "key_value=1",
-        "oper=1",
-        "oper_right=1",
-        "store_info=1",
-        "topic_right=1",
-        "user=1"
-    ],
+    "description": "Rights, locks and depends",
+    "parameters": "SYS",
+    "tables": [],
     "includes": [],
     "cache_on": "1",
     "cache_time": "0",

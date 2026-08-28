@@ -1,0 +1,14 @@
+/************************************************************************************************************
+ * @version 6.5.0.410 @ 2026-08-28
+ * @copyright 2002-2026 Melbis
+ * @link https://melbis.com
+ * @author Dmytro Kasianov
+ ************************************************************************************************************/
+
+table={DBNICK}_user_filter_param|id|name
+1=Magazyny dostawców
+2=Parametry towaru
+3=Wartości parametrów
+4=Charakterystyki
+5=Wartości charakterystyk
+6=Grupy podatków

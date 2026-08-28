@@ -1,0 +1,26 @@
+/************************************************************************************************************
+ * @version 6.5.0.410 @ 2026-08-28
+ * @copyright 2002-2026 Melbis
+ * @link https://melbis.com
+ * @author Dmytro Kasianov
+ ************************************************************************************************************/
+
+table={DBNICK}_user_filter|id|name
+1=Bestand im Lager (von und bis)
+2=Bestand nicht auf die Lager verteilt
+3=Bestand weicht von den Lagern ab
+4=Produkte ohne Foto
+5=Dubletten nach Herstellercode
+6=Seit N Tagen nicht aktualisiert
+7=Ohne Steuergruppe
+8=Mit Parameter (Wert von und bis)
+9=Mit Eigenschaftswert
+10=Ohne Eigenschaft
+11=In einer Steuergruppe
+12=Verkäufe aus dem Lager
+13=Bestellsumme (von und bis)
+14=Bestellungen mit Produkt (Shop-Code)
+15=Bestellungen mit Änderungen (Versionen ab)
+16=Kunden ohne Bestellungen
+17=Haben für eine Gesamtsumme gekauft (ab)
+18=Seit N Tagen nichts gekauft

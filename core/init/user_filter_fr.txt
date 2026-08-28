@@ -1,0 +1,26 @@
+/************************************************************************************************************
+ * @version 6.5.0.410 @ 2026-08-28
+ * @copyright 2002-2026 Melbis
+ * @link https://melbis.com
+ * @author Dmytro Kasianov
+ ************************************************************************************************************/
+
+table={DBNICK}_user_filter|id|name
+1=Stock en entrepôt (de et à)
+2=Stock non réparti entre les entrepôts
+3=Le stock diverge des entrepôts
+4=Produits sans photo
+5=Doublons par code fabricant
+6=Non mis à jour depuis N jours
+7=Sans groupe de taxes
+8=Avec un paramètre (valeur de et à)
+9=Avec une valeur de caractéristique
+10=Sans caractéristique
+11=Dans un groupe de taxes
+12=Ventes depuis l'entrepôt
+13=Montant de la commande (de et à)
+14=Commandes avec un produit (code magasin)
+15=Commandes avec des modifications (versions à partir de)
+16=Clients sans commandes
+17=Ont acheté pour un montant total (à partir de)
+18=N'ont pas acheté depuis N jours

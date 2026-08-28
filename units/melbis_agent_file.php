@@ -1,21 +1,12 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.402 @ 2026-08-20
+ * @version 6.5.0.410 @ 2026-08-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
  **************************************************************************************************
  *
- * CmdList     - Reads the files of an element, whole rows
- * CmdAdd      - Hangs the files of the call on their elements
- * CmdMake     - Derives a second picture out of one in the store, by a profile
- * CmdUpdate   - Changes the given columns of files, by id
- * CmdRemove   - Deletes the rows of files by id; the pictures wait for the audit
- * CmdPos      - Reorders one group of files of one element
- *
- * FileAllowed - Of the files asked for, the ones behind the right of their elements
- *
- * One tool for every element: the right is that of the element the file hangs on
+ * FileAllowed - The files of allowed elements
  *
  **************************************************************************************************/
 
@@ -25,10 +16,8 @@ namespace MELBIS_AGENT_FILE;
 
 // Libraries
 use MELBIS_INC_AGENT_FILE as FILE;
-use MELBIS_INC_AGENT_UTIL as UTIL;
-
-// The columns a call may write into a file; the picture on the disk is never touched
-const FIELDS_WRITE = "kind_key, real_name, pos";
+use MELBIS_INC_AGENT_SYSTEM as SYS;
+use MELBIS_INC_AGENT_TABLE as TABLE;
 
 
 /**
@@ -51,7 +40,7 @@ function CmdList($mUserId, $mParam)
 
     return [
         'result'  => true,
-        'message' => count($rows).' file(s) on '.count($mParam['elem_id']).' element(s)',
+        'message' => 'The files of the elements named',
         'tables'  => [
             'files_'.$entity => $rows
             ]
@@ -64,7 +53,7 @@ function CmdList($mUserId, $mParam)
  **/
 function CmdAdd($mUserId, $mParam)
 {
-    // The engine laid the files down already, so what is left here is the right of the element
+    // The right of the element
     $tables = [];
     $kept = [];
     $said = [];
@@ -85,14 +74,13 @@ function CmdAdd($mUserId, $mParam)
         $kept[] = $row['id'];
     }
 
-    // Answers files even when empty: that is how the engine knows the command cleared them
+    // Answers files even when empty
     if ( count($kept) == 0 )
     {
         return [
             'result'  => false,
             'files'   => [],
-            'message' => 'Not one of the files stayed, and they are gone from the store. '.
-                         implode(' | ', $said)
+            'message' => 'No file stayed: '.implode(' | ', $said)
             ];
     }
 
@@ -123,7 +111,7 @@ function CmdMake($mUserId, $mParam)
     {
         return [
             'result'  => false,
-            'message' => 'No file ['.$mParam['id'].'] among files_'.$entity.' - CmdList answers them'
+            'message' => 'No file ['.$mParam['id'].'] in files_'.$entity
             ];
     }
 
@@ -135,8 +123,7 @@ function CmdMake($mUserId, $mParam)
     {
         return [
             'result'  => false,
-            'message' => 'No profile ['.$mParam['profile'].'] in the registry - the Profiles tool '.
-                         'answers them'
+            'message' => 'No profile ['.$mParam['profile'].']'
             ];
     }
 
@@ -145,20 +132,19 @@ function CmdMake($mUserId, $mParam)
     {
         return [
             'result'  => false,
-            'message' => 'The recipe of ['.$mParam['profile'].'] is not readable - the program\'s '.
-                         'editor owns that row'
+            'message' => 'The recipe of ['.$mParam['profile'].'] is unreadable'
             ];
     }
 
     $tables = ['{DBNICK}_files_'.$entity];
-    $lock = UTIL\TablesLock($tables);
+    $lock = SYS\TablesLock($tables, $mUserId);
     if ( !$lock['result'] ) return $lock;
 
-    // The painting is one act of the workshop, the same the loader of the files runs
+    // One act of the workshop
     $made = FILE\Make($mUserId, $entity, $was, $mParam['profile'], $show,
                       $mParam['real_name'] ?? '');
 
-    UTIL\TablesUnlock($tables);
+    SYS\TablesUnlock($tables, $mUserId);
 
     if ( !$made['result'] ) return $made;
 
@@ -186,34 +172,13 @@ function CmdUpdate($mUserId, $mParam)
     $named = FileAllowed($mUserId, $entity, $mParam['id']);
     if ( !$named['result'] ) return $named;
 
-    $fields = UTIL\Only($mParam, FIELDS_WRITE);
-    if ( count($fields) == 0 )
-    {
-        return [
-            'result'  => false,
-            'message' => 'Nothing was named to change'
-            ];
-    }
+    // Every field is a column
+    $fields = $mParam;
+    unset($fields['entity']);
 
-    $table = '{DBNICK}_files_'.$entity;
-    $lock = UTIL\TablesLock([$table]);
-    if ( !$lock['result'] ) return $lock;
+    $ids = array_column($named['rows'], 'id');
 
-    foreach ( $named['rows'] as $was )
-    {
-        $row = $fields;
-        $row['id'] = $was['id'];
-        MELBIS()->SqlUpdate(__LINE__, $table, $row, 'id');
-    }
-
-    UTIL\TablesUnlock([$table]);
-
-    $changed = implode(', ', array_keys($fields));
-
-    return [
-        'result'  => true,
-        'message' => count($named['rows']).' file(s) changed: '.$changed
-        ];
+    return TABLE\Update($mUserId, 'files_'.$entity, $ids, $fields);
 }
 
 
@@ -230,26 +195,9 @@ function CmdRemove($mUserId, $mParam)
     $named = FileAllowed($mUserId, $entity, $mParam['id']);
     if ( !$named['result'] ) return $named;
 
-    $list = implode(',', array_column($named['rows'], 'id'));
+    $ids = array_column($named['rows'], 'id');
 
-    $table = '{DBNICK}_files_'.$entity;
-    $lock = UTIL\TablesLock([$table]);
-    if ( !$lock['result'] ) return $lock;
-
-    $command = "DELETE
-                  FROM {DBNICK}_files_$entity
-                 WHERE id IN ( $list )
-               ";
-    MELBIS()->SqlQuery(__LINE__, $command);
-
-    UTIL\TablesUnlock([$table]);
-
-    return [
-        'result'  => true,
-        'message' => count($named['rows']).' file row(s) off files_'.$entity.'. The pictures '.
-                     'themselves stay on the disk until the owner runs the idle-files audit - '.
-                     'nothing in this store deletes a file from there'
-        ];
+    return TABLE\Remove($mUserId, 'files_'.$entity, $ids, $mParam);
 }
 
 
@@ -266,27 +214,13 @@ function CmdPos($mUserId, $mParam)
     $gate = FILE\RightElem($mUserId, $entity, $mParam['elem_id']);
     if ( $gate !== true ) return $gate;
 
-    // The list here is one group of one element, and the rows put in order are its files
+    // The files of one group
     $scope = [
         'elem_id'  => $mParam['elem_id'],
         'kind_key' => $mParam['kind_key']
         ];
 
-    $table = '{DBNICK}_files_'.$entity;
-    $lock = UTIL\TablesLock([$table]);
-    if ( !$lock['result'] ) return $lock;
-
-    $done = UTIL\Pos('files_'.$entity, $scope, $mParam['type'], $mParam['data'] ?? []);
-
-    UTIL\TablesUnlock([$table]);
-
-    if ( !$done['result'] ) return $done;
-
-    return [
-        'result'  => true,
-        'message' => 'The group ['.$mParam['kind_key'].']: '.$done['said'].', '.$done['moved'].
-                     ' row(s) moved'
-        ];
+    return TABLE\Pos($mUserId, 'files_'.$entity, $scope, $mParam);
 }
 
 
@@ -295,7 +229,7 @@ function CmdPos($mUserId, $mParam)
  **/
 function FileAllowed($mUserId, $mEntity, $mIds)
 {
-    // Reads the rows of the files asked for, then weighs the element every one hangs on
+    // Weighs the element of each
     $list = implode(',', $mIds);
 
     $command = "SELECT *
@@ -311,7 +245,7 @@ function FileAllowed($mUserId, $mEntity, $mIds)
 
         return [
             'result'  => false,
-            'message' => 'No files ['.$said.'] among files_'.$mEntity.' - CmdList answers them'
+            'message' => 'No files ['.$said.'] in files_'.$entity
             ];
     }
 

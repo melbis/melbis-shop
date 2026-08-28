@@ -1,9 +1,13 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.402 @ 2026-08-20
+ * @version 6.5.0.410 @ 2026-08-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
+ **************************************************************************************************
+ *
+ * Run - Counts an order version
+ *
  **************************************************************************************************/
                           
  
@@ -15,7 +19,6 @@ use MELBIS_INC_LOGIC_COMMON as LOGIC_COMMON;
  
 /** 
  * Function Run
- * Calculate order information
  **/   
 function Run($mUserId, $mVersion)
 {

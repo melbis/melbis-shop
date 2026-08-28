@@ -1,0 +1,26 @@
+/************************************************************************************************************
+ * @version 6.5.0.410 @ 2026-08-28
+ * @copyright 2002-2026 Melbis
+ * @link https://melbis.com
+ * @author Dmytro Kasianov
+ ************************************************************************************************************/
+
+table={DBNICK}_user_filter|id|name
+1=Giacenza in magazzino (da e a)
+2=Giacenza non ripartita tra i magazzini
+3=La giacenza non concorda con i magazzini
+4=Prodotti senza foto
+5=Duplicati per codice produttore
+6=Non aggiornati da N giorni
+7=Senza gruppo di imposte
+8=Con parametro (valore da e a)
+9=Con valore di caratteristica
+10=Senza caratteristica
+11=In un gruppo di imposte
+12=Vendite dal magazzino
+13=Importo dell'ordine (da e a)
+14=Ordini con un prodotto (codice negozio)
+15=Ordini con modifiche (versioni da)
+16=Clienti senza ordini
+17=Hanno acquistato per un importo totale (da)
+18=Non acquistano da N giorni

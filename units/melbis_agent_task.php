@@ -1,19 +1,12 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.402 @ 2026-08-20
+ * @version 6.5.0.410 @ 2026-08-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
  **************************************************************************************************
  *
- * CmdList     - Reads every task this person may see, each with the count of its notes
- * CmdAdd      - Adds a task in kNew and opens its feed with the first note
- * CmdNoteList - Reads the whole feed of the given tasks
- * CmdNoteAdd  - Writes a note into the feed; any state but kComment moves the task with it
- *
- * TaskAllowed - Of the tasks asked for, the ones this person may see
- *
- * Add-only, the way the program keeps it: a task is never edited or deleted, it moves by its notes
+ * TaskAllowed - The tasks of this person
  *
  **************************************************************************************************/
 
@@ -22,13 +15,7 @@
 namespace MELBIS_AGENT_TASK;
 
 // Libraries
-use MELBIS_INC_AGENT_UTIL as UTIL;
-
-// The columns a call may write into a task; the author, the state and the clock are stamped here
-const FIELDS_TASK = "name, exec_id, kind_key, privy";
-
-// The columns a note may carry over into the task it moves
-const FIELDS_MOVE = "exec_id, kind_key, privy";
+use MELBIS_INC_AGENT_SYSTEM as SYS;
 
 
 /**
@@ -36,10 +23,7 @@ const FIELDS_MOVE = "exec_id, kind_key, privy";
  **/
 function CmdList($mUserId, $mParam)
 {
-    $gate = UTIL\RightOper($mUserId, 'GET_SCHED_TASK', 'Reading the scheduler');
-    if ( $gate !== true ) return $gate;
-
-    // A private task is read by its author, its executor and the person with id 1
+    // Author, executor and the owner
     $command = "SELECT *
                   FROM {DBNICK}_user_task
                  WHERE ( privy = 0
@@ -55,7 +39,7 @@ function CmdList($mUserId, $mParam)
         ];
     $tasks = MELBIS()->SqlSelect(__LINE__, $command, $param_task);
 
-    // Counts the notes of every task, so a read of a feed is asked for knowingly
+    // The count of every feed
     $command = "SELECT utn.task_id, COUNT(*) AS notes_how
                   FROM {DBNICK}_user_task_note utn
                   JOIN {DBNICK}_user_task ut
@@ -70,8 +54,7 @@ function CmdList($mUserId, $mParam)
 
     return [
         'result'  => true,
-        'message' => count($tasks).' task(s) this person may see, closed ones too - state_key '.
-                     'kClose tells them apart; CmdNoteList answers the feeds',
+        'message' => 'The tasks this person may see',
         'tables'  => [
             'user_task'  => $tasks,
             'task_notes' => $how
@@ -85,16 +68,15 @@ function CmdList($mUserId, $mParam)
  **/
 function CmdAdd($mUserId, $mParam)
 {
-    $gate = UTIL\RightOper($mUserId, 'ADD_SCHED_TASK', 'Adding a task');
-    if ( $gate !== true ) return $gate;
-
-    $fields = UTIL\Only($mParam, FIELDS_TASK);
+    // Every field is a column
+    $fields = $mParam;
+    unset($fields['content']);
 
     $tables = ['{DBNICK}_user_task', '{DBNICK}_user_task_note'];
-    $lock = UTIL\TablesLock($tables);
+    $lock = SYS\TablesLock($tables, $mUserId);
     if ( !$lock['result'] ) return $lock;
 
-    // Stamps the person of this session as the author and opens the task in kNew
+    // This person is the author
     $now = MELBIS()->DateTime();
     $row = $fields;
     $row['user_id'] = $mUserId;
@@ -103,7 +85,7 @@ function CmdAdd($mUserId, $mParam)
     MELBIS()->SqlInsert(__LINE__, '{DBNICK}_user_task', $row);
     $task_id = MELBIS()->SqlLastInsertId();
 
-    // Writes the first note of the feed, the way the program opens a task
+    // The first note of feed
     $note = [
         'task_id'   => $task_id,
         'user_id'   => $mUserId,
@@ -114,13 +96,12 @@ function CmdAdd($mUserId, $mParam)
         ];
     MELBIS()->SqlInsert(__LINE__, '{DBNICK}_user_task_note', $note);
 
-    UTIL\TablesUnlock($tables);
+    SYS\TablesUnlock($tables, $mUserId);
 
     return [
         'result'  => true,
         'id'      => $task_id,
-        'message' => 'The task ['.$mParam['name'].'] is in the scheduler, id '.$task_id.
-                     ', on the person ['.$row['exec_id'].']'
+        'message' => 'The task is in the scheduler'
         ];
 }
 
@@ -130,9 +111,6 @@ function CmdAdd($mUserId, $mParam)
  **/
 function CmdNoteList($mUserId, $mParam)
 {
-    $gate = UTIL\RightOper($mUserId, 'GET_SCHED_NOTE', 'Reading the feed of a task');
-    if ( $gate !== true ) return $gate;
-
     $named = TaskAllowed($mUserId, $mParam['task_id']);
     if ( !$named['result'] ) return $named;
 
@@ -147,7 +125,7 @@ function CmdNoteList($mUserId, $mParam)
 
     return [
         'result'  => true,
-        'message' => count($notes).' note(s) in the feed of '.count($mParam['task_id']).' task(s)',
+        'message' => 'The notes in the feeds asked for',
         'tables'  => [
             'user_task_note' => $notes
             ]
@@ -160,21 +138,20 @@ function CmdNoteList($mUserId, $mParam)
  **/
 function CmdNoteAdd($mUserId, $mParam)
 {
-    $gate = UTIL\RightOper($mUserId, 'ADD_SCHED_NOTE', 'Writing into the feed of a task');
-    if ( $gate !== true ) return $gate;
-
     $named = TaskAllowed($mUserId, [$mParam['task_id']]);
     if ( !$named['result'] ) return $named;
 
     $task = reset($named['rows']);
 
     $tables = ['{DBNICK}_user_task', '{DBNICK}_user_task_note'];
-    $lock = UTIL\TablesLock($tables);
+    $lock = SYS\TablesLock($tables, $mUserId);
     if ( !$lock['result'] ) return $lock;
 
-    // kComment leaves the task where it is; any other state moves it, and kClose ends it
+    // Any state but kComment moves
     $state = $mParam['state_key'];
-    $moved = UTIL\Only($mParam, FIELDS_MOVE);
+    // The note carries the rest
+    $moved = $mParam;
+    unset($moved['task_id'], $moved['content'], $moved['state_key']);
     if ( $state != 'kComment' )
     {
         $row = $moved;
@@ -194,7 +171,7 @@ function CmdNoteAdd($mUserId, $mParam)
     MELBIS()->SqlInsert(__LINE__, '{DBNICK}_user_task_note', $note);
     $note_id = MELBIS()->SqlLastInsertId();
 
-    UTIL\TablesUnlock($tables);
+    SYS\TablesUnlock($tables, $mUserId);
 
     $message = 'The note ['.$note_id.'] is in the feed of the task ['.$task['name'].']';
     if ( $state != 'kComment' )
@@ -217,7 +194,7 @@ function CmdNoteAdd($mUserId, $mParam)
  **/
 function TaskAllowed($mUserId, $mIds)
 {
-    // Reads the tasks this person may see and refuses the rest without telling them apart
+    // The tasks this person sees
     $list = implode(',', $mIds);
 
     $command = "SELECT *
@@ -242,7 +219,7 @@ function TaskAllowed($mUserId, $mIds)
 
         return [
             'result'  => false,
-            'message' => 'No tasks ['.$said.'] in the scheduler, or they are not yours to see'
+            'message' => 'No tasks ['.$said.'] of yours'
             ];
     }
 

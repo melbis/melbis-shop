@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.0.402 @ 2026-08-20
+ * @version 6.5.0.410 @ 2026-08-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -27,6 +27,9 @@ table={DBNICK}_oper|id|name
 98=Descuentos
 99=Obtener
 100=Guardar
+437=Impuestos
+438=Obtener
+439=Guardar
 26=Proveedores
 27=Obtener
 28=Guardar
@@ -53,6 +56,14 @@ table={DBNICK}_oper|id|name
 232=Marcas
 233=Obtener
 234=Guardar
+263=Explorador
+274=Actualizar configuración
+432=Principal
+434=Obtener productos de la sección
+436=Solicitud avanzada de productos
+433=Auxiliar
+106=Obtener productos de la sección
+191=Solicitud avanzada de productos
 16=Descripciones
 248=Sección personal
 210=Actualizar configuración
@@ -96,10 +107,6 @@ table={DBNICK}_oper|id|name
 242=Obtener
 243=Añadir
 244=Eliminar
-263=Explorador
-274=Actualizar configuración
-106=Obtener productos de la sección
-191=Buscar y obtener productos
 265=Estructura
 32=Catálogo
 219=Acceso rápido
@@ -262,10 +269,11 @@ table={DBNICK}_oper|id|name
 345=Eliminar
 346=Cargar
 348=Base de datos
-388=Obtener lista de bloqueos
 392=Obtener estructura de datos
 349=Lectura de datos
 350=Modificación de datos
+388=Obtener lista de bloqueos
+440=Liberar bloqueos de tablas
 421=Desarrollo
 384=Realizar limpieza de caché
 389=Obtener configuración
@@ -285,9 +293,5 @@ table={DBNICK}_oper|id|name
 318=Perfiles
 319=Obtener
 320=Guardar
-
-table={DBNICK}_user|id|name
 1=Administrador
-
-table={DBNICK}_user_group|id|name
 1=Administradores

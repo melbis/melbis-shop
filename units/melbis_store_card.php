@@ -1,9 +1,13 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.402 @ 2026-08-20
+ * @version 6.5.0.410 @ 2026-08-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
+ **************************************************************************************************
+ *
+ * Main - Prints a goods card
+ *
  **************************************************************************************************/
 
 namespace MELBIS_STORE_CARD;
@@ -21,10 +25,10 @@ function Main($mVars)
     // Vars
     $id = $mVars['id'];
 
-    // Every goods id the page has collected - one query serves all the cards
+    // Every id the page collected
     $ids = MELBIS()->EnumGet('store', $id);
 
-    // Get goods - the key and the currency stay raw, the view and the logic convert
+    // Get goods raw, view converts
     $command = "SELECT s.id, 
                        s.name, 
                        s.intro,       

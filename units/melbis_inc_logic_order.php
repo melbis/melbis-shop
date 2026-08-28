@@ -1,22 +1,22 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.402 @ 2026-08-20
+ * @version 6.5.0.410 @ 2026-08-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
  **************************************************************************************************
- * 
- * Create           - Create new order version
- * Normalize        - Normalize order version
- * Verify           - What the shop refuses to take, called by Calculate and Edit
- * Before           - The order as it stands now, for Verify to compare with
- * Load             - Load current order version
- * GoodsAdd         - Add goods to version
- * GoodsRemove      - Remove goods from version 
- * GoodsSum         - Calculate goods sum in the order 
- * GoodsDiscount    - Calculate goods discount info
- * OptionSet        - Set order option value by key
- * 
+ *
+ * Create        - A blank order version
+ * Normalize     - The registry over a version
+ * Verify        - What the shop refuses
+ * Before        - The order as it stands
+ * Load          - The version standing now
+ * GoodsAdd      - Puts a goods in
+ * GoodsRemove   - Takes a goods out
+ * GoodsSum      - The sum of the goods
+ * GoodsDiscount - The discount of one goods
+ * OptionSet     - Sets an order option
+ *
  **************************************************************************************************/
                           
  
@@ -27,7 +27,6 @@ use MELBIS_INC_LOGIC_COMMON as LOGIC_COMMON;
                                                
 /** 
  * Function Create
- * Create new order version
  **/   
 function Create()
 {
@@ -43,7 +42,7 @@ function Create()
                       'order_date_time'     => $now 
                       );
 
-    // Client - the registry answers the fields in the order of the shop
+    // Client - the registry answers
     //-------
     $version['client'] = [];
     foreach ( MELBIS()->SysFieldValues() as $field )
@@ -70,7 +69,7 @@ function Create()
     //------
     $version['store'] = [];  
     
-    // Option - the value the shop offers by itself, its sum brought to the base currency
+    // Option, what the shop offers
     //-------
     $version['option'] = [];
     foreach ( MELBIS()->SysOrderOptionValues() as $option )
@@ -100,7 +99,6 @@ function Create()
 
 /** 
  * Function Normalize      
- * Normalize order version
  **/
 function Normalize($mUserId, $mVersion)
 { 
@@ -123,7 +121,7 @@ function Normalize($mUserId, $mVersion)
         $row = $field_set[$field['field_id']];
         $one = array_column($row['value'], null, 'id')[$field['value_id']] ?? [];
         
-        // The row of a version wears its own names
+        // A row wears own names
         $value = [
             'value_id'          => $one['id'] ?? null,
             'value_skey'        => $one['skey'] ?? '',
@@ -160,7 +158,7 @@ function Normalize($mUserId, $mVersion)
         $row = $option_set[$option['option_id']];
         $one = array_column($row['value'], null, 'id')[$option['value_id']] ?? [];
         
-        // The row of a version wears its own names, and the sum comes to the currency of the shop
+        // Own names, the shop currency
         $value = [
             'value_id'          => $one['id'] ?? null,
             'value_skey'        => $one['skey'] ?? '',
@@ -204,7 +202,7 @@ function Normalize($mUserId, $mVersion)
     $mVersion['store'] = $mVersion['store'] ?? []; 
     if ( !empty($mVersion['store']) )
     {
-        // Get options - the registry answers them in the order of the shop
+        // Get options from registry
         $store_option_set = array_column(MELBIS()->SysOrderStoreOptionValues(), null, 'id');
         
         $template_option = [];
@@ -243,7 +241,7 @@ function Normalize($mUserId, $mVersion)
                 $row = $store_option_set[$option['option_id']];
                 $one = array_column($row['value'], null, 'id')[$option['value_id']] ?? [];
                 
-                // The row of a version wears its own names, and the sum comes to the currency of the shop
+                // Own names, the shop currency
                 $value = [
                     'value_id'          => $one['id'] ?? null,
                     'value_skey'        => $one['skey'] ?? '',
@@ -283,11 +281,10 @@ function Normalize($mUserId, $mVersion)
 
 /** 
  * Function Verify
- * What the shop refuses to take: a pair of values, or a change this person may not make
  **/
 function Verify($mUserId, $mVersion, $mVersionBefore)
 { 
-    // Store options block - the registry knows which pair the shop refuses
+    // Store options, blocked pairs
     //--------------------   
     $store_block = MELBIS()->SysOrderStoreOptionBlocks();
     foreach ( $mVersion['store'] as $item )
@@ -315,7 +312,7 @@ function Verify($mUserId, $mVersion, $mVersionBefore)
     }                        
          
     
-    // Order options block - the registry knows which pair the shop refuses
+    // Order options, blocked pairs
     //--------------------         
     $chosen = [];
     foreach ( $mVersion['option'] as $hash )
@@ -336,7 +333,7 @@ function Verify($mUserId, $mVersion, $mVersionBefore)
     }                        
        
          
-    // A value kept for an order already created may not be set while the order is being made
+    // Kept for an order created
     //-------------------------
     if ( is_null($mVersion['order_id']) )
     {
@@ -382,11 +379,11 @@ function Verify($mUserId, $mVersion, $mVersionBefore)
         }
     }
     
-    // The rest is about the person - null means there was nothing to compare with
+    // The rest is the person
     //-------------------------
     if ( is_null($mVersionBefore) ) return $mVersion;
     
-    // The order stands, and Load gave nothing back: this person may not see it
+    // Load gave nothing back
     if ( empty($mVersionBefore) )
     {
         $mVersion['result']['value'] = 'ORDER_RIGHT';
@@ -397,15 +394,14 @@ function Verify($mUserId, $mVersion, $mVersionBefore)
     
     $before = array_column($mVersionBefore['option'], null, 'option_id');
     
-    // The right to change an option is asked only where the value really changed
-    // The registry of the rights is read once: true means every option at once
+    // Asked where a value changed
     //-------------------------
     $option_right = MELBIS()->SysOrderOptionRight($mUserId);
     if ( $option_right !== true )
     {
         foreach ( $mVersion['option'] as $option )
         {
-            // An option the previous version did not know came from the template, not from this person
+            // Unknown before, from the template
             if ( !isset($before[$option['option_id']]) ) continue;
             
             $one = $before[$option['option_id']];
@@ -422,7 +418,7 @@ function Verify($mUserId, $mVersion, $mVersionBefore)
         }
     }
     
-    // The same right for the options standing on a goods
+    // The same right, on goods
     //-------------------------
     $store_right = MELBIS()->SysOrderStoreOptionRight($mUserId);
     if ( $store_right !== true )
@@ -430,13 +426,13 @@ function Verify($mUserId, $mVersion, $mVersionBefore)
         $store_before = array_column($mVersionBefore['store'], 'store_option', 'store_id');
         foreach ( $mVersion['store'] as $item )
         {
-            // A goods that was not in the order brings the values of the shop, not of this person
+            // New goods bring shop values
             if ( !isset($store_before[$item['store_id']]) ) continue;
             
             $one_set = array_column($store_before[$item['store_id']], null, 'option_id');
             foreach ( $item['store_option'] ?? [] as $option )
             {
-                // An option the previous version did not know came from the template, not from this person
+                // Unknown before, from the template
                 if ( !isset($one_set[$option['option_id']]) ) continue;
                 
                 $one = $one_set[$option['option_id']];
@@ -456,7 +452,7 @@ function Verify($mUserId, $mVersion, $mVersionBefore)
     
     // User order options limit  
     //-------------------------
-    // The door knows the owner and reads the right live, a cache would hold a revoked one
+    // Read live, never cached
     $no_limit = MELBIS()->SysOperRight($mUserId, 'PUT_ORDER_OPTION');
     if ( $no_limit ) return $mVersion;
     
@@ -469,7 +465,7 @@ function Verify($mUserId, $mVersion, $mVersionBefore)
         $set[(int) $option['value_id']] = true;
     }     
     
-    // The registry knows the rules, the door knows the person
+    // The rules and the person
     $user = array_column(MELBIS()->SysUsers(), null, 'id')[$mUserId] ?? [];
     $group = $user['group'] ?? [];
     
@@ -495,7 +491,6 @@ function Verify($mUserId, $mVersion, $mVersionBefore)
 
 /** 
  * Function Before
- * The order as it stands now: null when there is nothing to compare with
  **/   
 function Before($mUserId, $mVersion)
 {
@@ -508,7 +503,6 @@ function Before($mUserId, $mVersion)
 
 /** 
  * Function Load      
- * Load current order version
  **/
 function Load($mUserId, $mOrderId)
 { 
@@ -527,6 +521,8 @@ function Load($mUserId, $mOrderId)
         'order_id' => $mOrderId
         ];                       
     $version = MELBIS()->SqlSelectFlat(__LINE__, $command, $param);
+    if ( !isset($version['id']) ) return [];
+
     $version['parent_version_id'] = $version['id'];
     $version['parameters'] = 'kDefault';
     $version_id = $version['id']; 
@@ -607,7 +603,7 @@ function Load($mUserId, $mOrderId)
         $version['option'][] = $option;        
     }                     
     
-    // The right of an order comes from the values of its options - one of them is enough
+    // One granted value is enough
     if ( !is_null($mUserId) )
     {
         $allow = MELBIS()->SysOrderRight($mUserId);
@@ -634,10 +630,15 @@ function Load($mUserId, $mOrderId)
 
 /** 
  * Function GoodsAdd
- * Add goods to version
  **/   
 function GoodsAdd($mVersion, $mStoreId, $mAmount = 1, $mPriceOut = 0)
 {
+    // A version without its lists
+    $mVersion['store'] = $mVersion['store'] ?? [];
+
+    // Below one adds nothing
+    if ( $mAmount < 1 ) return $mVersion;
+
     // Store exists?                      
     $rows = count($mVersion['store']); 
     for ( $i = 0; $i <= $rows - 1; $i++ )
@@ -685,7 +686,7 @@ function GoodsAdd($mVersion, $mStoreId, $mAmount = 1, $mPriceOut = 0)
     $store = MELBIS()->SqlSelectFlat(__LINE__, $command, $param);
     if ( isset($store['store_id']) )
     {
-        // Every price is written in a currency of its own
+        // Every price its own currency
         $store['recalc'] = 1;
         $store['store_pprice'] = LOGIC_COMMON\Price($store['store_pprice'], $store['pprice_curr_id']);
         $store['store_rprice'] = LOGIC_COMMON\Price($store['store_rprice'], $store['rprice_curr_id']);        
@@ -703,7 +704,7 @@ function GoodsAdd($mVersion, $mStoreId, $mAmount = 1, $mPriceOut = 0)
         unset($store['price2_curr_id']);
         unset($store['price3_curr_id']);
         
-        // Set Goods options - the registry answers them in the order of the shop
+        // Goods options from registry
         $store['store_option'] = [];
         foreach ( MELBIS()->SysOrderStoreOptionValues() as $option )
         {
@@ -732,10 +733,12 @@ function GoodsAdd($mVersion, $mStoreId, $mAmount = 1, $mPriceOut = 0)
 
 /** 
  * Function GoodsRemove
- * Remove goods from version
  **/   
 function GoodsRemove($mVersion, $mStoreId)
 {    
+    // A version without its lists
+    $mVersion['store'] = $mVersion['store'] ?? [];
+
     $key = array_search($mStoreId, array_column($mVersion['store'], 'store_id'));
     if ($key !== false) array_splice($mVersion['store'], $key, 1);      
     
@@ -745,7 +748,6 @@ function GoodsRemove($mVersion, $mStoreId)
 
 /** 
  * Function GoodsSum
- * Calculate goods sum in the order
  **/   
 function GoodsSum($mVersion, $mPriceType = 'store_price')
 {
@@ -760,7 +762,6 @@ function GoodsSum($mVersion, $mPriceType = 'store_price')
 
 /** 
  * Function GoodsDiscount
- * Calculate goods discount info
  **/   
 function GoodsDiscount($mKindKey, $mSum, $mStoreId)
 {
@@ -786,7 +787,7 @@ function GoodsDiscount($mKindKey, $mSum, $mStoreId)
         ];                  
     $rates = MELBIS()->SqlSelect(__LINE__, $command, $param); 
     
-    // The rules of one group make a ladder - the highest one the sum reaches wins
+    // A ladder, the highest wins
     $disc_proc = 0;
     foreach ( $rates as $rate )
     {
@@ -800,18 +801,20 @@ function GoodsDiscount($mKindKey, $mSum, $mStoreId)
 
 /** 
  * Function OptionSet   
- * Set order option value by key
  **/
 function OptionSet($mVersion, $mOptionKey, $mValueKey, $mNotice = '', $mSaveNotice = false)
 { 
-    // The registry answers every option with its values at once
+    // A version without its lists
+    $mVersion['option'] = $mVersion['option'] ?? [];
+
+    // The registry answers every option
     $option_set = array_column(MELBIS()->SysOrderOptionValues(), null, 'skey');
     $value_set = array_column($option_set[$mOptionKey]['value'] ?? [], null, 'skey');
     
     $value = $value_set[$mValueKey] ?? [];
     if ( empty($value) ) return $mVersion;
     
-    // The row of a version wears its own names, and the sum comes to the currency of the shop
+    // Own names, the shop currency
     $hash = [
         'value_id'          => $value['id'],
         'value_skey'        => $value['skey'],

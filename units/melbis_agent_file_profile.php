@@ -1,22 +1,15 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.402 @ 2026-08-20
+ * @version 6.5.0.410 @ 2026-08-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
- ***************************************************************************************************
+ **************************************************************************************************
  *
- * CmdList    - Reads every profile, its recipe in plain words
- * CmdAdd     - Adds a profile: name and size, the rest by the defaults of the registry
- * CmdUpdate  - Changes the given words of one profile, the rest stay as they were
- * CmdRemove  - Deletes one profile from the registry, by name
- *
- * ProfileXml - Turns the words of a recipe back into the body the program's editor opens
- * MustSet    - Weighs the words of the call and lays them over the set standing now
- * Between    - Holds a number to its range, or refuses it by name
- * System     - Refuses a profile the program itself relies on
- *
- * A profile is a row of FILES_PROFILE; the agent speaks words, the tool writes the XML
+ * ProfileXml - The recipe into its body
+ * MustSet    - The call over the recipe
+ * Between    - Holds a number in range
+ * System     - Refuses a profile of program
  *
  **************************************************************************************************/
 
@@ -25,8 +18,8 @@
 namespace MELBIS_AGENT_FILE_PROFILE;
 
 // Libraries
-use MELBIS_INC_AGENT_UTIL as UTIL;
 use MELBIS_INC_AGENT_FILE as FILE;
+use MELBIS_INC_AGENT_TABLE as TABLE;
 
 
 /**
@@ -44,8 +37,7 @@ function CmdList($mUserId, $mParam)
 
     return [
         'result'  => true,
-        'message' => count($profiles).' picture profile(s). A derived picture takes the whole '.
-                     'recipe: the frame is cut by hand in the program, the rest is written here',
+        'message' => 'The picture profiles of the store',
         'tables'  => [
             'profile' => $profiles
             ]
@@ -63,7 +55,7 @@ function CmdAdd($mUserId, $mParam)
     {
         return [
             'result'  => false,
-            'message' => 'A profile needs a name - that is the word people and CmdMake call it by'
+            'message' => 'A profile takes a name'
             ];
     }
 
@@ -72,42 +64,29 @@ function CmdAdd($mUserId, $mParam)
     {
         return [
             'result'  => false,
-            'message' => 'The profile ['.$name.'] is already in the registry - CmdUpdate changes it'
+            'message' => 'The profile ['.$name.'] is already there'
             ];
     }
 
-    // The door filled the words the call left out, so a fresh profile is complete from birth
+    // The door filled the rest
     $ready = MustSet($mParam, []);
     if ( !$ready['result'] ) return $ready;
 
-    $command = "SELECT MAX(pos)
-                  FROM {DBNICK}_key_value
-                 WHERE key_code = 'FILES_PROFILE'
-               ";
-    $last = MELBIS()->SqlSelectValue(__LINE__, $command, 0);
-
-    $table = '{DBNICK}_key_value';
-    $lock = UTIL\TablesLock([$table]);
-    if ( !$lock['result'] ) return $lock;
-
     $fields = [
-        'id'        => MELBIS()->SqlGenId('key_value'),
         'key_code'  => 'FILES_PROFILE',
         'key_name'  => $name,
-        'value_txt' => ProfileXml($ready['set']),
-        'sys_key'   => 0,
-        'pos'       => $last + 1
+        'value_txt' => ProfileXml($ready['set'])
         ];
-    MELBIS()->SqlInsert(__LINE__, $table, $fields);
 
-    UTIL\TablesUnlock([$table]);
+    $said = TABLE\Add($mUserId, 'key_value', $fields);
+    if ( !$said['result'] ) return $said;
 
     $now = FILE\ProfileOne($name);
 
     return [
         'result'  => true,
-        'id'      => $fields['id'],
-        'message' => 'The profile ['.$name.'] is in the registry',
+        'id'      => $said['id'],
+        'message' => 'The profile is in the registry',
         'tables'  => [
             'profile' => [FILE\ProfileShow($now)]
             ]
@@ -126,7 +105,7 @@ function CmdUpdate($mUserId, $mParam)
     {
         return [
             'result'  => false,
-            'message' => 'No profile ['.$name.'] in the registry - CmdList answers them'
+            'message' => 'No profile ['.$name.'] in the registry'
             ];
     }
 
@@ -135,15 +114,14 @@ function CmdUpdate($mUserId, $mParam)
     {
         return [
             'result'  => false,
-            'message' => 'The recipe of ['.$name.'] is not readable, so nothing can lay over it - '.
-                         'the program\'s editor owns that row'
+            'message' => 'The recipe of ['.$name.'] is unreadable'
             ];
     }
 
     $fields = [];
     $said = [];
 
-    // The name is the identity of a profile, so a new one is weighed against the ones taken
+    // A name weighed against taken
     if ( isset($mParam['rename']) )
     {
         $rename = trim((string)$mParam['rename']);
@@ -151,7 +129,7 @@ function CmdUpdate($mUserId, $mParam)
         {
             return [
                 'result'  => false,
-                'message' => 'The rename came empty - a profile cannot lose its name'
+                'message' => 'The new name came empty'
                 ];
         }
         if ( $was['sys_key'] > 0 ) return System($was, 'renamed');
@@ -161,7 +139,7 @@ function CmdUpdate($mUserId, $mParam)
         {
             return [
                 'result'  => false,
-                'message' => 'The name ['.$rename.'] is already a profile of its own'
+                'message' => 'The name ['.$name.'] is taken'
                 ];
         }
 
@@ -177,7 +155,7 @@ function CmdUpdate($mUserId, $mParam)
     {
         return [
             'result'  => false,
-            'message' => 'Nothing to change: name a field of the recipe, or rename'
+            'message' => 'Nothing was named to change'
             ];
     }
 
@@ -186,21 +164,15 @@ function CmdUpdate($mUserId, $mParam)
         $fields['value_txt'] = ProfileXml($ready['set']);
     }
 
-    $table = '{DBNICK}_key_value';
-    $lock = UTIL\TablesLock([$table]);
-    if ( !$lock['result'] ) return $lock;
-
-    $fields['id'] = $was['id'];
-    MELBIS()->SqlUpdate(__LINE__, $table, $fields, 'id');
-
-    UTIL\TablesUnlock([$table]);
+    $done = TABLE\Update($mUserId, 'key_value', [$was['id']], $fields);
+    if ( !$done['result'] ) return $done;
 
     $now = FILE\ProfileOne($fields['key_name'] ?? $name);
     $changed = implode(', ', $said);
 
     return [
         'result'  => true,
-        'message' => 'The profile ['.$name.'] changed: '.$changed,
+        'message' => 'The profile is changed',
         'tables'  => [
             'profile' => [FILE\ProfileShow($now)]
             ]
@@ -219,40 +191,13 @@ function CmdRemove($mUserId, $mParam)
     {
         return [
             'result'  => false,
-            'message' => 'No profile ['.$name.'] in the registry - CmdList answers them'
+            'message' => 'No profile ['.$name.'] in the registry'
             ];
     }
 
     if ( $was['sys_key'] > 0 ) return System($was, 'removed');
 
-    $table = '{DBNICK}_key_value';
-    $lock = UTIL\TablesLock([$table]);
-    if ( !$lock['result'] ) return $lock;
-
-    MELBIS()->SqlDelete(__LINE__, $table, 'id', $was['id']);
-
-    UTIL\TablesUnlock([$table]);
-
-    // Sweeps what hung on the gone row, files among them, by the map of the engine
-    $swept = UTIL\DependSweep('key_value');
-
-    $said = [];
-    foreach ( $swept as $where => $how )
-    {
-        if ( $how === 0 ) continue;
-
-        $said[] = $where.': '.$how;
-    }
-    $told = implode(', ', $said);
-
-    $message = 'The profile ['.$name.'] is out of the registry. The pictures already derived by '.
-               'it stay where they hang';
-    if ( $told != '' ) $message .= '. Swept with it - '.$told;
-
-    return [
-        'result'  => true,
-        'message' => $message
-        ];
+    return TABLE\Remove($mUserId, 'key_value', [$was['id']], $mParam);
 }
 
 
@@ -261,7 +206,7 @@ function CmdRemove($mUserId, $mParam)
  **/
 function ProfileXml($mSet)
 {
-    // Builds the XML of a recipe the way the editor of the program writes it, word by word
+    // The XML the editor writes
     $stamp = 'Melbis Shop v'.MELBIS_SCRIPT_VERSION.'.'.MELBIS_SCRIPT_BUILD;
     $word = function($mText) { return htmlspecialchars((string)$mText, ENT_QUOTES); };
     $flag = function($mValue) { return ( $mValue ) ? 'True' : 'False'; };
@@ -296,7 +241,7 @@ function ProfileXml($mSet)
  **/
 function MustSet($mParam, $mSet)
 {
-    // The door held the types already, so what is weighed here is the sense of the recipe
+    // The sense of the recipe
     $said = [];
 
     if ( isset($mParam['type']) )
@@ -306,7 +251,7 @@ function MustSet($mParam, $mSet)
         {
             return [
                 'result'  => false,
-                'message' => 'The type takes jpeg or png, and ['.$type.'] is neither'
+                'message' => 'The type takes jpeg or png'
                 ];
         }
 
@@ -314,7 +259,7 @@ function MustSet($mParam, $mSet)
         $said[] = 'type';
     }
 
-    // The numbers of a recipe with the range each of them is held to
+    // Every number with its range
     $ranges = [
         'quality'    => [4, 100],
         'width'      => [1, 10000],
@@ -355,7 +300,7 @@ function MustSet($mParam, $mSet)
         $said[] = 'group';
     }
 
-    // A mask comes as a word, and the path to its picture is looked up here
+    // A mask word into path
     if ( isset($mParam['mask']) )
     {
         $word = trim((string)$mParam['mask']);
@@ -375,9 +320,7 @@ function MustSet($mParam, $mSet)
             {
                 return [
                     'result'  => false,
-                    'message' => 'No mask ['.$word.'] with a picture in the registry. A mask is a '.
-                                 'value of FILES_MASK in the base settings, and its picture hangs '.
-                                 'by the Files tool: entity key_value, elem_id the id of that value'
+                    'message' => 'No mask ['.$word.'] with a picture'
                     ];
             }
 
@@ -418,7 +361,7 @@ function MustSet($mParam, $mSet)
         $said[] = 'background';
     }
 
-    // An empty mask_file takes the mask off, and the other words of it keep their places
+    // An empty mask_file takes off
     $mSet['mask_file'] = $mSet['mask_file'] ?? '';
 
     return [
@@ -434,7 +377,7 @@ function MustSet($mParam, $mSet)
  **/
 function Between($mWord, $mValue, $mFrom, $mTo)
 {
-    // The door said it is a number; here the recipe says which numbers it allows
+    // Which numbers the recipe allows
     $value = (int)$mValue;
     if ( $value >= $mFrom && $value <= $mTo ) return true;
 
@@ -452,9 +395,7 @@ function System($mWas, $mWord)
 {
     return [
         'result'  => false,
-        'message' => 'The profile ['.$mWas['key_name'].'] is one the program itself relies on, '.
-                     'and cannot be '.$mWord.'. Its recipe is another matter: the fields may be '.
-                     'changed on any profile'
+        'message' => 'The profile ['.$mWas['key_name'].'] is the shop\'s own'
         ];
 }
 

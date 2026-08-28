@@ -1,11 +1,11 @@
 {
-    "description": "",
-    "parameters": "",
+    "description": "Files behind the AI tools",
+    "parameters": "FILE",
     "tables": [],
     "includes": [
-        "melbis_inc_agent_util.php=1"
+        "melbis_inc_agent_system.php=1"
     ],
-    "cache_on": "0",
+    "cache_on": "1",
     "cache_time": "0",
     "lazy_load": "0",
     "entry_point": "0",

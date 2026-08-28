@@ -1,15 +1,9 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.402 @ 2026-08-20
+ * @version 6.5.0.410 @ 2026-08-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
- **************************************************************************************************
- *
- * CmdAdd - Hangs a pack of files on their elements and derives a picture where a profile asks
- *
- * Runs after the loader of the goods: the store has laid the files down, the rows carry their ids
- *
  **************************************************************************************************/
 
 
@@ -18,7 +12,7 @@ namespace MELBIS_AGENT_IMPORT_FILES;
 
 // Libraries
 use MELBIS_INC_AGENT_FILE as FILE;
-use MELBIS_INC_AGENT_UTIL as UTIL;
+use MELBIS_INC_AGENT_SYSTEM as SYS;
 
 
 /**
@@ -28,7 +22,7 @@ function CmdAdd($mUserId, $mParam)
 {
     $profile = trim((string)( $mParam['profile'] ?? '' ));
 
-    // Reads the profile once for the whole pack, however many pictures lean on it
+    // One profile per pack
     $show = [];
     if ( $profile != '' )
     {
@@ -37,8 +31,7 @@ function CmdAdd($mUserId, $mParam)
         {
             return [
                 'result'  => false,
-                'message' => 'No profile ['.$profile.'] in the registry - the Profiles tool '.
-                             'answers them'
+                'message' => 'No profile ['.$profile.']'
                 ];
         }
 
@@ -47,13 +40,12 @@ function CmdAdd($mUserId, $mParam)
         {
             return [
                 'result'  => false,
-                'message' => 'The recipe of ['.$profile.'] is not readable - the program\'s editor '.
-                             'owns that row'
+                'message' => 'The recipe of ['.$profile.'] is unreadable'
                 ];
         }
     }
 
-    // Weighs the right of the element every file landed on, and refuses the rest by name
+    // The right of each element
     $tables = [];
     $kept = [];
     $said = [];
@@ -78,16 +70,15 @@ function CmdAdd($mUserId, $mParam)
         return [
             'result'  => false,
             'files'   => [],
-            'message' => 'Not one of the files stayed, and they are gone from the store. '.
-                         implode(' | ', $said)
+            'message' => 'No file stayed: '.implode(' | ', $said)
             ];
     }
 
     $names = array_keys($tables);
-    $lock = UTIL\TablesLock($names);
+    $lock = SYS\TablesLock($names, $mUserId);
     if ( !$lock['result'] ) return $lock;
 
-    // Derives a second picture for the rows that carry a profile, or take the one of the pack
+    // A second picture where asked
     $rows = [];
     $born = 0;
     $ids = [];
@@ -131,7 +122,7 @@ function CmdAdd($mUserId, $mParam)
         $born++;
     }
 
-    UTIL\TablesUnlock($names);
+    SYS\TablesUnlock($names, $mUserId);
 
     $message = count($kept).' file(s) in the store';
     if ( $born > 0 ) $message .= ', '.$born.' derived picture(s) painted beside them';

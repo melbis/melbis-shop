@@ -1,6 +1,6 @@
 {
     "description": "Order Calculate",
-    "parameters": "",
+    "parameters": "LOGIC_ORDER_CALC",
     "tables": [],
     "includes": [
         "melbis_inc_logic_order.php=1"

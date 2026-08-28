@@ -1,40 +1,38 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.402 @ 2026-08-20
+ * @version 6.5.0.410 @ 2026-08-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
  **************************************************************************************************
  *
- * EntityAll   - Names the elements a file may hang on
- * EntityOne   - Weighs one entity against that list, or refuses it by name
- * EntityGone  - Refuses an element that is not there and says where to look for it
+ * EntityAll   - The elements files hang on
+ * EntityOne   - Weighs one entity
+ * EntityGone  - Refuses an element gone
  *
- * RightElem   - Weighs the right on the element itself; every entity goes its own way
+ * RightElem   - Weighs the element right
  *
- * FileAll     - Reads the files of the given elements, whole rows
- * FileOne     - Reads one file row as it lies in the table
- * FileDrop    - Deletes a file the tool will not keep, the row and the picture both
+ * FileAll     - Reads files of the elements
+ * FileOne     - Reads one file row
+ * FileDrop    - Deletes row and picture
  *
- * DiskPath    - Builds the path of a row on the disk, by the formula of the product
- * DiskFolder  - Builds the folder of a file out of the hour it arrived
- * DiskPicture - Reads what a picture on the disk really is: its size and its type
+ * DiskPath    - The path of a row
+ * DiskFolder  - The folder of a file
+ * DiskPicture - What a picture really is
  *
- * ProfileAll  - Reads the rows of the FILES_PROFILE dictionary, in their order
- * ProfileOne  - Reads one picture profile by its name
- * ProfileShow - Turns the recipe of a profile into the words of the agent
+ * ProfileAll  - Reads the picture profiles
+ * ProfileOne  - Reads one picture profile
+ * ProfileShow - The recipe in agent words
  *
- * MaskMap     - Reads the masks that have a picture: the name and the path of each
- * MaskWord    - Turns the path a recipe keeps back into the name of its mask
+ * MaskMap     - The masks with a picture
+ * MaskWord    - The mask behind a path
  *
- * Make        - Derives a picture out of one lying in the store, by the recipe of a profile
- * MakePaint   - Lays the recipe onto the picture: everything GD can paint of it
- * MakeMask    - Lays the mask over the canvas the editor's way: own size, white is glass
- * MakeSkip    - Names the parts of a recipe only the program paints
+ * Make        - Derives a picture
+ * MakePaint   - The recipe onto the picture
+ * MakeMask    - The mask over the canvas
+ * MakeSkip    - What only the program paints
  *
- * ColorWord   - Turns a canvas colour of the base into #RRGGBB, and back
- *
- * A file is a row of files_<entity> and a picture on the disk; the right is that of the element
+ * ColorWord   - A canvas colour into #RRGGBB
  *
  **************************************************************************************************/
 
@@ -44,12 +42,12 @@ namespace MELBIS_INC_AGENT_FILE;
 
 
 // Libraries
-use MELBIS_INC_AGENT_UTIL as UTIL;
+use MELBIS_INC_AGENT_SYSTEM as SYS;
 
-// The words a mask position goes by; the base keeps the number of the word
+// The words of a position
 const MASK_POS = ['center', 'left-top', 'right-top', 'right-bottom', 'left-bottom'];
 
-// No mask, the way the editor of the program writes it: the folder of the zero date
+// No mask, as the editor
 const MASK_NONE = 'files/1899/12_30/00_00/';
 
 
@@ -58,7 +56,7 @@ const MASK_NONE = 'files/1899/12_30/00_00/';
  **/
 function EntityAll()
 {
-    // Each of them is a files_<entity> table of one and the same shape
+    // One shape for every entity
     return ['store', 'topic', 'info', 'info_value', 'brand', 'key_value'];
 }
 
@@ -68,7 +66,7 @@ function EntityAll()
  **/
 function EntityOne($mEntity)
 {
-    // The word goes into a table name, so an unknown one is refused before the query is built
+    // An unknown word refused early
     $entity = trim((string)$mEntity);
     if ( in_array($entity, EntityAll()) ) return true;
 
@@ -76,7 +74,7 @@ function EntityOne($mEntity)
 
     return [
         'result'  => false,
-        'message' => 'No element called ['.$entity.'] takes files - these do: '.$list
+        'message' => 'No files on ['.$mEntity.']; these take: '.$list
         ];
 }
 
@@ -98,7 +96,7 @@ function EntityGone($mEntity, $mId)
 
     return [
         'result'  => false,
-        'message' => 'No '.$mEntity.' ['.$mId.'] in the store - '.$said
+        'message' => 'No '.$mEntity.' ['.$elem_id.'] in the store'
         ];
 }
 
@@ -110,7 +108,7 @@ function RightElem($mUserId, $mEntity, $mElemId)
 {
     $elem_id = (int)$mElemId;
 
-    // A file of a goods takes the Descriptions right of a section the goods hangs in
+    // The Description right of section
     if ( $mEntity == 'store' )
     {
         $command = "SELECT id
@@ -123,7 +121,7 @@ function RightElem($mUserId, $mEntity, $mElemId)
         $found = (int)MELBIS()->SqlSelectValue(__LINE__, $command, 0, $param_elem);
         if ( $found == 0 ) return EntityGone($mEntity, $elem_id);
 
-        $allow = UTIL\RightTable('topic', $mUserId, 'descr');
+        $allow = SYS\RightTable('topic', $mUserId, 'descr');
 
         $command = "SELECT ts.store_id
                       FROM {DBNICK}_topic_store ts
@@ -136,12 +134,11 @@ function RightElem($mUserId, $mEntity, $mElemId)
 
         return [
             'result'  => false,
-            'message' => 'The files of the goods ['.$elem_id.'] are not yours to touch: that is '.
-                         'the Descriptions right on a section it hangs in'
+            'message' => 'The files of ['.$elem_id.'] are not yours'
             ];
     }
 
-    // A file of a section takes the Descriptions right standing on that section
+    // The Description right on it
     if ( $mEntity == 'topic' )
     {
         $command = "SELECT id
@@ -154,7 +151,7 @@ function RightElem($mUserId, $mEntity, $mElemId)
         $found = (int)MELBIS()->SqlSelectValue(__LINE__, $command, 0, $param_elem);
         if ( $found == 0 ) return EntityGone($mEntity, $elem_id);
 
-        $allow = UTIL\RightTable('topic', $mUserId, 'descr');
+        $allow = SYS\RightTable('topic', $mUserId, 'descr');
 
         $command = "SELECT id
                       FROM $allow
@@ -165,12 +162,11 @@ function RightElem($mUserId, $mEntity, $mElemId)
 
         return [
             'result'  => false,
-            'message' => 'The files of the section ['.$elem_id.'] are not yours to touch: that is '.
-                         'the Descriptions right on it, given out on the section in the program'
+            'message' => 'The files of ['.$elem_id.'] are not yours'
             ];
     }
 
-    // A file of a characteristic or of a value takes the right of the characteristic
+    // The right of the characteristic
     if ( $mEntity == 'info' || $mEntity == 'info_value' )
     {
         $info_id = $elem_id;
@@ -191,7 +187,7 @@ function RightElem($mUserId, $mEntity, $mElemId)
             $place = 'value';
         }
 
-        $allow = UTIL\RightTable('info', $mUserId, $place);
+        $allow = SYS\RightTable('info', $mUserId, $place);
 
         $command = "SELECT id
                       FROM $allow
@@ -215,12 +211,11 @@ function RightElem($mUserId, $mEntity, $mElemId)
 
         return [
             'result'  => false,
-            'message' => 'The files of the '.$mEntity.' ['.$elem_id.'] are not yours to touch: '.
-                         'that is its own right, given out on the characteristic in the program'
+            'message' => 'The files of ['.$elem_id.'] are not yours'
             ];
     }
 
-    // A brand and a value of the registry keep no rights, so the operation is the whole gate
+    // The operation is the gate
     $command = "SELECT id
                   FROM {DBNICK}_$mEntity
                  WHERE id = :ID
@@ -240,7 +235,7 @@ function RightElem($mUserId, $mEntity, $mElemId)
  **/
 function FileAll($mEntity, $mIds)
 {
-    // Reads them in the order a template walks them: by element, by group, by place
+    // The order a template walks
     $list = implode(',', $mIds);
     if ( $list == '' ) return [];
 
@@ -276,7 +271,7 @@ function FileOne($mEntity, $mId)
  **/
 function FileDrop($mEntity, $mId, $mDisk)
 {
-    // A refused upload was born in this very call, so the picture goes with the row
+    // Born here, gone with it
     MELBIS()->SqlDelete(__LINE__, '{DBNICK}_files_'.$mEntity, 'id', (int)$mId);
 
     if ( $mDisk != '' && file_exists($mDisk) ) @unlink($mDisk);
@@ -288,7 +283,7 @@ function FileDrop($mEntity, $mId, $mDisk)
  **/
 function DiskPath($mRow)
 {
-    // The same formula the program and the engine both write a file by
+    // The formula both sides use
     return __DIR__.'/..'.DiskFolder($mRow['upload_time']).$mRow['file_name'];
 }
 
@@ -298,7 +293,7 @@ function DiskPath($mRow)
  **/
 function DiskFolder($mUploadTime)
 {
-    // Cuts the day and the hour of arrival into the folders the store keeps files in
+    // The day and hour, foldered
     list( $date, $time ) = explode(' ', $mUploadTime);
     list( $y, $m, $d ) = explode('-', $date);
     list( $h, $n, $s ) = explode(':', $time);
@@ -312,7 +307,7 @@ function DiskFolder($mUploadTime)
  **/
 function DiskPicture($mDisk)
 {
-    // Asks the disk what the file really is, and answers empty when it is no picture
+    // What the file really is
     $what = [
         'type'   => '',
         'width'  => 0,
@@ -377,7 +372,7 @@ function ProfileOne($mName)
  **/
 function ProfileShow($mRow, $mRaw = false)
 {
-    // Turns the XML into words; a body no parser takes is answered as closed, not as empty
+    // The XML into words
     $show = [
         'name'   => $mRow['key_name'],
         'system' => ( $mRow['sys_key'] > 0 )
@@ -414,7 +409,7 @@ function ProfileShow($mRow, $mRaw = false)
     $show['contrast']   = (int)( $xml->EFFECTS['Contrast'] ?? 0 );
     $show['sharpen']    = (int)( $xml->EFFECTS['Sharpen'] ?? 0 );
 
-    // An update needs the raw path of the mask too; the agent never sees this face
+    // The raw path, for update
     if ( $mRaw ) $show['mask_file'] = (string)( $xml->MASK['File'] ?? '' );
 
     return $show;
@@ -426,7 +421,7 @@ function ProfileShow($mRow, $mRaw = false)
  **/
 function MaskMap()
 {
-    // Reads the name a person says beside the path the recipe keeps, for both ways of the turn
+    // The name beside the path
     $command = "SELECT kv.key_name, f.file_name, f.upload_time
                   FROM {DBNICK}_key_value kv
                   JOIN {DBNICK}_files_key_value f
@@ -461,7 +456,7 @@ function MaskMap()
  **/
 function MaskWord($mPath)
 {
-    // The zero folder and an empty path both mean no mask; an unknown path is shown as it is
+    // Zero folder means no mask
     if ( $mPath == '' || $mPath == MASK_NONE || substr($mPath, -1) == '/' ) return '';
 
     foreach ( MaskMap() as $mask )
@@ -478,12 +473,12 @@ function MaskWord($mPath)
  **/
 function Make($mUserId, $mEntity, $mWas, $mProfile, $mShow, $mRealName = '')
 {
-    // The caller holds the lock and the right already, so the work here is the picture alone
+    // The picture alone
     if ( !function_exists('imagecreatetruecolor') )
     {
         return [
             'result'  => false,
-            'message' => 'This PHP carries no GD, so nothing can be painted here'
+            'message' => 'This PHP carries no GD'
             ];
     }
 
@@ -493,15 +488,14 @@ function Make($mUserId, $mEntity, $mWas, $mProfile, $mShow, $mRealName = '')
     {
         return [
             'result'  => false,
-            'message' => 'The file ['.$mWas['real_name'].'] is not a picture the engine reads - '.
-                         'jpg, png, gif and webp are'
+            'message' => 'The file ['.$mWas['real_name'].'] is no picture'
             ];
     }
 
     $paint = MakePaint($what, $disk, $mShow);
     if ( !$paint['result'] ) return $paint;
 
-    // Lays the new picture down by the formula of the engine: this minute, table, person, id
+    // Laid by the engine formula
     $table = 'files_'.$mEntity;
     $now = MELBIS()->DateTime();
     $folder = DiskFolder($now);
@@ -512,7 +506,7 @@ function Make($mUserId, $mEntity, $mWas, $mProfile, $mShow, $mRealName = '')
 
         return [
             'result'  => false,
-            'message' => 'The folder of this minute could not be made: '.$folder
+            'message' => 'The folder could not be made'
             ];
     }
 
@@ -520,7 +514,7 @@ function Make($mUserId, $mEntity, $mWas, $mProfile, $mShow, $mRealName = '')
     $ext = ( $mShow['type'] == 'png' ) ? 'png' : 'jpg';
     $file_name = strtolower($table.'_'.$mUserId.'_'.$id).'.'.$ext;
 
-    // Writes the file first and the row second: a break leaves garbage, not a dead link
+    // File first, row second
     $laid = ( $mShow['type'] == 'png' )
         ? imagepng($paint['image'], $dir.$file_name)
         : imagejpeg($paint['image'], $dir.$file_name, $mShow['quality']);
@@ -530,23 +524,12 @@ function Make($mUserId, $mEntity, $mWas, $mProfile, $mShow, $mRealName = '')
     {
         return [
             'result'  => false,
-            'message' => 'The picture could not be written into '.$folder
+            'message' => 'The picture could not be written'
             ];
     }
 
-    // The new file stands at the end of the group the recipe names
+    // The new file stands last
     $kind = $mShow['group'];
-    $command = "SELECT MAX(pos)
-                  FROM {DBNICK}_".$table."
-                 WHERE elem_id = :ELEM_ID
-                   AND kind_key = :KIND_KEY
-               ";
-    $param_pos = [
-        'elem_id'  => $mWas['elem_id'],
-        'kind_key' => $kind
-        ];
-    $last = MELBIS()->SqlSelectValue(__LINE__, $command, 0, $param_pos);
-
     $real_name = trim((string)$mRealName);
     if ( $real_name == '' )
     {
@@ -564,12 +547,11 @@ function Make($mUserId, $mEntity, $mWas, $mProfile, $mShow, $mRealName = '')
         'upload_ok'   => 1,
         'real_name'   => $real_name,
         'format_xml'  => '',
-        'pos'         => $last + 1
+        'pos'         => $id
         ];
     MELBIS()->SqlInsert(__LINE__, '{DBNICK}_'.$table, $fields);
 
-    $message = 'Made ['.$real_name.'] - '.$paint['width'].'x'.$paint['height'].' '.$mShow['type'].
-               ' by ['.$mProfile.'], in the group ['.$kind.']';
+    $message = 'Made ['.$real_name.'] - '.$paint['width'].'x'.$paint['height'].' by ['.$mProfile.']';
     $skipped = MakeSkip($mShow);
     if ( $skipped != '' ) $message .= '. Left to the program, it alone paints: '.$skipped;
 
@@ -587,7 +569,7 @@ function Make($mUserId, $mEntity, $mWas, $mProfile, $mShow, $mRealName = '')
  **/
 function MakePaint($mWhat, $mDisk, $mShow)
 {
-    // Opens the picture by its type: what GD cannot open is refused here, not later
+    // Opened by its type
     $doors = [
         'jpg'  => 'imagecreatefromjpeg',
         'png'  => 'imagecreatefrompng',
@@ -600,7 +582,7 @@ function MakePaint($mWhat, $mDisk, $mShow)
     {
         return [
             'result'  => false,
-            'message' => 'The picture could not be opened - the file may be broken'
+            'message' => 'The picture could not be opened'
             ];
     }
 
@@ -609,7 +591,7 @@ function MakePaint($mWhat, $mDisk, $mShow)
     $green = hexdec(substr($hex, 2, 2));
     $blue = hexdec(substr($hex, 4, 2));
 
-    // Mirrors and turns first, the way the editor of the program does, and fits after
+    // Mirror and turn, then fit
     if ( $mShow['mirror'] ) imageflip($source, IMG_FLIP_HORIZONTAL);
     if ( $mShow['rotate'] != 0 )
     {
@@ -618,7 +600,7 @@ function MakePaint($mWhat, $mDisk, $mShow)
         $source = $turned;
     }
 
-    // Fits the picture whole into the box the margins leave, smart shrinking the canvas to it
+    // Fits whole into the box
     $source_w = imagesx($source);
     $source_h = imagesy($source);
     $border = $mShow['border'];
@@ -639,7 +621,7 @@ function MakePaint($mWhat, $mDisk, $mShow)
     imagecopyresampled($canvas, $source, $x, $y, 0, 0, $fit_w, $fit_h, $source_w, $source_h);
     imagedestroy($source);
 
-    // The effects GD can paint; the contrast of the program grows the other way round
+    // The effects GD can paint
     if ( $mShow['red'] != 0 || $mShow['green'] != 0 || $mShow['blue'] != 0 )
     {
         imagefilter($canvas, IMG_FILTER_COLORIZE, $mShow['red'], $mShow['green'], $mShow['blue']);
@@ -657,7 +639,7 @@ function MakePaint($mWhat, $mDisk, $mShow)
         imageconvolution($canvas, $matrix, 1, 0);
     }
 
-    // The mask goes last, over everything the recipe has painted so far
+    // The mask goes last
     if ( $mShow['mask_file'] != '' && $mShow['mask_alpha'] > 0 )
     {
         MakeMask($canvas, $canvas_w, $canvas_h, $mShow);
@@ -677,7 +659,7 @@ function MakePaint($mWhat, $mDisk, $mShow)
  **/
 function MakeMask($mCanvas, $mCanvasW, $mCanvasH, $mShow)
 {
-    // Mirrored off the editor of the program: white is glass, and mask_alpha is how solid it lies
+    // White glass, alpha solid
     $disk = __DIR__.'/../'.$mShow['mask_file'];
     $what = DiskPicture($disk);
     if ( $what['type'] == '' ) return;
@@ -695,7 +677,7 @@ function MakeMask($mCanvas, $mCanvasW, $mCanvasH, $mShow)
     $mask_w = imagesx($mask);
     $mask_h = imagesy($mask);
 
-    // The five places the editor lays a mask in, by the words of the registry
+    // Five places for a mask
     $spots = [
         'center'       => [(int)(( $mCanvasW - $mask_w ) / 2), (int)(( $mCanvasH - $mask_h ) / 2)],
         'left-top'     => [0, 0],
@@ -721,7 +703,7 @@ function MakeMask($mCanvas, $mCanvasW, $mCanvasH, $mShow)
             $green = ( $dot >> 8 ) & 0xFF;
             $blue = $dot & 0xFF;
 
-            // White is glass, the way the editor keys it, and the png alpha thins the rest
+            // White is glass, alpha thins
             if ( $red == 255 && $green == 255 && $blue == 255 ) continue;
 
             $thin = ( 127 - ( ( $dot >> 24 ) & 0x7F ) ) / 127;
@@ -745,7 +727,7 @@ function MakeMask($mCanvas, $mCanvasW, $mCanvasH, $mShow)
  **/
 function MakeSkip($mShow)
 {
-    // Names what this painting left out, so nothing of a recipe is skipped in silence
+    // What this painting left out
     $skipped = [];
     if ( $mShow['mask'] != '' && $mShow['mask_alpha'] == 0 )
     {
@@ -762,7 +744,7 @@ function MakeSkip($mShow)
  **/
 function ColorWord($mColor, $mBack = false)
 {
-    // The base keeps a TColor, its bytes standing blue to red, and a person reads #RRGGBB
+    // TColor runs blue to red
     if ( $mBack )
     {
         $hex = substr((string)$mColor, 1);

@@ -1,9 +1,13 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.402 @ 2026-08-20
+ * @version 6.5.0.410 @ 2026-08-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
+ **************************************************************************************************
+ *
+ * Main - Prints the sections under
+ *
  **************************************************************************************************/
 
 namespace MELBIS_CATALOGE_SUB;
@@ -11,7 +15,7 @@ namespace MELBIS_CATALOGE_SUB;
 use MELBIS_INC_WEB_TOPIC as TOPIC;
 use MELBIS_INC_WEB_CALLBACK as CALLBACK;
 
-// Define Callback - the ajax call is an entry point of its own
+// Define Callback
 CALLBACK\Define(); 
 
 
@@ -23,10 +27,10 @@ function Main($mVars)
     // Create 
     $tpl = MELBIS()->TplCreate();   
     
-    // Vars - from a template the id comes as a parameter, over AJAX in the post               
+    // Vars - parameter or post
     $id = !empty($mVars['id']) ? $mVars['id'] : (int) ( $mVars['post']['id'] ?? 0 );   
     
-    // Find root - the section whose children are asked for
+    // Find root - the parent
     $command = "SELECT id, tlevel
                   FROM {DBNICK}_topic
                  WHERE id = :ID 

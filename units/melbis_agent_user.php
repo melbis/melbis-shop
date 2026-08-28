@@ -1,28 +1,14 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.0.402 @ 2026-08-20
+ * @version 6.5.0.410 @ 2026-08-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
  **************************************************************************************************
  *
- * CmdList        - Reads the people, the groups, the operations and the rights
- * CmdAdd         - Adds a person with a password born here and said once
- * CmdUpdate      - Changes the given columns of people, by id
- * CmdRemove      - Deletes people by id, refusing while they carry history
- * CmdPassword    - Gives one person a new password and says it once
- * CmdGroupAdd    - Adds a group at the end of the list
- * CmdGroupUpdate - Changes the given columns of groups, by id
- * CmdGroupRemove - Deletes groups by id, refusing while people stand in them
- * CmdGroupPos    - Reorders the groups by POS, MOVE or SORT
- * CmdRightAdd    - Grants an operation to a person or to a group
- * CmdRightUpdate - Changes the given columns of rights, by id
- * CmdRightRemove - Takes rights back, by id
- *
- * Login          - Weighs the shape of a login and the ones already taken
- * Password       - Builds a password of letters that cannot be mistaken for one another
- *
- * A password is kept as md5 and said once; the tree of the operations belongs to the engine
+ * People         - The people with their tables
+ * Login          - Weighs a login
+ * Password       - A password of clear letters
  *
  **************************************************************************************************/
 
@@ -31,73 +17,31 @@
 namespace MELBIS_AGENT_USER;
 
 // Libraries
-use MELBIS_INC_AGENT_UTIL as UTIL;
+use MELBIS_INC_AGENT_SYSTEM as SYS;
+use MELBIS_INC_AGENT_TABLE as TABLE;
 
-// The columns a call may write into a person; the password is never one of them
-const FIELDS_USER = "login, name, group_id, add_group_id, phone, email, params, is_blocked";
-
-// The columns a read gives back; the md5 of the password is not among them
+// The columns a read gives
 const FIELDS_READ = "id, group_id, add_group_id, login, name, phone, email, params, is_blocked";
-
-// The columns a call may write into a group
-const FIELDS_GROUP = "skey, name, phone, email, pos";
-
-// The columns a call may write into a right: an operation, and the one it is given to
-const FIELDS_RIGHT = "oper_id, user_id, group_id";
 
 
 /**
- * Function CmdList
+ * Function CmdListCut
  **/
-function CmdList($mUserId, $mParam)
+function CmdListCut($mUserId, $mParam)
 {
-    $gate = UTIL\RightOper($mUserId, 'GET_USERS', 'Reading the people of the shop');
-    if ( $gate !== true ) return $gate;
+    return People(['user_group']);
+}
 
-    $fields = FIELDS_READ;
 
-    $command = "SELECT $fields
-                  FROM {DBNICK}_user
-              ORDER BY id
-               ";
-    $users = MELBIS()->SqlSelect(__LINE__, $command);
+/**
+ * Function CmdListFull
+ **/
+function CmdListFull($mUserId, $mParam)
+{
+    $more = ['user_group', 'oper', 'oper_right', 'oper_table',
+             'user_key_set', 'user_group_key_set'];
 
-    $command = "SELECT *
-                  FROM {DBNICK}_user_group
-              ORDER BY pos
-               ";
-    $groups = MELBIS()->SqlSelect(__LINE__, $command);
-
-    $command = "SELECT *
-                  FROM {DBNICK}_oper
-              ORDER BY absindex
-               ";
-    $opers = MELBIS()->SqlSelect(__LINE__, $command);
-
-    $command = "SELECT *
-                  FROM {DBNICK}_oper_right
-              ORDER BY id
-               ";
-    $rights = MELBIS()->SqlSelect(__LINE__, $command);
-
-    $command = "SELECT *
-                  FROM {DBNICK}_oper_table
-              ORDER BY oper_id, pos
-               ";
-    $tables = MELBIS()->SqlSelect(__LINE__, $command);
-
-    return [
-        'result'  => true,
-        'message' => count($users).' people, '.count($groups).' groups, '.count($opers).
-                     ' operations, '.count($rights).' rights',
-        'tables'  => [
-            'user'       => $users,
-            'user_group' => $groups,
-            'oper'       => $opers,
-            'oper_right' => $rights,
-            'oper_table' => $tables
-            ]
-        ];
+    return People($more);
 }
 
 
@@ -106,33 +50,28 @@ function CmdList($mUserId, $mParam)
  **/
 function CmdAdd($mUserId, $mParam)
 {
-    $gate = UTIL\RightOper($mUserId, 'PUT_USERS', 'Adding a person to the shop');
-    if ( $gate !== true ) return $gate;
-
     $weighed = Login($mParam['login'], 0);
     if ( !$weighed['result'] ) return $weighed;
 
-    $fields = UTIL\Only($mParam, FIELDS_USER);
     $password = Password();
 
     $tables = ['{DBNICK}_user'];
-    $lock = UTIL\TablesLock($tables);
+    $lock = SYS\TablesLock($tables, $mUserId);
     if ( !$lock['result'] ) return $lock;
 
-    $row = $fields;
+    // Every field is a column
+    $row = $mParam;
     $row['id'] = MELBIS()->SqlGenId('user');
     $row['pass_code'] = md5($password);
     MELBIS()->SqlInsert(__LINE__, '{DBNICK}_user', $row);
 
-    UTIL\TablesUnlock($tables);
+    SYS\TablesUnlock($tables, $mUserId);
 
     return [
         'result'   => true,
         'id'       => $row['id'],
         'password' => $password,
-        'message'  => 'The person ['.$mParam['login'].'] is in the shop, id '.$row['id'].
-                      '. The password is said once and kept as md5 only: hand it over, advise to '.
-                      'change it, and store it nowhere. Rights are given out with CmdRightAdd'
+        'message' => 'The person ['.$mParam['login'].'] is in the shop'
         ];
 }
 
@@ -142,64 +81,24 @@ function CmdAdd($mUserId, $mParam)
  **/
 function CmdUpdate($mUserId, $mParam)
 {
-    $gate = UTIL\RightOper($mUserId, 'PUT_USERS', 'Changing a person of the shop');
-    if ( $gate !== true ) return $gate;
+    $ids = $mParam['id'];
 
-    $ids = UTIL\Exists('user', $mParam['id']);
-    $lost = array_diff($mParam['id'], $ids);
-    if ( count($lost) > 0 )
-    {
-        $list = implode(', ', $lost);
-
-        return [
-            'result'  => false,
-            'message' => 'No people ['.$list.'] in the shop - CmdList answers who is there'
-            ];
-    }
-
-    $fields = UTIL\Only($mParam, FIELDS_USER);
-    if ( count($fields) == 0 )
-    {
-        return [
-            'result'  => false,
-            'message' => 'Nothing was named to change'
-            ];
-    }
-
-    // A login belongs to one person, so a change of it is weighed against the ones taken
-    if ( isset($fields['login']) )
+    // A login weighed against taken
+    if ( isset($mParam['login']) )
     {
         if ( count($ids) > 1 )
         {
             return [
                 'result'  => false,
-                'message' => 'A login belongs to one person: name one id when the login changes'
+                'message' => 'A login belongs to one person'
                 ];
         }
 
-        $weighed = Login($fields['login'], reset($ids));
+        $weighed = Login($mParam['login'], reset($ids));
         if ( !$weighed['result'] ) return $weighed;
     }
 
-    $tables = ['{DBNICK}_user'];
-    $lock = UTIL\TablesLock($tables);
-    if ( !$lock['result'] ) return $lock;
-
-    foreach ( $ids as $id )
-    {
-        $row = $fields;
-        $row['id'] = $id;
-        MELBIS()->SqlUpdate(__LINE__, '{DBNICK}_user', $row, 'id');
-    }
-
-    UTIL\TablesUnlock($tables);
-
-    $changed = implode(', ', array_keys($fields));
-
-    return [
-        'result'  => true,
-        'message' => count($ids).' people changed: '.$changed
-        ];
+    return TABLE\Update($mUserId, 'user', $ids, $mParam);
 }
 
 
@@ -208,65 +107,27 @@ function CmdUpdate($mUserId, $mParam)
  **/
 function CmdRemove($mUserId, $mParam)
 {
-    $gate = UTIL\RightOper($mUserId, 'PUT_USERS', 'Removing a person of the shop');
-    if ( $gate !== true ) return $gate;
-
-    $ids = UTIL\Exists('user', $mParam['id']);
-    $lost = array_diff($mParam['id'], $ids);
-    if ( count($lost) > 0 )
-    {
-        $list = implode(', ', $lost);
-
-        return [
-            'result'  => false,
-            'message' => 'No people ['.$list.'] in the shop'
-            ];
-    }
+    $ids = $mParam['id'];
 
     if ( in_array($mUserId, $ids) )
     {
         return [
             'result'  => false,
-            'message' => 'The person of this session is not removed by it'
+            'message' => 'This session does not remove itself'
             ];
     }
 
-    $list = implode(',', $ids);
-
-    // Counts the history a person carries: deleting would orphan it, so they are blocked instead
-    $told = UTIL\DependCount('user', $ids);
+    // History is blocked, never deleted
+    $told = SYS\DependCount('user', $ids);
     if ( $told['count'] > 0 )
     {
         return [
             'result'  => false,
-            'message' => 'Those people carry history'.$told['said'].'. Deleting would orphan it - '.
-                         'block them instead, CmdUpdate with is_blocked'
+            'message' => 'Those people carry history'.$told['said'].' - block them'
             ];
     }
 
-    $tables = ['{DBNICK}_user'];
-    $lock = UTIL\TablesLock($tables);
-    if ( !$lock['result'] ) return $lock;
-
-    $command = "DELETE
-                  FROM {DBNICK}_user
-                 WHERE id IN ( $list )
-               ";
-    MELBIS()->SqlQuery(__LINE__, $command);
-
-    UTIL\TablesUnlock($tables);
-
-    // Sweeps the rights of the gone people, by the map of the engine
-    $swept = UTIL\DependSweep('user');
-
-    $message = count($ids).' people gone. What they wrote in the shop keeps their id: an order '.
-               'line, a version of a file, a task';
-    $message .= UTIL\DependSaid($swept);
-
-    return [
-        'result'  => true,
-        'message' => $message
-        ];
+    return TABLE\Remove($mUserId, 'user', $ids, $mParam);
 }
 
 
@@ -275,22 +136,10 @@ function CmdRemove($mUserId, $mParam)
  **/
 function CmdPassword($mUserId, $mParam)
 {
-    $gate = UTIL\RightOper($mUserId, 'PUT_USERS', 'Setting a password of a person');
-    if ( $gate !== true ) return $gate;
-
-    $ids = UTIL\Exists('user', [$mParam['id']]);
-    if ( count($ids) == 0 )
-    {
-        return [
-            'result'  => false,
-            'message' => 'No person ['.$mParam['id'].'] in the shop'
-            ];
-    }
-
     $password = Password();
 
     $tables = ['{DBNICK}_user'];
-    $lock = UTIL\TablesLock($tables);
+    $lock = SYS\TablesLock($tables, $mUserId);
     if ( !$lock['result'] ) return $lock;
 
     $row = [
@@ -299,13 +148,12 @@ function CmdPassword($mUserId, $mParam)
         ];
     MELBIS()->SqlUpdate(__LINE__, '{DBNICK}_user', $row, 'id');
 
-    UTIL\TablesUnlock($tables);
+    SYS\TablesUnlock($tables, $mUserId);
 
     return [
         'result'   => true,
         'password' => $password,
-        'message'  => 'A new password of the person ['.$mParam['id'].'], said once and kept as md5 '.
-                      'only. The old one stops working at once'
+        'message' => 'A new password of ['.$mParam['id'].'], said once'
         ];
 }
 
@@ -315,33 +163,7 @@ function CmdPassword($mUserId, $mParam)
  **/
 function CmdGroupAdd($mUserId, $mParam)
 {
-    $gate = UTIL\RightOper($mUserId, 'PUT_USERS', 'Shaping the groups of the people');
-    if ( $gate !== true ) return $gate;
-
-    $fields = UTIL\Only($mParam, FIELDS_GROUP);
-
-    $tables = ['{DBNICK}_user_group'];
-    $lock = UTIL\TablesLock($tables);
-    if ( !$lock['result'] ) return $lock;
-
-    $command = "SELECT MAX(pos)
-                  FROM {DBNICK}_user_group
-               ";
-    $last = MELBIS()->SqlSelectValue(__LINE__, $command, 0);
-
-    $row = $fields;
-    $row['id'] = MELBIS()->SqlGenId('user_group');
-    if ( !isset($row['pos']) ) $row['pos'] = $last + 1;
-    MELBIS()->SqlInsert(__LINE__, '{DBNICK}_user_group', $row);
-
-    UTIL\TablesUnlock($tables);
-
-    return [
-        'result'  => true,
-        'id'      => $row['id'],
-        'message' => 'The group ['.$row['id'].'] is in the list. Its rights are given out with '.
-                     'CmdRightAdd'
-        ];
+    return TABLE\Add($mUserId, 'user_group', $mParam);
 }
 
 
@@ -350,49 +172,7 @@ function CmdGroupAdd($mUserId, $mParam)
  **/
 function CmdGroupUpdate($mUserId, $mParam)
 {
-    $gate = UTIL\RightOper($mUserId, 'PUT_USERS', 'Shaping the groups of the people');
-    if ( $gate !== true ) return $gate;
-
-    $ids = UTIL\Exists('user_group', $mParam['id']);
-    $lost = array_diff($mParam['id'], $ids);
-    if ( count($lost) > 0 )
-    {
-        $list = implode(', ', $lost);
-
-        return [
-            'result'  => false,
-            'message' => 'No groups ['.$list.'] in the shop'
-            ];
-    }
-
-    $fields = UTIL\Only($mParam, FIELDS_GROUP);
-    if ( count($fields) == 0 )
-    {
-        return [
-            'result'  => false,
-            'message' => 'Nothing was named to change'
-            ];
-    }
-
-    $tables = ['{DBNICK}_user_group'];
-    $lock = UTIL\TablesLock($tables);
-    if ( !$lock['result'] ) return $lock;
-
-    foreach ( $ids as $id )
-    {
-        $row = $fields;
-        $row['id'] = $id;
-        MELBIS()->SqlUpdate(__LINE__, '{DBNICK}_user_group', $row, 'id');
-    }
-
-    UTIL\TablesUnlock($tables);
-
-    $changed = implode(', ', array_keys($fields));
-
-    return [
-        'result'  => true,
-        'message' => count($ids).' groups changed: '.$changed
-        ];
+    return TABLE\Update($mUserId, 'user_group', $mParam['id'], $mParam);
 }
 
 
@@ -401,24 +181,9 @@ function CmdGroupUpdate($mUserId, $mParam)
  **/
 function CmdGroupRemove($mUserId, $mParam)
 {
-    $gate = UTIL\RightOper($mUserId, 'PUT_USERS', 'Shaping the groups of the people');
-    if ( $gate !== true ) return $gate;
+    $list = implode(',', $mParam['id']);
 
-    $ids = UTIL\Exists('user_group', $mParam['id']);
-    $lost = array_diff($mParam['id'], $ids);
-    if ( count($lost) > 0 )
-    {
-        $list = implode(', ', $lost);
-
-        return [
-            'result'  => false,
-            'message' => 'No groups ['.$list.'] in the shop'
-            ];
-    }
-
-    $list = implode(',', $ids);
-
-    // Counts the people standing in those groups: a group with any of them is not deleted
+    // A group with people stays
     $command = "SELECT COUNT(*)
                   FROM {DBNICK}_user
                  WHERE group_id IN ( $list )
@@ -430,33 +195,11 @@ function CmdGroupRemove($mUserId, $mParam)
     {
         return [
             'result'  => false,
-            'message' => $people.' person(s) stand in those groups and would be left without one - '.
-                         'move them first, CmdUpdate with group_id'
+            'message' => $people.' person(s) would lose their group'
             ];
     }
 
-    $tables = ['{DBNICK}_user_group'];
-    $lock = UTIL\TablesLock($tables);
-    if ( !$lock['result'] ) return $lock;
-
-    $command = "DELETE
-                  FROM {DBNICK}_user_group
-                 WHERE id IN ( $list )
-               ";
-    MELBIS()->SqlQuery(__LINE__, $command);
-
-    UTIL\TablesUnlock($tables);
-
-    // Sweeps the rights given to the gone groups, by the map of the engine
-    $swept = UTIL\DependSweep('user_group');
-
-    $message = count($ids).' group(s) gone';
-    $message .= UTIL\DependSaid($swept);
-
-    return [
-        'result'  => true,
-        'message' => $message
-        ];
+    return TABLE\Remove($mUserId, 'user_group', $mParam['id'], $mParam);
 }
 
 
@@ -465,24 +208,7 @@ function CmdGroupRemove($mUserId, $mParam)
  **/
 function CmdGroupPos($mUserId, $mParam)
 {
-    $gate = UTIL\RightOper($mUserId, 'PUT_USERS', 'Shaping the groups of the people');
-    if ( $gate !== true ) return $gate;
-
-    $tables = ['{DBNICK}_user_group'];
-    $lock = UTIL\TablesLock($tables);
-    if ( !$lock['result'] ) return $lock;
-
-    // One list for the whole table, so the scope is empty
-    $done = UTIL\Pos('user_group', [], $mParam['type'], $mParam['data'] ?? []);
-
-    UTIL\TablesUnlock($tables);
-
-    if ( !$done['result'] ) return $done;
-
-    return [
-        'result'  => true,
-        'message' => 'The groups: '.$done['said'].', '.$done['moved'].' row(s) moved'
-        ];
+    return TABLE\Pos($mUserId, 'user_group', [], $mParam);
 }
 
 
@@ -491,61 +217,18 @@ function CmdGroupPos($mUserId, $mParam)
  **/
 function CmdRightAdd($mUserId, $mParam)
 {
-    $gate = UTIL\RightOper($mUserId, 'PUT_USERS', 'Giving out a right');
-    if ( $gate !== true ) return $gate;
-
-    // A right stands on an operation of the program, so the operation is weighed first
-    $oper_id = $mParam['oper_id'];
-    if ( count(UTIL\Exists('oper', [$oper_id])) == 0 )
-    {
-        return [
-            'result'  => false,
-            'message' => 'No operation ['.$oper_id.'] in the program - CmdList answers them in the oper table'
-            ];
-    }
-
-    // A right belongs to a person or to a group, and to one that is really there
+    // A right names one owner
     $user_id = $mParam['user_id'] ?? 0;
     $group_id = $mParam['group_id'] ?? 0;
     if ( $user_id == 0 && $group_id == 0 )
     {
         return [
             'result'  => false,
-            'message' => 'A right belongs to a person or to a group: name user_id or group_id'
-            ];
-    }
-    if ( $user_id != 0 && count(UTIL\Exists('user', [$user_id])) == 0 )
-    {
-        return [
-            'result'  => false,
-            'message' => 'No people ['.$user_id.'] in the shop - CmdList answers who is there'
-            ];
-    }
-    if ( $group_id != 0 && count(UTIL\Exists('user_group', [$group_id])) == 0 )
-    {
-        return [
-            'result'  => false,
-            'message' => 'No groups ['.$group_id.'] in the shop - CmdList answers them'
+            'message' => 'Name user_id or group_id'
             ];
     }
 
-    $fields = UTIL\Only($mParam, FIELDS_RIGHT);
-
-    $tables = ['{DBNICK}_oper_right'];
-    $lock = UTIL\TablesLock($tables);
-    if ( !$lock['result'] ) return $lock;
-
-    $row = $fields;
-    $row['id'] = MELBIS()->SqlGenId('oper_right');
-    MELBIS()->SqlInsert(__LINE__, '{DBNICK}_oper_right', $row);
-
-    UTIL\TablesUnlock($tables);
-
-    return [
-        'result'  => true,
-        'id'      => $row['id'],
-        'message' => 'The right ['.$row['id'].'] is given out'
-        ];
+    return TABLE\Add($mUserId, 'oper_right', $mParam);
 }
 
 
@@ -554,49 +237,7 @@ function CmdRightAdd($mUserId, $mParam)
  **/
 function CmdRightUpdate($mUserId, $mParam)
 {
-    $gate = UTIL\RightOper($mUserId, 'PUT_USERS', 'Changing a right');
-    if ( $gate !== true ) return $gate;
-
-    $ids = UTIL\Exists('oper_right', $mParam['id']);
-    $lost = array_diff($mParam['id'], $ids);
-    if ( count($lost) > 0 )
-    {
-        $list = implode(', ', $lost);
-
-        return [
-            'result'  => false,
-            'message' => 'No right rows ['.$list.'] in the shop'
-            ];
-    }
-
-    $fields = UTIL\Only($mParam, FIELDS_RIGHT);
-    if ( count($fields) == 0 )
-    {
-        return [
-            'result'  => false,
-            'message' => 'Nothing was named to change'
-            ];
-    }
-
-    $tables = ['{DBNICK}_oper_right'];
-    $lock = UTIL\TablesLock($tables);
-    if ( !$lock['result'] ) return $lock;
-
-    foreach ( $ids as $id )
-    {
-        $row = $fields;
-        $row['id'] = $id;
-        MELBIS()->SqlUpdate(__LINE__, '{DBNICK}_oper_right', $row, 'id');
-    }
-
-    UTIL\TablesUnlock($tables);
-
-    $changed = implode(', ', array_keys($fields));
-
-    return [
-        'result'  => true,
-        'message' => count($ids).' right(s) changed: '.$changed
-        ];
+    return TABLE\Update($mUserId, 'oper_right', $mParam['id'], $mParam);
 }
 
 
@@ -605,43 +246,87 @@ function CmdRightUpdate($mUserId, $mParam)
  **/
 function CmdRightRemove($mUserId, $mParam)
 {
-    $gate = UTIL\RightOper($mUserId, 'PUT_USERS', 'Taking a right back');
-    if ( $gate !== true ) return $gate;
-
-    $ids = UTIL\Exists('oper_right', $mParam['id']);
-    $lost = array_diff($mParam['id'], $ids);
-    if ( count($lost) > 0 )
-    {
-        $list = implode(', ', $lost);
-
-        return [
-            'result'  => false,
-            'message' => 'No right rows ['.$list.'] in the shop'
-            ];
-    }
-
-    $list = implode(',', $ids);
-
-    $tables = ['{DBNICK}_oper_right'];
-    $lock = UTIL\TablesLock($tables);
-    if ( !$lock['result'] ) return $lock;
-
-    $command = "DELETE
-                  FROM {DBNICK}_oper_right
-                 WHERE id IN ( $list )
-               ";
-    MELBIS()->SqlQuery(__LINE__, $command);
-
-    UTIL\TablesUnlock($tables);
-
-    return [
-        'result'  => true,
-        'message' => count($ids).' right(s) taken back'
-        ];
+    return TABLE\Remove($mUserId, 'oper_right', $mParam['id'], $mParam);
 }
 
 
+/**
+ * Function CmdKeyAdd
+ **/
+function CmdKeyAdd($mUserId, $mParam)
+{
+    return TABLE\KeySetAdd($mUserId, 'user', $mParam['user_id'], $mParam);
+}
 
+
+/**
+ * Function CmdKeyUpdate
+ **/
+function CmdKeyUpdate($mUserId, $mParam)
+{
+    return TABLE\KeySetUpdate($mUserId, 'user', $mParam['id'], $mParam);
+}
+
+
+/**
+ * Function CmdKeyRemove
+ **/
+function CmdKeyRemove($mUserId, $mParam)
+{
+    return TABLE\KeySetRemove($mUserId, 'user', $mParam['id']);
+}
+
+
+/**
+ * Function CmdGroupKeyAdd
+ **/
+function CmdGroupKeyAdd($mUserId, $mParam)
+{
+    return TABLE\KeySetAdd($mUserId, 'user_group', $mParam['user_group_id'], $mParam);
+}
+
+
+/**
+ * Function CmdGroupKeyUpdate
+ **/
+function CmdGroupKeyUpdate($mUserId, $mParam)
+{
+    return TABLE\KeySetUpdate($mUserId, 'user_group', $mParam['id'], $mParam);
+}
+
+
+/**
+ * Function CmdGroupKeyRemove
+ **/
+function CmdGroupKeyRemove($mUserId, $mParam)
+{
+    return TABLE\KeySetRemove($mUserId, 'user_group', $mParam['id']);
+}
+
+
+/**
+ * Function People
+ **/
+function People($mMore)
+{
+    // Read by name of column
+    $fields = FIELDS_READ;
+
+    $command = "SELECT $fields
+                  FROM {DBNICK}_user
+               ";
+    $users = MELBIS()->SqlSelect(__LINE__, $command);
+
+    $said = TABLE\Read($mMore[0], array_slice($mMore, 1));
+    $tables = $said['tables'];
+    $tables['user'] = $users;
+
+    return [
+        'result'  => true,
+        'message' => 'The people of the shop',
+        'tables'  => $tables
+        ];
+}
 
 
 /**
@@ -649,14 +334,14 @@ function CmdRightRemove($mUserId, $mParam)
  **/
 function Login($mLogin, $mSelfId)
 {
-    // Weighs the shape of a login before the base sees it, then the logins already taken
+    // The shape, then the taken
     $login = trim((string)$mLogin);
     $is_clean = preg_match('/^[a-z0-9_]+$/i', $login);
     if ( !$is_clean )
     {
         return [
             'result'  => false,
-            'message' => 'A login is latin letters, digits and underscore, and ['.$login.'] is not'
+            'message' => 'A login takes latin, digits, underscore'
             ];
     }
 
@@ -674,7 +359,7 @@ function Login($mLogin, $mSelfId)
     {
         return [
             'result'  => false,
-            'message' => 'The login ['.$login.'] is taken already, by the person ['.$busy.']'
+            'message' => 'The login ['.$mParam['login'].'] is taken'
             ];
     }
 
@@ -689,7 +374,7 @@ function Login($mLogin, $mSelfId)
  **/
 function Password()
 {
-    // Letters that cannot be mistaken for one another when read out: no 0, no 1, no l, no O
+    // Letters nobody misreads aloud
     $alphabet = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789';
     $max = strlen($alphabet) - 1;
 
