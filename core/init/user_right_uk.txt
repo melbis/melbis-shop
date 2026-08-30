@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.416 @ 2026-08-29
+ * @version 6.5.1.417 @ 2026-08-30
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -293,5 +293,9 @@ table={DBNICK}_oper|id|name
 318=Профілі
 319=Отримати
 320=Зберегти
+
+table={DBNICK}_user|id|name
 1=Адміністратор
+
+table={DBNICK}_user_group|id|name
 1=Адміністратори

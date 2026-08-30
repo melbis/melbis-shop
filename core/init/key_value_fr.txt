@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.416 @ 2026-08-29
+ * @version 6.5.1.417 @ 2026-08-30
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -27,7 +27,7 @@ table={DBNICK}_key|id|name
 137=Fournisseurs
 138=Type
 139=État
-159=Par défaut
+159=Entrepôts
 160=Type
 108=Marques
 109=Type
@@ -125,6 +125,8 @@ table={DBNICK}_key|id|name
 123=Balises
 124=Classes
 125=Modèles
+
+table={DBNICK}_key_value|id|value_txt
 1=kDefault
 3=Fichier source
 4=Fichier source
