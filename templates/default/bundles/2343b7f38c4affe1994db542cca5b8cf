@@ -4,7 +4,7 @@
     "bundle": [
         {
             "name": "base.css",
-            "prior": 2
+            "prior": 3
         }
     ]
 }

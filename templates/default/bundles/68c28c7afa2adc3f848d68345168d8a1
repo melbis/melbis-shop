@@ -1,0 +1,10 @@
+{
+    "info": "Palette and fonts of the bundle",
+    "source": "statics\/base\/theme.psv",
+    "bundle": [
+        {
+            "name": "base.css",
+            "prior": 1
+        }
+    ]
+}

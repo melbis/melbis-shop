@@ -1,0 +1,109 @@
+<?php
+/***************************************************************************************************
+ * Palette and fonts of the base bundle
+ *
+ * Change a colour here and the whole bundle follows: bootstrap asks for {PRIMARY}, {PRIMARY_D10}
+ * and the rest by name, and every shade below is counted the way sass counts it.
+ *
+ * A suffix says the recipe:  D10 darker by 10%,  L25 lighter by 25%,  W72 seventy two per cent
+ * white mixed in,  B48 the same with black,  GLOW the button shadow.  Two more say how a colour
+ * is written rather than counted:  RGB the numbers for rgba(),  URL the form a picture drawn
+ * inside css carries.
+ **************************************************************************************************/
+
+use Melbis\MelbisShop\PhpStyleVar as PSV;
+
+// The colours bootstrap 4.6.2 is built from, and the only lines meant for changing
+$base = [
+    'PRIMARY'   => '#007bff',
+    'SECONDARY' => '#6c757d',
+    'SUCCESS'   => '#28a745',
+    'INFO'      => '#17a2b8',
+    'WARNING'   => '#ffc107',
+    'DANGER'    => '#dc3545',
+    'LIGHT'     => '#f8f9fa',
+    'DARK'      => '#343a40',
+
+    'WHITE'     => '#fff',
+    'GRAY_100'  => '#f8f9fa',
+    'GRAY_200'  => '#e9ecef',
+    'GRAY_300'  => '#dee2e6',
+    'GRAY_400'  => '#ced4da',
+    'GRAY_500'  => '#adb5bd',
+    'GRAY_600'  => '#6c757d',
+    'GRAY_700'  => '#495057',
+    'GRAY_800'  => '#343a40',
+    'GRAY_900'  => '#212529',
+    'BLACK'     => '#000',
+
+    'PINK'      => '#e83e8c',
+    'INDIGO'    => '#6610f2',
+    'PURPLE'    => '#6f42c1',
+    'ORANGE'    => '#fd7e14',
+    'TEAL'      => '#20c997',
+    'MARK'      => '#fcf8e3'
+    ];
+
+// The fonts, as bootstrap names them
+$font = [
+    'FONT_SANS' => '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+    'FONT_MONO' => 'SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace'
+    ];
+
+// How far bootstrap moves a colour: the tail of the key, and the step behind it
+$darker = [
+    'D3'    => 3,
+    'D5'    => 5,
+    'D7P5'  => 7.5,
+    'D8'    => 8,
+    'D10'   => 10,
+    'D12P5' => 12.5,
+    'D15'   => 15,
+    'D20'   => 20
+    ];
+$lighter = [
+    'L2P5'  => 2.5,
+    'L7P5'  => 7.5,
+    'L10'   => 10,
+    'L25'   => 25,
+    'L35'   => 35
+    ];
+$paler = [
+    'W15'   => 15,
+    'W48'   => 48,
+    'W72'   => 72,
+    'W80'   => 80
+    ];
+
+// The colours themselves first, so that white is called WHITE and not a shade of something
+$vars = $base;
+
+// Every shade of every colour
+foreach ( $base as $name => $color )
+{
+    foreach ( $darker as $tail => $step )  $vars[$name.'_'.$tail] = PSV::darken($color, $step);
+    foreach ( $lighter as $tail => $step ) $vars[$name.'_'.$tail] = PSV::lighten($color, $step);
+    foreach ( $paler as $tail => $step )   $vars[$name.'_'.$tail] = PSV::mix($base['WHITE'], $color, $step);
+    $vars[$name.'_B48'] = PSV::mix($base['BLACK'], $color, 48);
+    $vars[$name.'_GLOW'] = PSV::mix(PSV::yiq($color, $base['GRAY_900'], $base['WHITE']), $color, 15);
+}
+
+// The three shades bootstrap takes a second step to
+foreach ( $base as $name => $color )
+{
+    $vars[$name.'_W72_D5'] = PSV::darken($vars[$name.'_W72'], 5);
+    $vars[$name.'_W80_D5'] = PSV::darken($vars[$name.'_W80'], 5);
+    $vars[$name.'_B48_D10'] = PSV::darken($vars[$name.'_B48'], 10);
+}
+
+// The same colours as numbers for rgba(), and escaped for a picture inside css
+$more = [];
+foreach ( $vars as $name => $color )
+{
+    $more[$name.'_RGB'] = PSV::rgb($color);
+    $more[$name.'_URL'] = PSV::url($color);
+}
+
+return array_merge($vars, $more, $font);
+
+?>
