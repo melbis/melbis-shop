@@ -4,17 +4,17 @@
     </div>
     <div class="col-md-7">
         <h1>{NAME|html}</h1>
-        <p class="text-muted">Код товара: {CODE|html}</p>
+        <p class="text-muted">Product code: {CODE|html}</p>
 
         <p class="lead m-0">{PRICE_CURR|inum} {CURR_NAME|html}</p>
         <p>
             <span class="badge badge-warning">{STATUS_KEY|$StatusName|html}</span>
-            {*HOW>0}<small class="text-muted">В наличии: {HOW|int} шт.</small>{HOW*}
+            {*HOW>0}<small class="text-muted">In stock: {HOW|int} pcs</small>{HOW*}
         </p>
 
         <p>{INTRO|html}</p>
 
-        <button class="btn btn-primary melbis_btn_add" data-id="{ID}" data-name="{NAME|html}"><i class="fa fa-cart-plus"></i> Купить</button>
+        <button class="btn btn-primary melbis_btn_add" data-id="{ID}" data-name="{NAME|html}"><i class="fa fa-cart-plus"></i> Add to cart</button>
 
         {MELBIS:melbis_store_features([ID],kGoods)}
     </div>
@@ -23,7 +23,7 @@
 {*DESCR}
     <div class="row mt-4">
         <div class="col-12">
-            <h5>Описание</h5>
+            <h5>Description</h5>
             {DESCR}
         </div>
     </div>
@@ -31,6 +31,6 @@
 
 <div class="row mt-3">
     <div class="col-12">
-        <small class="text-muted">Обновлено: {UPDATE_TIME|idate}</small>
+        <small class="text-muted">Updated: {UPDATE_TIME|idate}</small>
     </div>
 </div>

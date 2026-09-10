@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.427 @ 2026-09-09
+ * @version 6.5.1.428 @ 2026-09-10
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -23,6 +23,7 @@
  * ProfileAll  - Reads the picture profiles
  * ProfileOne  - Reads one picture profile
  * ProfileShow - The recipe in agent words
+ * ProfileXml  - The recipe into its body
  *
  * MaskMap     - The masks with a picture
  * MaskWord    - The mask behind a path
@@ -43,6 +44,9 @@ namespace MELBIS_INC_AGENT_FILE;
 
 // Libraries
 use MELBIS_INC_AGENT_SYSTEM as SYS;
+
+// The words of a type, by the number of the editor
+const TYPE_WORD = ['jpeg', 'png', 'webp'];
 
 // The words of a position
 const MASK_POS = ['center', 'left-top', 'right-top', 'right-bottom', 'left-bottom'];
@@ -388,31 +392,79 @@ function ProfileShow($mRow, $mRaw = false)
     $pos = (int)( $xml->MASK['Pos'] ?? 0 );
     if ( !isset(MASK_POS[$pos]) ) $pos = 0;
 
-    $show['type']       = ( (int)$xml->JPEG['FileType'] == 1 ) ? 'png' : 'jpeg';
-    $show['quality']    = (int)$xml->JPEG['Compress'];
-    $show['width']      = (int)$xml->JPEG['Width'];
-    $show['height']     = (int)$xml->JPEG['Hight'];
-    $show['smart']      = ( (string)$xml->JPEG['Smart'] == 'True' );
-    $show['group']      = (string)( $xml->FILE['KindKey'] ?? 'kDefault' );
-    $show['range']      = (int)( $xml->CANVAS['Range'] ?? 255 );
-    $show['border']     = (int)( $xml->CANVAS['Border'] ?? 0 );
-    $show['background'] = ColorWord((int)( $xml->CANVAS['Color'] ?? 16777215 ));
-    $show['rotate']     = (int)( $xml->ROTATE['Rotate'] ?? 0 );
-    $show['mirror']     = ( (string)( $xml->ROTATE['Mirror'] ?? '' ) == 'True' );
-    $show['mask']       = MaskWord((string)( $xml->MASK['File'] ?? '' ));
-    $show['mask_pos']   = MASK_POS[$pos];
-    $show['mask_alpha'] = (int)( $xml->MASK['Alpha'] ?? 0 );
-    $show['red']        = (int)( $xml->EFFECTS['Red'] ?? 0 );
-    $show['green']      = (int)( $xml->EFFECTS['Green'] ?? 0 );
-    $show['blue']       = (int)( $xml->EFFECTS['Blue'] ?? 0 );
-    $show['intensive']  = (int)( $xml->EFFECTS['Intensive'] ?? 0 );
-    $show['contrast']   = (int)( $xml->EFFECTS['Contrast'] ?? 0 );
-    $show['sharpen']    = (int)( $xml->EFFECTS['Sharpen'] ?? 0 );
+    $type = (int)( $xml->JPEG['FileType'] ?? 0 );
+    if ( !isset(TYPE_WORD[$type]) ) $type = 0;
+
+    $show['type']         = TYPE_WORD[$type];
+    $show['quality']      = (int)$xml->JPEG['Compress'];
+    $show['width']        = (int)$xml->JPEG['Width'];
+    $show['height']       = (int)$xml->JPEG['Hight'];
+    $show['smart']        = ( (string)$xml->JPEG['Smart'] == 'True' );
+    $show['size_base']    = ( (string)( $xml->JPEG['Base'] ?? '' ) == 'True' );
+    $show['size_optim']   = ( (string)( $xml->JPEG['Optim'] ?? '' ) == 'True' );
+    $show['group']        = (string)( $xml->FILE['KindKey'] ?? 'kDefault' );
+    $show['group_base']   = ( (string)( $xml->FILE['Base'] ?? '' ) == 'True' );
+    $show['range']        = (int)( $xml->CANVAS['Range'] ?? 255 );
+    $show['range_border'] = (int)( $xml->CANVAS['RangeBorder'] ?? 10 );
+    $show['border']       = (int)( $xml->CANVAS['Border'] ?? 0 );
+    $show['background']   = ColorWord((int)( $xml->CANVAS['Color'] ?? 16777215 ));
+    $show['canvas_alpha'] = ( (string)( $xml->CANVAS['Alpha'] ?? '' ) == 'True' );
+    $show['rotate']       = (int)( $xml->ROTATE['Rotate'] ?? 0 );
+    $show['mirror']       = ( (string)( $xml->ROTATE['Mirror'] ?? '' ) == 'True' );
+    $show['mask']         = MaskWord((string)( $xml->MASK['File'] ?? '' ));
+    $show['mask_pos']     = MASK_POS[$pos];
+    $show['mask_alpha']   = (int)( $xml->MASK['Alpha'] ?? 0 );
+    $show['red']          = (int)( $xml->EFFECTS['Red'] ?? 0 );
+    $show['green']        = (int)( $xml->EFFECTS['Green'] ?? 0 );
+    $show['blue']         = (int)( $xml->EFFECTS['Blue'] ?? 0 );
+    $show['intensive']    = (int)( $xml->EFFECTS['Intensive'] ?? 0 );
+    $show['contrast']     = (int)( $xml->EFFECTS['Contrast'] ?? 0 );
+    $show['sharpen']      = (int)( $xml->EFFECTS['Sharpen'] ?? 0 );
 
     // The raw path, for update
     if ( $mRaw ) $show['mask_file'] = (string)( $xml->MASK['File'] ?? '' );
 
     return $show;
+}
+
+
+/**
+ * Function ProfileXml
+ **/
+function ProfileXml($mSet)
+{
+    // The XML the editor writes
+    $stamp = 'Melbis Shop v'.MELBIS_SCRIPT_VERSION.'.'.MELBIS_SCRIPT_BUILD;
+    $word = function($mText) { return htmlspecialchars((string)$mText, ENT_QUOTES); };
+    $flag = function($mValue) { return ( $mValue ) ? 'True' : 'False'; };
+
+    return '<MELBISSHOP ShopVersion="'.$word($stamp).'">'.
+           '<JPEG FileType="'.array_search($mSet['type'], TYPE_WORD).'"'.
+                ' Compress="'.$mSet['quality'].'"'.
+                ' Width="'.$mSet['width'].'"'.
+                ' Hight="'.$mSet['height'].'"'.
+                ' Smart="'.$flag($mSet['smart']).'"'.
+                ' Base="'.$flag($mSet['size_base']).'"'.
+                ' Optim="'.$flag($mSet['size_optim']).'"/>'.
+           '<FILE KindKey="'.$word($mSet['group']).'"'.
+                ' Base="'.$flag($mSet['group_base']).'"/>'.
+           '<MASK File="'.$word(( $mSet['mask_file'] == '' ) ? MASK_NONE : $mSet['mask_file']).'"'.
+                ' Pos="'.array_search($mSet['mask_pos'], MASK_POS).'"'.
+                ' Alpha="'.$mSet['mask_alpha'].'"/>'.
+           '<CANVAS Range="'.$mSet['range'].'"'.
+                ' RangeBorder="'.$mSet['range_border'].'"'.
+                ' Border="'.$mSet['border'].'"'.
+                ' Color="'.ColorWord($mSet['background'], true).'"'.
+                ' Alpha="'.$flag($mSet['canvas_alpha']).'"/>'.
+           '<ROTATE Rotate="'.$mSet['rotate'].'"'.
+                ' Mirror="'.$flag($mSet['mirror']).'"/>'.
+           '<EFFECTS Red="'.$mSet['red'].'"'.
+                ' Green="'.$mSet['green'].'"'.
+                ' Blue="'.$mSet['blue'].'"'.
+                ' Intensive="'.$mSet['intensive'].'"'.
+                ' Contrast="'.$mSet['contrast'].'"'.
+                ' Sharpen="'.$mSet['sharpen'].'"/>'.
+           '</MELBISSHOP>';
 }
 
 
@@ -511,13 +563,14 @@ function Make($mUserId, $mEntity, $mWas, $mProfile, $mShow, $mRealName = '')
     }
 
     $id = MELBIS()->SqlGenId($table);
-    $ext = ( $mShow['type'] == 'png' ) ? 'png' : 'jpg';
+    $ext = ( $mShow['type'] == 'jpeg' ) ? 'jpg' : $mShow['type'];
     $file_name = strtolower($table.'_'.$mUserId.'_'.$id).'.'.$ext;
 
     // File first, row second
-    $laid = ( $mShow['type'] == 'png' )
-        ? imagepng($paint['image'], $dir.$file_name)
-        : imagejpeg($paint['image'], $dir.$file_name, $mShow['quality']);
+    $laid = false;
+    if ( $mShow['type'] == 'jpeg' ) $laid = imagejpeg($paint['image'], $dir.$file_name, $mShow['quality']);
+    if ( $mShow['type'] == 'png' ) $laid = imagepng($paint['image'], $dir.$file_name);
+    if ( $mShow['type'] == 'webp' ) $laid = imagewebp($paint['image'], $dir.$file_name, $mShow['quality']);
     imagedestroy($paint['image']);
 
     if ( !$laid )
@@ -528,8 +581,8 @@ function Make($mUserId, $mEntity, $mWas, $mProfile, $mShow, $mRealName = '')
             ];
     }
 
-    // The new file stands last
-    $kind = $mShow['group'];
+    // The new file stands last, and may keep the group it already has
+    $kind = ( $mShow['group_base'] ) ? $mWas['kind_key'] : $mShow['group'];
     $real_name = trim((string)$mRealName);
     if ( $real_name == '' )
     {
@@ -607,14 +660,34 @@ function MakePaint($mWhat, $mDisk, $mShow)
     $inner_w = max(1, $mShow['width'] - 2 * $border);
     $inner_h = max(1, $mShow['height'] - 2 * $border);
     $scale = min($inner_w / $source_w, $inner_h / $source_h);
+
+    // The picture itself sets the size, and nothing smaller than asked is blown up
+    $small = ( $source_w < $inner_w && $source_h < $inner_h );
+    $native = ( $mShow['size_base'] || ( $mShow['size_optim'] && $small ) );
+    if ( $native ) $scale = 1;
+
     $fit_w = max(1, (int)round($source_w * $scale));
     $fit_h = max(1, (int)round($source_h * $scale));
-    $canvas_w = ( $mShow['smart'] ) ? $fit_w + 2 * $border : $mShow['width'];
-    $canvas_h = ( $mShow['smart'] ) ? $fit_h + 2 * $border : $mShow['height'];
+    $whole = ( $mShow['smart'] || $native );
+    $canvas_w = ( $whole ) ? $fit_w + 2 * $border : $mShow['width'];
+    $canvas_h = ( $whole ) ? $fit_h + 2 * $border : $mShow['height'];
+
+    // Alpha is for png and webp alone
+    $alpha = ( $mShow['canvas_alpha'] && $mShow['type'] != 'jpeg' );
 
     $canvas = imagecreatetruecolor($canvas_w, $canvas_h);
-    $back = imagecolorallocate($canvas, $red, $green, $blue);
-    imagefill($canvas, 0, 0, $back);
+    if ( $alpha )
+    {
+        imagealphablending($canvas, false);
+        imagesavealpha($canvas, true);
+        $back = imagecolorallocatealpha($canvas, $red, $green, $blue, 127);
+        imagefilledrectangle($canvas, 0, 0, $canvas_w - 1, $canvas_h - 1, $back);
+    }
+    else
+    {
+        $back = imagecolorallocate($canvas, $red, $green, $blue);
+        imagefill($canvas, 0, 0, $back);
+    }
 
     $x = (int)(( $canvas_w - $fit_w ) / 2);
     $y = (int)(( $canvas_h - $fit_h ) / 2);
@@ -714,7 +787,8 @@ function MakeMask($mCanvas, $mCanvasW, $mCanvasH, $mShow)
             $mix_r = (int)round($red * $mix + ( ( $was >> 16 ) & 0xFF ) * ( 1 - $mix ));
             $mix_g = (int)round($green * $mix + ( ( $was >> 8 ) & 0xFF ) * ( 1 - $mix ));
             $mix_b = (int)round($blue * $mix + ( $was & 0xFF ) * ( 1 - $mix ));
-            imagesetpixel($mCanvas, $to_x, $to_y, ( $mix_r << 16 ) + ( $mix_g << 8 ) + $mix_b);
+            $keep = $was & 0x7F000000;
+            imagesetpixel($mCanvas, $to_x, $to_y, $keep + ( $mix_r << 16 ) + ( $mix_g << 8 ) + $mix_b);
         }
     }
 
@@ -733,7 +807,13 @@ function MakeSkip($mShow)
     {
         $skipped[] = 'the mask ['.$mShow['mask'].'] (mask_alpha is 0, so it lies invisible)';
     }
-    if ( $mShow['range'] < 255 ) $skipped[] = 'the grey wash (range '.$mShow['range'].')';
+    if ( $mShow['range'] < 255 )
+    {
+        $wash = 'the grey wash (range '.$mShow['range'].', range_border '.$mShow['range_border'].')';
+        if ( $mShow['canvas_alpha'] ) $wash .= ', and the cut into transparency with it';
+
+        $skipped[] = $wash;
+    }
 
     return implode(', ', $skipped);
 }

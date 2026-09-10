@@ -1,15 +1,14 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.427 @ 2026-09-09
+ * @version 6.5.1.428 @ 2026-09-10
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
  **************************************************************************************************
  *
- * ProfileXml - The recipe into its body
- * MustSet    - The call over the recipe
- * Between    - Holds a number in range
- * System     - Refuses a profile of program
+ * MustSet - The call over the recipe
+ * Between - Holds a number in range
+ * System  - Refuses a profile of program
  *
  **************************************************************************************************/
 
@@ -75,7 +74,7 @@ function CmdAdd($mUserId, $mParam)
     $fields = [
         'key_code'  => 'FILES_PROFILE',
         'key_name'  => $name,
-        'value_txt' => ProfileXml($ready['set'])
+        'value_txt' => FILE\ProfileXml($ready['set'])
         ];
 
     $said = TABLE\Add($mUserId, 'key_value', $fields);
@@ -161,7 +160,7 @@ function CmdUpdate($mUserId, $mParam)
 
     if ( count($ready['said']) > 0 )
     {
-        $fields['value_txt'] = ProfileXml($ready['set']);
+        $fields['value_txt'] = FILE\ProfileXml($ready['set']);
     }
 
     $done = TABLE\Update($mUserId, 'key_value', [$was['id']], $fields);
@@ -202,41 +201,6 @@ function CmdRemove($mUserId, $mParam)
 
 
 /**
- * Function ProfileXml
- **/
-function ProfileXml($mSet)
-{
-    // The XML the editor writes
-    $stamp = 'Melbis Shop v'.MELBIS_SCRIPT_VERSION.'.'.MELBIS_SCRIPT_BUILD;
-    $word = function($mText) { return htmlspecialchars((string)$mText, ENT_QUOTES); };
-    $flag = function($mValue) { return ( $mValue ) ? 'True' : 'False'; };
-
-    return '<MELBISSHOP ShopVersion="'.$word($stamp).'">'.
-           '<JPEG FileType="'.( ( $mSet['type'] == 'png' ) ? 1 : 0 ).'"'.
-                ' Compress="'.$mSet['quality'].'"'.
-                ' Width="'.$mSet['width'].'"'.
-                ' Hight="'.$mSet['height'].'"'.
-                ' Smart="'.$flag($mSet['smart']).'"/>'.
-           '<FILE KindKey="'.$word($mSet['group']).'"/>'.
-           '<MASK File="'.$word(( $mSet['mask_file'] == '' ) ? FILE\MASK_NONE : $mSet['mask_file']).'"'.
-                ' Pos="'.array_search($mSet['mask_pos'], FILE\MASK_POS).'"'.
-                ' Alpha="'.$mSet['mask_alpha'].'"/>'.
-           '<CANVAS Range="'.$mSet['range'].'"'.
-                ' Border="'.$mSet['border'].'"'.
-                ' Color="'.FILE\ColorWord($mSet['background'], true).'"/>'.
-           '<ROTATE Rotate="'.$mSet['rotate'].'"'.
-                ' Mirror="'.$flag($mSet['mirror']).'"/>'.
-           '<EFFECTS Red="'.$mSet['red'].'"'.
-                ' Green="'.$mSet['green'].'"'.
-                ' Blue="'.$mSet['blue'].'"'.
-                ' Intensive="'.$mSet['intensive'].'"'.
-                ' Contrast="'.$mSet['contrast'].'"'.
-                ' Sharpen="'.$mSet['sharpen'].'"/>'.
-           '</MELBISSHOP>';
-}
-
-
-/**
  * Function MustSet
  **/
 function MustSet($mParam, $mSet)
@@ -247,11 +211,12 @@ function MustSet($mParam, $mSet)
     if ( isset($mParam['type']) )
     {
         $type = strtolower(trim((string)$mParam['type']));
-        if ( $type != 'jpeg' && $type != 'png' )
+        if ( !in_array($type, FILE\TYPE_WORD) )
         {
+            $known = implode(', ', FILE\TYPE_WORD);
             return [
                 'result'  => false,
-                'message' => 'The type takes jpeg or png'
+                'message' => 'The type takes one of: '.$known
                 ];
         }
 
@@ -261,19 +226,20 @@ function MustSet($mParam, $mSet)
 
     // Every number with its range
     $ranges = [
-        'quality'    => [4, 100],
-        'width'      => [1, 10000],
-        'height'     => [1, 10000],
-        'range'      => [0, 255],
-        'border'     => [0, 1000],
-        'rotate'     => [-180, 180],
-        'mask_alpha' => [0, 255],
-        'red'        => [-255, 255],
-        'green'      => [-255, 255],
-        'blue'       => [-255, 255],
-        'intensive'  => [-255, 255],
-        'contrast'   => [-50, 50],
-        'sharpen'    => [0, 1000]
+        'quality'      => [4, 100],
+        'width'        => [1, 10000],
+        'height'       => [1, 10000],
+        'range'        => [0, 255],
+        'range_border' => [0, 100],
+        'border'       => [0, 1000],
+        'rotate'       => [-180, 180],
+        'mask_alpha'   => [0, 255],
+        'red'          => [-255, 255],
+        'green'        => [-255, 255],
+        'blue'         => [-255, 255],
+        'intensive'    => [-255, 255],
+        'contrast'     => [-50, 50],
+        'sharpen'      => [0, 1000]
         ];
     foreach ( $ranges as $word => $pair )
     {
@@ -286,7 +252,7 @@ function MustSet($mParam, $mSet)
         $said[] = $word;
     }
 
-    foreach ( ['smart', 'mirror'] as $word )
+    foreach ( ['smart', 'size_base', 'size_optim', 'group_base', 'mirror', 'canvas_alpha'] as $word )
     {
         if ( !isset($mParam[$word]) ) continue;
 
