@@ -1,13 +1,13 @@
 /*       Melbis Shop auto bundle report       */
-/*         Create: 2026-09-04 01:10:07        */
+/*         Create: 2026-09-11 17:32:35        */
 
 /*   #1    main.js                         32 ln     1 kb    /templates/default/statics/melbis/main.js                     */
-/*   #10   scripts.js                      57 ln     1 kb    /templates/default/units/melbis_cataloge/scripts.js           */
+/*   #10   scripts.js                      56 ln     1 kb    /templates/default/units/melbis_cataloge/scripts.js           */
 /*   #15   scripts.js                      75 ln     3 kb    /templates/default/units/melbis_base_page/scripts.js          */
 
 
 /***************************************************************************************************
- * @version 6.5.1.428 @ 2026-09-10
+ * @version 6.5.1.430 @ 2026-09-11
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov    
@@ -55,8 +55,7 @@ function melbis_navbar_active()
     {   
         if ( $(item).data('id') == melbis_topic_id )
         {
-            $(item).addClass('text-white');
-            $(item).parent('li').addClass('bg-primary');
+            $(item).addClass('active');
         }
     }
 }

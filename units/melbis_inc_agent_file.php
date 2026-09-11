@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.428 @ 2026-09-10
+ * @version 6.5.1.430 @ 2026-09-11
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -24,6 +24,7 @@
  * ProfileOne  - Reads one picture profile
  * ProfileShow - The recipe in agent words
  * ProfileXml  - The recipe into its body
+ * BoxSize     - Megapixels in a shape
  *
  * MaskMap     - The masks with a picture
  * MaskWord    - The mask behind a path
@@ -47,6 +48,9 @@ use MELBIS_INC_AGENT_SYSTEM as SYS;
 
 // The words of a type, by the number of the editor
 const TYPE_WORD = ['jpeg', 'png', 'webp'];
+
+// The largest picture the program paints
+const MAX_PIXELS = 50000000;
 
 // The words of a position
 const MASK_POS = ['center', 'left-top', 'right-top', 'right-bottom', 'left-bottom'];
@@ -395,10 +399,14 @@ function ProfileShow($mRow, $mRaw = false)
     $type = (int)( $xml->JPEG['FileType'] ?? 0 );
     if ( !isset(TYPE_WORD[$type]) ) $type = 0;
 
+    // A size wins, the megapixels beside it are not read
+    $sized = ( isset($xml->JPEG['Width']) && isset($xml->JPEG['Hight']) );
+
     $show['type']         = TYPE_WORD[$type];
     $show['quality']      = (int)$xml->JPEG['Compress'];
-    $show['width']        = (int)$xml->JPEG['Width'];
-    $show['height']       = (int)$xml->JPEG['Hight'];
+    $show['width']        = ( $sized ) ? (int)$xml->JPEG['Width'] : null;
+    $show['height']       = ( $sized ) ? (int)$xml->JPEG['Hight'] : null;
+    $show['resolution']   = ( !$sized && isset($xml->JPEG['Resolution']) ) ? (float)$xml->JPEG['Resolution'] : null;
     $show['smart']        = ( (string)$xml->JPEG['Smart'] == 'True' );
     $show['size_base']    = ( (string)( $xml->JPEG['Base'] ?? '' ) == 'True' );
     $show['size_optim']   = ( (string)( $xml->JPEG['Optim'] ?? '' ) == 'True' );
@@ -438,11 +446,17 @@ function ProfileXml($mSet)
     $word = function($mText) { return htmlspecialchars((string)$mText, ENT_QUOTES); };
     $flag = function($mValue) { return ( $mValue ) ? 'True' : 'False'; };
 
+    // The size, or the megapixels of a picture of its own shape
+    $size = ' Resolution="'.number_format((float)( $mSet['resolution'] ?? 0 ), 2, '.', '').'"';
+    if ( isset($mSet['width']) && isset($mSet['height']) )
+    {
+        $size = ' Width="'.$mSet['width'].'" Hight="'.$mSet['height'].'"';
+    }
+
     return '<MELBISSHOP ShopVersion="'.$word($stamp).'">'.
            '<JPEG FileType="'.array_search($mSet['type'], TYPE_WORD).'"'.
                 ' Compress="'.$mSet['quality'].'"'.
-                ' Width="'.$mSet['width'].'"'.
-                ' Hight="'.$mSet['height'].'"'.
+                $size.
                 ' Smart="'.$flag($mSet['smart']).'"'.
                 ' Base="'.$flag($mSet['size_base']).'"'.
                 ' Optim="'.$flag($mSet['size_optim']).'"/>'.
@@ -465,6 +479,20 @@ function ProfileXml($mSet)
                 ' Contrast="'.$mSet['contrast'].'"'.
                 ' Sharpen="'.$mSet['sharpen'].'"/>'.
            '</MELBISSHOP>';
+}
+
+
+/**
+ * Function BoxSize
+ **/
+function BoxSize($mResolution, $mRatio)
+{
+    // Megapixels spread over a shape, the width leads
+    $pixels = $mResolution * 1000000;
+    $width = (int)round(sqrt($pixels * $mRatio));
+    $height = (int)round($width / $mRatio);
+
+    return [$width, $height];
 }
 
 
@@ -653,24 +681,75 @@ function MakePaint($mWhat, $mDisk, $mShow)
         $source = $turned;
     }
 
-    // Fits whole into the box
+    // The area itself, the size of the profile, or its megapixels in the shape of the area
     $source_w = imagesx($source);
     $source_h = imagesy($source);
+    if ( $mShow['size_base'] )
+    {
+        $box_w = $source_w;
+        $box_h = $source_h;
+    }
+    elseif ( $mShow['width'] !== null )
+    {
+        $box_w = $mShow['width'];
+        $box_h = $mShow['height'];
+    }
+    else
+    {
+        list( $box_w, $box_h ) = BoxSize($mShow['resolution'], $source_w / $source_h);
+    }
+    $box_w = max(2, $box_w);
+    $box_h = max(2, $box_h);
+
+    // Beyond the limit nothing is painted
+    if ( $box_w * $box_h > MAX_PIXELS )
+    {
+        imagedestroy($source);
+
+        return [
+            'result'  => false,
+            'message' => 'The picture is too large: '.$box_w.'x'.$box_h.' is over '.( MAX_PIXELS / 1000000 ).' megapixels'
+            ];
+    }
+
+    // Nothing smaller than asked is blown up
+    $small = ( $source_w < $box_w && $source_h < $box_h );
+    if ( $mShow['size_optim'] && $small )
+    {
+        $box_w = $source_w;
+        $box_h = $source_h;
+    }
+
+    // The canvas takes the shape of the area
+    if ( $mShow['smart'] )
+    {
+        $by_w = $box_w / $source_w;
+        $by_h = $box_h / $source_h;
+        if ( $by_w < $by_h ) $box_h = (int)round($source_h * $by_w);
+        if ( $by_w >= $by_h ) $box_w = (int)round($source_w * $by_h);
+    }
+
+    // Fitted into the canvas, then two margins off the long side
+    $scale = max($source_w / $box_w, $source_h / $box_h);
+    $fit_w = (int)round($source_w / $scale);
+    $fit_h = (int)round($source_h / $scale);
     $border = $mShow['border'];
-    $inner_w = max(1, $mShow['width'] - 2 * $border);
-    $inner_h = max(1, $mShow['height'] - 2 * $border);
-    $scale = min($inner_w / $source_w, $inner_h / $source_h);
-
-    // The picture itself sets the size, and nothing smaller than asked is blown up
-    $small = ( $source_w < $inner_w && $source_h < $inner_h );
-    $native = ( $mShow['size_base'] || ( $mShow['size_optim'] && $small ) );
-    if ( $native ) $scale = 1;
-
-    $fit_w = max(1, (int)round($source_w * $scale));
-    $fit_h = max(1, (int)round($source_h * $scale));
-    $whole = ( $mShow['smart'] || $native );
-    $canvas_w = ( $whole ) ? $fit_w + 2 * $border : $mShow['width'];
-    $canvas_h = ( $whole ) ? $fit_h + 2 * $border : $mShow['height'];
+    if ( $fit_w >= $fit_h )
+    {
+        $shape = $fit_h / $fit_w;
+        $fit_w = $fit_w - 2 * $border;
+        $fit_h = (int)round($fit_w * $shape);
+    }
+    else
+    {
+        $shape = $fit_w / $fit_h;
+        $fit_h = $fit_h - 2 * $border;
+        $fit_w = (int)round($fit_h * $shape);
+    }
+    $fit_w = max(1, $fit_w);
+    $fit_h = max(1, $fit_h);
+    $canvas_w = $box_w;
+    $canvas_h = $box_h;
 
     // Alpha is for png and webp alone
     $alpha = ( $mShow['canvas_alpha'] && $mShow['type'] != 'jpeg' );
@@ -689,8 +768,8 @@ function MakePaint($mWhat, $mDisk, $mShow)
         imagefill($canvas, 0, 0, $back);
     }
 
-    $x = (int)(( $canvas_w - $fit_w ) / 2);
-    $y = (int)(( $canvas_h - $fit_h ) / 2);
+    $x = (int)round(( $canvas_w - $fit_w ) / 2);
+    $y = (int)round(( $canvas_h - $fit_h ) / 2);
     imagecopyresampled($canvas, $source, $x, $y, 0, 0, $fit_w, $fit_h, $source_w, $source_h);
     imagedestroy($source);
 

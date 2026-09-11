@@ -5,7 +5,7 @@
             <input type="hidden" name="option{OPTION_ID}_text">
             <select class="form-control" name="option{OPTION_ID}_id">
                 {#VALUE_LIST}
-                    <option value="{ID}" {*IS_SELECTED}selected{IS_SELECTED*}>{NAME}</option>
+                    <option value="{ID}" {*IS_SELECTED}selected{IS_SELECTED*}>{NAME|html}</option>
                 {VALUE_LIST#}
             </select>
         </div>

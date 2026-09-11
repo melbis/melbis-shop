@@ -11,7 +11,7 @@
                 <input type="hidden" name="field{FIELD_ID}_text">
                 <select class="form-control" name="field{FIELD_ID}_id">
                     {#VALUE_LIST}
-                        <option value="{ID}" {*IS_SELECTED}selected{IS_SELECTED*}>{NAME}</option>
+                        <option value="{ID}" {*IS_SELECTED}selected{IS_SELECTED*}>{NAME|html}</option>
                     {VALUE_LIST#}
                 </select>
             </div>

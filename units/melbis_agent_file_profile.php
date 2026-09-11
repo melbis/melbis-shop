@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.428 @ 2026-09-10
+ * @version 6.5.1.430 @ 2026-09-11
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -224,11 +224,34 @@ function MustSet($mParam, $mSet)
         $said[] = 'type';
     }
 
+    // A size, or the megapixels of a picture of its own shape - one kind at a time
+    $sized = ( isset($mParam['width']) || isset($mParam['height']) );
+    if ( $sized && isset($mParam['resolution']) )
+    {
+        return [
+            'result'  => false,
+            'message' => 'Width and height, or resolution - a profile holds one kind of size'
+            ];
+    }
+
+    if ( isset($mParam['resolution']) )
+    {
+        $weighed = Between('resolution', $mParam['resolution'], 0.01, 50);
+        if ( $weighed !== true ) return $weighed;
+
+        $mSet['resolution'] = round((float)$mParam['resolution'], 2);
+        $mSet['width'] = null;
+        $mSet['height'] = null;
+        $said[] = 'resolution';
+    }
+
+    if ( $sized ) $mSet['resolution'] = null;
+
     // Every number with its range
     $ranges = [
         'quality'      => [4, 100],
-        'width'        => [1, 10000],
-        'height'       => [1, 10000],
+        'width'        => [10, 50000],
+        'height'       => [10, 50000],
         'range'        => [0, 255],
         'range_border' => [0, 100],
         'border'       => [0, 1000],
@@ -330,6 +353,16 @@ function MustSet($mParam, $mSet)
     // An empty mask_file takes off
     $mSet['mask_file'] = $mSet['mask_file'] ?? '';
 
+    // Without a size there is no profile
+    $sides = ( isset($mSet['width']) && isset($mSet['height']) );
+    if ( !$sides && !isset($mSet['resolution']) )
+    {
+        return [
+            'result'  => false,
+            'message' => 'A profile takes a size: width and height, or resolution for pictures of their own shape'
+            ];
+    }
+
     return [
         'result' => true,
         'set'    => $mSet,
@@ -344,7 +377,7 @@ function MustSet($mParam, $mSet)
 function Between($mWord, $mValue, $mFrom, $mTo)
 {
     // Which numbers the recipe allows
-    $value = (int)$mValue;
+    $value = (float)$mValue;
     if ( $value >= $mFrom && $value <= $mTo ) return true;
 
     return [

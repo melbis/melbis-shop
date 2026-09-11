@@ -3,8 +3,8 @@
     "source": "statics\/base\/bs\/bootstrap-table.js",
     "bundle": [
         {
-            "name": "base.js",
-            "prior": 3
+            "name": "melbis.auth.js",
+            "prior": 1
         }
     ]
 }

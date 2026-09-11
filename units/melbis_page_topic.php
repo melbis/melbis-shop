@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.428 @ 2026-09-10
+ * @version 6.5.1.430 @ 2026-09-11
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -37,7 +37,8 @@ function Main($mVars)
                   JOIN {DBNICK}_store s
                     ON ts.store_id = s.id
                  WHERE s.no_visible = 0 
-              ORDER BY t.absindex, ts.pos
+              GROUP BY s.id
+              ORDER BY MIN(t.absindex), MIN(ts.pos)
                  LIMIT 100 
                 ";                    
     $goods = MELBIS()->SqlSelect(__LINE__, $command);     

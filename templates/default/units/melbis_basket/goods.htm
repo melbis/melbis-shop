@@ -2,29 +2,35 @@
     <table class="table">
         <thead class="thead-light">
             <tr>
-                <th scope="col">#</th>
                 <th scope="col">Name</th>
-                <th scope="col">Amount</th>
-                <th scope="col">Price</th>
-                <th scope="col">To do</th>      
+                <th scope="col" class="text-center">Amount</th>
+                <th scope="col" class="text-right">Price</th>
+                <th scope="col"></th>
             </tr>
         </thead>
         <tbody>
         {#GOODS}
             <tr>
-              <th scope="row">{STORE_ID}</th>
-                  <td>{STORE_NAME|html}</td>
-                  <td>{AMOUNT}</td>
-                  <td>{OUT_PRICE|inum}</td>
-                  <td><button type="button" class="btn btn-warning melbis_btn_remove btn-sm" data-id="{STORE_ID}"> Remove</button></td>
-            </tr>  
+                <td class="align-middle"><a href="/?store_id=[STORE_ID]">{STORE_NAME|html}</a></td>
+                <td class="align-middle text-center">{AMOUNT}</td>
+                <td class="align-middle text-right">{OUT_PRICE|inum}</td>
+                <td class="align-middle text-right"><button type="button" class="btn btn-outline-danger btn-sm melbis_btn_remove" data-id="{STORE_ID}" title="Remove" aria-label="Remove"><i class="fa fa-trash"></i></button></td>
+            </tr>
         {GOODS#}
         </tbody>
-    </table>        
+        <tfoot>
+            <tr>
+                <th colspan="2">Subtotal</th>
+                <th class="text-right">{GOODS_SUM|inum}</th>
+                <th></th>
+            </tr>
+        </tfoot>
+    </table>
 {GOODS:COUNT*}
-           
+
 {*!GOODS:COUNT}
-    <h3 class="text-center m-4">
-        Cart is empty! <small class="text-muted">Add item to cart</small>
-    </h3>  
+    <div class="text-center my-4">
+        <h4>Your cart is empty</h4>
+        <button type="button" class="btn btn-primary mt-2" data-dismiss="modal">Continue shopping</button>
+    </div>
 {GOODS:COUNT*}

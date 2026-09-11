@@ -14,8 +14,7 @@ function melbis_navbar_active()
     {   
         if ( $(item).data('id') == melbis_topic_id )
         {
-            $(item).addClass('text-white');
-            $(item).parent('li').addClass('bg-primary');
+            $(item).addClass('active');
         }
     }
 }

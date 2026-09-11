@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.428 @ 2026-09-10
+ * @version 6.5.1.430 @ 2026-09-11
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -46,7 +46,7 @@ function Main($mVars)
         if ( !isset($store['id']) )
         {
             // 404 Not found
-            $page['id'] = 0;             
+            $page['id'] = -1;             
             $page['title'] = '404 Not Found';
     
             // Header
@@ -58,7 +58,7 @@ function Main($mVars)
         else
         {
             // Found
-            $page['id'] = 0;
+            $page['id'] = -1;
             $page['store_id'] = $store['id'];
             $page['title'] = $store['name'];
 
@@ -91,7 +91,7 @@ function Main($mVars)
             else
             {          
                 // 404 Not found
-                $page['id'] = 0;             
+                $page['id'] = -1;             
                 $page['title'] = '404 Not Found';
         
                 // Header

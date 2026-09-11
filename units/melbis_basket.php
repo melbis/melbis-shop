@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.428 @ 2026-09-10
+ * @version 6.5.1.430 @ 2026-09-11
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -95,6 +95,10 @@ function Goods($mVars)
     $tpl = MELBIS()->TplCreate();  
     
     MELBIS()->TplAssign($tpl, 'GOODS', $version['store'] ?? []);    
+
+    // Goods sum, options come later
+    $goods_sum = LOGIC_ORDER\GoodsSum($version, 'out_price');
+    MELBIS()->TplAssign($tpl, 'GOODS_SUM', $goods_sum);
                                                               
     // Final
     return MELBIS()->TplFinal($tpl, 'goods');        

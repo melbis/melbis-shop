@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.428 @ 2026-09-10
+ * @version 6.5.1.430 @ 2026-09-11
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -135,7 +135,7 @@ INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('1
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('11', 'FILES_INFO_VALUE', 'kDescr', '1', '3');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('15', 'FILES_KEY_VALUE', 'kBase', '1', '1');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('16', 'FILES_MASK', 'Без маски', '1', '1');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('17', 'FILES_PROFILE', 'Пример', '0', '1');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('17', 'FILES_PROFILE', 'Каталог', '0', '1');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('20', 'TOPIC_TEMPL_KEY', 'kDefault', '1', '1');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('22', 'FILES_TOPIC', 'kBase', '1', '1');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('24', 'FILES_TOPIC', 'kDescr', '1', '3');
@@ -272,4 +272,5 @@ INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('4
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('402', 'TAX_AREA_TYPE_KEY', 'kState', '0', '402');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('403', 'TAX_RATE_KIND_KEY', 'kDefault', '1', '403');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('404', 'TAX_RULE_KEY', 'kDefault', '1', '404');
-UPDATE {DBNICK}_generator SET gen_value = 404 WHERE table_name = 'key_value';
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('405', 'FILES_PROFILE', 'Галерея', '0', '405');
+UPDATE {DBNICK}_generator SET gen_value = 412 WHERE table_name = 'key_value';
