@@ -1,5 +1,5 @@
 /*       Melbis Shop auto bundle report       */
-/*         Create: 2026-09-11 17:32:35        */
+/*         Create: 2026-09-12 13:34:02        */
 
 /*   #1    bootstrap-table.js            8578 ln   322 kb    /templates/default/statics/base/bs/bootstrap-table.js         */
 /*   #2    bootbox.js                    1247 ln    39 kb    /templates/default/statics/base/bootbox.js                    */
