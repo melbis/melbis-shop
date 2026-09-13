@@ -272,6 +272,14 @@ That file is the same jsonl the tools write, so it feeds them back: any paramete
 `tool_run` takes `{"file": "..."}`, and the rows go from a query into a change without
 passing through this conversation.
 
+**A pool too big to write out comes as a file too.** Hundreds of rows to insert are
+not typed into a call: build the pool with a script on this machine — the very list
+of steps `pool` takes — and give its path as `pool_file` instead, absolute or counted
+from the local folder of the Store. It travels whole, and nothing of it passes
+through this conversation. One `insert` holds at most **65 535 values**, rows times
+columns — a ceiling of the database, not of the engine — so a bigger load is several
+`insert` steps of the same pool.
+
 `big` lifts the guard, not the memory of the server: a whole wide table read in one
 step (fifty thousand rows of `store`, say) ends as *Allowed memory size exhausted* —
 the engine builds the whole answer before sending it. Take such a table in pages by
@@ -327,9 +335,10 @@ own** folder: everything under `mcp/melbis/` is expendable and is wiped without
 warning.
 
 **Reading it back is your own business, and so is putting it back.** No MCP-tool
-reads a file of this machine into an answer or replays one into the base; the Host
-you run in does the reading — a script, a grep — and the pool that returns the rows
-you build yourself from what you read. Nearly every Host can do that.
+reads such a file into an answer: the Host you run in does the reading — a script, a
+grep. The pool that returns the rows you build yourself from what you read, and when
+it is too big to write out, the script that builds it writes it to a file for
+`pool_file` — see "Volume" above. Nearly every Host can do that.
 
 If yours cannot touch local files at all, there is a fallback, and it is a heavier
 thing: a copy of the rows in a **real table of the base**, made with `CREATE TABLE
