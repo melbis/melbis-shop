@@ -336,22 +336,27 @@ module by saving the file.
 
 The Distribution seeds its AI-tools into a Store once; from then on they are the
 owner's. The platform keeps adding tools and reworking old ones, and none of that
-reaches a Store by itself. The current set lies unpacked, in the layout of
-`tool_export`, at `https://github.com/melbis/melbis-shop/tree/master/ai_tools`; a file
-comes straight from `https://raw.githubusercontent.com/melbis/melbis-shop/master/ai_tools/`
-plus its name from `files` in `index.json`.
+reaches a Store by itself. The current set is the Distribution itself, public at
+`https://github.com/melbis/melbis-shop`; a file comes straight from
+`https://raw.githubusercontent.com/melbis/melbis-shop/master/` plus its path:
+
+- `core/init/agent_tool.sql` — the registry as `INSERT` statements: the tree
+  (`agent_tool`), the Commands (`agent_tool_command`), their fields
+  (`agent_tool_param`);
+- `units/<unit>.php` and `units/<unit>.json` — the module of each AI-tool, named in
+  the `unit` column;
+- the libraries its manifest names under `includes` — `melbis_inc_agent_*` and the
+  like, in the same `units/`.
 
 Go there when the User asks — what is new, or how a tool of the Store differs from
-the current one. The order is the one above: `index.json` of the set, `tool_export` of
-the Store, read in full only what differs, and carry over by agreement. Two things
-differ from a backup:
-
-- The modules of the set keep `{MELBIS_VERSION}` in the header where the modules of a
-  Store carry the number of their build, so the sums of `units/` never match: compare
-  modules by content. The sums of `tools/` compare as they are.
-- `version` and `build` under `melbis` in `index.json` name the engine the set was
-  taken on. A tool newer than the engine of the Store may lean on what that engine
-  does not have yet.
+the current one. Take `tool_export` of the Store for the other side, then match by
+meaning, never by id — the ids of the script are the Distribution's own: an AI-tool
+by `unit`, a Command by its name inside the AI-tool, a field by its name inside the
+Command. Compare modules by content: the header of each carries the build it came
+with, so no sum of a Store's module ever matches. The `@version` line at the top of
+`agent_tool.sql` names the build of the set; a tool newer than the engine of the
+Store may lean on what that engine does not have yet. Carry over as above — by
+agreement, piece by piece.
 
 ## What the module gets
 

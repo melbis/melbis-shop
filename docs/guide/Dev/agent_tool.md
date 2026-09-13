@@ -149,11 +149,11 @@ The aliases it publishes are named by the library in its own manifest, in the `p
 
 ## Backup and Update
 
-**Development → AI Tools → Export** (the `TOOL_EXPORT` right; for the agent — `tool_export`) collects the whole registry and the modules behind it: `index.json` with the tree and the md5 sum of every file, `tools/<unit>.json` per tool — the commands with their fields — and `units/` with the modules, the manifests, and the libraries found through those manifests. The program lays this out straight into the chosen folder, clearing it first; the agent gets a zip archive. Grants do not go into the export: they are about the store's people, not about the tools.
-
-The current set of the distribution lies in the same form on GitHub: [melbis/melbis-shop/ai_tools](https://github.com/melbis/melbis-shop/tree/master/ai_tools).
+**Development → AI Tools → Export** (the `TOOL_EXPORT` right; for the agent — `tool_export`) collects the whole registry and the modules behind it into a single archive: `index.json` with the tree and the md5 sum of every file, `tools/<unit>.json` per tool — the commands with their fields — and `units/` with the modules, the manifests, and the libraries found through those manifests. Grants do not go into the archive: they are about the store's people, not about the tools.
 
 There is no import door, and that is a decision: after installation the owner adapts the tools to their own needs, and an update is always a comparison rather than an overwrite. The agent unpacks the container, finds what has diverged by the sums in the index, and transfers it point by point: the registry by direct queries, the module by saving the file.
+
+The MCP server documentation tells the agent where the current set of the distribution lies and how to update the store's tools from it — just ask.
 
 ## Reference Implementations
 

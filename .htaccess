@@ -17,5 +17,9 @@ RewriteRule ^cron.php$ - [F]
 RewriteRule \.log$ - [F]
 RewriteRule ^core/(cache|class|init|log|tmp|trick)/ - [F]
 
+# Deny module sources
+RewriteRule ^units/ - [F]
+RewriteRule ^templates/[^/]+/units/ - [F]
+
 # Lazy
 RewriteRule ^lazy/$ index.php?lazy [L,QSA]

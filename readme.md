@@ -57,7 +57,6 @@ Free to install and run in demo mode. A licence is bound to a staff login, not t
 - 📘 **Reference of the Windows client:** [melbis.com/help/en](https://melbis.com/help/en/)
 - 📚 **Platform guide in Markdown:** [docs/guide](https://github.com/melbis/melbis-shop/blob/master/docs/guide/index.md)
 - 🤖 **Documentation of the MCP server for the AI agent:** [docs/mcp](https://github.com/melbis/melbis-shop/blob/master/docs/mcp/index.md)
-- 🧰 **AI-tools of the demo store, the current reference set:** [ai_tools](https://github.com/melbis/melbis-shop/tree/master/ai_tools)
 - 📀 **Installation packages:** [melbis.com/en/download](https://melbis.com/en/download/)
 - 💻 **Releases:** [melbis/melbis-shop/releases](https://github.com/melbis/melbis-shop/releases)
 - 🐳 **Docker Hub:** [melbis/melbis-shop](https://hub.docker.com/r/melbis/melbis-shop)

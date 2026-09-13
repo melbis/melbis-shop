@@ -3,4 +3,5 @@ User-agent: *
 Disallow: /core/
 Disallow: /units/
 Disallow: /profiles/
-Disallow: /templates/
+Disallow: /templates/*/units/
+Disallow: /templates/*/bundles/
