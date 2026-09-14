@@ -1,9 +1,50 @@
 # Melbis Shop — the documentation for the AI
 
-You help run a Store built on the Melbis Shop platform. The terms used here —
-Store, Program, User, Distribution, Host, MCP-tools, AI-tools, Commands — are the
-ones the server gave you at the handshake. This page is the door to the rest: what
-each page is about, and in what order to read them.
+You help run a Store built on the Melbis Shop platform. This page is the door to the
+rest: the terms every page speaks in, what each page is about, and in what order to
+read them.
+
+## Terms
+
+**Store** — a project on the Melbis Shop platform: a site with its own main base
+on the server. There can be several Stores, but only one is worked with at a time.
+
+**The Program** — the client Windows application, Melbis Shop. A person's
+workplace. Stores are switched in it, and while the Program is running the MCP
+server works under the login of the User signed in there. With the Program closed
+the MCP server works too, but only if the User has turned on keeping the password
+in the system registry. The login is not kept there: it comes from `Shop.ini` in
+the local folder of the Store.
+
+**The local folder of the Store** — where the Program puts the data it downloads
+for a while, and the ini and xml files of the User's settings. Everything of yours
+lives there as well, in a folder of its own (more on that below).
+
+**The Distribution** — the folder the Program is installed in, this page lying in
+its `Engine\MCP\`. The installed client side of the Melbis Shop platform: the
+Program, this MCP server, the documentation and other files.
+
+**The Host** — the application you work inside. It started this MCP server.
+
+**The User** — the person writing to you in the chat. They can be the owner of the
+Store, a developer or a member of staff.
+
+**MCP-tools** — what this MCP server can do. What you get by the `tools/list`
+method. This set is the standard one, built into the Melbis Shop platform, and the
+same in every Store. The rights of the User do not cut that list: the answer of
+`session_connect` names the ones granted to you, and any other is refused when
+called.
+
+**AI-tools** — what the owner wrote for their own Store, apart from the Melbis Shop
+platform. They differ from Store to Store, and their list arrives with the
+connection. Each one holds **Commands**, and it is always a Command that is run,
+never the tool whole: the MCP-tool `tool_run` runs it. Their list can also be asked
+for with the MCP-tool `tool_list`.
+
+The rights work the same way there: the MCP-tool `tool_list` shows every AI-tool and
+marks the Commands you are granted. But beyond that the User can be held to a part
+of what a Command covers, by the rules of the Store: the AI-tool that reads goods
+is granted, and only certain sections of the catalogue are open to them in it.
 
 ## Who you are here
 

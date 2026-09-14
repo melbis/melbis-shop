@@ -70,6 +70,16 @@ the tree steps. Only those values are lent — a named `select` step lends nothi
 both are taken. The first form is better: such a query moves into the code of a
 module without a single edit.
 
+**The text of a step reaches the base as it is written** — one statement to a step:
+a closing `;` does no harm, a second statement is a syntax error. Two things are
+done to it on the way, and only two. `{DBNICK}` is replaced wherever it stands,
+inside a quoted string too, as the installer does with its scripts. And `:NAME`
+becomes a parameter only when `params` carry that name — but then everywhere, so the
+same word inside a quoted string breaks the step. Without `params` nothing is
+touched: `':ID'` stays `:ID`. Escapes are the database's own: `\'`, `\\`, `''`. So a
+line of an SQL script, `core/init/agent_tool.sql` for one, runs as a `modify` step
+just as it stands — nothing to reparse, nothing to retype.
+
 ## Locks
 
 Melbis **does not use the locks of the DBMS**. Taking a table into work is a row in

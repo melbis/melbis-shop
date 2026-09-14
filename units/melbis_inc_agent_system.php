@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.436 @ 2026-09-13
+ * @version 6.5.1.437 @ 2026-09-14
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -38,10 +38,13 @@ function RightTable($mKind, $mUserId, $mPlace = '')
     // What every kind names
     $of_kind = [
         'topic' => ['topic', 'topic_right', 'topic_id', 'PUT_TOPIC_RIGHT',
-                    ['descr' => 'for_frame', 'price' => 'for_price', 'place' => 'for_ctrl',
-                     'browse' => 'for_browse']],
+                    ['descr'  => ['for_frame'],
+                     'price'  => ['for_price'],
+                     'place'  => ['for_ctrl'],
+                     'browse' => ['for_browse', 'for_frame', 'for_price', 'for_ctrl']]],
         'info'  => ['info', 'info_right', 'info_id', 'PUT_INFO_RIGHT',
-                    ['info' => 'for_info', 'value' => 'for_value']],
+                    ['info'  => ['for_info'],
+                     'value' => ['for_value']]],
         'order' => ['order_option_value', 'order_right', 'value_id', 'PUT_ORDER_OPTION', []]
         ];
     list( $tree, $satellite, $key, $oper, $of_place ) = $of_kind[$mKind];
@@ -52,20 +55,12 @@ function RightTable($mKind, $mUserId, $mPlace = '')
     $table = '{DBNICK}_tmp_allow_'.$mKind.'_'.$mark;
     if ( isset($made[$mUserId][$mKind][$mark]) ) return $table;
 
-    // No places: the grant itself
-    $flag = $of_place[$mPlace] ?? '';
-    if ( count($of_place) == 0 )
-    {
-        $right = 'r.id IS NOT NULL';
-    }
-    elseif ( $flag != '' )
-    {
-        $right = 'r.'.$flag.' > 0';
-    }
-    else
+    // A kind without flags asks the grant itself, a place asks any of its flags
+    $right = 'r.id IS NOT NULL';
+    if ( count($of_place) > 0 )
     {
         $any = [];
-        foreach ( $of_place as $one )
+        foreach ( $of_place[$mPlace] as $one )
         {
             $any[] = 'r.'.$one.' > 0';
         }
