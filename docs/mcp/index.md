@@ -222,6 +222,27 @@ current version and the releases, the wiki, the scripts for installing and
 maintaining the server. When the answer depends on an exact value, or on what a
 fresh script does, look there.
 
+## The machine you work on
+
+When the Host runs commands on this machine, data goes through scripts: a price
+list, the rows of a query, a journal are read, compared and turned into a file for
+the Store right here, and none of it passes through this conversation. The pages
+that say "a script writes the file" mean this.
+
+1. **Check once, when a task first needs a script:** `python --version`. A package
+   the script lacks — `openpyxl` for an xlsx, say — is no reason to ask or to write
+   around it: install it yourself with `python -m pip install`, a well-known one
+   under its exact name, and say what you installed.
+2. **No Python — tell the User once, in one sentence,** what it would speed up in
+   this very task and where to get it:
+   [melbis.com/en/doc/install/ai_setup](https://melbis.com/en/doc/install/ai_setup/),
+   with `ru` or `uk` in place of `en`. Meanwhile work with what the machine has;
+   install it yourself only if the User asks.
+3. **A file for the Store is UTF-8 with no byte order mark.** Python writes in the
+   code page of Windows — cp1251 on a Russian one — unless run as `python -X utf8`.
+   Windows PowerShell writes UTF-16 or puts the mark in front, depending on the
+   command: leave the writing to a script or to the Host's own tool for files.
+
 ## What lies in the local folder of the Store
 
 - **`Shop.ini`** — the settings of this very Store: the address of the server and the

@@ -40,8 +40,7 @@ watermark), **"Sharpness"**, **"Intensity"**, **"Colors"**, **"Rotate/Mirror"**,
 saved to the current file or to a new one.
 
 PNG and WebP open together with their transparency, and the transparent places are shown
-in the background color. A mask with transparency is laid over with its own transparency
-taken into account.
+in the background color.
 
 ### Size
 
@@ -81,6 +80,25 @@ The editor does not build a resulting image larger than 50 megapixels — the me
   a hard edge;
 * **"Transparent"** — the background is not filled but stays transparent. It works for
   PNG and WebP; JPEG has no transparency.
+
+### Mask
+
+A mask is a protective watermark; the masks themselves are configured in the "Settings
+Registry". A mask with transparency is laid over with its own transparency taken into
+account; for a mask without transparency, white counts as transparent.
+
+* the list to the right of the mask — the placement: in the center, in one of the
+  corners, or **"Tile"** — the mask repeats as a grid over the whole picture, with one
+  copy standing exactly in the center;
+* **"Width, %"** and **"Height, %"** — the frame the mask is fitted into: the mask keeps
+  its own proportion and grows until one of its sides meets the frame; 0 — that side is
+  not limited, both 0 — the mask keeps its own size;
+* **"Padding, %"** — a share of the picture's short side: in a corner — from the edge,
+  when tiled — around each copy; in the center it has no effect;
+* **"Rotate"** — the angle of the mask in degrees; a rotated mask is fitted into the
+  frame as well;
+* the slider at the bottom — the transparency of the mask: 0 — the mask is fully
+  visible.
 
 ### Format and Compression
 

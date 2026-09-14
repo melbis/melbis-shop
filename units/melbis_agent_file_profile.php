@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.437 @ 2026-09-14
+ * @version 6.5.1.438 @ 2026-09-14
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -257,6 +257,10 @@ function MustSet($mParam, $mSet)
         'border'       => [0, 1000],
         'rotate'       => [-180, 180],
         'mask_alpha'   => [0, 255],
+        'mask_size_w'  => [0, 100],
+        'mask_size_h'  => [0, 100],
+        'mask_indent'  => [0, 50],
+        'mask_rotate'  => [-180, 180],
         'red'          => [-255, 255],
         'green'        => [-255, 255],
         'blue'         => [-255, 255],

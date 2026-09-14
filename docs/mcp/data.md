@@ -288,7 +288,8 @@ of steps `pool` takes — and give its path as `pool_file` instead, absolute or 
 from the local folder of the Store. It travels whole, and nothing of it passes
 through this conversation. One `insert` holds at most **65 535 values**, rows times
 columns — a ceiling of the database, not of the engine — so a bigger load is several
-`insert` steps of the same pool.
+`insert` steps of the same pool. The script and its file — see "The machine you work
+on" in [index.md](index.md).
 
 `big` lifts the guard, not the memory of the server: a whole wide table read in one
 step (fifty thousand rows of `store`, say) ends as *Allowed memory size exhausted* —

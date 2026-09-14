@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.437 @ 2026-09-14
+ * @version 6.5.1.438 @ 2026-09-14
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -32,6 +32,8 @@
  * Make        - Derives a picture
  * MakePaint   - The recipe onto the picture
  * MakeMask    - The mask over the canvas
+ * MakeInk     - The mask picture as ink
+ * MakeLay     - One copy of the ink
  * MakeSkip    - What only the program paints
  *
  * ColorWord   - A canvas colour into #RRGGBB
@@ -53,7 +55,7 @@ const TYPE_WORD = ['jpeg', 'png', 'webp'];
 const MAX_PIXELS = 50000000;
 
 // The words of a position
-const MASK_POS = ['center', 'left-top', 'right-top', 'right-bottom', 'left-bottom'];
+const MASK_POS = ['center', 'left-top', 'right-top', 'right-bottom', 'left-bottom', 'tile'];
 
 // No mask, as the editor
 const MASK_NONE = 'files/1899/12_30/00_00/';
@@ -422,6 +424,10 @@ function ProfileShow($mRow, $mRaw = false)
     $show['mask']         = MaskWord((string)( $xml->MASK['File'] ?? '' ));
     $show['mask_pos']     = MASK_POS[$pos];
     $show['mask_alpha']   = (int)( $xml->MASK['Alpha'] ?? 0 );
+    $show['mask_size_w']  = (int)( $xml->MASK['SizeW'] ?? 0 );
+    $show['mask_size_h']  = (int)( $xml->MASK['SizeH'] ?? 0 );
+    $show['mask_indent']  = (int)( $xml->MASK['Indent'] ?? 0 );
+    $show['mask_rotate']  = (int)( $xml->MASK['Rotate'] ?? 0 );
     $show['red']          = (int)( $xml->EFFECTS['Red'] ?? 0 );
     $show['green']        = (int)( $xml->EFFECTS['Green'] ?? 0 );
     $show['blue']         = (int)( $xml->EFFECTS['Blue'] ?? 0 );
@@ -464,7 +470,11 @@ function ProfileXml($mSet)
                 ' Base="'.$flag($mSet['group_base']).'"/>'.
            '<MASK File="'.$word(( $mSet['mask_file'] == '' ) ? MASK_NONE : $mSet['mask_file']).'"'.
                 ' Pos="'.array_search($mSet['mask_pos'], MASK_POS).'"'.
-                ' Alpha="'.$mSet['mask_alpha'].'"/>'.
+                ' Alpha="'.$mSet['mask_alpha'].'"'.
+                ' SizeW="'.$mSet['mask_size_w'].'"'.
+                ' SizeH="'.$mSet['mask_size_h'].'"'.
+                ' Indent="'.$mSet['mask_indent'].'"'.
+                ' Rotate="'.$mSet['mask_rotate'].'"/>'.
            '<CANVAS Range="'.$mSet['range'].'"'.
                 ' RangeBorder="'.$mSet['range_border'].'"'.
                 ' Border="'.$mSet['border'].'"'.
@@ -811,10 +821,99 @@ function MakePaint($mWhat, $mDisk, $mShow)
  **/
 function MakeMask($mCanvas, $mCanvasW, $mCanvasH, $mShow)
 {
-    // White glass, alpha solid
+    // The mask as ink with its own alpha
     $disk = __DIR__.'/../'.$mShow['mask_file'];
-    $what = DiskPicture($disk);
-    if ( $what['type'] == '' ) return;
+    $ink = MakeInk($disk);
+    if ( $ink === false ) return;
+
+    // Turned first, as the canvas turns
+    if ( $mShow['mask_rotate'] != 0 )
+    {
+        $angle = -1 * $mShow['mask_rotate'];
+        $clear = imagecolorallocatealpha($ink, 0, 0, 0, 127);
+        $turned = imagerotate($ink, $angle, $clear);
+        imagedestroy($ink);
+        $ink = $turned;
+        imagealphablending($ink, false);
+        imagesavealpha($ink, true);
+    }
+
+    // Fitted into its frame of the picture, a zero side sets no limit
+    $ink_w = imagesx($ink);
+    $ink_h = imagesy($ink);
+    $scale = 0;
+    if ( $mShow['mask_size_w'] > 0 ) $scale = $mCanvasW * $mShow['mask_size_w'] / 100 / $ink_w;
+    if ( $mShow['mask_size_h'] > 0 )
+    {
+        $limit = $mCanvasH * $mShow['mask_size_h'] / 100 / $ink_h;
+        if ( $scale == 0 || $limit < $scale ) $scale = $limit;
+    }
+    if ( $scale > 0 )
+    {
+        $fit_w = max(1, (int)round($ink_w * $scale));
+        $fit_h = max(1, (int)round($ink_h * $scale));
+        $fit = imagecreatetruecolor($fit_w, $fit_h);
+        imagealphablending($fit, false);
+        imagesavealpha($fit, true);
+        imagecopyresampled($fit, $ink, 0, 0, 0, 0, $fit_w, $fit_h, $ink_w, $ink_h);
+        imagedestroy($ink);
+        $ink = $fit;
+        $ink_w = $fit_w;
+        $ink_h = $fit_h;
+    }
+
+    // The indent follows the shorter side
+    $pad = (int)round(min($mCanvasW, $mCanvasH) * $mShow['mask_indent'] / 100);
+    $solid = $mShow['mask_alpha'] / 255;
+
+    if ( $mShow['mask_pos'] == 'tile' )
+    {
+        // An odd grid keeps one copy in the very centre
+        $cell_w = $ink_w + 2 * $pad;
+        $cell_h = $ink_h + 2 * $pad;
+        $cols = intdiv($mCanvasW, $cell_w) + 1;
+        if ( $cols % 2 == 0 ) $cols++;
+        $rows = intdiv($mCanvasH, $cell_h) + 1;
+        if ( $rows % 2 == 0 ) $rows++;
+        $from_x = intdiv($mCanvasW - $cols * $cell_w, 2) + $pad;
+        $from_y = intdiv($mCanvasH - $rows * $cell_h, 2) + $pad;
+
+        for ( $row = 0; $row < $rows; $row++ )
+        {
+            for ( $col = 0; $col < $cols; $col++ )
+            {
+                $at_x = $from_x + $col * $cell_w;
+                $at_y = $from_y + $row * $cell_h;
+                MakeLay($mCanvas, $mCanvasW, $mCanvasH, $ink, $at_x, $at_y, $solid);
+            }
+        }
+    }
+    else
+    {
+        // The centre takes no indent, the corners do
+        $spots = [
+            'center'       => [(int)round(( $mCanvasW - $ink_w ) / 2), (int)round(( $mCanvasH - $ink_h ) / 2)],
+            'left-top'     => [$pad, $pad],
+            'right-top'    => [$mCanvasW - $ink_w - $pad, $pad],
+            'right-bottom' => [$mCanvasW - $ink_w - $pad, $mCanvasH - $ink_h - $pad],
+            'left-bottom'  => [$pad, $mCanvasH - $ink_h - $pad]
+            ];
+        list( $at_x, $at_y ) = $spots[$mShow['mask_pos']] ?? $spots['center'];
+        MakeLay($mCanvas, $mCanvasW, $mCanvasH, $ink, $at_x, $at_y, $solid);
+    }
+
+    imagedestroy($ink);
+}
+
+
+/**
+ * Function MakeInk
+ **/
+function MakeInk($mDisk)
+{
+    // Opened by its type
+    $what = DiskPicture($mDisk);
+    if ( $what['type'] == '' ) return false;
 
     $doors = [
         'jpg'  => 'imagecreatefromjpeg',
@@ -823,45 +922,67 @@ function MakeMask($mCanvas, $mCanvasW, $mCanvasH, $mShow)
         'webp' => 'imagecreatefromwebp'
         ];
     $open = $doors[$what['type']];
-    $mask = @$open($disk);
-    if ( $mask === false ) return;
+    $ink = @$open($mDisk);
+    if ( $ink === false ) return false;
 
-    $mask_w = imagesx($mask);
-    $mask_h = imagesy($mask);
+    // A palette hands its transparent colour over as alpha
+    if ( !imageistruecolor($ink) ) imagepalettetotruecolor($ink);
+    imagealphablending($ink, false);
+    imagesavealpha($ink, true);
 
-    // Five places for a mask
-    $spots = [
-        'center'       => [(int)(( $mCanvasW - $mask_w ) / 2), (int)(( $mCanvasH - $mask_h ) / 2)],
-        'left-top'     => [0, 0],
-        'right-top'    => [$mCanvasW - $mask_w, 0],
-        'right-bottom' => [$mCanvasW - $mask_w, $mCanvasH - $mask_h],
-        'left-bottom'  => [0, $mCanvasH - $mask_h]
-        ];
-    list( $at_x, $at_y ) = $spots[$mShow['mask_pos']] ?? $spots['center'];
-
-    $solid = $mShow['mask_alpha'] / 255;
-    for ( $y = 0; $y < $mask_h; $y++ )
+    // A mask with a transparency of its own lays by it
+    $ink_w = imagesx($ink);
+    $ink_h = imagesy($ink);
+    for ( $y = 0; $y < $ink_h; $y++ )
     {
-        $to_y = $at_y + $y;
+        for ( $x = 0; $x < $ink_w; $x++ )
+        {
+            $dot = imagecolorat($ink, $x, $y);
+            if ( ( $dot >> 24 ) & 0x7F ) return $ink;
+        }
+    }
+
+    // One without any takes pure white as its holes
+    $hole = imagecolorallocatealpha($ink, 255, 255, 255, 127);
+    for ( $y = 0; $y < $ink_h; $y++ )
+    {
+        for ( $x = 0; $x < $ink_w; $x++ )
+        {
+            $dot = imagecolorat($ink, $x, $y);
+            if ( ( $dot & 0xFFFFFF ) == 0xFFFFFF ) imagesetpixel($ink, $x, $y, $hole);
+        }
+    }
+
+    return $ink;
+}
+
+
+/**
+ * Function MakeLay
+ **/
+function MakeLay($mCanvas, $mCanvasW, $mCanvasH, $mInk, $mAtX, $mAtY, $mSolid)
+{
+    // One copy over the picture, the alpha of the canvas stands
+    $ink_w = imagesx($mInk);
+    $ink_h = imagesy($mInk);
+    for ( $y = 0; $y < $ink_h; $y++ )
+    {
+        $to_y = $mAtY + $y;
         if ( $to_y < 0 || $to_y >= $mCanvasH ) continue;
 
-        for ( $x = 0; $x < $mask_w; $x++ )
+        for ( $x = 0; $x < $ink_w; $x++ )
         {
-            $to_x = $at_x + $x;
+            $to_x = $mAtX + $x;
             if ( $to_x < 0 || $to_x >= $mCanvasW ) continue;
 
-            $dot = imagecolorat($mask, $x, $y);
+            $dot = imagecolorat($mInk, $x, $y);
+            $thin = ( 127 - ( ( $dot >> 24 ) & 0x7F ) ) / 127;
+            $mix = $mSolid * $thin;
+            if ( $mix <= 0 ) continue;
+
             $red = ( $dot >> 16 ) & 0xFF;
             $green = ( $dot >> 8 ) & 0xFF;
             $blue = $dot & 0xFF;
-
-            // White is glass, alpha thins
-            if ( $red == 255 && $green == 255 && $blue == 255 ) continue;
-
-            $thin = ( 127 - ( ( $dot >> 24 ) & 0x7F ) ) / 127;
-            $mix = $solid * $thin;
-            if ( $mix <= 0 ) continue;
-
             $was = imagecolorat($mCanvas, $to_x, $to_y);
             $mix_r = (int)round($red * $mix + ( ( $was >> 16 ) & 0xFF ) * ( 1 - $mix ));
             $mix_g = (int)round($green * $mix + ( ( $was >> 8 ) & 0xFF ) * ( 1 - $mix ));
@@ -870,8 +991,6 @@ function MakeMask($mCanvas, $mCanvasW, $mCanvasH, $mShow)
             imagesetpixel($mCanvas, $to_x, $to_y, $keep + ( $mix_r << 16 ) + ( $mix_g << 8 ) + $mix_b);
         }
     }
-
-    imagedestroy($mask);
 }
 
 

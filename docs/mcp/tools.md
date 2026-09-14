@@ -118,7 +118,8 @@ But data that already exists somewhere — a price list, an export, the output o
 own scraping script, rows from `mcp\melbis\tables\*.jsonl` you read earlier —
 must never be retyped: a hundred products dictated into parameters is hundreds of
 thousands of characters of your answer, whereas as a file it is one call and one
-second. A script writes the file, you only name it.
+second. A script writes the file, you only name it — see "The machine you work on"
+in [index.md](index.md).
 
 ## Files attached to a call
 
