@@ -36,10 +36,9 @@ same in every Store. The rights of the User do not cut that list: the answer of
 called.
 
 **AI-tools** — what the owner wrote for their own Store, apart from the Melbis Shop
-platform. They differ from Store to Store, and their list arrives with the
-connection. Each one holds **Commands**, and it is always a Command that is run,
-never the tool whole: the MCP-tool `tool_run` runs it. Their list can also be asked
-for with the MCP-tool `tool_list`.
+platform. They differ from Store to Store: the connection says how many there are,
+and the MCP-tool `tool_list` lists them. Each one holds **Commands**, and it is
+always a Command that is run, never the tool whole: the MCP-tool `tool_run` runs it.
 
 The rights work the same way there: the MCP-tool `tool_list` shows every AI-tool and
 marks the Commands you are granted. But beyond that the User can be held to a part
@@ -64,11 +63,12 @@ took it.
    The licence and the demo mode are explained there too.
 2. **[memory.md](memory.md)** — read what you already know about this Store. The
    notes live inside the Store itself, so they are with you even in the first
-   session on a new machine. They belong to the login: another member of staff has
-   their own. The same thing is therefore sometimes learned twice — in exchange you
-   remember exactly what you learned with this person.
+   session on a new machine. Your own belong to the login: another member of staff
+   has their own. The same thing is therefore sometimes learned twice — in exchange
+   you remember exactly what you learned with this person. Beside them stand the
+   notes the administrator keeps for a group or for everyone.
 3. **[tools.md](tools.md)** — the AI-tools of this Store: what its owner wrote
-   beyond the standard set. Their list arrives together with the connection.
+   beyond the standard set. The connection counts them, `tool_list` lists them.
 
 Then, by task:
 
@@ -90,9 +90,10 @@ half of the silent breakages come from there as well.
 ## Who you are working with
 
 The first thing to settle: **is the User the owner of the Store, a developer, or a
-member of staff?** The manner of all the work that follows depends on it. **Ask
-outright and do not guess from the style of the messages** — then keep the answer
-with `memory_save`, so the next session here starts knowing it.
+member of staff?** The manner of all the work that follows depends on it. A
+`kCritical` note of your memory may say it already. If none does, **ask outright and
+do not guess from the style of the messages**, then keep the answer with
+`memory_save` as a `kCritical` note, so the next session here starts knowing it.
 
 - **The owner.** They want the result; the technical side is your concern. Take the
   initiative: work out yourself how to do it properly, offer one way and explain

@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.438 @ 2026-09-14
+ * @version 6.5.1.440 @ 2026-09-15
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -258,40 +258,39 @@ INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_
 INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('410', '408', '2', '249', '0', 'AGENT_MEMORY_LOAD', '2000-01-01', '2000-01-01 23:59:59');
 INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('411', '408', '2', '250', '0', 'AGENT_MEMORY_SAVE', '2000-01-01', '2000-01-01 23:59:59');
 INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('412', '408', '2', '251', '0', 'AGENT_MEMORY_REMOVE', '2000-01-01', '2000-01-01 23:59:59');
-INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('413', '408', '2', '252', '0', 'AGENT_MEMORY_FULL', '2000-01-01', '2000-01-01 23:59:59');
-INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('407', '347', '1', '253', '1', '', '2000-01-01', '2000-01-01 23:59:59');
-INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('415', '407', '2', '254', '0', 'AGENT_TOOL_LIST', '2000-01-01', '2000-01-01 23:59:59');
-INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('416', '407', '2', '255', '0', 'AGENT_TOOL_RUN', '2000-01-01', '2000-01-01 23:59:59');
-INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('351', '347', '1', '256', '1', '', '2000-01-01', '2000-01-01 23:59:59');
-INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('343', '351', '2', '257', '1', '', '2000-01-01', '2000-01-01 23:59:59');
-INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('344', '343', '3', '258', '0', 'AGENT_ENGINE_FILES_ADD', '2000-01-01', '2000-01-01 23:59:59');
-INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('345', '343', '3', '259', '0', 'AGENT_ENGINE_FILES_REMOVE', '2000-01-01', '2000-01-01 23:59:59');
-INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('346', '343', '3', '260', '0', 'AGENT_ENGINE_FILES_LOAD', '2000-01-01', '2000-01-01 23:59:59');
-INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('348', '351', '2', '261', '1', '', '2000-01-01', '2000-01-01 23:59:59');
-INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('392', '348', '3', '262', '0', 'AGENT_ENGINE_DB_TABLES', '2000-01-01', '2000-01-01 23:59:59');
-INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('349', '348', '3', '263', '0', 'AGENT_ENGINE_DB_SELECT', '2000-01-01', '2000-01-01 23:59:59');
-INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('350', '348', '3', '264', '0', 'AGENT_ENGINE_DB_EXECUTE', '2000-01-01', '2000-01-01 23:59:59');
-INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('388', '348', '3', '265', '0', 'AGENT_ENGINE_DB_LOCKS', '2000-01-01', '2000-01-01 23:59:59');
-INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('440', '348', '3', '266', '0', 'AGENT_ENGINE_DB_UNLOCKS', '2000-01-01', '2000-01-01 23:59:59');
-INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('421', '351', '2', '267', '1', '', '2000-01-01', '2000-01-01 23:59:59');
-INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('384', '421', '3', '268', '0', 'AGENT_ENGINE_DEV_CACHE_CLEAR', '2000-01-01', '2000-01-01 23:59:59');
-INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('389', '421', '3', '269', '0', 'AGENT_ENGINE_DEV_CONFIG', '2000-01-01', '2000-01-01 23:59:59');
-INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('430', '421', '3', '270', '0', 'AGENT_ENGINE_DEV_READ', '2000-01-01', '2000-01-01 23:59:59');
-INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('431', '421', '3', '271', '0', 'AGENT_ENGINE_DEV_WRITE', '2000-01-01', '2000-01-01 23:59:59');
-INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('426', '347', '1', '272', '1', '', '2000-01-01', '2000-01-01 23:59:59');
-INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('427', '426', '2', '273', '0', 'AGENT_TOOL_EXPORT', '2000-01-01', '2000-01-01 23:59:59');
-INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('428', '426', '2', '274', '0', 'AGENT_SHOP_DOWNLOAD', '2000-01-01', '2000-01-01 23:59:59');
-INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('268', '0', '0', '275', '1', '', '2000-01-01', '2000-01-01 23:59:59');
-INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('5', '268', '1', '276', '1', '', '2000-01-01', '2000-01-01 23:59:59');
-INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('6', '5', '2', '277', '0', 'LOAD_LOCK_TABLES_LIST', '2000-01-01', '2000-01-01 23:59:59');
-INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('54', '5', '2', '278', '0', 'UNLOCK_MY_TABLES', '2000-01-01', '2000-01-01 23:59:59');
-INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('7', '5', '2', '279', '0', 'UNLOCK_ANY_TABLES', '2000-01-01', '2000-01-01 23:59:59');
-INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('64', '268', '1', '280', '1', '', '2000-01-01', '2000-01-01 23:59:59');
-INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('1', '64', '2', '281', '0', 'GET_USERS', '2000-01-01', '2000-01-01 23:59:59');
-INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('2', '64', '2', '282', '0', 'PUT_USERS', '2000-01-01', '2000-01-01 23:59:59');
-INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('318', '268', '1', '283', '1', '', '2000-01-01', '2000-01-01 23:59:59');
-INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('319', '318', '2', '284', '0', 'LOAD_PROFILE', '2000-01-01', '2000-01-01 23:59:59');
-INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('320', '318', '2', '285', '0', 'SAVE_PROFILE', '2000-01-01', '2000-01-01 23:59:59');
+INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('407', '347', '1', '252', '1', '', '2000-01-01', '2000-01-01 23:59:59');
+INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('415', '407', '2', '253', '0', 'AGENT_TOOL_LIST', '2000-01-01', '2000-01-01 23:59:59');
+INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('416', '407', '2', '254', '0', 'AGENT_TOOL_RUN', '2000-01-01', '2000-01-01 23:59:59');
+INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('351', '347', '1', '255', '1', '', '2000-01-01', '2000-01-01 23:59:59');
+INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('343', '351', '2', '256', '1', '', '2000-01-01', '2000-01-01 23:59:59');
+INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('344', '343', '3', '257', '0', 'AGENT_ENGINE_FILES_ADD', '2000-01-01', '2000-01-01 23:59:59');
+INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('345', '343', '3', '258', '0', 'AGENT_ENGINE_FILES_REMOVE', '2000-01-01', '2000-01-01 23:59:59');
+INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('346', '343', '3', '259', '0', 'AGENT_ENGINE_FILES_LOAD', '2000-01-01', '2000-01-01 23:59:59');
+INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('348', '351', '2', '260', '1', '', '2000-01-01', '2000-01-01 23:59:59');
+INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('392', '348', '3', '261', '0', 'AGENT_ENGINE_DB_TABLES', '2000-01-01', '2000-01-01 23:59:59');
+INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('349', '348', '3', '262', '0', 'AGENT_ENGINE_DB_SELECT', '2000-01-01', '2000-01-01 23:59:59');
+INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('350', '348', '3', '263', '0', 'AGENT_ENGINE_DB_EXECUTE', '2000-01-01', '2000-01-01 23:59:59');
+INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('388', '348', '3', '264', '0', 'AGENT_ENGINE_DB_LOCKS', '2000-01-01', '2000-01-01 23:59:59');
+INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('440', '348', '3', '265', '0', 'AGENT_ENGINE_DB_UNLOCKS', '2000-01-01', '2000-01-01 23:59:59');
+INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('421', '351', '2', '266', '1', '', '2000-01-01', '2000-01-01 23:59:59');
+INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('384', '421', '3', '267', '0', 'AGENT_ENGINE_DEV_CACHE_CLEAR', '2000-01-01', '2000-01-01 23:59:59');
+INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('389', '421', '3', '268', '0', 'AGENT_ENGINE_DEV_CONFIG', '2000-01-01', '2000-01-01 23:59:59');
+INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('430', '421', '3', '269', '0', 'AGENT_ENGINE_DEV_READ', '2000-01-01', '2000-01-01 23:59:59');
+INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('431', '421', '3', '270', '0', 'AGENT_ENGINE_DEV_WRITE', '2000-01-01', '2000-01-01 23:59:59');
+INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('426', '347', '1', '271', '1', '', '2000-01-01', '2000-01-01 23:59:59');
+INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('427', '426', '2', '272', '0', 'AGENT_TOOL_EXPORT', '2000-01-01', '2000-01-01 23:59:59');
+INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('428', '426', '2', '273', '0', 'AGENT_SHOP_DOWNLOAD', '2000-01-01', '2000-01-01 23:59:59');
+INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('268', '0', '0', '274', '1', '', '2000-01-01', '2000-01-01 23:59:59');
+INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('5', '268', '1', '275', '1', '', '2000-01-01', '2000-01-01 23:59:59');
+INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('6', '5', '2', '276', '0', 'LOAD_LOCK_TABLES_LIST', '2000-01-01', '2000-01-01 23:59:59');
+INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('54', '5', '2', '277', '0', 'UNLOCK_MY_TABLES', '2000-01-01', '2000-01-01 23:59:59');
+INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('7', '5', '2', '278', '0', 'UNLOCK_ANY_TABLES', '2000-01-01', '2000-01-01 23:59:59');
+INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('64', '268', '1', '279', '1', '', '2000-01-01', '2000-01-01 23:59:59');
+INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('1', '64', '2', '280', '0', 'GET_USERS', '2000-01-01', '2000-01-01 23:59:59');
+INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('2', '64', '2', '281', '0', 'PUT_USERS', '2000-01-01', '2000-01-01 23:59:59');
+INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('318', '268', '1', '282', '1', '', '2000-01-01', '2000-01-01 23:59:59');
+INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('319', '318', '2', '283', '0', 'LOAD_PROFILE', '2000-01-01', '2000-01-01 23:59:59');
+INSERT INTO {DBNICK}_oper (id, tindex, tlevel, absindex, folder, command, allow_from, allow_to) VALUES ('320', '318', '2', '284', '0', 'SAVE_PROFILE', '2000-01-01', '2000-01-01 23:59:59');
 UPDATE {DBNICK}_generator SET gen_value = 440 WHERE table_name = 'oper';
 
 INSERT INTO {DBNICK}_oper_table (id, oper_id, server_table, local_table, fields_list, pos) VALUES ('1', '1', 'user_group', 'user_group', '*', '1');
@@ -798,10 +797,10 @@ INSERT INTO {DBNICK}_oper_table (id, oper_id, server_table, local_table, fields_
 INSERT INTO {DBNICK}_oper_table (id, oper_id, server_table, local_table, fields_list, pos) VALUES ('742', '419', 'agent_tool_param', 'agent_tool_param', '*', '3');
 INSERT INTO {DBNICK}_oper_table (id, oper_id, server_table, local_table, fields_list, pos) VALUES ('743', '418', 'agent_tool_right', 'agent_tool_right', '*', '4');
 INSERT INTO {DBNICK}_oper_table (id, oper_id, server_table, local_table, fields_list, pos) VALUES ('744', '419', 'agent_tool_right', 'agent_tool_right', '*', '4');
-INSERT INTO {DBNICK}_oper_table (id, oper_id, server_table, local_table, fields_list, pos) VALUES ('745', '418', 'oper', 'cut_oper', '*', '5');
-INSERT INTO {DBNICK}_oper_table (id, oper_id, server_table, local_table, fields_list, pos) VALUES ('746', '418', 'oper_right', 'cut_oper_right', '*', '6');
-INSERT INTO {DBNICK}_oper_table (id, oper_id, server_table, local_table, fields_list, pos) VALUES ('747', '418', 'user', 'cut_user', 'id,group_id,login,name,phone,email,add_group_id', '7');
-INSERT INTO {DBNICK}_oper_table (id, oper_id, server_table, local_table, fields_list, pos) VALUES ('748', '418', 'user_group', 'cut_user_group', '*', '8');
+INSERT INTO {DBNICK}_oper_table (id, oper_id, server_table, local_table, fields_list, pos) VALUES ('745', '418', 'oper', 'cut_oper', '*', '6');
+INSERT INTO {DBNICK}_oper_table (id, oper_id, server_table, local_table, fields_list, pos) VALUES ('746', '418', 'oper_right', 'cut_oper_right', '*', '7');
+INSERT INTO {DBNICK}_oper_table (id, oper_id, server_table, local_table, fields_list, pos) VALUES ('747', '418', 'user', 'cut_user', 'id,group_id,login,name,phone,email,add_group_id', '8');
+INSERT INTO {DBNICK}_oper_table (id, oper_id, server_table, local_table, fields_list, pos) VALUES ('748', '418', 'user_group', 'cut_user_group', '*', '9');
 INSERT INTO {DBNICK}_oper_table (id, oper_id, server_table, local_table, fields_list, pos) VALUES ('749', '418', 'agent_tool_command', 'agent_tool_command', '*', '2');
 INSERT INTO {DBNICK}_oper_table (id, oper_id, server_table, local_table, fields_list, pos) VALUES ('750', '419', 'agent_tool_command', 'agent_tool_command', '*', '2');
 INSERT INTO {DBNICK}_oper_table (id, oper_id, server_table, local_table, fields_list, pos) VALUES ('751', '434', 'FUNC:GetPartBrowseStore', 'part_browse_store', '*', '751');
@@ -907,7 +906,11 @@ INSERT INTO {DBNICK}_oper_table (id, oper_id, server_table, local_table, fields_
 INSERT INTO {DBNICK}_oper_table (id, oper_id, server_table, local_table, fields_list, pos) VALUES ('852', '274', 'user_filter_param', 'cut_user_filter_param', '*', '852');
 INSERT INTO {DBNICK}_oper_table (id, oper_id, server_table, local_table, fields_list, pos) VALUES ('853', '167', 'user_filter_param', 'cut_user_filter_param', '*', '853');
 INSERT INTO {DBNICK}_oper_table (id, oper_id, server_table, local_table, fields_list, pos) VALUES ('854', '194', 'user_filter_param', 'cut_user_filter_param', '*', '854');
-UPDATE {DBNICK}_generator SET gen_value = 854 WHERE table_name = 'oper_table';
+INSERT INTO {DBNICK}_oper_table (id, oper_id, server_table, local_table, fields_list, pos) VALUES ('855', '418', 'key_value', 'cut_key_value', '*', '10');
+INSERT INTO {DBNICK}_oper_table (id, oper_id, server_table, local_table, fields_list, pos) VALUES ('856', '418', 'files_key_value', 'cut_files_key_value', '*', '11');
+INSERT INTO {DBNICK}_oper_table (id, oper_id, server_table, local_table, fields_list, pos) VALUES ('857', '418', 'agent_memory', 'agent_memory', '*', '5');
+INSERT INTO {DBNICK}_oper_table (id, oper_id, server_table, local_table, fields_list, pos) VALUES ('858', '419', 'agent_memory', 'agent_memory', '*', '858');
+UPDATE {DBNICK}_generator SET gen_value = 858 WHERE table_name = 'oper_table';
 
 INSERT INTO {DBNICK}_user (id, group_id, login, pass_code) VALUES ('1', '1', 'admin', '21232f297a57a5a743894a0e4a801fc3');
 UPDATE {DBNICK}_generator SET gen_value = 22 WHERE table_name = 'user';
@@ -1100,7 +1103,6 @@ INSERT INTO {DBNICK}_oper_right (id, oper_id, user_id, group_id) VALUES ('850', 
 INSERT INTO {DBNICK}_oper_right (id, oper_id, user_id, group_id) VALUES ('851', '410', NULL, 1);
 INSERT INTO {DBNICK}_oper_right (id, oper_id, user_id, group_id) VALUES ('852', '411', NULL, 1);
 INSERT INTO {DBNICK}_oper_right (id, oper_id, user_id, group_id) VALUES ('853', '412', NULL, 1);
-INSERT INTO {DBNICK}_oper_right (id, oper_id, user_id, group_id) VALUES ('854', '413', NULL, 1);
 INSERT INTO {DBNICK}_oper_right (id, oper_id, user_id, group_id) VALUES ('855', '415', NULL, 1);
 INSERT INTO {DBNICK}_oper_right (id, oper_id, user_id, group_id) VALUES ('856', '416', NULL, 1);
 INSERT INTO {DBNICK}_oper_right (id, oper_id, user_id, group_id) VALUES ('857', '344', NULL, 1);

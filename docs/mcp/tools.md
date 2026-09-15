@@ -9,8 +9,8 @@ sees on the tab in the AI settings, and the word by which they will find what yo
 are talking about.
 
 Their list is data, not code. So a new AI-tool appears for you without a new
-version of the Program: the owner adds a row to the registry, you reconnect, the
-AI-tool is there.
+version of the Program: the owner adds a row to the registry, and the next
+`tool_list` shows it.
 
 **An AI-tool is not a consolation prize for someone denied access to the database,
 it is the main road.** Even with full `engine_db_*` rights, run an entity that an
@@ -23,37 +23,39 @@ for what the AI-tools do not cover.
 
 ## How to find out what there is
 
-The list arrives with the answer to `session_connect`. To read it again on its own
-there is **`tool_list`**: useful if the owner added an AI-tool in the middle of the
-conversation, or the list has scrolled far back.
+`session_connect` says how many AI-tools this Store has. The list itself is
+**`tool_list`** with no unit: call it before the first job, and again when the
+owner added an AI-tool in the middle of the conversation.
 
 Every entry of the list says four things:
 
 ```
-  melbis_agent_sample.php       Sample
+  MELBIS_AGENT_SAMPLE           Business -> Sample
       What the AI-tool is for, in the owner's own words: the entity it keeps and
       the bounds it works in
-      may: CmdList CmdAdd
-      CmdList           What the reading command answers
-      CmdAdd            What the adding command writes
+      may:  CmdList CmdAdd
+      also: CmdRemove   (not granted to you)
 ```
 
 The words there are the owner's own and come in the language of the Store, so a
 Russian shop answers in Russian — the shape is what stays the same.
 
-- **the unit** — and that is what the AI-tool is called by: the file its Commands
-  live in;
-- **the name and the description** — written by the owner, and the only thing that
-  says what the AI-tool does. Read the description in full: the conditions and the
-  reservations that exist nowhere else are in it;
-- **the Commands** — the words of this AI-tool, its own: a word and its
-  description. An AI-tool is an entity, a Command is one job of it;
-- **`may:`** — which of those Commands are granted to **you**. You work under the
-  login of the User, the rights are counted for them and handed out one Command at
-  a time (see [session.md](session.md)). The list itself shows **every** AI-tool
-  and **every** Command whatever the rights, so `may: nothing` means "the AI-tool
-  is there, none of its Commands were granted" — say exactly that to the User, and
-  name the place they are granted: the server sent the path along with the list.
+- **the name** — the first word of the line, and that is what the AI-tool is called
+  by: its unit in upper case, the namespace its Commands live in;
+- **the path** — where the owner put it in the tree of AI-tools, its own title
+  last. Name the AI-tool to the User by it: that is how the Program shows it;
+- **the description** — written by the owner, and the only thing that says what the
+  AI-tool does. The list gives its first sentence, and `tool_list` with the name of
+  the AI-tool gives it whole, with every Command and its fields. Read it in full
+  before the first call: the conditions and the reservations that exist nowhere
+  else are in it;
+- **the Commands** — the words after `may:` and `also:`. An AI-tool is an entity, a
+  Command is one job of it. `may:` holds the ones granted to **you**, `also:` the
+  rest. You work under the login of the User, the rights are counted for them and
+  handed out one Command at a time (see [session.md](session.md)). The list shows
+  **every** AI-tool and **every** Command whatever the rights, so `may: nothing`
+  means "the AI-tool is there, none of its Commands were granted" — say exactly that
+  to the User, and name the place they are granted: the head of the list names it.
 
 ## How to run one
 
@@ -66,12 +68,15 @@ Two steps, and the first is that same list:
 2. **`tool_run`** — the unit, the Command and its parameters:
 
 ```json
-{ "unit": "melbis_agent_sample.php", "command": "CmdAdd",
+{ "unit": "MELBIS_AGENT_SAMPLE", "command": "CmdAdd",
   "params": { "name": "Acme", "descr": "Optics and tripods" } }
 ```
 
-The unit is the address of the AI-tool, and the engine meets it against the
-registry: there is no path from here to a file of your own choosing. An unknown
+The unit is the address of the AI-tool, written exactly as the list gives it —
+`MELBIS_AGENT_SAMPLE`, not the name of its file — and the engine meets it against
+the registry: there is no path from here to a file of your own choosing. The row of
+the registry keeps the file name, `melbis_agent_sample.php`, and the engine makes the
+upper-case name out of it. An unknown
 Command it turns away at once, listing the declared ones; an ungranted one with a
 refusal carrying the full address — which Command of which AI-tool, and where it is
 handed out. Pass that address to the User as it is, it is ready for use.
@@ -164,7 +169,7 @@ the shape of it; the description of the Command says what to look for.
 
 **Rows of tables do not come into the conversation.** A Command that hands over data
 puts it under the key `tables`, and every table is written to a file of its own,
-`mcp\melbis\tables\<unit>.<command>.<table>.jsonl` — the unit without its `.php` —
+`mcp\melbis\tables\<unit>.<command>.<table>.jsonl`,
 one row per line. What stays
 in the chat is the verdict and the first three rows of each table, clipped at 300
 characters, so that the shape is visible; for the data itself go to the file. The
@@ -179,7 +184,7 @@ walk. Name the job with **`into`**, and every table of the answer is also append
 a file of that job, `mcp\melbis\tables\<into>.<table>.jsonl`:
 
 ```json
-{"unit": "melbis_agent_sample.php", "command": "CmdQuery", "into": "walk",
+{"unit": "MELBIS_AGENT_SAMPLE", "command": "CmdQuery", "into": "walk",
  "params": {"query": { ... }, "limit": 1000}}
 ```
 
@@ -187,7 +192,7 @@ The answer then carries one line more per table - the file of the job and how ma
 it holds by now, so the walk can be seen while it runs:
 
 ```
-goods: 1000 rows -> ...\melbis_agent_sample.CmdQuery.goods.jsonl
+goods: 1000 rows -> ...\MELBIS_AGENT_SAMPLE.CmdQuery.goods.jsonl
     + walk.goods.jsonl, 7000 rows in file
 ```
 
@@ -242,8 +247,9 @@ answers **what** would follow, and acts only on a second call carrying the flag 
 own description names. That answer is the one to read out to the User — it is the
 place where the decision is made.
 
-The refusal `ACCESS_DENIED: no such tool: <unit>` means one thing: there is no such
-unit in the registry — call `tool_list` and check. The unit, the Command, the grant
+The refusal `ACCESS_DENIED: no such tool: <unit>` means one thing: no AI-tool of the
+registry goes by that name — call `tool_list` and take the first word of its line as
+it stands, upper case and all. The unit, the Command, the grant
 and the fields are all checked by the engine **before** the module; the Command, the
 grant and the fields refuse in the same language as the modules — `result: false` and
 a `message` with a hint — while an unknown unit comes back as the plain refusal above.
@@ -294,7 +300,8 @@ Do not invent the shape — it already exists. In order:
    these notes): the registry, the contract of a call, the reference router, the
    rules for commands.
 2. **Read the units of the AI-tools this Store already keeps** as living examples,
-   with `engine_php_load` — `tool_list` names their units.
+   with `engine_php_load` — the name `tool_list` gives is the unit in upper case:
+   `MELBIS_AGENT_SAMPLE` is `units/melbis_agent_sample.php`.
 3. **Keep to the conventions**: an AI-tool is an entity and a unit, and a Command is
    a function of that unit — `CmdList`, `CmdAdd`; the `Cmd` prefix is what tells a
    Command from a helper. A unit declares a namespace of its own name in upper case,

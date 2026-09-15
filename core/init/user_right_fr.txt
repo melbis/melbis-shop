@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.438 @ 2026-09-14
+ * @version 6.5.1.440 @ 2026-09-15
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -259,7 +259,6 @@ table={DBNICK}_oper|id|name
 410=Charger
 411=Enregistrer
 412=Supprimer
-413=Accès complet
 407=Outils
 415=Obtenir la liste
 416=Exécuter

@@ -1,21 +1,21 @@
 # AI Tools
 
-An AI tool is a modular script that the store owner registers for the AI assistant. The agent sees the list of tools on connection and runs them by name — this is how a store gets its own "buttons": create a product the way it is done here, close an order by your rules.
+An AI tool is a modular script that the store owner registers for the AI assistant. On connection the agent learns how many of them the store has, takes the list with a `tool_list` call, and runs the tools by name — this is how a store gets its own "buttons": create a product the way it is done here, close an order by your rules.
 
-The list is data, not code. A new tool appears for the agent without updating the program: rows in the registry plus a module in `units`. The owner maintains the registry in the program: **Development → AI Tools**.
+The list is data, not code. A new tool appears for the agent without updating the program: rows in the registry plus a module in `units`. The owner maintains the registry in the program: **Development → AI Components**, the "AI Tools" tab.
 
 ## The Registry
 
 | Table | What it holds |
 |---|---|
-| `agent_tool` | the tool: name, description, module (`unit`); a tree with folders |
-| `agent_tool_command` | the tool's commands: the name — which is also the function name — description, order |
+| `agent_tool` | the tool: name, description, module (`unit`), type (`kind_key`, the `AGENT_TOOL_KIND_KEY` dictionary); a tree with folders |
+| `agent_tool_command` | the tool's commands: the name — which is also the function name — description, type (`kind_key`, the `AGENT_TOOL_COMMAND_KIND_KEY` dictionary), order |
 | `agent_tool_param` | the command's parameters: name, description, type, required flag, default, order |
 | `agent_tool_right` | grants: a row gives one command (`command_id`) to a person (`user_id`) or a group (`group_id`) |
 
 The registry is the only source of the signature: from it the agent learns both what the tool does (the descriptions) and how to call it (the commands with their fields). The module does not describe itself — all that is left in it are the command bodies.
 
-Rights are granted to **people**: the agent signs in to the store under the login of the employee sitting at the keyboard — there is no separate AI user — and the grant is counted for them: either their own row or a row of their group. Hence the fact that the same tool can do different things for different employees. A right is a command: as many commands, as many rights. The holder of the "Change AI settings" right (`PUT_AGENT_OPTION`) owns all commands automatically. The list is open to everyone: the agent sees all tools and all commands, and the granted ones as a separate `may:` line; if it is empty, the agent tells the employee whom to ask for access.
+Rights are granted to **people**: the agent signs in to the store under the login of the employee sitting at the keyboard — there is no separate AI user — and the grant is counted for them: either their own row or a row of their group. Hence the fact that the same tool can do different things for different employees. A right is a command: as many commands, as many rights. The holder of the "Change AI settings" right (`PUT_AGENT_OPTION`) owns all commands automatically. The list is open to everyone: the agent sees all tools and all commands — the granted ones in the `may:` line, the rest in the `also:` line; with an empty `may:`, the agent tells the employee whom to ask for access.
 
 ## A Tool Is an Entity, a Command Is Its Function
 
@@ -25,7 +25,7 @@ A right is granted on the whole command, with all of its parametric breadth: `Cm
 
 ## The Call Contract
 
-The module declares a namespace by its own name in capitals, and the engine calls the command's function directly — there is no entry point and no dispatching `switch` in the module:
+The module declares a namespace by its own name in capitals, and the engine calls the command's function directly — there is no entry point and no dispatching `switch` in the module. The agent calls the tool by the same name: in the list and in `tool_run`, the module `melbis_agent_currency.php` is `MELBIS_AGENT_CURRENCY`, and next to it the list shows the path through the registry tree, `Business -> Currencies`:
 
 ```php
 namespace MELBIS_AGENT_USER;
@@ -52,8 +52,9 @@ The response is an array, and it travels to the agent whole. The convention: `re
 
 Before the module, the engine checks everything that is written in the registry, and what is left for the module are the rules of the subject area:
 
-- **the module** — the tool's address; it is checked against the registry, and no
-  path of one's own to someone else's file arrives from outside;
+- **the module** — the tool's address, in capitals, as in the list; it is checked
+  against the registry, and no path of one's own to someone else's file arrives
+  from outside;
 - **the command** — by name, in any case; an unknown one is refused with a list of
   the declared ones, one that has not been granted is refused with an address:
   which command of which tool, and where it is granted;
@@ -133,7 +134,7 @@ The agent assembles a call from three layers of text, each with its own depth:
 - the parameter's `descr` — what this value is and what it should be; a dictionary of
   allowed values is named here in words (`a value of STORE_KIND_KEY`).
 
-The first two travel in the list on every connection; the parameters the agent takes one tool at a time, once it has settled on working with it.
+The `tool_list` list carries only the beginning of the tool's description — its first sentence — and its command words. The command descriptions and the parameters the agent takes one tool at a time, once it has settled on working with it.
 
 ## Libraries
 
@@ -149,7 +150,7 @@ The aliases it publishes are named by the library in its own manifest, in the `p
 
 ## Backup and Update
 
-**Development → AI Tools → Export** (the `TOOL_EXPORT` right; for the agent — `tool_export`) collects the whole registry and the modules behind it into a single archive: `index.json` with the tree and the md5 sum of every file, `tools/<unit>.json` per tool — the commands with their fields — and `units/` with the modules, the manifests, and the libraries found through those manifests. Grants do not go into the archive: they are about the store's people, not about the tools.
+**Development → AI Components → Export** (the `TOOL_EXPORT` right; for the agent — `tool_export`) collects the whole registry and the modules behind it into a single archive: `index.json` with the tree and the md5 sum of every file, `tools/<unit>.json` per tool — the commands with their fields — and `units/` with the modules, the manifests, and the libraries found through those manifests. Grants do not go into the archive: they are about the store's people, not about the tools.
 
 There is no import door, and that is a decision: after installation the owner adapts the tools to their own needs, and an update is always a comparison rather than an overwrite. The agent unpacks the container, finds what has diverged by the sums in the index, and transfers it point by point: the registry by direct queries, the module by saving the file.
 

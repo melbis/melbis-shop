@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.438 @ 2026-09-14
+ * @version 6.5.1.440 @ 2026-09-15
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -426,15 +426,19 @@ CREATE TABLE {DBNICK}_user_group_key_set (
  **/
 DROP TABLE IF EXISTS {DBNICK}_agent_memory;
 CREATE TABLE {DBNICK}_agent_memory (
-   id 		   INT UNSIGNED NOT NULL AUTO_INCREMENT,
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
    user_id 	   INT UNSIGNED DEFAULT NULL,
+   group_id 	INT UNSIGNED DEFAULT NULL,
+   category 	CHAR(100) DEFAULT '' NOT NULL,
    name 	      CHAR(100) DEFAULT '' NOT NULL,
    info 	      CHAR(255) DEFAULT '' NOT NULL,
-   body 	      MEDIUMTEXT DEFAULT ('') NOT NULL,
-   shared 	   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   kind_key 	CHAR(100) DEFAULT '' NOT NULL,
+   body 	      MEDIUMTEXT DEFAULT ('') NOT NULL,   
    edit_time	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,
+   pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   UNIQUE (user_id, name)
+   KEY IDX1 (user_id),
+   KEY IDX2 (group_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -450,6 +454,7 @@ CREATE TABLE {DBNICK}_agent_tool (
    tlevel 	   INT UNSIGNED DEFAULT '0' NOT NULL,
    absindex 	INT UNSIGNED DEFAULT '0' NOT NULL,
    folder 	   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   kind_key 	CHAR(100) DEFAULT '' NOT NULL,
    unit 	      CHAR(100) DEFAULT '' NOT NULL,
    PRIMARY KEY (id),
    KEY IDX1 (tindex),
@@ -467,6 +472,7 @@ CREATE TABLE {DBNICK}_agent_tool_command (
    tool_id 	   INT UNSIGNED DEFAULT NULL,
    name 	      CHAR(100) DEFAULT '' NOT NULL,
    descr 	   MEDIUMTEXT DEFAULT ('') NOT NULL,
+   kind_key 	CHAR(100) DEFAULT '' NOT NULL,
    pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY IDX1 (tool_id)

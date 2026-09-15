@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.438 @ 2026-09-14
+ * @version 6.5.1.440 @ 2026-09-15
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -19,6 +19,7 @@ INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('advert_key', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('advert_key_value', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('advert_key_set', 0);
 
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('agent_memory', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('agent_tool', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('agent_tool_command', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('agent_tool_param', 0);

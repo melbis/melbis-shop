@@ -18,7 +18,7 @@ A tool is worth creating when you see one of two things:
 
 ## Where They Are Created
 
-**"Development → AI Tools"**. On the left is the tool catalog, on the right are the commands of the selected tool and the permissions for each of them.
+**"Development → AI Components"**, the "AI Tools" tab. On the left is the tool catalog, on the right are the commands of the selected tool and the permissions for each of them.
 
 The catalog is arranged like the other trees in the program: folder sections for grouping, with the group flag set by a button on the toolbar. **A folder is not a tool** — it has neither commands nor permissions, and the assistant does not see it.
 
@@ -65,7 +65,7 @@ A right is granted **per command** — by a checkmark at the intersection of "co
 
 ## Ready-Made Tools
 
-The demonstration store ships with a ready-made set: products with their prices and descriptions, the catalog and attributes, files and image profiles, the settings registry, employees, scheduler tasks. The exact list does not live in the documentation — it is the store's data: the full and always fresh list stands in "Development → AI Tools", and it is the same one the assistant sees on every connection.
+The demonstration store ships with a ready-made set: products with their prices and descriptions, the catalog and attributes, files and image profiles, the settings registry, employees, scheduler tasks. The exact list does not live in the documentation — it is the store's data: the full and always fresh list stands in "Development → AI Components" on the "AI Tools" tab, and the assistant takes this same list before its first task.
 
 A couple of examples of what that looks like:
 

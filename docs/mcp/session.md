@@ -35,9 +35,7 @@ by tool:
 
 Memory, the AI-tools of the Store, the files of the elements and the database keep
 a row per command: reading the tables, reading data, changing data, the locks,
-adding and removing a file, and the five rows of memory are each their own — four
-commands, and `AGENT_MEMORY_FULL` beside them, which lifts the limits on other
-people's notes.
+adding and removing a file, and the four commands of memory are each their own.
 
 That the development branch is one right for reading and one for writing is not a
 simplification of the registry but the truth about the work: a login that may save a
@@ -91,10 +89,10 @@ session has to be opened again**: the list arrives with the connection and does 
 change in the middle of the work.
 
 The refusal comes back at once, with no request to the Store: the server received
-the list of rights when it connected and checks against it itself. **You only see
-the MCP-tools you are allowed** — after connecting, the list is cut down to your
-rights, so this at-once refusal is met on one thing only: a command that was never
-yours and that your Host is still showing because it ignored the refreshed list.
+the list of rights when it connected and checks against it itself. **Your Host shows
+every MCP-tool, whatever the rights** — it reads the list before anybody signs in and
+keeps it — so the answer of `session_connect` names the ones granted to you, and any
+other one is met by this at-once refusal.
 
 A right taken away in the middle of a session is a different matter. The list this
 server holds was fixed at the connection, so the call goes through and it is the
@@ -154,7 +152,8 @@ The answer tells you everything about the session at once:
   and the rights to the Store's AI-tools are counted for them ([tools.md](tools.md));
 - a reminder to settle **who you are working with** — the owner, a developer or a
   member of staff (see "Who you are working with" in [index.md](index.md)). Nobody
-  sets it for you: ask outright, do not guess, and keep the answer in memory;
+  sets it for you: a `kCritical` note may say it already, and if none does, ask
+  outright, do not guess, and keep the answer in memory as a `kCritical` note;
 - **your own folder** inside the local folder of the Store;
 - **the build of the Program**, but only when it differs from the one your last
   session in this Store was stamped with — then what you remember of this
@@ -162,10 +161,14 @@ The answer tells you everything about the session at once:
   tables belongs to the older build: say it to the User, read the pages anew and ask
   the tools of the map for a fresh copy with `reload`. The stamp lies in your own
   folder and moves with the answer, so this is said once;
-- how many notes you hold in the memory of this Store — zero means a first session;
+- how many notes you hold in the memory of this Store — zero means a first session —
+  and how many of them are `kCritical`: those are read before any work
+  ([memory.md](memory.md)). Without the right to read memory, the answer says that
+  instead;
 - whether the Store is running without a licence (see below);
-- **which AI-tools this Store has** — that list comes in the same answer, see
-  [tools.md](tools.md).
+- **how many AI-tools this Store has** — the list itself is `tool_list`, see
+  [tools.md](tools.md);
+- **which MCP-tools are granted to you**, in the last line.
 
 The map of the project is **not read** when you connect. Every part of it is asked
 for by its own tool when it is needed — see [map.md](map.md).

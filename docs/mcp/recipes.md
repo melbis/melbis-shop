@@ -6,9 +6,9 @@ actions, a warning before editing files and a separate one before changing data.
 
 ## Looking around an unfamiliar Store
 
-1. `memory_list` and `memory_load` — what you already know about this Store. The notes
-   live inside the Store itself, so they are there even in the first session on a new
-   machine.
+1. `memory_list` and `memory_load` — what you already know about this Store, every
+   `kCritical` note first. The notes live inside the Store itself, so they are there
+   even in the first session on a new machine.
 2. `engine_map_tree` — the files: root scripts, modules, template sets, folders of
    statics.
 3. `engine_map_units` — which modules there are and what functions they declare.

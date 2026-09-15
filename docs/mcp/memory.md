@@ -1,23 +1,34 @@
 # Your memory of this Store
 
 The notes live **in a table of the Store**, not on this machine and not in this
-conversation. So the next session, on another computer, meets the very same ones,
-and a colleague who connects to the same Store meets the ones marked shared.
+conversation. So the next session, on another computer, meets the very same ones.
 
-A note belongs to **the login you signed in under** — that is, to the User at the
-keyboard. Another member of staff has a memory of their own, and that is by design:
-you remember exactly what you learned with this person and inherit no one else's
-conclusions. The same thing will sometimes have to be learned twice — in exchange
-the behaviour is predictable.
+A note stands on one of three levels:
+
+| Level | Who reads it | Who writes it |
+|---|---|---|
+| for everyone | every login of the Store | the administrator |
+| for a group | the logins of that group, main or additional | the administrator |
+| your own | the login you signed in under | you, with `memory_save` |
+
+Your own notes belong to **the login you signed in under** — that is, to the User at
+the keyboard. Another member of staff has a memory of their own, and that is by
+design: you remember exactly what you learned with this person and inherit no one
+else's conclusions. The same thing will sometimes have to be learned twice — in
+exchange the behaviour is predictable. What every agent of the Store, or of one
+group, has to know, the administrator writes on the levels above. In the Program
+all of it lies open: whoever may open the window of AI settings sees and edits
+every note of every login.
 
 Four MCP-tools: `memory_list`, `memory_load`, `memory_save`, `memory_remove`.
 
 ## How a session starts
 
 **`memory_list`** — first of all, before you go anywhere near the code. It gives
-names with their short descriptions, the size and the time; the texts are asked for
-separately. `find` narrows the list to the notes whose name, description or body
-holds that word.
+every note with its number, category, kind and short description, the size and the
+time, and marks the notes for everyone and for a group; the texts are asked for
+separately. `find` narrows the list to the notes whose name, category, description
+or body holds that word.
 
 Then **`memory_load`**, with a list of names at once rather than one at a time:
 
@@ -25,9 +36,52 @@ Then **`memory_load`**, with a list of names at once rather than one at a time:
 { "names": ["cache-rules", "goods-import", "owner-prefers"] }
 ```
 
-Names that are not there, or that you are not shown, come back in `missed`. A name
-is unique within one person, so load someone else's shared note together with the
-`login` of its author — the list shows it on every line.
+**Every `kCritical` note is loaded before any work**, whatever its level.
+`session_connect` says how many there are, and no work starts without them.
+A critical note may name other notes to read with it: load those too. The rest are
+read when a job needs them, and their `info` line decides which. Without the right
+to read memory, `session_connect` says so, and the work goes on without it.
+
+A name brings every note of that name you can see — your own, a group's, everyone's
+— each marked with its level. A name with no note comes back in `missed`.
+
+## Kinds
+
+Every note has a kind, `kind_key`, from the registry of the Store:
+
+| Kind | What it is | When it is read |
+|---|---|---|
+| `kCritical` | what must hold in every session | before any work |
+| `kDirect` | an order of the User | when a job needs it |
+| `kSkill` | how to work with this person | when a job needs it |
+| `kDefault` | everything else | when a job needs it |
+
+The owner may add kinds of their own, and those count as `kDefault`. A kind the
+registry does not know is refused, and the refusal lists the ones it does.
+
+**When notes disagree, the order is strict**: the level first, the kind inside it.
+
+1. `kCritical`, `kDirect`, `kSkill` for everyone;
+2. `kCritical`, `kDirect`, `kSkill` for a group;
+3. your own `kCritical`, `kDirect`, `kSkill`;
+4. every other note, whatever its level.
+
+Two cases the order does not settle:
+
+- **A note against what the User says now.** Against an own `kDirect` or `kSkill`,
+  do what is said now and rewrite the note: the person changed their mind. Against a
+  `kCritical`, or a `kDirect` or `kSkill` for a group or for everyone, do not do it:
+  name the note and stop. A note of their own the User may have rewritten; the
+  administrator's is not theirs to overrule.
+- **Two notes on one step of the order** — of the two groups a login stands in, say.
+  Name both and ask which holds. A wrong note of your own is removed; a wrong one of
+  the administrator's is theirs to change.
+
+The kind is chosen when you write. `kCritical` is for the few things that must never
+be missed: keep them short, and let one of them name the others worth reading at the
+start. Who the User is — the owner, a developer or staff — is `kCritical`: every
+session starts from it. An order the User gave is `kDirect`, what you learned about
+how they want to be worked with is `kSkill`, and everything else is `kDefault`.
 
 ## What to write down
 
@@ -45,71 +99,62 @@ written down nowhere in the Store.
 ## How to write it
 
 ```json
-{ "name": "cache-rules",
+{ "category": "Cache",
+  "name": "cache-rules",
   "info": "Why the cache is off on kasdim_goods_cataloge",
   "body": "…" }
 ```
 
-- **`name`** — the key. Short, stable, kebab-case. A second save under the same name
-  replaces the first.
+- **`id`** — the note to change, as `memory_list` numbers it. Without it a new note is
+  written, and it stands last.
+- **`category`** — free words the notes are grouped by; the list is ordered by them.
+- **`name`** — a title: short, stable, kebab-case. A new note cannot go without one.
 - **`info`** — one line: this is what `memory_list` shows, and what you will later
   decide by whether to read the body at all. Write it so that the decision can be
   made from that one line.
-- **`body`** — the text itself.
-- **`shared: true`** — opens the note to the other users of this Store. **Ask about
-  every note on its own and wait for a plain yes.** One agreement opens one note: a
-  yes given earlier is not a standing permission, "share whatever is useful" is not
-  a permission at all, and a note that already went out shared does not license the
-  next one. There is no right behind this and nothing will stop you — which makes
-  the restraint yours: deciding for someone what of your findings their colleagues
-  get to see is not your call.
+- **`kind_key`** — the kind, see "Kinds" above. Left out, a new note is `kDefault`
+  and an old one keeps its kind.
+- **`body`** — the text itself, in plain HTML: `<p>`, `<ul>` and `<li>`, `<b>`,
+  `<code>`. Never markdown, and no styles or scripts. `info` stays one plain line.
 
 Write the note in the language you speak with the User: when they ask what you
 remember, these are the lines they get to see.
 
-**A field you leave out keeps its old value.** Opening a note to others by sending
-just `shared` will not wipe its text; rewriting the text will not close it again.
+**A field you leave out keeps its old value**: rewriting the text keeps the kind, and
+naming a kind keeps the text.
 
-To forget, `memory_remove`, and only when a note turned out to be **wrong**. A
-merely old note does no harm: it carries its date, and you will see for yourself
-that it speaks of the past.
+**The Program edits memory too**, on a tab of the window of AI settings, and that
+window takes the table into work the moment it opens, whichever tab is in front.
+While it is open, `memory_save` and `memory_remove` write nothing and say the table
+is busy: tell the User who holds it — `engine_db_locks` — and come back to the note
+later.
 
-## Other people's notes
+To forget, `memory_remove` with the id of the note, and only when it turned out to be
+**wrong**. A merely old note does no harm: it carries its date, and you will see for
+yourself that it speaks of the past.
 
-A note belongs to whoever wrote it, and one supervising right steps across that
-line — `AGENT_MEMORY_FULL`. Usually the developer has it and no one else does.
+## Notes for a group and for everyone
 
-**Reading.** An ordinary request always gives you your own notes and everything
-marked shared — that is enough for the work, and rights have nothing to do with it.
-Wider than that only on request, and only with the supervising right: `login` shows
-everything one named person keeps, `all: true` every note in the Store, whoever
-wrote it. The right on its own widens nothing: ask for no more and you get the
-ordinary answer. And the other way round — ask wider without the right and nothing
-is refused, the answer simply stays the ordinary one, except that a named `login`
-still narrows it, to that person's shared notes.
+They are the administrator's: a rule the whole Store keeps, a convention of one
+department. `memory_save` and `memory_remove` never reach them. When the
+administrator asks you for one, it is a row of `agent_memory` written with
+`engine_db_execute`, announced as a change of data like any other: a `lock` step
+first, since the Program edits this table too; `id` from a `generate` step and `pos`
+the same number; `user_id` empty; `group_id` the group, or empty too for everyone;
+the category, the name, the description, the kind, the text and `edit_time` as for
+any note.
 
-**Writing and forgetting.** Your own, always. Someone else's, with the supervising
-right, and whether it is shared or personal makes no difference.
-
-When you read a shared note, remember whose it is: this is not documentation of the
-Store but the conclusion of another session, drawn with another person and possibly
-half a year ago. Check it before you build on it.
-
-And when you delete a shared one — **say out loud that you are deleting it**, yours
-or not. It was written for everybody, someone may be leaning on it, and there is
-nothing to restore it from: memory keeps no history.
+Read one as the word of the Store, not as a finding of a session: it stands above
+your own notes in the order above, and only the administrator changes it.
 
 ## When you are asked what you remember
 
-Memory has no window of its own in the Program: the only way a person can find out
-what you remember about their Store is through you. If they ask, show
-`memory_list`, and whatever they need in full. For an owner with the supervising
-right, put the whole picture together: `all: true` shows everything every agent
-remembers about this Store — every line but your own carries the name of its author.
+The Program shows memory on a tab of the window of AI settings. When they ask you,
+show `memory_list`, and whatever they need in full.
 
 If they ask you to forget something, forget it — `memory_remove`, without arguing
-and without "but the note is useful". They may remove someone else's too, if the
-right is there; a shared one with the warning described above.
+and without "but the note is useful". A note for a group or for everyone is not
+yours to forget: say that the administrator removes it.
 
 ## Memory and what is expendable
 

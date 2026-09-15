@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.438 @ 2026-09-14
+ * @version 6.5.1.440 @ 2026-09-15
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -116,6 +116,13 @@ table={DBNICK}_key|id|name
 117=Liste des événements
 150=Multilinguisme
 151=Traducteur
+169=Assistant IA
+170=Mémoire
+171=Type
+172=Outils
+173=Type
+174=Commandes
+175=Type
 8=------------- Paramètres des éditeurs -------------
 66=Éditeur d’images
 9=Profils
@@ -274,3 +281,9 @@ table={DBNICK}_key_value|id|value_txt
 403=Par défaut
 404=Par défaut
 405=<MELBISSHOP ShopVersion="Melbis Shop v6.5.1.537"><JPEG FileType="2" Compress="95" Resolution="3.00" Smart="True" Base="False" Optim="True"/><FILE KindKey="kDefault" Base="True"/><MASK File="files/1899/12_30/00_00/" Pos="0" Alpha="0" SizeW="0" SizeH="0" Indent="0" Rotate="0"/><CANVAS Range="255" RangeBorder="10" Border="0" Color="16777215" Alpha="False"/><ROTATE Rotate="0" Mirror="False"/><EFFECTS Red="0" Green="0" Blue="0" Intensive="0" Contrast="0" Sharpen="10"/></MELBISSHOP>
+424=Critique
+425=Directive
+426=Compétence
+427=Par défaut
+428=Par défaut
+429=Par défaut
