@@ -20,5 +20,6 @@ Store. You work with the same core through this MCP server.
 - Everything you make goes into your own folder, `mcp\{AGENT}\` in the local folder
   of the Store, and nowhere else — not into the folder the Host happens to run in.
 - That folder goes with the computer. What has to outlive the session — agreements,
-  the User's rules, what you learned about the Store — goes into the memory of the
-  Store with `memory_save`.
+  the User's rules, what you learned about the Store — is offered to the User for the
+  memory of the Store: say the note with its name, category and kind, and call
+  `memory_save` only when they agree. What they did not agree to stays in your folder.

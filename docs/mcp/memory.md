@@ -9,7 +9,7 @@ A note stands on one of three levels:
 |---|---|---|
 | for everyone | every login of the Store | the administrator |
 | for a group | the logins of that group, main or additional | the administrator |
-| your own | the login you signed in under | you, with `memory_save` |
+| your own | the login you signed in under | you, with `memory_save`, when the User agrees |
 
 Your own notes belong to **the login you signed in under** — that is, to the User at
 the keyboard. Another member of staff has a memory of their own, and that is by
@@ -30,20 +30,23 @@ time, and marks the notes for everyone and for a group; the texts are asked for
 separately. `find` narrows the list to the notes whose name, category, description
 or body holds that word.
 
-Then **`memory_load`**, with a list of names at once rather than one at a time:
+Then **`memory_load`**, with a list of numbers at once rather than one at a time —
+the numbers `memory_list` gives:
 
 ```json
-{ "names": ["Cache rules", "Goods import", "How the owner works"] }
+{ "ids": [1, 4, 12] }
 ```
 
 **Every `kCritical` note is loaded before any work**, whatever its level.
-`session_connect` says how many there are, and no work starts without them.
-A critical note may name other notes to read with it: load those too. The rest are
+`session_connect` says how many there are, and until every one of them is loaded in
+this session, this server refuses every other command.
+A critical note may name other notes to read with it: find their numbers in the list
+and load those too. The rest are
 read when a job needs them, and their `info` line decides which. Without the right
 to read memory, `session_connect` says so, and the work goes on without it.
 
-A name brings every note of that name you can see — your own, a group's, everyone's
-— each marked with its level. A name with no note comes back in `missed`.
+Every note comes marked with its level — your own, a group's, everyone's. A number
+that is not among the notes you can see comes back in `missed`.
 
 ## Kinds
 
@@ -69,7 +72,7 @@ registry does not know is refused, and the refusal lists the ones it does.
 Two cases the order does not settle:
 
 - **A note against what the User says now.** Against an own `kDirect` or `kSkill`,
-  do what is said now and rewrite the note: the person changed their mind. Against a
+  do what is said now and offer to rewrite the note: the person changed their mind. Against a
   `kCritical`, or a `kDirect` or `kSkill` for a group or for everyone, do not do it:
   name the note and stop. A note of their own the User may have rewritten; the
   administrator's is not theirs to overrule.
@@ -77,7 +80,7 @@ Two cases the order does not settle:
   Name both and ask which holds. A wrong note of your own is removed; a wrong one of
   the administrator's is theirs to change.
 
-The kind is chosen when you write. `kCritical` is for the few things that must never
+The kind is proposed with the note. `kCritical` is for the few things that must never
 be missed: keep them short, and let one of them name the others worth reading at the
 start. Who the User is — the owner, a developer or staff — and how often they want
 the scheduler looked into are `kCritical`: every session starts from them. An order
@@ -86,13 +89,20 @@ the User gave is `kDirect`, what you learned about how they want to be worked wi
 
 ## What to write down
 
-What you **learned about this Store and could not have read out of the code**:
+**Nothing goes into memory on the quiet.** When you notice a pattern worth keeping,
+put it to the User in words — the rule itself, and the name, category and kind you
+would give it — and call `memory_save` only when they agree; a change to a note is
+agreed the same way. A pile of notes written without asking buries the few that
+matter.
+
+Worth offering is what you **learned about this Store and could not have read out of
+the code**:
 
 - a decision and the reason for it: why it was done this way and not another;
 - a convention the owner insists on, while it is still taking shape;
 - a trap that cost you an hour.
 
-What **not** to write down: how the code is built, the list of modules, the
+What **not** to offer: how the code is built, the list of modules, the
 structure of the tables, the names of files. All of that is in the map and in the
 files, and such a note goes stale before it is ever of use. Memory is for what is
 written down nowhere in the Store.
@@ -175,17 +185,18 @@ What you put into `mcp\melbis\` — downloaded images, pages, query dumps — is
 your own folder beside it: the whole local folder of the Store goes when the User
 changes computers.
 
-Memory is the opposite: what goes here is what has to outlive this session and this
-machine. If you catch yourself thinking "I will need to remember this", it belongs
-in `memory_save` and not in a file beside it.
+Memory is the opposite: what goes here has to outlive this session and this machine,
+and it goes only with the User's yes. What you think worth keeping but the User has
+not agreed to — or you are not sure about — you may write down in your own folder:
+remember that it can vanish, and that it is your draft, not the word of the Store.
 
 ## The Host's own memory
 
 The Host you work inside may keep a memory of its own — files on this machine. The
-line is simple: **everything about the Store and its people goes here, into the
-Store's table** — the facts, the traps, the owner's rules, the agreements about how
-to work. What is left for the Host's memory is the machine itself: paths, local
-tools. The one path kept here instead is the folder the User named for the things
+line is simple: **what the User agreed to keep about the Store and its people goes
+here, into the Store's table** — the facts, the traps, the owner's rules, the
+agreements about how to work. What is left for the Host's memory is the machine
+itself: paths, local tools. The one path kept here instead is the folder the User named for the things
 they will open later — reports, tables, exports — and the note names the machine it
 belongs to, because the same Store is worked with from more than one.
 

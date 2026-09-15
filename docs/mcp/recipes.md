@@ -23,8 +23,9 @@ part again with `reload`.
 
 The first acquaintance is the longest part of the work: warn the User in advance and
 do not skimp on it. It is preparation, and afterwards things go noticeably faster —
-especially if what you understood settles into the memory of the Store
-(`memory_save`): the next task then starts from the notes instead of from nothing.
+especially if what you understood settles into the memory of the Store — offered to
+the User and saved with their yes (`memory_save`): the next task then starts from the
+notes instead of from nothing.
 
 ## Changing the markup of a module
 

@@ -154,7 +154,7 @@ The answer tells you everything about the session at once:
   member of staff (see "Who you are working with" in [index.md](index.md)) — and,
   when the scheduler is theirs, how often they want it looked into. Nobody sets it
   for you: a `kCritical` note may say it already, and if none does, ask outright, do
-  not guess, and keep the answer in memory as a `kCritical` note;
+  not guess, and offer to keep the answer in memory as a `kCritical` note;
 - **your own folder** inside the local folder of the Store;
 - **the build of the Program**, but only when it differs from the one your last
   session in this Store was stamped with — then what you remember of this
@@ -163,9 +163,9 @@ The answer tells you everything about the session at once:
   the tools of the map for a fresh copy with `reload`. The stamp lies in your own
   folder and moves with the answer, so this is said once;
 - how many notes you hold in the memory of this Store — zero means a first session —
-  and how many of them are `kCritical`: those are read before any work
-  ([memory.md](memory.md)). Without the right to read memory, the answer says that
-  instead;
+  and how many of them are `kCritical`: those are read before any work, and every
+  other command is refused until they are loaded ([memory.md](memory.md)). Without
+  the right to read memory, the answer says that instead;
 - whether the Store is running without a licence (see below);
 - **how many AI-tools this Store has** — the list itself is `tool_list`, see
   [tools.md](tools.md);
