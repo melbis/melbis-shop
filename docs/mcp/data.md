@@ -27,7 +27,7 @@ live exactly as long as the connection, and separate calls cannot put them toget
 
 | Step | What it does |
 |---|---|
-| `lock` | takes tables into work — the Melbis registry, not a lock of the DBMS |
+| `lock` | takes tables into work, all of them at once or none — the Melbis registry, not a lock of the DBMS |
 | `unlock` | releases; with no argument, everything this pool took |
 | `generate` | the next id from the table's generator |
 | `select` | the rows of a query |
@@ -114,9 +114,10 @@ strategy, in three steps:
 keyboard, so in that list your row cannot be told from the row of their open form by
 the name — only by the operation and the time.
 
-Hence the rules of the engine, hard on both sides. The `lock` step turns away
-**any** busy table — the one held by a form in the Program under your own login
-included, and your own stuck one too. The `unlock` step releases **only what this
+Hence the rules of the engine, hard on both sides. The `lock` step waits out a table
+taken for a moment, and turns away **any** table still busy after that — the one held
+by a form in the Program under your own login included, and your own stuck one too.
+The `unlock` step releases **only what this
 pool took**; a foreign table named there gets the same refusal. There is nothing to
 get around this with, and no need: a busy table means a person is editing its data
 right now.

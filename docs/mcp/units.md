@@ -128,9 +128,9 @@ are `melbis_*` too.
   one, `*_add` first.
 - **Nobody locks a file.** The registry of locks guards tables; between your `*_load`
   and `*_save` the file may have been saved by a person in the Program, and your save
-  will wipe their change in silence — only the version history will save you. When you
-  are changing a file, tell the User to leave it alone for now; after a long pause,
-  read the file again before writing.
+  will wipe their change in silence — only the version history, when it is kept, will
+  save you. When you are changing a file, tell the User to leave it alone for now;
+  after a long pause, read the file again before writing.
 - **A save drops the cache of its module, a data write does not.** Save the code of a
   module and it loses its cache, its views included — save a library and everyone who
   includes it loses theirs. Editing data is the other way round: the storefront looks
@@ -176,7 +176,7 @@ The files are in `../Guide/Russian/Dev/`, relative to this page.
 | web modules (external applications and panels) | `web.md` |
 | deferred loading of blocks | `lazy.md` |
 | sessions, CSRF, cookies, the visitor | `session.md`, `cookie.md`, `visitor.md` |
-| the scheduler | `cron.md` |
+| cron | `cron.md` |
 | the debugger and the journals | `debug.md`, `log.md` |
 | the naming conventions | `rules.md` |
 | the AI-tools of a Store: registry, contract, commands | `agent_tool.md` |

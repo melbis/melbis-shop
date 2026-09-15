@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.440 @ 2026-09-15
+ * @version 6.5.1.441 @ 2026-09-15
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -189,7 +189,7 @@ table={DBNICK}_oper|id|name
 257=Moduły i opcje
 258=Pobierz
 259=Zapisz
-417=Narzędzia AI
+417=Komponenty AI
 418=Pobierz
 419=Zapisz
 423=Eksport
@@ -212,7 +212,7 @@ table={DBNICK}_oper|id|name
 126=Dodaj
 127=Zmień nazwę
 128=Usuń
-129=Pliki specjalne
+129=Pliki statyczne
 131=Dodaj
 132=Zmień nazwę
 133=Usuń
@@ -239,7 +239,7 @@ table={DBNICK}_oper|id|name
 143=Zmień nazwę
 144=Usuń
 338=Załaduj
-145=Katalog dla obrazów
+145=Katalog
 146=Dodaj
 147=Zmień nazwę
 148=Usuń

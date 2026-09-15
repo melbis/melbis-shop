@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.440 @ 2026-09-15
+ * @version 6.5.1.441 @ 2026-09-15
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -189,7 +189,7 @@ table={DBNICK}_oper|id|name
 257=Module und Optionen
 258=Abrufen
 259=Speichern
-417=KI-Werkzeuge
+417=KI-Komponenten
 418=Abrufen
 419=Speichern
 423=Export
@@ -212,7 +212,7 @@ table={DBNICK}_oper|id|name
 126=Hinzufügen
 127=Umbenennen
 128=Löschen
-129=Spezialdateien
+129=Statische Dateien
 131=Hinzufügen
 132=Umbenennen
 133=Löschen
@@ -239,7 +239,7 @@ table={DBNICK}_oper|id|name
 143=Umbenennen
 144=Löschen
 338=Laden
-145=Katalog für Bilder
+145=Katalog
 146=Hinzufügen
 147=Umbenennen
 148=Löschen

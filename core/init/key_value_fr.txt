@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.440 @ 2026-09-15
+ * @version 6.5.1.441 @ 2026-09-15
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -116,7 +116,7 @@ table={DBNICK}_key|id|name
 117=Liste des événements
 150=Multilinguisme
 151=Traducteur
-169=Assistant IA
+169=Composants IA
 170=Mémoire
 171=Type
 172=Outils

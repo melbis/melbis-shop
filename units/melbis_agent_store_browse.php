@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.440 @ 2026-09-15
+ * @version 6.5.1.441 @ 2026-09-15
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -63,6 +63,34 @@ function CmdTopic($mUserId, $mParam)
 function CmdQuery($mUserId, $mParam)
 {
     return STORE\Query($mUserId, 'browse', SCHEMA, $mParam);
+}
+
+
+/**
+ * Function CmdReadDescr
+ **/
+function CmdReadDescr($mUserId, $mParam)
+{
+    $said = STORE\Allowed($mUserId, $mParam['id'], 'browse');
+    if ( !$said['result'] ) return $said;
+
+    $list = implode(',', $said['ids']);
+
+    // The text alone, by id
+    $command = "SELECT id, descr
+                  FROM {DBNICK}_store
+                 WHERE id IN ( $list )
+              ORDER BY id
+               ";
+    $rows = MELBIS()->SqlSelect(__LINE__, $command);
+
+    return [
+        'result'  => true,
+        'message' => 'The description of '.count($rows).' goods',
+        'tables'  => [
+            'store' => $rows
+            ]
+        ];
 }
 
 

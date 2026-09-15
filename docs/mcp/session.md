@@ -151,9 +151,10 @@ The answer tells you everything about the session at once:
 - **which login you came in under** — that is the User, and both the engine rights
   and the rights to the Store's AI-tools are counted for them ([tools.md](tools.md));
 - a reminder to settle **who you are working with** — the owner, a developer or a
-  member of staff (see "Who you are working with" in [index.md](index.md)). Nobody
-  sets it for you: a `kCritical` note may say it already, and if none does, ask
-  outright, do not guess, and keep the answer in memory as a `kCritical` note;
+  member of staff (see "Who you are working with" in [index.md](index.md)) — and,
+  when the scheduler is theirs, how often they want it looked into. Nobody sets it
+  for you: a `kCritical` note may say it already, and if none does, ask outright, do
+  not guess, and keep the answer in memory as a `kCritical` note;
 - **your own folder** inside the local folder of the Store;
 - **the build of the Program**, but only when it differs from the one your last
   session in this Store was stamped with — then what you remember of this
@@ -168,6 +169,10 @@ The answer tells you everything about the session at once:
 - whether the Store is running without a licence (see below);
 - **how many AI-tools this Store has** — the list itself is `tool_list`, see
   [tools.md](tools.md);
+- **what waits for the User in the scheduler** — the open tasks they execute, counted
+  by state, when the scheduler is theirs by right; without that right
+  the line is not there. Tell the User what it says. You look into the scheduler with
+  its AI-tool, when it is granted to you; when it is not, say so;
 - **which MCP-tools are granted to you**, in the last line.
 
 The map of the project is **not read** when you connect. Every part of it is asked

@@ -33,7 +33,7 @@ or body holds that word.
 Then **`memory_load`**, with a list of names at once rather than one at a time:
 
 ```json
-{ "names": ["cache-rules", "goods-import", "owner-prefers"] }
+{ "names": ["Cache rules", "Goods import", "How the owner works"] }
 ```
 
 **Every `kCritical` note is loaded before any work**, whatever its level.
@@ -79,16 +79,17 @@ Two cases the order does not settle:
 
 The kind is chosen when you write. `kCritical` is for the few things that must never
 be missed: keep them short, and let one of them name the others worth reading at the
-start. Who the User is — the owner, a developer or staff — is `kCritical`: every
-session starts from it. An order the User gave is `kDirect`, what you learned about
-how they want to be worked with is `kSkill`, and everything else is `kDefault`.
+start. Who the User is — the owner, a developer or staff — and how often they want
+the scheduler looked into are `kCritical`: every session starts from them. An order
+the User gave is `kDirect`, what you learned about how they want to be worked with is
+`kSkill`, and everything else is `kDefault`.
 
 ## What to write down
 
 What you **learned about this Store and could not have read out of the code**:
 
 - a decision and the reason for it: why it was done this way and not another;
-- a convention the owner insists on;
+- a convention the owner insists on, while it is still taking shape;
 - a trap that cost you an hour.
 
 What **not** to write down: how the code is built, the list of modules, the
@@ -96,11 +97,21 @@ structure of the tables, the names of files. All of that is in the map and in th
 files, and such a note goes stale before it is ever of use. Memory is for what is
 written down nowhere in the Store.
 
+Notes are for the everyday, and they are kept clean. Now and then offer the User a
+**review** of yours: what is stale, what repeats, what has settled into a rule of the
+project — and remove only what they agree to. A settled rule, how the project works
+as a whole, is better kept in the Store itself, as its **charter**: documents in a
+section of the catalogue, read and edited by the rights on that section, by people
+and agents alike; once the charter holds a rule, its note goes. Past 100 notes in the
+list, memory has started to keep how the project works: tell the User it is time for
+a charter. Where the Store has one, a `kCritical` note for everyone says where it
+lies, and what the charter says is not repeated in a note.
+
 ## How to write it
 
 ```json
 { "category": "Cache",
-  "name": "cache-rules",
+  "name": "Cache rules",
   "info": "Why the cache is off on kasdim_goods_cataloge",
   "body": "…" }
 ```
@@ -108,7 +119,8 @@ written down nowhere in the Store.
 - **`id`** — the note to change, as `memory_list` numbers it. Without it a new note is
   written, and it stands last.
 - **`category`** — free words the notes are grouped by; the list is ordered by them.
-- **`name`** — a title: short, stable, kebab-case. A new note cannot go without one.
+- **`name`** — a short title. A new note cannot go without one; once given, keep it:
+  other notes may name it.
 - **`info`** — one line: this is what `memory_list` shows, and what you will later
   decide by whether to read the body at all. Write it so that the decision can be
   made from that one line.
@@ -117,8 +129,8 @@ written down nowhere in the Store.
 - **`body`** — the text itself, in plain HTML: `<p>`, `<ul>` and `<li>`, `<b>`,
   `<code>`. Never markdown, and no styles or scripts. `info` stays one plain line.
 
-Write the note in the language you speak with the User: when they ask what you
-remember, these are the lines they get to see.
+Write the note, its name too, in the language you speak with the User: when they
+ask what you remember, these are the lines they get to see.
 
 **A field you leave out keeps its old value**: rewriting the text keeps the kind, and
 naming a kind keeps the text.
@@ -126,12 +138,12 @@ naming a kind keeps the text.
 **The Program edits memory too**, on a tab of the window of AI settings, and that
 window takes the table into work the moment it opens, whichever tab is in front.
 While it is open, `memory_save` and `memory_remove` write nothing and say the table
-is busy: tell the User who holds it — `engine_db_locks` — and come back to the note
-later.
+is busy: tell the User who holds it — `engine_db_locks`. A note not written is kept
+nowhere: offer to put it into the scheduler, when its AI-tool is granted to you, so
+that it waits there until the window is closed.
 
-To forget, `memory_remove` with the id of the note, and only when it turned out to be
-**wrong**. A merely old note does no harm: it carries its date, and you will see for
-yourself that it speaks of the past.
+To forget, `memory_remove` with the id of the note: one the User agreed to drop at a
+review, or one that turned out to be wrong.
 
 ## Notes for a group and for everyone
 
@@ -181,5 +193,5 @@ Do not keep one note in both places: the copy will quietly drift away from the
 original.
 
 And when you report "saved", name the Store and the note — "into the Store's
-memory, `owner-work-rules`". A bare "saved to memory" leaves the owner guessing
+memory, `How the owner works`". A bare "saved to memory" leaves the owner guessing
 where to look.

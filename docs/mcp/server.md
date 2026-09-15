@@ -96,8 +96,8 @@ Three containers run:
 
 The host itself: a 4 GB swap file, `logrotate` over `/var/melbis/log/*/*.log` (daily,
 seven copies, compressed), `fail2ban`, `ufw` with 22/80/443 open, and two cron jobs — the
-certificate renewal at 3:00 and `php cron.php` once a minute (that is the scheduler of
-the platform — `../Guide/Russian/Dev/cron.md`).
+certificate renewal at 3:00 and `php cron.php` once a minute (that is the cron of the
+platform — `../Guide/Russian/Dev/cron.md`).
 
 **There are no container journals:** all three services are given `logging: driver: none`
 in `docker-compose.yml`. What to look at is the files in `/var/melbis/log` — and there is

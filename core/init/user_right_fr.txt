@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.440 @ 2026-09-15
+ * @version 6.5.1.441 @ 2026-09-15
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -189,7 +189,7 @@ table={DBNICK}_oper|id|name
 257=Modules et options
 258=Obtenir
 259=Enregistrer
-417=Outils IA
+417=Composants IA
 418=Obtenir
 419=Enregistrer
 423=Exporter
@@ -212,7 +212,7 @@ table={DBNICK}_oper|id|name
 126=Ajouter
 127=Renommer
 128=Supprimer
-129=Fichiers spéciaux
+129=Fichiers statiques
 131=Ajouter
 132=Renommer
 133=Supprimer
@@ -239,7 +239,7 @@ table={DBNICK}_oper|id|name
 143=Renommer
 144=Supprimer
 338=Charger
-145=Répertoire pour les images
+145=Répertoire
 146=Ajouter
 147=Renommer
 148=Supprimer

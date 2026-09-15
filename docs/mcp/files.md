@@ -179,9 +179,11 @@ reading the build is a last resort, only to check what went into it.
 
 **`engine_history_list(path)`** — who saved the file and when,
 **`engine_history_content(id)`** — the content of that version. A version is written
-on every save through `*_save`. The list is paged: `before` is a datetime cursor
-(versions no later than it) and `limit` the size of a page, so you page down with
-the value of the last row.
+on every save through `*_save`, as the options of the development environment of the
+Program on this machine say: switched off there, no version is written, and a file
+keeps no more versions than the number set there. The list is paged: `before` is a
+datetime cursor (versions no later than it) and `limit` the size of a page, so you
+page down with the value of the last row.
 
 Four different answers mean four different things, do not mix them up:
 
@@ -202,11 +204,11 @@ path from the map.
 |---|---|
 | `core/log/melbis/front.log` | errors of the storefront: URL, IP, User-Agent, POST and the session |
 | `core/log/melbis/back.log` | errors of the back office — the exchange with the Program and the web modules |
-| `core/log/cron/<task>.log` | a file per scheduler task: time, URL, code, duration, the body of the answer |
+| `core/log/cron/<task>.log` | a file per cron task: time, URL, code, duration, the body of the answer |
 | `core/log/apache/error.log`, `core/log/nginx/error.log` | the web server and the proxy, with `access.log` beside them — everything that happened before PHP |
 
 So the one story of one request reads in one place: nginx took it → apache handed it
-to PHP → the engine fell over → the scheduler could not get through.
+to PHP → the engine fell over → cron could not get through.
 
 **The `melbis/` channels are written only while the file `error.save` lies in the
 root** — both `front.log` and `back.log`. No file, no errors in the journal at all,
