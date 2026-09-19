@@ -118,10 +118,11 @@ Multiplicity is a property of the registry row, not of the field as such: the sa
   goes out once in the response, with an instruction to change it.
 - **Self-protection.** A command that saws off the branch it sits on (blocking or
   deleting the employee whose session is running) is rejected with `result=false`.
-- **Demolition takes a second call.** A command that deletes something with a tail
-  behind it first answers with exactly what would follow, and acts only on a repeat
-  call that says `depend`. That is the confirmation — in the command's contract
-  rather than in persuasion.
+- **Demolition takes a second call.** A delete command first answers with what would
+  go together with the rows and what would be left referring to them, and deletes only
+  on a repeat call that says `apply`. That is the confirmation — in the command's
+  contract rather than in persuasion. Rows of sets — rights, links — are deleted at
+  once: the module passes `apply` itself.
 
 ## The Command's Response
 
@@ -170,9 +171,9 @@ A refusal is `result: false` and a `message` that names the next step. Who refus
 | the engine | the type did not match | `The [id] takes a whole number, and [abc] is not one` |
 | the command | a rule of the subject area | `Nothing was named to change` |
 | the command | the table is busy | `The [currency] tables are busy` |
-| the command | a deletion with a tail | `Deleting 1 row(s) of <table>, and with them 3 <table>. Say depend` |
+| the command | a deletion without `apply` | `Deleting 1 row(s) of <table>, and with them 3 <table>. Say apply` |
 
-The last row is the first step of a demolition that takes a second call: the agent shows the person what will go along with it, and after their consent repeats the call with `depend: true`.
+The last row is the first step of a demolition that takes a second call: the agent shows the person what will go along with it, and after their consent repeats the call with `apply: true`.
 
 ### A Crash
 
@@ -235,14 +236,14 @@ The agent gets:
  "time": {"server": 9, "module": 1, "trip": 44}}
 ```
 
-**A deletion with a tail.** The first call:
+**A deletion.** The first call, without `apply`:
 
 ```json
-{"result": false, "message": "Deleting 1 row(s) of <table>, and with them 3 <table>. Say depend",
+{"result": false, "message": "Deleting 1 row(s) of <table>, and with them 3 <table>. Say apply",
  "detail": {}, "tables": {}, "files": []}
 ```
 
-The second call, with `depend: true`, after the person's consent:
+The second call, with `apply: true`, after the person's consent:
 
 ```json
 {"result": true, "message": "1 row(s) of <table> gone…",

@@ -46,9 +46,9 @@ The captions of the program's windows and fields are given here in English: in t
 
 ### The Session and the Rights
 
-**A session** is work with one store under one login. It is opened by `session_connect`, and it lives until the agent application restarts the server. The store, the login and the list of rights are remembered at the moment it opens. Switch the store in the program or grant a new right, and the session is opened anew.
+**A session** is work with one store under one login. It is opened by `session_connect`, and it lives until the agent application restarts the server. The store, the login and the list of rights are remembered at the moment it opens. Grant a new right, and the session is opened anew.
 
-The store signed in to is the one last opened in the program, and the session follows the program: while another store is open there, the tools refuse with `STORE_SWITCHED`. The server can also be tied to one store in the application's configuration — then switching in the program does not affect it.
+An application opened on the store folder starts a server tied to this store: switching in the program does not affect it, and two stores can be run in two windows. A server without a tie signs in to the store last opened in the program and follows it: while another store is open there, the tools refuse with `STORE_SWITCHED`.
 
 **Signing in under a user.** There is no separate user for the AI in the store: the agent works under a person's login, with their rights and in their name. The login-password pair the server takes itself — from the running program, and if it is closed, from the Windows registry (only when the "store passwords" box is ticked). The password never passes through the correspondence.
 
@@ -100,7 +100,7 @@ The actions repeat from family to family: `load` — read, `save` — write an e
 | `files\` | a copy of the element files folder from the server: both the program and `engine_files_load` fill it |
 | `mcp\<application>\` | the agent's working folder: reports, scripts, what has been downloaded to be studied. The name is the one the agent application called itself by |
 | `mcp\melbis\` | the server's disposable folder: downloaded pages, images, large query results. It can be wiped at any moment |
-| `.mcp.json` | how an application opened on this folder starts the server, tying it to this store. The program rewrites the file at every start |
+| `.mcp.json`, `.claude\`, `.codex\`, `AGENTS.md` | how applications opened on this folder as a project start the server, tying it to this store, and call its tools without asking for permission — once the user has trusted the folder to the application. The program lays them down from `Engine\MCP\Setup\` of the distribution at every start, rewriting them whole |
 
 ## The Answer
 

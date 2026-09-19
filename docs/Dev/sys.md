@@ -513,6 +513,8 @@ The relation lives until the end of the request. A relation the engine already h
 
 **`SysDepends($mTable)`** — what hangs on a table, as a list of rows `main`, `table`, `key`, `nullable`.
 
+**`SysFileEntities()`** — the entities files are attached to: the tables that have a `files_<table>` link by `elem_id` in the map. The list is read from the same map, so a link the store declares through `SysDependAdd` gets into it by itself.
+
 **`SysDependCount($mTable, $mIds)`** — how many rows would be left hanging if the named ones were removed. The answer is a map of `table => number`, only the non-zero ones. It must be asked **before** the deletion, while the rows are still in place:
 
 ```php

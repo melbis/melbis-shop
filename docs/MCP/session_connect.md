@@ -25,7 +25,7 @@ Two blocks: first the session's data in JSON, then the text.
   "group":   {"id": 2, "skey": "MANAGER", "name": "Managers", "options": {}},
   "demo":    false,
   "folder":  "D:\\Melbis\\shop.example.com\\mcp\\claude-code",
-  "build":   {"current": "6.5.1.545", "previous": "6.5.1.544"},
+  "build":   "6.5.1.552",
   "memory":  {"notes": 3, "critical": 1},
   "tools":   16,
   "tasks":   {"waiting": [{"state": "kNew", "name": "New", "count": 2}],
@@ -41,7 +41,7 @@ Two blocks: first the session's data in JSON, then the text.
 | `group` | the user's group: the number, `skey`, the name, the parameters; `null` if there is no group |
 | `demo` | the store works in demo mode, without a license |
 | `folder` | the agent's working folder in the store folder |
-| `build` | the build of the program: the current one and the one the agent worked with in this store last time; an empty `previous` — the first session |
+| `build` | the build of the program the server is installed next to. If it changes in the middle of a conversation, the program has been updated under it, and the tool descriptions the host has already shown the agent are out of date: the new ones come with compacting the conversation or with a new conversation |
 | `memory` | how many notes the agent can see and how many of them are critical; `null` — there is no right to read the memory |
 | `tools` | how many AI tools the store has; `null` — there is no right to their list |
 | `tasks` | the scheduler's open tasks by state, two lists: `waiting` — the move is the user's ("New", "Reassigned", "Requires clarification", "Completed" — handed in to them as the creator), `given` — the ones they have given to others, in all the open states; closed ones are not counted; `null` — the user has no right to the scheduler |
@@ -54,9 +54,6 @@ Two blocks: first the session's data in JSON, then the text.
 First — only what this very case calls for:
 
 * a warning about demo mode;
-* that the program has been updated since the last session: what was remembered
-  about the documentation, the windows and the tables is out of date, and the
-  project map is requested anew;
 * that the store's memory is closed by a right, and where that right is granted;
 * that the store has no AI tools, or that their list is closed by a right, and
   where they are written or where that right is granted.
