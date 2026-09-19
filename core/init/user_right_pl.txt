@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.445 @ 2026-09-15
+ * @version 6.5.1.451 @ 2026-09-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -208,7 +208,7 @@ table={DBNICK}_oper|id|name
 122=Pobierz listę
 255=Wyszukiwanie tekstu w plikach
 217=Wykonaj czyszczenie pamięci podręcznej
-123=Zestaw szablonów
+123=Grupa szablonów
 126=Dodaj
 127=Zmień nazwę
 128=Usuń

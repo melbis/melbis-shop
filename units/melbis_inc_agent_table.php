@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.445 @ 2026-09-15
+ * @version 6.5.1.451 @ 2026-09-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -104,8 +104,10 @@ function Add($mUserId, $mTable, $mParam, $mUseGen = true)
 
     return [
         'result'  => true,
-        'id'      => $row['id'],
-        'message' => 'The row of '.$mTable.' is added'
+        'message' => 'The row of '.$mTable.' is added',
+        'detail'  => [
+            'id' => $row['id']
+            ]
         ];
 }
 
@@ -157,8 +159,10 @@ function AddBlock($mUserId, $mTable, $mKey, $mIds, $mParam, $mUseGen = true)
 
     return [
         'result'  => true,
-        'id'      => $said,
-        'message' => 'The rows of '.$mTable.' are set'
+        'message' => 'The rows of '.$mTable.' are set',
+        'detail'  => [
+            'id' => $said
+            ]
         ];
 }
 
@@ -209,18 +213,18 @@ function Remove($mUserId, $mTable, $mIds, $mParam = [])
 {
     $list = implode(',', $mIds);
 
-    // The depend flag takes them
+    // Counted while the rows stand
     $depend = SYS\DependCount($mTable, $mIds);
-    if ( $depend['count'] > 0 && !( $mParam['depend'] ?? false ) )
+    $relate = SYS\RelateCount($mTable, $mIds);
+
+    // Without apply only the forecast
+    if ( !( $mParam['apply'] ?? false ) )
     {
         return [
             'result'  => false,
-            'message' => 'Deleting '.count($mIds).' row(s) of '.$mTable.$depend['said'].'. Say depend'
+            'message' => 'Deleting '.count($mIds).' row(s) of '.$mTable.$depend['said'].$relate['said'].'. Say apply'
             ];
     }
-
-    // Counted while the rows stand
-    $relate = SYS\RelateCount($mTable, $mIds);
 
     $tables = ['{DBNICK}_'.$mTable];
     $lock = SYS\TablesLock($tables, $mUserId);
@@ -231,10 +235,11 @@ function Remove($mUserId, $mTable, $mIds, $mParam = [])
                  WHERE id IN ( $list )
                ";
     MELBIS()->SqlQuery(__LINE__, $command);
+    $gone = MELBIS()->SqlAffectedRows();
 
     SYS\TablesUnlock($tables, $mUserId);
 
-    $message = count($mIds).' row(s) of '.$mTable.' gone';
+    $message = $gone.' row(s) of '.$mTable.' gone';
     $message .= SYS\DependSaid(SYS\DependSweep($mTable));
 
     // The relation flag clears them
@@ -569,8 +574,10 @@ function TreeAdd($mUserId, $mTable, $mParam, $mScope = [])
 
     return [
         'result'  => true,
-        'id'      => $id,
-        'message' => 'The row of '.$mTable.' is seated'
+        'message' => 'The row of '.$mTable.' is seated',
+        'detail'  => [
+            'id' => $id
+            ]
         ];
 }
 
@@ -622,18 +629,18 @@ function TreeRemove($mUserId, $mTable, $mIds, $mParam = [], $mScope = [])
         }
     }
 
-    // The depend flag takes them
+    // Counted while the rows stand
     $depend = SYS\DependCount($mTable, $branch);
-    if ( !( $mParam['depend'] ?? false ) )
+    $relate = SYS\RelateCount($mTable, $branch);
+
+    // Without apply only the forecast
+    if ( !( $mParam['apply'] ?? false ) )
     {
         return [
             'result'  => false,
-            'message' => 'Deleting '.count($branch).' row(s) with branches'.$depend['said'].'. Say depend'
+            'message' => 'Deleting '.count($branch).' row(s) with branches'.$depend['said'].$relate['said'].'. Say apply'
             ];
     }
-
-    // Counted while the rows stand
-    $relate = SYS\RelateCount($mTable, $branch);
 
     $tables = ['{DBNICK}_'.$mTable];
     $lock = SYS\TablesLock($tables, $mUserId);

@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.445 @ 2026-09-15
+ * @version 6.5.1.451 @ 2026-09-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -208,7 +208,7 @@ table={DBNICK}_oper|id|name
 122=Obtener lista
 255=Búsqueda de texto en archivos
 217=Realizar limpieza de caché
-123=Conjunto de plantillas
+123=Grupo de plantillas
 126=Añadir
 127=Renombrar
 128=Eliminar

@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.445 @ 2026-09-15
+ * @version 6.5.1.451 @ 2026-09-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -60,6 +60,15 @@ function CmdAdd($mUserId, $mParam)
     foreach ( $mParam['files'] as $one )
     {
         $entity = $one['entity'];
+
+        // The entity, as elsewhere
+        $found = FILE\EntityOne($entity);
+        if ( $found !== true )
+        {
+            FILE\FileDrop($entity, $one['id'], $one['disk']);
+            $said[] = $one['real_name'].': '.$found['message'];
+            continue;
+        }
 
         $gate = FILE\RightElem($mUserId, $entity, $one['elem_id']);
         if ( $gate !== true )
@@ -150,8 +159,10 @@ function CmdMake($mUserId, $mParam)
 
     return [
         'result'  => true,
-        'id'      => $made['id'],
         'message' => $made['message'],
+        'detail'  => [
+            'id' => $made['id']
+            ],
         'tables'  => [
             'files_'.$entity => [FILE\FileOne($entity, $made['id'])]
             ]
@@ -197,6 +208,7 @@ function CmdRemove($mUserId, $mParam)
 
     $ids = array_column($named['rows'], 'id');
 
+    $mParam['apply'] = true;
     return TABLE\Remove($mUserId, 'files_'.$entity, $ids, $mParam);
 }
 
@@ -245,7 +257,7 @@ function FileAllowed($mUserId, $mEntity, $mIds)
 
         return [
             'result'  => false,
-            'message' => 'No files ['.$said.'] in files_'.$entity
+            'message' => 'No files ['.$said.'] in files_'.$mEntity
             ];
     }
 

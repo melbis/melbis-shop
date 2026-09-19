@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.445 @ 2026-09-15
+ * @version 6.5.1.451 @ 2026-09-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -82,6 +82,7 @@ function CmdValueUpdate($mUserId, $mParam)
  **/
 function CmdValueRemove($mUserId, $mParam)
 {
+    $mParam['apply'] = true;
     return TABLE\Remove($mUserId, 'self_key_value', $mParam['id'], $mParam);
 }
 
@@ -130,6 +131,7 @@ function CmdRightUpdate($mUserId, $mParam)
  **/
 function CmdRightRemove($mUserId, $mParam)
 {
+    $mParam['apply'] = true;
     return TABLE\Remove($mUserId, 'self_key_right', $mParam['id'], $mParam);
 }
 

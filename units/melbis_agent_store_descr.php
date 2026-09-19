@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.445 @ 2026-09-15
+ * @version 6.5.1.451 @ 2026-09-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -131,8 +131,10 @@ function CmdAdd($mUserId, $mParam)
 
     return [
         'result'  => true,
-        'id'      => $row['id'],
-        'message' => 'The goods is in the section'
+        'message' => 'The goods is in the section',
+        'detail'  => [
+            'id' => $row['id']
+            ]
         ];
 }
 
@@ -208,6 +210,7 @@ function CmdInfoRemove($mUserId, $mParam)
     $said = STORE\SlaveAllowed($mUserId, 'store_info', $mParam['id'], 'descr');
     if ( !$said['result'] ) return $said;
 
+    $mParam['apply'] = true;
     return TABLE\Remove($mUserId, 'store_info', $said['ids'], $mParam);
 }
 
@@ -254,6 +257,7 @@ function CmdSetRemove($mUserId, $mParam)
     $said = STORE\SlaveAllowed($mUserId, 'store_set', $mParam['id'], 'descr');
     if ( !$said['result'] ) return $said;
 
+    $mParam['apply'] = true;
     return TABLE\Remove($mUserId, 'store_set', $said['ids'], $mParam);
 }
 
@@ -294,8 +298,10 @@ function CmdClannNew($mUserId, $mParam)
 
     return [
         'result'  => true,
-        'clann'   => $clann,
-        'message' => count($ids).' goods in the clan, ['.$root.'] leads'
+        'message' => count($ids).' goods in the clan, ['.$root.'] leads',
+        'detail'  => [
+            'clann' => $clann
+            ]
         ];
 }
 

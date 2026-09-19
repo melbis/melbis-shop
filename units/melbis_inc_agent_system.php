@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.445 @ 2026-09-15
+ * @version 6.5.1.451 @ 2026-09-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -165,41 +165,23 @@ function DependCount($mTable, $mIds)
     $ids = array_values(array_unique(array_map('intval', (array)$mIds)));
 
     $count = MELBIS()->SysDependCount($mTable, $ids);
-    $ties = MELBIS()->SysDepends($mTable);
 
-    // The map tells the fate
-    $nullable = [];
-    foreach ( $ties as $tie )
-    {
-        if ( $tie['nullable'] ) $nullable[$tie['table']] = true;
-    }
-
+    // Every counted row goes
     $gone = [];
-    $left = [];
     $total = 0;
     foreach ( $count as $table => $num )
     {
         if ( $num == 0 ) continue;
 
         $total += $num;
-        if ( isset($nullable[$table]) )
-        {
-            $left[] = $num.' '.$table;
-        }
-        else
-        {
-            $gone[] = $num.' '.$table;
-        }
+        $gone[] = $num.' '.$table;
     }
 
     $said = '';
-    if ( count($gone) > 0 ) $said .= ', and with them '.implode(', ', $gone);
-    if ( count($left) > 0 ) $said .= ', leaving '.implode(', ', $left).' pointing at nothing';
+    if ( count($gone) > 0 ) $said = ', and with them '.implode(', ', $gone);
 
     return [
         'count' => $total,
-        'gone'  => $gone,
-        'left'  => $left,
         'said'  => $said
         ];
 }

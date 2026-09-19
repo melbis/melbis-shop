@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.445 @ 2026-09-15
+ * @version 6.5.1.451 @ 2026-09-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -141,8 +141,10 @@ function CmdAdd($mUserId, $mParam)
 
     return [
         'result'  => true,
-        'id'      => $row['id'],
-        'message' => 'The goods is in the section'
+        'message' => 'The goods is in the section',
+        'detail'  => [
+            'id' => $row['id']
+            ]
         ];
 }
 
@@ -215,6 +217,7 @@ function CmdParamRemove($mUserId, $mParam)
     $said = STORE\SlaveAllowed($mUserId, 'store_param', $mParam['id'], 'price');
     if ( !$said['result'] ) return $said;
 
+    $mParam['apply'] = true;
     return TABLE\Remove($mUserId, 'store_param', $said['ids'], $mParam);
 }
 
@@ -260,6 +263,7 @@ function CmdStockRemove($mUserId, $mParam)
     $said = STORE\SlaveAllowed($mUserId, 'store_stock', $mParam['id'], 'price');
     if ( !$said['result'] ) return $said;
 
+    $mParam['apply'] = true;
     return TABLE\Remove($mUserId, 'store_stock', $said['ids'], $mParam);
 }
 

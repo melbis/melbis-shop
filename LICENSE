@@ -1,0 +1,54 @@
+This License Agreement (hereinafter referred to as the Agreement) is a legally binding contract between you (hereinafter referred to as the User) and the Melbis project (hereinafter referred to as the Author). 
+
+By starting to use the Melbis Shop software product (downloading, installation, license activation), you confirm that you have fully read the terms of this Agreement and accept them unconditionally. 
+
+1. Terms and Definitions 
+Product (Software) — the e-commerce software suite “Melbis Shop,” including the Windows client application, server-side PHP scripts, database structure, and accompanying documentation. 
+License — a non-exclusive right to use the Product in accordance with the selected pricing plan (daily, monthly, annual). 
+Project — a unified business logic of an online store managed from a single database. 
+2. Copyright 
+2.1. All exclusive rights to the Product, including the software code, architecture, and interfaces, belong to the Author and are protected by international intellectual property laws. 
+
+2.2. The Product is not sold, but provided for use under a License. Purchasing a License does not mean the transfer of ownership rights to the Product to the User. 
+
+3. Terms of Use (Licensing) 
+3.1. User License: The License is granted to each specific user (employee) and is strictly linked to their account credentials, as well as to one specific domain name (Project). The License is not tied to a specific computer (hardware), which allows the User to work in the system from any device. 
+
+3.2. Server Side and Validation: No separate license is issued for the server side of the Product. The Product core (server-side scripts) is supplied in encoded form and independently verifies the existence, authenticity, and validity period of the user license for the current domain each time the Windows client application connects. 
+
+3.3. Domain (Project) Binding: To manage each new Project (domain), a separate license must be purchased for each employee. The License is identified exclusively by the combination of login and domain name. The use of the same license to manage several different domains is strictly prohibited. 
+
+3.4. Mandatory Attribution: The User undertakes to place on the pages of the store’s customer-facing side (storefront) a clearly readable notice “Powered by Melbis Shop” (or an approved logo) with an active hyperlink to https://melbis.com.3.1. The User has the right to use the License for operating an unlimited number of Projects, provided that all used domains (URLs) are explicitly registered to the User and fully belong to them. 
+
+4. Restrictions 
+The User is strictly PROHIBITED from: 
+
+4.1. Modifying or decompiling the source code of the Product core (Windows application and core server-side PHP scripts). At the same time, the User has the right to extend the Product with their own storefront PHP scripts without affecting the core. 
+
+4.2. Transferring, selling, renting out the Product to third parties, or making Product files publicly available on the Internet. 
+
+4.3. Including the Product or its fragments as part of other software suites without the Author’s written consent. 
+
+5. Disclaimer of Warranties (“AS IS”) 
+5.1. The Product is provided on an “AS IS” basis. The Author does not guarantee that the Product will meet the User’s specific requirements or operate without interruption. 
+
+5.2. The Author shall not be liable for any direct or indirect losses, lost profits, data loss, or damage to business arising from the use of or inability to use the Product. 
+
+6. Processing of Customers’ Personal Data 
+6.1. The Product is solely a technical tool. 
+
+6.2. The User acts as an independent Controller of the personal data of customers of their online store. 
+
+6.3. All responsibility for obtaining consent for data processing, compliance with privacy policies (including GDPR and local laws), as well as the protection of payment information, lies solely with the User. 
+
+7. Third-Party Services and API 
+7.1. The Product may contain integration modules with third-party services (AI agents, payment gateways, delivery services). 
+
+7.2. The Author shall not be responsible for the operability, pricing changes, blocking, or API changes on the part of these third-party services. 
+
+8. Termination of the Agreement 
+8.1. The Author shall not be liable in the event the User uses the Product for unlawful purposes. 
+
+8.2. The Author reserves the right to terminate this Agreement unilaterally (including in the event of the User’s violation of clauses 3 and 4), by notifying the User 30 days in advance. 
+
+8.3. In the event of termination of the Agreement (for any reason), the User must immediately cease using the Product and permanently delete all received files, scripts, applications, and their backup copies.

@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.445 @ 2026-09-15
+ * @version 6.5.1.451 @ 2026-09-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -208,7 +208,7 @@ table={DBNICK}_oper|id|name
 122=Get list
 255=Search text in files
 217=Clear cache
-123=Template Set
+123=Template Group
 126=Add
 127=Rename
 128=Delete

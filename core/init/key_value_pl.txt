@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.445 @ 2026-09-15
+ * @version 6.5.1.451 @ 2026-09-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -78,7 +78,7 @@ table={DBNICK}_key|id|name
 61=Typ
 127=Harmonogram
 128=Typ
-129=Status
+129=Stan
 130=Opcje modułów
 131=Nazwa
 133=Typ

@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.445 @ 2026-09-15
+ * @version 6.5.1.451 @ 2026-09-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -208,7 +208,7 @@ table={DBNICK}_oper|id|name
 122=Ottenere elenco
 255=Ricerca testo nei file
 217=Eseguire pulizia cache
-123=Set di modelli
+123=Gruppo di modelli
 126=Aggiungere
 127=Rinominare
 128=Eliminare

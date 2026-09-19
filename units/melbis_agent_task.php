@@ -1,12 +1,14 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.445 @ 2026-09-15
+ * @version 6.5.1.451 @ 2026-09-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
  **************************************************************************************************
  *
  * TaskAllowed - The tasks of this person
+ * TaskHeld    - The task in these hands
+ * TaskWrite   - The note, the task moving
  *
  **************************************************************************************************/
 
@@ -14,8 +16,15 @@
 // Name space
 namespace MELBIS_AGENT_TASK;
 
-// Libraries
-use MELBIS_INC_AGENT_SYSTEM as SYS;
+// The states with doors elsewhere
+const STATE_DOOR = [
+    'kNew'     => 'CmdAdd',
+    'kComment' => 'CmdNoteAdd',
+    'kTrans'   => 'CmdPass',
+    'kExplain' => 'CmdPass',
+    'kDone'    => 'CmdDone',
+    'kClose'   => 'CmdClose'
+    ];
 
 
 /**
@@ -23,41 +32,72 @@ use MELBIS_INC_AGENT_SYSTEM as SYS;
  **/
 function CmdList($mUserId, $mParam)
 {
-    // Author, executor and the owner
+    // Open, author, executor and the owner
     $command = "SELECT *
                   FROM {DBNICK}_user_task
-                 WHERE ( privy = 0
-                         OR user_id = :ME_AUTHOR
-                         OR exec_id = :ME_EXEC
-                         OR :ME_ADMIN = 1 )
+                 WHERE state_key <> 'kClose'
+                   AND ( privy = 0
+                         OR user_id = :ME
+                         OR exec_id = :ME
+                         OR :ME = 1 )
               ORDER BY id
                ";
     $param_task = [
-        'me_author' => $mUserId,
-        'me_exec'   => $mUserId,
-        'me_admin'  => $mUserId
+        'me' => $mUserId
         ];
     $tasks = MELBIS()->SqlSelect(__LINE__, $command, $param_task);
 
-    // The count of every feed
-    $command = "SELECT utn.task_id, COUNT(*) AS notes_how
-                  FROM {DBNICK}_user_task_note utn
-                  JOIN {DBNICK}_user_task ut
-                    ON ut.id = utn.task_id
-                 WHERE ( ut.privy = 0
-                         OR ut.user_id = :ME_AUTHOR
-                         OR ut.exec_id = :ME_EXEC
-                         OR :ME_ADMIN = 1 )
-              GROUP BY utn.task_id
-               ";
-    $how = MELBIS()->SqlSelect(__LINE__, $command, $param_task);
+    // Counted against this person
+    $held = 0;
+    $given = 0;
+    foreach ( $tasks as $task )
+    {
+        if ( $task['exec_id'] == $mUserId ) $held++;
+        elseif ( $task['user_id'] == $mUserId ) $given++;
+    }
+    $others = count($tasks) - $held - $given;
+
+    $message = count($tasks).' open task(s): '.$held.' in your hands (exec_id '.$mUserId.'), '.
+               $given.' given by you (user_id '.$mUserId.'), '.$others.' of others';
 
     return [
         'result'  => true,
-        'message' => 'The tasks this person may see',
+        'message' => $message,
         'tables'  => [
-            'user_task'  => $tasks,
-            'task_notes' => $how
+            'user_task' => $tasks
+            ]
+        ];
+}
+
+
+/**
+ * Function CmdListClosed
+ **/
+function CmdListClosed($mUserId, $mParam)
+{
+    // Closed, of that person
+    $command = "SELECT *
+                  FROM {DBNICK}_user_task
+                 WHERE state_key = 'kClose'
+                   AND ( user_id = :WHO
+                         OR exec_id = :WHO )
+                   AND ( privy = 0
+                         OR user_id = :ME
+                         OR exec_id = :ME
+                         OR :ME = 1 )
+              ORDER BY id
+               ";
+    $param_task = [
+        'who' => $mParam['user_id'],
+        'me'  => $mUserId
+        ];
+    $tasks = MELBIS()->SqlSelect(__LINE__, $command, $param_task);
+
+    return [
+        'result'  => true,
+        'message' => count($tasks).' closed task(s) of the person ['.$mParam['user_id'].']',
+        'tables'  => [
+            'user_task' => $tasks
             ]
         ];
 }
@@ -69,16 +109,11 @@ function CmdList($mUserId, $mParam)
 function CmdAdd($mUserId, $mParam)
 {
     // Every field is a column
-    $fields = $mParam;
-    unset($fields['content']);
-
-    $tables = ['{DBNICK}_user_task', '{DBNICK}_user_task_note'];
-    $lock = SYS\TablesLock($tables, $mUserId);
-    if ( !$lock['result'] ) return $lock;
+    $row = $mParam;
+    unset($row['content']);
 
     // This person is the author
     $now = MELBIS()->DateTime();
-    $row = $fields;
     $row['user_id'] = $mUserId;
     $row['state_key'] = 'kNew';
     $row['date_time'] = $now;
@@ -96,13 +131,123 @@ function CmdAdd($mUserId, $mParam)
         ];
     MELBIS()->SqlInsert(__LINE__, '{DBNICK}_user_task_note', $note);
 
-    SYS\TablesUnlock($tables, $mUserId);
-
     return [
         'result'  => true,
-        'id'      => $task_id,
-        'message' => 'The task is in the scheduler'
+        'message' => 'The task is in the scheduler',
+        'detail'  => [
+            'id' => $task_id
+            ]
         ];
+}
+
+
+/**
+ * Function CmdState
+ **/
+function CmdState($mUserId, $mParam)
+{
+    // The states with doors elsewhere
+    $state = $mParam['state_key'];
+    if ( array_key_exists($state, STATE_DOOR) )
+    {
+        return [
+            'result'  => false,
+            'message' => 'The state ['.$state.'] is written by '.STATE_DOOR[$state]
+            ];
+    }
+
+    $held = TaskHeld($mUserId, $mParam['task_id']);
+    if ( !$held['result'] ) return $held;
+
+    // Kind and privacy go along
+    $moved = $mParam;
+    unset($moved['task_id'], $moved['content']);
+    $content = $mParam['content'] ?? '';
+
+    return TaskWrite($mUserId, $held['task'], $moved, $content);
+}
+
+
+/**
+ * Function CmdPass
+ **/
+function CmdPass($mUserId, $mParam)
+{
+    // Passed on, or asked about
+    $state = $mParam['state_key'];
+    if ( $state != 'kTrans' && $state != 'kExplain' )
+    {
+        return [
+            'result'  => false,
+            'message' => 'A task is passed with kTrans or kExplain, and ['.$state.'] is neither'
+            ];
+    }
+
+    if ( $mParam['exec_id'] == $mUserId )
+    {
+        return [
+            'result'  => false,
+            'message' => 'A task is passed to someone else; its executor keeps it by CmdState'
+            ];
+    }
+
+    $held = TaskHeld($mUserId, $mParam['task_id']);
+    if ( !$held['result'] ) return $held;
+
+    $moved = [
+        'state_key' => $state,
+        'exec_id'   => $mParam['exec_id']
+        ];
+    $content = $mParam['content'] ?? '';
+
+    return TaskWrite($mUserId, $held['task'], $moved, $content);
+}
+
+
+/**
+ * Function CmdDone
+ **/
+function CmdDone($mUserId, $mParam)
+{
+    $held = TaskHeld($mUserId, $mParam['task_id']);
+    if ( !$held['result'] ) return $held;
+
+    // Done goes back to author
+    $task = $held['task'];
+    $moved = [
+        'state_key' => 'kDone',
+        'exec_id'   => $task['user_id']
+        ];
+    $content = $mParam['content'] ?? '';
+
+    return TaskWrite($mUserId, $task, $moved, $content);
+}
+
+
+/**
+ * Function CmdClose
+ **/
+function CmdClose($mUserId, $mParam)
+{
+    $held = TaskHeld($mUserId, $mParam['task_id']);
+    if ( !$held['result'] ) return $held;
+
+    // Its author alone closes
+    $task = $held['task'];
+    if ( $task['user_id'] != $mUserId )
+    {
+        return [
+            'result'  => false,
+            'message' => 'The task ['.$task['id'].'] is closed by its author ['.$task['user_id'].']; CmdDone gives it back to them'
+            ];
+    }
+
+    $moved = [
+        'state_key' => 'kClose'
+        ];
+    $content = $mParam['content'] ?? '';
+
+    return TaskWrite($mUserId, $task, $moved, $content);
 }
 
 
@@ -141,51 +286,13 @@ function CmdNoteAdd($mUserId, $mParam)
     $named = TaskAllowed($mUserId, [$mParam['task_id']]);
     if ( !$named['result'] ) return $named;
 
+    // A comment moves nothing
     $task = reset($named['rows']);
-
-    $tables = ['{DBNICK}_user_task', '{DBNICK}_user_task_note'];
-    $lock = SYS\TablesLock($tables, $mUserId);
-    if ( !$lock['result'] ) return $lock;
-
-    // Any state but kComment moves
-    $state = $mParam['state_key'];
-    // The note carries the rest
-    $moved = $mParam;
-    unset($moved['task_id'], $moved['content'], $moved['state_key']);
-    if ( $state != 'kComment' )
-    {
-        $row = $moved;
-        $row['id'] = $task['id'];
-        $row['state_key'] = $state;
-        MELBIS()->SqlUpdate(__LINE__, '{DBNICK}_user_task', $row, 'id');
-    }
-
-    $note = [
-        'task_id'   => $task['id'],
-        'user_id'   => $mUserId,
-        'kind_key'  => $mParam['kind_key'] ?? $task['kind_key'],
-        'state_key' => $state,
-        'content'   => $mParam['content'],
-        'date_time' => MELBIS()->DateTime()
+    $moved = [
+        'state_key' => 'kComment'
         ];
-    MELBIS()->SqlInsert(__LINE__, '{DBNICK}_user_task_note', $note);
-    $note_id = MELBIS()->SqlLastInsertId();
 
-    SYS\TablesUnlock($tables, $mUserId);
-
-    $message = 'The note ['.$note_id.'] is in the feed of the task ['.$task['name'].']';
-    if ( $state != 'kComment' )
-    {
-        $message .= ', and the task moved to ['.$state.']';
-        $said = array_keys($moved);
-        if ( count($said) > 0 ) $message .= ' with '.implode(', ', $said);
-    }
-
-    return [
-        'result'  => true,
-        'id'      => $note_id,
-        'message' => $message
-        ];
+    return TaskWrite($mUserId, $task, $moved, $mParam['content']);
 }
 
 
@@ -201,18 +308,17 @@ function TaskAllowed($mUserId, $mIds)
                   FROM {DBNICK}_user_task
                  WHERE id IN ( $list )
                    AND ( privy = 0
-                         OR user_id = :ME_AUTHOR
-                         OR exec_id = :ME_EXEC
-                         OR :ME_ADMIN = 1 )
+                         OR user_id = :ME
+                         OR exec_id = :ME
+                         OR :ME = 1 )
                ";
     $param_task = [
-        'me_author' => $mUserId,
-        'me_exec'   => $mUserId,
-        'me_admin'  => $mUserId
+        'me' => $mUserId
         ];
     $rows = MELBIS()->SqlSelect(__LINE__, $command, $param_task);
 
-    $lost = array_diff($mIds, array_column($rows, 'id'));
+    $found = array_column($rows, 'id');
+    $lost = array_diff($mIds, $found);
     if ( count($lost) > 0 )
     {
         $said = implode(', ', $lost);
@@ -226,6 +332,70 @@ function TaskAllowed($mUserId, $mIds)
     return [
         'result' => true,
         'rows'   => $rows
+        ];
+}
+
+/**
+ * Function TaskHeld
+ **/
+function TaskHeld($mUserId, $mTaskId)
+{
+    $named = TaskAllowed($mUserId, [$mTaskId]);
+    if ( !$named['result'] ) return $named;
+
+    // Its executor alone moves it
+    $task = reset($named['rows']);
+    if ( $task['exec_id'] != $mUserId )
+    {
+        return [
+            'result'  => false,
+            'message' => 'The task ['.$task['id'].'] is in the hands of ['.$task['exec_id'].'], who alone moves it; a comment is CmdNoteAdd'
+            ];
+    }
+
+    return [
+        'result' => true,
+        'task'   => $task
+        ];
+}
+
+
+/**
+ * Function TaskWrite
+ **/
+function TaskWrite($mUserId, $mTask, $mMoved, $mContent)
+{
+    // A comment leaves the task
+    $state = $mMoved['state_key'];
+    if ( $state != 'kComment' )
+    {
+        $row = $mMoved;
+        $row['id'] = $mTask['id'];
+        MELBIS()->SqlUpdate(__LINE__, '{DBNICK}_user_task', $row, 'id');
+    }
+
+    $note = [
+        'task_id'   => $mTask['id'],
+        'user_id'   => $mUserId,
+        'kind_key'  => $mMoved['kind_key'] ?? $mTask['kind_key'],
+        'state_key' => $state,
+        'content'   => $mContent,
+        'date_time' => MELBIS()->DateTime()
+        ];
+    MELBIS()->SqlInsert(__LINE__, '{DBNICK}_user_task_note', $note);
+    $note_id = MELBIS()->SqlLastInsertId();
+
+    // Where the task stands now
+    $message = 'The note ['.$note_id.'] is in the feed of the task ['.$mTask['name'].']';
+    if ( $state != 'kComment' ) $message .= ', and the task moved to ['.$state.']';
+    if ( isset($mMoved['exec_id']) ) $message .= ' into the hands of ['.$mMoved['exec_id'].']';
+
+    return [
+        'result'  => true,
+        'message' => $message,
+        'detail'  => [
+            'id' => $note_id
+            ]
         ];
 }
 

@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.445 @ 2026-09-15
+ * @version 6.5.1.451 @ 2026-09-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -898,7 +898,7 @@ DROP TABLE IF EXISTS {DBNICK}_provider;
 CREATE TABLE {DBNICK}_provider (
    id 		   INT UNSIGNED DEFAULT '0' NOT NULL,   
    skey 	      CHAR(32) DEFAULT '' NOT NULL,
-   group_id 	INT UNSIGNED DEFAULT NULL,
+   group_id 	INT UNSIGNED NOT NULL,
    name 	      CHAR(255) DEFAULT '' NOT NULL,
    kind_key 	CHAR(100) DEFAULT '' NOT NULL,
    state_key 	CHAR(100) DEFAULT '' NOT NULL,

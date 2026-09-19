@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.445 @ 2026-09-15
+ * @version 6.5.1.451 @ 2026-09-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -208,7 +208,7 @@ table={DBNICK}_oper|id|name
 122=Liste abrufen
 255=Text in Dateien suchen
 217=Cache-Bereinigung durchführen
-123=Vorlagensatz
+123=Vorlagengruppe
 126=Hinzufügen
 127=Umbenennen
 128=Löschen

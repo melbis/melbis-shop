@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.445 @ 2026-09-15
+ * @version 6.5.1.451 @ 2026-09-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -151,7 +151,7 @@ function PlaceOne($mPlace)
 
         return [
             'result'  => false,
-            'message' => 'No options for ['.$mPlace.']; places: '.$list
+            'message' => 'No options for ['.$mPlace.']; places: '.$said
             ];
     }
 

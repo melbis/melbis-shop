@@ -1,12 +1,11 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.445 @ 2026-09-15
+ * @version 6.5.1.451 @ 2026-09-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
  **************************************************************************************************
  *
- * EntityAll   - The elements files hang on
  * EntityOne   - Weighs one entity
  * EntityGone  - Refuses an element gone
  *
@@ -62,25 +61,16 @@ const MASK_NONE = 'files/1899/12_30/00_00/';
 
 
 /**
- * Function EntityAll
- **/
-function EntityAll()
-{
-    // One shape for every entity
-    return ['store', 'topic', 'info', 'info_value', 'brand', 'key_value'];
-}
-
-
-/**
  * Function EntityOne
  **/
 function EntityOne($mEntity)
 {
     // An unknown word refused early
     $entity = trim((string)$mEntity);
-    if ( in_array($entity, EntityAll()) ) return true;
+    $all = MELBIS()->SysFileEntities();
+    if ( in_array($entity, $all) ) return true;
 
-    $list = implode(', ', EntityAll());
+    $list = implode(', ', $all);
 
     return [
         'result'  => false,
@@ -95,18 +85,19 @@ function EntityOne($mEntity)
 function EntityGone($mEntity, $mId)
 {
     $where = [
-        'store'      => 'the Search tool answers the goods',
-        'topic'      => 'the Catalog tool answers them',
-        'info'       => 'the Attributes tool answers them',
-        'info_value' => 'the Attributes tool answers them',
-        'brand'      => 'the Brands tool answers them',
-        'key_value'  => 'the Registry tool answers them'
+        'store'       => 'the Browser tool answers the goods',
+        'topic'       => 'the Catalog tool answers them',
+        'info'        => 'the Attributes tool answers them',
+        'info_value'  => 'the Attributes tool answers them',
+        'brand'       => 'the Brands tool answers them',
+        'key_value'   => 'the Basic settings tool answers them',
+        'advert_text' => 'the Promo blocks tool answers them'
         ];
     $said = $where[$mEntity] ?? 'its own tool answers them';
 
     return [
         'result'  => false,
-        'message' => 'No '.$mEntity.' ['.$elem_id.'] in the store'
+        'message' => 'No '.$mEntity.' ['.$mId.'] in the store - '.$said
         ];
 }
 

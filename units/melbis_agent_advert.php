@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.445 @ 2026-09-15
+ * @version 6.5.1.451 @ 2026-09-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -123,6 +123,7 @@ function CmdGoodsUpdate($mUserId, $mParam)
  **/
 function CmdGoodsRemove($mUserId, $mParam)
 {
+    $mParam['apply'] = true;
     return TABLE\Remove($mUserId, 'advert_goods', $mParam['id'], $mParam);
 }
 
@@ -162,6 +163,7 @@ function CmdLinkUpdate($mUserId, $mParam)
  **/
 function CmdLinkRemove($mUserId, $mParam)
 {
+    $mParam['apply'] = true;
     return TABLE\Remove($mUserId, 'advert_link', $mParam['id'], $mParam);
 }
 

@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.445 @ 2026-09-15
+ * @version 6.5.1.451 @ 2026-09-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -68,10 +68,12 @@ function CmdAdd($mUserId, $mParam)
     SYS\TablesUnlock($tables, $mUserId);
 
     return [
-        'result'   => true,
-        'id'       => $row['id'],
-        'password' => $password,
-        'message' => 'The person ['.$mParam['login'].'] is in the shop'
+        'result'  => true,
+        'message' => 'The person ['.$mParam['login'].'] is in the shop',
+        'detail'  => [
+            'id'       => $row['id'],
+            'password' => $password
+            ]
         ];
 }
 
@@ -117,13 +119,12 @@ function CmdRemove($mUserId, $mParam)
             ];
     }
 
-    // History is blocked, never deleted
-    $told = SYS\DependCount('user', $ids);
-    if ( $told['count'] > 0 )
+    // The owner stays, as in program
+    if ( in_array(1, $ids) )
     {
         return [
             'result'  => false,
-            'message' => 'Those people carry history'.$told['said'].' - block them'
+            'message' => 'The owner [1] is not removed'
             ];
     }
 
@@ -136,6 +137,23 @@ function CmdRemove($mUserId, $mParam)
  **/
 function CmdPassword($mUserId, $mParam)
 {
+    // A password for a person who stands
+    $command = "SELECT id
+                  FROM {DBNICK}_user
+                 WHERE id = :ID
+               ";
+    $param_user = [
+        'id' => $mParam['id']
+        ];
+    $found = MELBIS()->SqlSelectValue(__LINE__, $command, 0, $param_user);
+    if ( $found == 0 )
+    {
+        return [
+            'result'  => false,
+            'message' => 'No person ['.$mParam['id'].'] in the shop'
+            ];
+    }
+
     $password = Password();
 
     $tables = ['{DBNICK}_user'];
@@ -151,9 +169,11 @@ function CmdPassword($mUserId, $mParam)
     SYS\TablesUnlock($tables, $mUserId);
 
     return [
-        'result'   => true,
-        'password' => $password,
-        'message' => 'A new password of ['.$mParam['id'].'], said once'
+        'result'  => true,
+        'message' => 'A new password of ['.$mParam['id'].'], said once',
+        'detail'  => [
+            'password' => $password
+            ]
         ];
 }
 
@@ -246,6 +266,7 @@ function CmdRightUpdate($mUserId, $mParam)
  **/
 function CmdRightRemove($mUserId, $mParam)
 {
+    $mParam['apply'] = true;
     return TABLE\Remove($mUserId, 'oper_right', $mParam['id'], $mParam);
 }
 
@@ -359,7 +380,7 @@ function Login($mLogin, $mSelfId)
     {
         return [
             'result'  => false,
-            'message' => 'The login ['.$mParam['login'].'] is taken'
+            'message' => 'The login ['.$login.'] is taken'
             ];
     }
 

@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.445 @ 2026-09-15
+ * @version 6.5.1.451 @ 2026-09-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -84,8 +84,10 @@ function CmdAdd($mUserId, $mParam)
 
     return [
         'result'  => true,
-        'id'      => $said['id'],
         'message' => 'The profile is in the registry',
+        'detail'  => [
+            'id' => $said['detail']['id']
+            ],
         'tables'  => [
             'profile' => [FILE\ProfileShow($now)]
             ]
@@ -138,7 +140,7 @@ function CmdUpdate($mUserId, $mParam)
         {
             return [
                 'result'  => false,
-                'message' => 'The name ['.$name.'] is taken'
+                'message' => 'The name ['.$rename.'] is taken'
                 ];
         }
 
