@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.452 @ 2026-09-19
+ * @version 6.5.1.460 @ 2026-09-20
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -86,7 +86,20 @@ function CmdRemove($mUserId, $mParam)
     $said = TopicAllowed($mUserId, $mParam['id']);
     if ( !$said['result'] ) return $said;
 
-    return TABLE\TreeRemove($mUserId, 'topic', $said['ids'], $mParam);
+    $gone = TABLE\TreeRemove($mUserId, 'topic', $said['ids'], $mParam);
+    if ( !$gone['result'] ) return $gone;
+
+    // The alt catalogues after the sweep
+    $tables = ['{DBNICK}_topic_alt'];
+    $lock = SYS\TablesLock($tables, $mUserId);
+    if ( !$lock['result'] ) return $gone;
+
+    $repair = MELBIS()->SysTreeRepair('topic_alt');
+    SYS\TablesUnlock($tables, $mUserId);
+
+    if ( $repair['gone'] > 0 ) $gone['message'] .= ', and '.$repair['gone'].' alt node(s) under them';
+
+    return $gone;
 }
 
 

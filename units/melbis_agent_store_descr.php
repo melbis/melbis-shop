@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.452 @ 2026-09-19
+ * @version 6.5.1.460 @ 2026-09-20
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -272,8 +272,11 @@ function CmdClannNew($mUserId, $mParam)
 
     $ids = $said['ids'];
 
+    // The first named leads
+    $named = (array)$mParam['id'];
+
     $root = $mParam['root'] ?? 0;
-    if ( $root == 0 ) $root = reset($ids);
+    if ( $root == 0 ) $root = reset($named);
 
     $tables = ['{DBNICK}_store'];
     $lock = SYS\TablesLock($tables, $mUserId);

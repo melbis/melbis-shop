@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.452 @ 2026-09-19
+ * @version 6.5.1.460 @ 2026-09-20
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -281,6 +281,17 @@ function CmdCalc($mUserId, $mParam)
 {
     $version = LOGIC_ORDER_CALC\Run($mUserId, $mParam['version']);
 
+    // The word of the shop
+    $said = $version['result'];
+    if ( $said['value'] != 'OK' )
+    {
+        return [
+            'result'  => false,
+            'message' => $said['message'],
+            'detail'  => $version
+            ];
+    }
+
     return [
         'result'  => true,
         'message' => 'The version is counted',
@@ -295,12 +306,21 @@ function CmdCalc($mUserId, $mParam)
 function CmdEdit($mUserId, $mParam)
 {
     // The word of the shop
-    $detail = LOGIC_ORDER_EDIT\Run($mUserId, $mParam['version']);
+    $said = LOGIC_ORDER_EDIT\Run($mUserId, $mParam['version']);
+
+    if ( $said['value'] != 'OK' )
+    {
+        return [
+            'result'  => false,
+            'message' => $said['message'],
+            'detail'  => $said
+            ];
+    }
 
     return [
         'result'  => true,
         'message' => 'The version went to the shop',
-        'detail'  => $detail
+        'detail'  => $said
         ];
 }
 

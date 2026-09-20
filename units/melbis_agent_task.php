@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.452 @ 2026-09-19
+ * @version 6.5.1.460 @ 2026-09-20
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -229,16 +229,16 @@ function CmdDone($mUserId, $mParam)
  **/
 function CmdClose($mUserId, $mParam)
 {
-    $held = TaskHeld($mUserId, $mParam['task_id']);
-    if ( !$held['result'] ) return $held;
+    $named = TaskAllowed($mUserId, [$mParam['task_id']]);
+    if ( !$named['result'] ) return $named;
 
-    // Its author alone closes
-    $task = $held['task'];
+    // Its author alone closes, as in program
+    $task = reset($named['rows']);
     if ( $task['user_id'] != $mUserId )
     {
         return [
             'result'  => false,
-            'message' => 'The task ['.$task['id'].'] is closed by its author ['.$task['user_id'].']; CmdDone gives it back to them'
+            'message' => 'The task ['.$task['id'].'] is closed by its author ['.$task['user_id'].']'
             ];
     }
 

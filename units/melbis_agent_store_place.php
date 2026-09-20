@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.452 @ 2026-09-19
+ * @version 6.5.1.460 @ 2026-09-20
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -140,11 +140,12 @@ function CmdUpdate($mUserId, $mParam)
     if ( !$lock['result'] ) return $lock;
 
     // A moved link goes last
-    foreach ( $ids as $id )
+    $last = MELBIS()->SqlGenIdBlock('topic_store', count($ids));
+    foreach ( $ids as $num => $id )
     {
         $row = $fields;
         $row['id'] = $id;
-        if ( !isset($row['pos']) ) $row['pos'] = $id;
+        if ( !isset($row['pos']) ) $row['pos'] = $last[$num];
         MELBIS()->SqlUpdate(__LINE__, '{DBNICK}_topic_store', $row, 'id');
     }
 

@@ -458,6 +458,7 @@ The utilities themselves change the structure — where a node stands, in what o
 | `SysTreeMove($mTable, $mId, $mParentId = 0, $mScope = [])` | moves a node together with its branch | `true` or `false` |
 | `SysTreeShift($mTable, $mId, $mDown = false, $mScope = [])` | swaps a node with its neighbour | `true` or `false` |
 | `SysTreeDelete($mTable, $mId, $mScope = [])` | removes a node together with its branch | the number of rows removed |
+| `SysTreeRepair($mTable, $mScope = [])` | removes the nodes left without a parent and lays the rest out anew | `['gone' => …, 'moved' => …]` |
 
 Three things about writing are worth knowing in advance.
 
@@ -466,6 +467,21 @@ Three things about writing are worth knowing in advance.
 **The lock is on the caller.** The utilities mark the table as changed themselves, so the cache of this same request will see the edit. But they do not take `SqlTableLock` — take it around your work as a whole, not around every call.
 
 **A move into the node's own branch writes nothing** and answers `false`: a node cannot become a descendant of itself. Shifting a node that has no neighbour on that side answers the same way: there is nothing to swap with — not an error, but not a shift either.
+
+### 11.1. A Node Without a Parent
+
+A row of a tree can go missing past the utilities as well — through a `DELETE` of one's own or through the sweep of dependants: `SysDependSweep` takes a node of an alternative catalog away after its section. The children of such a node stay in the table with a `tindex` that leads nowhere. A query by `absindex` shows those rows, but the tree utilities do not see them: they can neither be moved nor removed.
+
+`SysTreeRepair` finishes the job — it removes everything the walk from the root does not reach, and lays the rest out anew:
+
+```php
+$result = MELBIS()->SysTreeRepair('topic_alt');
+// ['gone' => 3, 'moved' => 5]
+```
+
+`gone` is how many rows went, `moved` how many were laid out anew. What hung on the rows that went is swept by the caller — as after `SysTreeDelete`. The lock is on them too.
+
+The scope means more here than usual. With a scope, one tree is repaired, and a node whose parent stands in another tree of the same table counts as excess in it too. Without a scope the whole table is read as one forest: the orphaned nodes of every tree go in a single call, and `absindex` is numbered straight through the whole table — the order inside each tree is kept.
 
 ## 12. The Order of a Flat List
 
@@ -515,7 +531,7 @@ The relation lives until the end of the request. A relation the engine already h
 
 **`SysFileEntities()`** — the entities files are attached to: the tables that have a `files_<table>` link by `elem_id` in the map. The list is read from the same map, so a link the store declares through `SysDependAdd` gets into it by itself.
 
-**`SysDependCount($mTable, $mIds)`** — how many rows would be left hanging if the named ones were removed. The answer is a map of `table => number`, only the non-zero ones. It must be asked **before** the deletion, while the rows are still in place:
+**`SysDependCount($mTable, $mIds)`** — how many rows would be left hanging if the named ones were removed. The answer is a map of `table => number`, only the non-zero ones. The count runs along the same chain as the sweep: the dependants of dependants are in the answer too. A row that two relations lead to is counted once — as once it will go. It must be asked **before** the deletion, while the rows are still in place:
 
 ```php
 $count = MELBIS()->SysDependCount('topic', $topic_id);
@@ -547,10 +563,10 @@ Not everything that refers depends: a product refers to a currency and to a bran
 | Door | What it does |
 |---|---|
 | `SysRelates($mTable)` | the soft relations of a table, as a list: `main`, `table`, `key` |
-| `SysRelateCount($mTable, $mIds)` | how many rows would be left without a reference if the named ones were removed — ask **before** the deletion |
-| `SysRelateSweep($mTable, $mTries = false, $mPause = false)` | null the references to rows already deleted |
+| `SysRelateCount($mTable, $mIds)` | how many references would be left hanging if the named ones were removed, and with them everything that goes down the chain of dependants — ask **before** the deletion |
+| `SysRelateSweep($mTable, $mTries = false, $mPause = false)` | null the references to rows already deleted, of the table and of its chain of dependants |
 
-The pass is built like the hard one — a pre-check by count, a latch per table, the mark, `busy` after the sitting out — but with two differences in meaning. There is no chain: a nulled reference has orphaned nobody, and there is nowhere to go deeper. And there is no sparing variant: only non-empty references are nulled, an empty one is empty already. In the row of the report, `cleared` stands in place of `gone`:
+The pass is built like the hard one — a pre-check by count, a latch per table, the mark, `busy` after the sitting out. The main ones for references are the named table and its whole chain of dependants: the suppliers themselves go after a group of suppliers, and the same call nulls the products' references to them. The soft relations have no chain of their own — a nulled reference has orphaned nobody. And there is no sparing variant: only non-empty references are nulled, an empty one is empty already. The count here runs by references rather than by rows: a product that names a currency in three columns is three references. In the row of the report, `cleared` stands in place of `gone`:
 
 ```php
 [

@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.452 @ 2026-09-19
+ * @version 6.5.1.460 @ 2026-09-20
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -98,6 +98,26 @@ function CmdUpdate($mUserId, $mParam)
 
         $weighed = Login($mParam['login'], reset($ids));
         if ( !$weighed['result'] ) return $weighed;
+    }
+
+    // The branch under the session
+    if ( $mParam['is_blocked'] ?? false )
+    {
+        if ( in_array($mUserId, $ids) )
+        {
+            return [
+                'result'  => false,
+                'message' => 'This session does not block itself'
+                ];
+        }
+
+        if ( in_array(1, $ids) )
+        {
+            return [
+                'result'  => false,
+                'message' => 'The owner [1] is not blocked'
+                ];
+        }
     }
 
     return TABLE\Update($mUserId, 'user', $ids, $mParam);
