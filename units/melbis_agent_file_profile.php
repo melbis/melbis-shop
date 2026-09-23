@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.460 @ 2026-09-20
+ * @version 6.5.1.461 @ 2026-09-23
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -255,6 +255,8 @@ function MustSet($mParam, $mSet)
         'width'        => [10, 50000],
         'height'       => [10, 50000],
         'range'        => [0, 255],
+        'frame_range'  => [0, 255],
+        'frame_border' => [0, 100],
         'range_border' => [0, 100],
         'border'       => [0, 1000],
         'rotate'       => [-180, 180],
@@ -281,7 +283,7 @@ function MustSet($mParam, $mSet)
         $said[] = $word;
     }
 
-    foreach ( ['smart', 'size_base', 'size_optim', 'group_base', 'mirror', 'canvas_alpha'] as $word )
+    foreach ( ['smart', 'size_base', 'size_optim', 'group_base', 'mirror', 'canvas_alpha', 'frame_auto'] as $word )
     {
         if ( !isset($mParam[$word]) ) continue;
 

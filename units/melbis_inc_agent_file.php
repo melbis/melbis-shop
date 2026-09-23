@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.460 @ 2026-09-20
+ * @version 6.5.1.461 @ 2026-09-23
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -52,6 +52,9 @@ const TYPE_WORD = ['jpeg', 'png', 'webp'];
 
 // The largest picture the program paints
 const MAX_PIXELS = 50000000;
+
+// The side of the copy the frame is looked for on
+const FRAME_SIDE = 1600;
 
 // The words of a position
 const MASK_POS = ['center', 'left-top', 'right-top', 'right-bottom', 'left-bottom', 'tile'];
@@ -395,6 +398,9 @@ function ProfileShow($mRow, $mRaw = false)
     // A size wins, the megapixels beside it are not read
     $sized = ( isset($xml->JPEG['Width']) && isset($xml->JPEG['Hight']) );
 
+    $show['frame_auto']   = ( (int)( $xml->FRAME['Kind'] ?? 0 ) == 2 );
+    $show['frame_range']  = (int)( $xml->FRAME['Range'] ?? 255 );
+    $show['frame_border'] = (int)( $xml->FRAME['Border'] ?? 0 );
     $show['type']         = TYPE_WORD[$type];
     $show['quality']      = (int)$xml->JPEG['Compress'];
     $show['width']        = ( $sized ) ? (int)$xml->JPEG['Width'] : null;
@@ -451,6 +457,9 @@ function ProfileXml($mSet)
     }
 
     return '<MELBISSHOP ShopVersion="'.$word($stamp).'">'.
+           '<FRAME Kind="'.( ( $mSet['frame_auto'] ) ? 2 : 0 ).'"'.
+                ' Range="'.$mSet['frame_range'].'"'.
+                ' Border="'.$mSet['frame_border'].'"/>'.
            '<JPEG FileType="'.array_search($mSet['type'], TYPE_WORD).'"'.
                 ' Compress="'.$mSet['quality'].'"'.
                 $size.
@@ -673,6 +682,9 @@ function MakePaint($mWhat, $mDisk, $mShow)
     $green = hexdec(substr($hex, 2, 2));
     $blue = hexdec(substr($hex, 4, 2));
 
+    // The frame the profile finds, before the picture is turned
+    if ( $mShow['frame_auto'] ) $source = MakeFrame($source, $red, $green, $blue, $mShow);
+
     // Mirror and turn, then fit
     if ( $mShow['mirror'] ) imageflip($source, IMG_FLIP_HORIZONTAL);
     if ( $mShow['rotate'] != 0 )
@@ -804,6 +816,85 @@ function MakePaint($mWhat, $mDisk, $mShow)
         'width'  => $canvas_w,
         'height' => $canvas_h
         ];
+}
+
+
+/**
+ * Function MakeFrame
+ **/
+function MakeFrame($mImage, $mRed, $mGreen, $mBlue, $mShow)
+{
+    $wide = imagesx($mImage);
+    $high = imagesy($mImage);
+
+    // The edges are read off a smaller copy
+    $scale = max($wide, $high) / FRAME_SIDE;
+    if ( $scale < 1 ) $scale = 1;
+    $scan_w = (int)round($wide / $scale);
+    $scan_h = (int)round($high / $scale);
+
+    // A transparent place takes the background
+    $scan = imagecreatetruecolor($scan_w, $scan_h);
+    $back = imagecolorallocate($scan, $mRed, $mGreen, $mBlue);
+    imagefilledrectangle($scan, 0, 0, $scan_w - 1, $scan_h - 1, $back);
+    imagecopyresampled($scan, $mImage, 0, 0, 0, 0, $scan_w, $scan_h, $wide, $high);
+
+    // A light tone and the background itself are no picture
+    $level = $mShow['frame_range'];
+    $left = $scan_w;
+    $top = $scan_h;
+    $right = -1;
+    $bottom = -1;
+    for ( $y = 0; $y < $scan_h; $y++ )
+    {
+        for ( $x = 0; $x < $scan_w; $x++ )
+        {
+            $color = imagecolorat($scan, $x, $y);
+            $red = ( $color >> 16 ) & 255;
+            $green = ( $color >> 8 ) & 255;
+            $blue = $color & 255;
+
+            if ( min($red, $green, $blue) > $level ) continue;
+            if ( $red == $mRed && $green == $mGreen && $blue == $mBlue ) continue;
+
+            if ( $x < $left ) $left = $x;
+            if ( $x > $right ) $right = $x;
+            if ( $y < $top ) $top = $y;
+            if ( $y > $bottom ) $bottom = $y;
+        }
+    }
+    imagedestroy($scan);
+
+    // All background keeps the whole picture
+    if ( $right < $left )
+    {
+        $left = 0;
+        $top = 0;
+        $right = $scan_w - 1;
+        $bottom = $scan_h - 1;
+    }
+
+    // The indent stays inside the picture
+    $pad = (int)round(min($scan_w, $scan_h) * $mShow['frame_border'] / 100);
+    $left = max(0, $left - $pad);
+    $top = max(0, $top - $pad);
+    $right = min($scan_w - 1, $right + $pad);
+    $bottom = min($scan_h - 1, $bottom + $pad);
+
+    $at_x = (int)round($left * $scale);
+    $at_y = (int)round($top * $scale);
+    $cut_w = min($wide - $at_x, (int)round(( $right + 1 ) * $scale) - $at_x);
+    $cut_h = min($high - $at_y, (int)round(( $bottom + 1 ) * $scale) - $at_y);
+    if ( $cut_w == $wide && $cut_h == $high ) return $mImage;
+
+    // The cut carries what the source had, alpha included
+    $cut = imagecreatetruecolor($cut_w, $cut_h);
+    imagealphablending($cut, false);
+    imagesavealpha($cut, true);
+    imagecopy($cut, $mImage, 0, 0, $at_x, $at_y, $cut_w, $cut_h);
+    imagedestroy($mImage);
+
+    return $cut;
 }
 
 
