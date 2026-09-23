@@ -83,7 +83,7 @@ Hundreds of small tools are dangerous if nobody keeps an eye on them. In Melbis,
   separately for consent to change data, and does not touch a table that an employee
   currently has locked.
 - **Decisions live in the store.** Rules and agreements are kept in the store's
-  memory, and the established ones in the store charter. The next assistant and the
+  memory, and the established ones in the [store charter](charter.md). The next assistant and the
   next employee do not start from scratch.
 - **An error is a refusal, not broken data.** The command answers what is wrong and
   what to do next.
@@ -138,6 +138,8 @@ When the tool for a task is built in the same conversation in which the task was
 
 ## Where to Go Next
 
+- "[Store Charter](charter.md)" — how written rules guide the assistant and the
+  employees.
 - "[AI Assistant](User/ai-assistant.md)" — connection, rights, and how to work with it.
 - "[AI Tools](User/ai-tools.md)" — how the owner sets up tools and grants commands.
 - "[AI Tools](Dev/agent_tool.md)" in the developer guide — how a tool is written.

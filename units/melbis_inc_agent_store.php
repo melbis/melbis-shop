@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.462 @ 2026-09-23
+ * @version 6.5.1.465 @ 2026-09-23
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -204,7 +204,7 @@ function DefaultFill($mRow)
 
     $born = [
         'no_visible'  => 1,
-        'status_key'  => 'kAbsent',
+        'status_key'  => 'kDefault',
         'kind_key'    => 'kDefault',
         'state_key'   => 'kDefault',
         'templ_key'   => 'kDefault',

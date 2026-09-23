@@ -27,5 +27,5 @@ A review contains: the product (ID, store code, name), user data
 * **"Delete Review"** — for example, those that look like spam;
 * **"Table Designer"** — configure columns.
 
-Modified reviews are highlighted in yellow; the **"Save"** button submits the changes to
+Modified reviews are shown in bold; the **"Save"** button submits the changes to
 the store.

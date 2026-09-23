@@ -184,7 +184,7 @@ MELBIS()->SqlInsert(__LINE__, '{DBNICK}_store_param', $fields);
 $fields = [
     'id'        => $store_id,
     'price'     => $price,
-    'status_key'=> 'kExist'
+    'status_key'=> 'kGoodsExist'
     ];
 MELBIS()->SqlUpdate(__LINE__, '{DBNICK}_store', $fields, 'id');
 

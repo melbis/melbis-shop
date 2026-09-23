@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.462 @ 2026-09-23
+ * @version 6.5.1.465 @ 2026-09-23
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -107,7 +107,7 @@ function Main($mVars)
             $page['id'] = $topic['id'];                   
             $page['title'] = $topic['name'];     
 
-            if ( $topic['kind_key'] == 'kText' )  
+            if ( $topic['kind_key'] == 'kDoc' )  
             { 
                 // Text page content                  
                 $command = "SELECT s.*
@@ -135,15 +135,10 @@ function Main($mVars)
                     MELBIS()->TplParse($tpl, 'PAGE', 'page_text');
                 }
             }
-            elseif ( $topic['kind_key'] == 'kGoods' )  
-            {           
-                // Page topic
-                MELBIS()->TplParse($tpl, 'PAGE', 'page_topic');        
-            }
             else
             {
-                // Unknown page        
-                MELBIS()->Halt(__FILE__.':'.__LINE__, 'UNKNOWN PAGE');            
+                // Page topic
+                MELBIS()->TplParse($tpl, 'PAGE', 'page_topic');        
             }                                
         }                                               
     }

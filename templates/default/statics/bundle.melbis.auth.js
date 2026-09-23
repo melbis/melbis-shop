@@ -1,5 +1,5 @@
 /*       Melbis Shop auto bundle report       */
-/*         Create: 2026-09-16 21:18:41        */
+/*         Create: 2026-09-24 00:28:50        */
 
 /*   #1    bootstrap-table.js            8578 ln   322 kb    /templates/default/statics/base/bs/bootstrap-table.js         */
 /*   #2    bootbox.js                    1247 ln    39 kb    /templates/default/statics/base/bootbox.js                    */
@@ -10037,10 +10037,10 @@ function melbis_fmt_status(value, row)
     var res = '';
     switch (row.status_key) 
     {
-       case 'kExist':
+       case 'kGoodsExist':
           res = '<span class="badge badge-success">' + row.status_name + '</span>';
           break;      
-       case 'kAbsent':
+       case 'kGoodsAbsent':
           res = '<span class="badge badge-danger">' + row.status_name + '</span>';
           break;
     }    

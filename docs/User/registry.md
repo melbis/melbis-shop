@@ -11,7 +11,8 @@ four tabs.
   "Callable Modules" (order calculation and processing), "Editor Settings"
   (classes, tags and HTML editor templates, image editor profiles and masks — the profiles
   are maintained by the AI assistant as well, see "[AI Tools](ai-tools.md)"),
-  "File Groups", "Alternative Catalogs", and more. System keys are marked with `*`.
+  "File Groups", "Alternative Catalogs", and more. System values, which cannot be
+  deleted, are ticked in the `*` column.
 * **User Settings** — key store variables that staff
   change in the "[Settings](settings.md)" section; their names,
   input templates, values, and display permissions by groups and users are defined here.
@@ -23,6 +24,23 @@ four tabs.
   customers; they appear in the "Advanced Query" of the corresponding section (see
   "[Basic Operating Principles](basics.md)"). The second tab inside it is
   **"Value Lists"**: the directories for the parameters of those queries.
+
+## Value Style {#styles}
+
+A key value can be given a style — rows with this value stand out in the program's
+tables. The button next to the value opens the **"Value Format"** window: **text
+color**, font style (**bold**, **italic**, **underline**, **strikethrough**) and
+**background color**. An empty field changes nothing. The button is there for keys
+whose values are assigned to rows: types, statuses, states, file groups and the like.
+
+If a row carries several keys — for example, a product's type, status and state — the
+styles overlay each other, and the type overrides the rest. The font style is added to
+by the row's service marks: changed, being deleted, new, hidden (see "[Basic Operating
+Principles](basics.md)"). So it is handier to give keys a color and leave the font
+style to the marks. In orders, an option value's own "Highlighting" overrides the style.
+
+Styles are kept in the store and are the same for every employee. Other employees will
+see new styles the next time they open the window or after "Refresh Settings".
 
 ## Additional Options
 

@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.462 @ 2026-09-23
+ * @version 6.5.1.465 @ 2026-09-23
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -51,8 +51,18 @@ function StoreLink($mVars)
  **/
 function StatusName($mVars)
 { 
+    // A fresh goods shows none
+    if ( $mVars[0] == 'kDefault' ) return '';
+
     // A key, worded in settings
-    return MELBIS()->SysKeyValues('STORE_STATUS_KEY')[$mVars[0]] ?? '';
+    $status = MELBIS()->SysKeyValues('STORE_STATUS_KEY');
+    $name = $status[$mVars[0]] ?? '';
+
+    // The kind hint is staff's
+    $cut = strpos($name, ' [');
+    if ( $cut !== false ) $name = substr($name, 0, $cut);
+
+    return $name;
 } 
 
 

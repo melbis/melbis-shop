@@ -51,7 +51,7 @@ For key fields (for example, "Status (key)"), the supplier's values must be mapp
 to the store's keys. The **"Generate list of possible values"** button scans the
 entire price list and collects all encountered values; for each one, in the
 **"Original value → Replace with value"** pair, specify the store key (for example,
-`kExist` for in-stock status — keys are found in "Development" → "Settings Registry" →
+`kGoodsExist` for in-stock status — keys are found in "Development" → "Settings Registry" →
 "Basic settings"). The **"Restore original list"** and **"Clear entire list"**
 buttons reset the substitution table.
 

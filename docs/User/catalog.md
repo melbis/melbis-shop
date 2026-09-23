@@ -31,8 +31,8 @@ copies the current value to all nested sections.
 
 The value lists for the **Section Type**, **Sorting**, and **Style** fields are extended in
 the "Settings Registry" (see "[Settings Registry](registry.md)"). The basic section types are
-"Department with Products", "Link to URL", and "Text Page" (the first two cannot be deleted);
-custom types are treated by the system as a variety of text types.
+"Default", "Products", "Documents", and "Link"; they cannot be deleted. A new section
+gets the "Default" type.
 
 ## Alternative Catalogs
 

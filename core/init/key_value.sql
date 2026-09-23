@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.462 @ 2026-09-23
+ * @version 6.5.1.465 @ 2026-09-23
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -133,157 +133,204 @@ INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('1
 INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('125', 'HTML_TEMPLATE', '67', '2', '124', '0');
 UPDATE {DBNICK}_generator SET gen_value = 175 WHERE table_name = 'key';
 
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('1', 'INFO_KIND_KEY', 'kDefault', '1', '2');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('3', 'FILES_INFO', 'kBase', '1', '1');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('4', 'FILES_INFO_VALUE', 'kBase', '1', '1');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('5', 'FILES_INFO', 'kDefault', '0', '4');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('7', 'FILES_INFO_VALUE', 'kDefault', '0', '4');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('10', 'FILES_INFO', 'kDescr', '1', '3');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('11', 'FILES_INFO_VALUE', 'kDescr', '1', '3');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('15', 'FILES_KEY_VALUE', 'kBase', '1', '1');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('16', 'FILES_MASK', 'Без маски', '1', '1');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('17', 'FILES_PROFILE', 'Каталог', '0', '1');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('20', 'TOPIC_TEMPL_KEY', 'kDefault', '1', '1');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('22', 'FILES_TOPIC', 'kBase', '1', '1');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('24', 'FILES_TOPIC', 'kDescr', '1', '3');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('25', 'FILES_TOPIC', 'kDefault', '0', '4');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('35', 'TOPIC_KIND_KEY', 'kGoods', '1', '2');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('37', 'TOPIC_KIND_KEY', 'kLink', '1', '4');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('39', 'TOPIC_ORDER_KEY', 'kDefault', '1', '1');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('40', 'TOPIC_ALT_KIND_KEY', 'kTree', '1', '1');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('41', 'TOPIC_ALT_KIND_KEY', 'kCenter', '0', '2');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('70', 'STORE_KIND_KEY', 'kDefault', '1', '70');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('71', 'STORE_TEMPL_KEY', 'kDefault', '1', '71');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('72', 'STORE_STATUS_KEY', 'kExist', '1', '1');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('73', 'STORE_STATUS_KEY', 'kAbsent', '1', '2');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('74', 'STORE_STATUS_KEY', 'kExistOrder', '0', '3');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('75', 'STORE_STATUS_KEY', 'kAbsentOrder', '0', '4');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('76', 'FILES_STORE', 'kBase', '1', '76');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('78', 'FILES_STORE', 'kDescr', '1', '78');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('79', 'FILES_STORE', 'kDefault', '0', '79');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('80', 'FILES_STORE', 'kDescrImg', '0', '80');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('82', 'STORE_SET_KIND_KEY', 'kDefault', '1', '82');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('83', 'DISC_KIND_KEY', 'kOrder', '1', '83');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('85', 'DISC_KIND_KEY', 'kBalanceSum', '0', '85');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('86', 'INFO_VALUE_KIND_KEY', 'kDefault', '1', '86');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('94', 'ADVERT_KIND_KEY', 'kDefault', '1', '94');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('100', 'ADVERT_TEXT_KIND_KEY', 'kDefault', '1', '100');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('101', 'FILES_ADVERT_TEXT', 'kBase', '1', '101');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('103', 'FILES_ADVERT_TEXT', 'kDescr', '1', '103');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('104', 'FILES_ADVERT_TEXT', 'kDefault', '0', '104');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('105', 'ADVERT_GOODS_KIND_KEY', 'kDefault', '1', '105');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('107', 'ADVERT_LINK_KIND_KEY', 'kId', '1', '107');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('110', 'HTML_OPTION', 'kCSS', '1', '110');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('114', 'TOPIC_FILTER_KIND_KEY', 'kDefault', '1', '114');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('115', 'FIELD_KIND_KEY', 'kDefault', '1', '115');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('116', 'FIELD_SPEC_KEY', 'kDefault', '1', '116');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('117', 'FIELD_VALUE_KIND_KEY', 'kDefault', '1', '117');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('120', 'ORDER_OPTION_KIND_KEY', 'kDefault', '1', '120');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('121', 'ORDER_OPTION_VALUE_KIND_KEY', 'kDefault', '1', '121');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('123', 'MODULE_ORDER_VERSION_CALC', 'melbis_inc_logic_order_calc.php', '0', '123');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('125', 'MODULE_ORDER_VERSION_ADD', 'melbis_inc_logic_order_edit.php', '0', '125');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('131', 'PARAM_KIND_KEY', 'kDefault', '1', '2');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('135', 'INFO_TYPE_KEY', 'kSet', '1', '135');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('137', 'INFO_TYPE_KEY', 'kDecimal', '1', '137');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('138', 'STORE_STATE_KEY', 'kDefault', '1', '138');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('145', 'STORE_STATE_KEY', 'kImport', '0', '145');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('146', 'STORE_STATE_KEY', 'kDescrNeed', '0', '146');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('147', 'STORE_STATE_KEY', 'kDescrUp', '0', '147');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('148', 'STORE_STATE_KEY', 'kOk', '0', '148');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('149', 'ADVERT_LINK_OBJ_KEY', 'kTopic', '1', '149');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('150', 'ADVERT_LINK_OBJ_KEY', 'kGoods', '1', '150');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('153', 'ORDER_TRANSPORT', 'kDefault', '1', '153');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('154', 'BRAND_KIND_KEY', 'kDefault', '1', '154');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('155', 'FILES_BRAND', 'kBase', '1', '155');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('156', 'FILES_BRAND', 'kDescr', '1', '156');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('157', 'FILES_BRAND', 'kDefault', '0', '157');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('159', 'ORDER_STORE_OPTION_KIND_KEY', 'kDefault', '1', '159');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('161', 'MODULE_NOTIFICATION', 'melbis_inc_logic_notify.php', '0', '161');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('163', 'EVENT_NOTIFICATION', 'kNewOrder', '0', '163');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('164', 'EVENT_NOTIFICATION', 'kNewClient', '0', '164');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('178', 'FILES_KEY_VALUE', 'kAttach', '1', '178');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('181', 'HTML_TAG', 'p', '1', '1');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('182', 'HTML_TAG', 'div', '1', '3');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('183', 'HTML_TAG', 'span', '1', '2');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('184', 'HTML_TAG', 'h1', '1', '5');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('191', 'HTML_TAG', 'h2', '1', '6');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('192', 'HTML_TAG', 'h3', '1', '7');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('193', 'HTML_TAG', 'h4', '1', '8');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('194', 'HTML_TAG', 'h5', '1', '9');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('195', 'HTML_TAG', 'h6', '1', '10');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('196', 'HTML_TAG', 'a', '1', '4');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('253', 'HTML_TEMPLATE', 'Table', '0', '253');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('257', 'HTML_OPTION', 'kContainer', '1', '257');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('261', 'TASK_KIND_KEY', 'kDefault', '1', '261');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('262', 'TASK_KIND_KEY', 'kUrgent', '1', '262');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('263', 'TASK_KIND_KEY', 'kWish', '1', '263');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('264', 'TASK_KIND_KEY', 'kPriority1', '0', '264');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('265', 'TASK_KIND_KEY', 'kPriority2', '0', '265');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('266', 'TASK_KIND_KEY', 'kPriority3', '0', '266');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('267', 'TASK_STATE_KEY', 'kNew', '1', '267');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('268', 'TASK_STATE_KEY', 'kAccept', '1', '268');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('269', 'TASK_STATE_KEY', 'kHold', '1', '269');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('270', 'TASK_STATE_KEY', 'kDone', '1', '270');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('271', 'TASK_STATE_KEY', 'kStop', '1', '271');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('272', 'TASK_STATE_KEY', 'kTrans', '1', '272');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('273', 'TASK_STATE_KEY', 'kExplain', '1', '273');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('274', 'TASK_STATE_KEY', 'kComment', '1', '274');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('275', 'TASK_STATE_KEY', 'kClose', '1', '275');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('277', 'WEB_KEY_KIND_KEY', 'kDefault', '1', '277');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('278', 'WEB_KEY_VALUE_KIND_KEY', 'kDefault', '1', '278');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('279', 'FILES_WEB_KEY', 'kBase', '1', '279');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('280', 'FILES_WEB_KEY', 'kDescr', '1', '280');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('281', 'FILES_WEB_KEY', 'kDefault', '0', '281');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('282', 'FILES_WEB_KEY_VALUE', 'kBase', '1', '282');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('283', 'FILES_WEB_KEY_VALUE', 'kDescr', '1', '283');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('284', 'FILES_WEB_KEY_VALUE', 'kDefault', '0', '284');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('286', 'PROVIDER_KIND_KEY', 'kDefault', '1', '286');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('287', 'PROVIDER_STATE_KEY', 'kDefault', '1', '287');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('288', 'INFO_TYPE_KEY', 'kText', '1', '288');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('289', 'STORE_SET_OBJ_KEY', 'kGoods', '1', '289');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('290', 'STORE_SET_OBJ_KEY', 'kTopic', '1', '290');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('291', 'HTML_OPTION', 'kPostProcess', '1', '291');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('292', 'LANG_KIND_KEY', 'kDefault', '1', '292');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('293', 'TRANS_KIND_KEY', 'kDefault', '1', '293');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('294', 'TRANS_ORIGIN_KIND_KEY', 'kDefault', '1', '294');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('295', 'TRANS_TABLE_KEY', 'kDefault', '1', '295');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('296', 'TRANS_TABLE_KEY', 'kTopic', '0', '296');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('297', 'TRANS_TABLE_KEY', 'kStore', '0', '297');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('298', 'TRANS_TABLE_KEY', 'kTag', '0', '298');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('299', 'MODULE_TRANSLATE_LINE', 'melbis_inc_lang.php', '0', '299');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('300', 'HTML_TAG', 'blockquote', '1', '300');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('301', 'HTML_TAG', 'code', '1', '301');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('302', 'HTML_TAG', 'small', '1', '302');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('303', 'HTML_TAG', 'mark', '1', '303');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('304', 'HTML_TAG', 'sub', '1', '304');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('305', 'HTML_TAG', 'sup', '1', '305');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('306', 'HTML_TAG', 'pre', '1', '306');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('307', 'HTML_TEMPLATE', 'YouTube', '0', '307');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('308', 'HTML_TAG', 'iframe', '1', '308');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('309', 'FILES_LANG', 'kBase', '1', '309');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('310', 'FILES_LANG', 'kDescr', '1', '310');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('311', 'FILES_LANG', 'kDefault', '0', '311');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('313', 'FILES_FIELD', 'kBase', '1', '313');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('314', 'FILES_FIELD', 'kDescr', '1', '314');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('315', 'FILES_FIELD', 'kDefault', '0', '315');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('316', 'FILES_ORDER_OPTION', 'kBase', '1', '316');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('317', 'FILES_ORDER_OPTION', 'kDescr', '1', '317');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('318', 'FILES_ORDER_OPTION', 'kDefault', '0', '318');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('319', 'FILES_ORDER_OPTION_VALUE', 'kBase', '1', '319');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('320', 'FILES_ORDER_OPTION_VALUE', 'kDescr', '1', '320');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('321', 'FILES_ORDER_OPTION_VALUE', 'kDefault', '0', '321');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('398', 'PARAM_VALUE_KIND_KEY', 'kDefault', '1', '398');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('399', 'PROVIDER_STOCK_KIND_KEY', 'kDefault', '1', '399');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('400', 'TAX_AREA_KIND_KEY', 'kDefault', '1', '400');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('401', 'TAX_AREA_TYPE_KEY', 'kCountry', '1', '401');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('402', 'TAX_AREA_TYPE_KEY', 'kState', '0', '402');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('403', 'TAX_RATE_KIND_KEY', 'kDefault', '1', '403');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('404', 'TAX_RULE_KEY', 'kDefault', '1', '404');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('405', 'FILES_PROFILE', 'Галерея', '0', '405');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('424', 'AGENT_MEMORY_KIND_KEY', 'kCritical', '1', '424');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('425', 'AGENT_MEMORY_KIND_KEY', 'kDirect', '1', '425');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('426', 'AGENT_MEMORY_KIND_KEY', 'kSkill', '1', '426');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('427', 'AGENT_TOOL_KIND_KEY', 'kDefault', '1', '427');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('428', 'AGENT_TOOL_COMMAND_KIND_KEY', 'kDefault', '1', '428');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('429', 'AGENT_MEMORY_KIND_KEY', 'kDefault', '1', '429');
-UPDATE {DBNICK}_generator SET gen_value = 444 WHERE table_name = 'key_value';
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('1', 'INFO_KIND_KEY', 'kDefault', '', '1', '2');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('3', 'FILES_INFO', 'kBase', '<STYLE><Font Color="#006600"/></STYLE>
+', '1', '2');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('4', 'FILES_INFO_VALUE', 'kBase', '<STYLE><Font Color="#006600"/></STYLE>
+', '1', '2');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('5', 'FILES_INFO', 'kDefault', '', '1', '1');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('7', 'FILES_INFO_VALUE', 'kDefault', '', '1', '1');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('10', 'FILES_INFO', 'kDescr', '<STYLE><Font Color="#999999"/></STYLE>
+', '1', '3');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('11', 'FILES_INFO_VALUE', 'kDescr', '<STYLE><Font Color="#999999"/></STYLE>
+', '1', '3');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('15', 'FILES_KEY_VALUE', 'kBase', '', '1', '1');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('16', 'FILES_MASK', 'Без маски', '', '1', '1');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('17', 'FILES_PROFILE', 'Каталог', '', '0', '1');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('20', 'TOPIC_TEMPL_KEY', 'kDefault', '', '1', '1');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('22', 'FILES_TOPIC', 'kBase', '<STYLE><Font Color="#006600"/></STYLE>
+', '1', '2');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('24', 'FILES_TOPIC', 'kDescr', '<STYLE><Font Color="#999999"/></STYLE>
+', '1', '3');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('25', 'FILES_TOPIC', 'kDefault', '', '1', '1');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('35', 'TOPIC_KIND_KEY', 'kGoods', '', '1', '2');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('37', 'TOPIC_KIND_KEY', 'kLink', '', '1', '4');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('39', 'TOPIC_ORDER_KEY', 'kDefault', '', '1', '1');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('40', 'TOPIC_ALT_KIND_KEY', 'kTree', '', '0', '2');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('41', 'TOPIC_ALT_KIND_KEY', 'kCenter', '', '0', '3');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('70', 'STORE_KIND_KEY', 'kDefault', '', '1', '70');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('71', 'STORE_TEMPL_KEY', 'kDefault', '', '1', '71');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('72', 'STORE_STATUS_KEY', 'kGoodsExist', '<STYLE><Font Color="#006600"/></STYLE>
+', '0', '2');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('73', 'STORE_STATUS_KEY', 'kGoodsAbsent', '<STYLE><Font Color="#CC0000"/></STYLE>
+', '0', '3');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('74', 'STORE_STATUS_KEY', 'kDocDraft', '<STYLE><Background>#F2F2F2</Background></STYLE>
+', '0', '4');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('75', 'STORE_STATUS_KEY', 'kDocRelease', '', '0', '5');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('76', 'FILES_STORE', 'kBase', '<STYLE><Font Color="#006600"/></STYLE>
+', '1', '2');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('78', 'FILES_STORE', 'kDescr', '<STYLE><Font Color="#999999"/></STYLE>
+', '1', '3');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('79', 'FILES_STORE', 'kDefault', '', '1', '1');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('82', 'STORE_SET_KIND_KEY', 'kDefault', '', '1', '82');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('83', 'DISC_KIND_KEY', 'kOrder', '', '0', '2');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('85', 'DISC_KIND_KEY', 'kBalanceSum', '', '0', '3');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('86', 'INFO_VALUE_KIND_KEY', 'kDefault', '', '1', '86');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('94', 'ADVERT_KIND_KEY', 'kDefault', '', '1', '94');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('100', 'ADVERT_TEXT_KIND_KEY', 'kDefault', '', '1', '100');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('101', 'FILES_ADVERT_TEXT', 'kBase', '<STYLE><Font Color="#006600"/></STYLE>
+', '1', '2');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('103', 'FILES_ADVERT_TEXT', 'kDescr', '<STYLE><Font Color="#999999"/></STYLE>
+', '1', '3');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('104', 'FILES_ADVERT_TEXT', 'kDefault', '', '1', '1');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('105', 'ADVERT_GOODS_KIND_KEY', 'kDefault', '', '1', '105');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('107', 'ADVERT_LINK_KIND_KEY', 'kId', '', '1', '107');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('110', 'HTML_OPTION', 'kCSS', '', '1', '110');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('114', 'TOPIC_FILTER_KIND_KEY', 'kDefault', '', '1', '114');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('115', 'FIELD_KIND_KEY', 'kDefault', '', '1', '115');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('116', 'FIELD_SPEC_KEY', 'kDefault', '', '1', '116');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('117', 'FIELD_VALUE_KIND_KEY', 'kDefault', '', '1', '117');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('120', 'ORDER_OPTION_KIND_KEY', 'kDefault', '', '1', '120');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('121', 'ORDER_OPTION_VALUE_KIND_KEY', 'kDefault', '', '1', '121');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('123', 'MODULE_ORDER_VERSION_CALC', 'melbis_inc_logic_order_calc.php', '', '0', '123');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('125', 'MODULE_ORDER_VERSION_ADD', 'melbis_inc_logic_order_edit.php', '', '0', '125');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('131', 'PARAM_KIND_KEY', 'kDefault', '', '1', '2');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('135', 'INFO_TYPE_KEY', 'kSet', '', '1', '135');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('137', 'INFO_TYPE_KEY', 'kDecimal', '', '1', '137');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('138', 'STORE_STATE_KEY', 'kDefault', '', '1', '138');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('149', 'ADVERT_LINK_OBJ_KEY', 'kTopic', '', '1', '149');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('150', 'ADVERT_LINK_OBJ_KEY', 'kGoods', '', '1', '150');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('153', 'ORDER_TRANSPORT', 'kDefault', '', '1', '153');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('154', 'BRAND_KIND_KEY', 'kDefault', '', '1', '154');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('155', 'FILES_BRAND', 'kBase', '<STYLE><Font Color="#006600"/></STYLE>
+', '1', '2');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('156', 'FILES_BRAND', 'kDescr', '<STYLE><Font Color="#999999"/></STYLE>
+', '1', '3');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('157', 'FILES_BRAND', 'kDefault', '', '1', '1');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('159', 'ORDER_STORE_OPTION_KIND_KEY', 'kDefault', '', '1', '159');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('161', 'MODULE_NOTIFICATION', 'melbis_inc_logic_notify.php', '', '0', '161');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('163', 'EVENT_NOTIFICATION', 'kNewOrder', '', '0', '163');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('164', 'EVENT_NOTIFICATION', 'kNewClient', '', '0', '164');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('178', 'FILES_KEY_VALUE', 'kAttach', '', '1', '178');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('181', 'HTML_TAG', 'p', '', '1', '1');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('182', 'HTML_TAG', 'div', '', '1', '3');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('183', 'HTML_TAG', 'span', '', '1', '2');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('184', 'HTML_TAG', 'h1', '', '1', '5');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('191', 'HTML_TAG', 'h2', '', '1', '6');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('192', 'HTML_TAG', 'h3', '', '1', '7');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('193', 'HTML_TAG', 'h4', '', '1', '8');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('194', 'HTML_TAG', 'h5', '', '1', '9');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('195', 'HTML_TAG', 'h6', '', '1', '10');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('196', 'HTML_TAG', 'a', '', '1', '4');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('253', 'HTML_TEMPLATE', 'Table', '', '0', '253');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('257', 'HTML_OPTION', 'kContainer', '', '1', '257');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('261', 'TASK_KIND_KEY', 'kDefault', '', '1', '261');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('262', 'TASK_KIND_KEY', 'kUrgent', '<STYLE><Font Style="fsBold"/></STYLE>
+', '0', '262');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('263', 'TASK_KIND_KEY', 'kWish', '<STYLE><Font Color="#717171"/></STYLE>
+', '0', '263');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('264', 'TASK_KIND_KEY', 'kPriority1', '', '0', '264');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('265', 'TASK_KIND_KEY', 'kPriority2', '', '0', '265');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('266', 'TASK_KIND_KEY', 'kPriority3', '', '0', '266');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('267', 'TASK_STATE_KEY', 'kNew', '<STYLE><Background>#FF9999</Background></STYLE>
+', '1', '267');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('268', 'TASK_STATE_KEY', 'kAccept', '<STYLE><Background>#00CCFF</Background></STYLE>
+', '1', '268');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('269', 'TASK_STATE_KEY', 'kHold', '<STYLE><Background>#FFFF99</Background></STYLE>
+', '1', '269');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('270', 'TASK_STATE_KEY', 'kDone', '<STYLE><Background>#99FF99</Background></STYLE>
+', '1', '270');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('271', 'TASK_STATE_KEY', 'kStop', '<STYLE><Font Color="#FFFFFF"/><Background>#000000</Background></STYLE>
+', '1', '271');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('272', 'TASK_STATE_KEY', 'kTrans', '<STYLE><Background>#FFCC33</Background></STYLE>
+', '1', '272');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('273', 'TASK_STATE_KEY', 'kExplain', '<STYLE><Font Color="#FFFFFF"/><Background>#CC3300</Background></STYLE>
+', '1', '273');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('274', 'TASK_STATE_KEY', 'kComment', '<STYLE><Background>#CCCCCC</Background></STYLE>
+', '1', '274');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('275', 'TASK_STATE_KEY', 'kClose', '<STYLE><Font Color="#FFFFFF"/><Background>#339900</Background></STYLE>
+', '1', '275');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('277', 'WEB_KEY_KIND_KEY', 'kDefault', '', '1', '277');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('278', 'WEB_KEY_VALUE_KIND_KEY', 'kDefault', '', '1', '278');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('279', 'FILES_WEB_KEY', 'kBase', '<STYLE><Font Color="#006600"/></STYLE>
+', '1', '2');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('280', 'FILES_WEB_KEY', 'kDescr', '<STYLE><Font Color="#999999"/></STYLE>
+', '1', '3');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('281', 'FILES_WEB_KEY', 'kDefault', '', '1', '1');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('282', 'FILES_WEB_KEY_VALUE', 'kBase', '<STYLE><Font Color="#006600"/></STYLE>
+', '1', '2');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('283', 'FILES_WEB_KEY_VALUE', 'kDescr', '<STYLE><Font Color="#999999"/></STYLE>
+', '1', '3');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('284', 'FILES_WEB_KEY_VALUE', 'kDefault', '', '1', '1');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('286', 'PROVIDER_KIND_KEY', 'kDefault', '', '1', '286');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('287', 'PROVIDER_STATE_KEY', 'kDefault', '', '1', '287');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('288', 'INFO_TYPE_KEY', 'kText', '', '1', '288');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('289', 'STORE_SET_OBJ_KEY', 'kGoods', '', '1', '289');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('290', 'STORE_SET_OBJ_KEY', 'kTopic', '', '1', '290');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('291', 'HTML_OPTION', 'kPostProcess', '', '1', '291');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('292', 'LANG_KIND_KEY', 'kDefault', '', '1', '292');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('293', 'TRANS_KIND_KEY', 'kDefault', '', '1', '293');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('294', 'TRANS_ORIGIN_KIND_KEY', 'kDefault', '', '1', '294');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('295', 'TRANS_TABLE_KEY', 'kDefault', '', '1', '295');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('296', 'TRANS_TABLE_KEY', 'kTopic', '', '0', '296');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('297', 'TRANS_TABLE_KEY', 'kStore', '', '0', '297');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('298', 'TRANS_TABLE_KEY', 'kTag', '', '0', '298');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('299', 'MODULE_TRANSLATE_LINE', 'melbis_inc_lang.php', '', '0', '299');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('300', 'HTML_TAG', 'blockquote', '', '1', '300');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('301', 'HTML_TAG', 'code', '', '1', '301');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('302', 'HTML_TAG', 'small', '', '1', '302');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('303', 'HTML_TAG', 'mark', '', '1', '303');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('304', 'HTML_TAG', 'sub', '', '1', '304');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('305', 'HTML_TAG', 'sup', '', '1', '305');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('306', 'HTML_TAG', 'pre', '', '1', '306');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('307', 'HTML_TEMPLATE', 'YouTube', '', '0', '307');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('308', 'HTML_TAG', 'iframe', '', '1', '308');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('309', 'FILES_LANG', 'kBase', '<STYLE><Font Color="#006600"/></STYLE>
+', '1', '2');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('310', 'FILES_LANG', 'kDescr', '<STYLE><Font Color="#999999"/></STYLE>
+', '1', '3');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('311', 'FILES_LANG', 'kDefault', '', '1', '1');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('313', 'FILES_FIELD', 'kBase', '<STYLE><Font Color="#006600"/></STYLE>
+', '1', '2');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('314', 'FILES_FIELD', 'kDescr', '<STYLE><Font Color="#999999"/></STYLE>
+', '1', '3');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('315', 'FILES_FIELD', 'kDefault', '', '1', '1');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('316', 'FILES_ORDER_OPTION', 'kBase', '<STYLE><Font Color="#006600"/></STYLE>
+', '1', '2');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('317', 'FILES_ORDER_OPTION', 'kDescr', '<STYLE><Font Color="#999999"/></STYLE>
+', '1', '3');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('318', 'FILES_ORDER_OPTION', 'kDefault', '', '1', '1');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('319', 'FILES_ORDER_OPTION_VALUE', 'kBase', '<STYLE><Font Color="#006600"/></STYLE>
+', '1', '2');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('320', 'FILES_ORDER_OPTION_VALUE', 'kDescr', '<STYLE><Font Color="#999999"/></STYLE>
+', '1', '3');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('321', 'FILES_ORDER_OPTION_VALUE', 'kDefault', '', '1', '1');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('398', 'PARAM_VALUE_KIND_KEY', 'kDefault', '', '1', '398');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('399', 'PROVIDER_STOCK_KIND_KEY', 'kDefault', '', '1', '399');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('400', 'TAX_AREA_KIND_KEY', 'kDefault', '', '1', '400');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('401', 'TAX_AREA_TYPE_KEY', 'kCountry', '', '0', '2');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('402', 'TAX_AREA_TYPE_KEY', 'kState', '', '0', '3');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('403', 'TAX_RATE_KIND_KEY', 'kDefault', '', '1', '403');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('404', 'TAX_RULE_KEY', 'kDefault', '', '1', '404');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('405', 'FILES_PROFILE', 'Галерея', '', '0', '405');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('424', 'AGENT_MEMORY_KIND_KEY', 'kCritical', '<STYLE><Background>#FF9999</Background></STYLE>
+', '1', '424');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('425', 'AGENT_MEMORY_KIND_KEY', 'kDirect', '<STYLE><Background>#FFFF99</Background></STYLE>
+', '1', '425');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('426', 'AGENT_MEMORY_KIND_KEY', 'kSkill', '<STYLE><Background>#99FF99</Background></STYLE>
+', '1', '426');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('427', 'AGENT_TOOL_KIND_KEY', 'kDefault', '', '1', '427');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('428', 'AGENT_TOOL_COMMAND_KIND_KEY', 'kDefault', '', '1', '428');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('429', 'AGENT_MEMORY_KIND_KEY', 'kDefault', '', '1', '429');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('445', 'TOPIC_ALT_KIND_KEY', 'kDefault', '', '1', '1');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('446', 'TOPIC_KIND_KEY', 'kDefault', '', '1', '1');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('447', 'STORE_STATUS_KEY', 'kDefault', '', '1', '1');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('448', 'DISC_KIND_KEY', 'kDefault', '', '1', '1');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('449', 'TAX_AREA_TYPE_KEY', 'kDefault', '', '1', '1');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('450', 'TOPIC_KIND_KEY', 'kDoc', '', '1', '3');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('451', 'STORE_KIND_KEY', 'kGoods', '', '0', '451');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('452', 'STORE_KIND_KEY', 'kDoc', '<STYLE><Font Color="#0033FF"/></STYLE>
+', '0', '452');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('453', 'FILES_STORE', 'kCataloge', '', '0', '453');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('454', 'FILES_STORE', 'kGallery', '', '0', '454');
+UPDATE {DBNICK}_generator SET gen_value = 454 WHERE table_name = 'key_value';

@@ -31,5 +31,5 @@ using the "Table Designer".
 On the right, you can edit any registration fields of the customer, including those closed
 during order placement. Fields may have an input mask (e.g., a phone number) or
 a dropdown list — this is configured in "[Customer Options](customer-options.md)".
-A modified customer is highlighted in yellow; the **"Save"** button submits the data
+A modified customer is shown in bold; the **"Save"** button submits the data
 to the server.

@@ -57,9 +57,19 @@ accumulate locally and are sent to the server as a **single batch** using the
 "Save" button. This makes work fast, minimizes server load,
 and prevents the storefront cache from being reset on every minor change.
 
-Modified but not yet saved rows are highlighted in **yellow**. Rows
-marked for deletion are displayed as **strikethrough**. Until the data is
-saved, changes exist only on your end.
+Until the data is saved, changes exist only on your end. The state of a row
+shows in its font style:
+
+* **bold** — the row has been changed and not yet saved;
+* **strikethrough** — the row is marked for deletion;
+* **underline** — a new row that the server does not have yet, or a product that
+  another employee has changed in the meantime;
+* **italic** — the row is hidden or inactive: the product is not shown on the
+  storefront, the element belongs to another group, the field takes no part in the load.
+
+The text and background colors come from the row's type, status or state — every
+value has its own style in the "[Settings Registry](registry.md#styles)". The font
+styles add up, so all the marks are visible at once.
 
 The local database should be placed on a fast drive and, as a rule, not on
 the system drive `C:`. For more details about choosing the folder, see

@@ -74,6 +74,6 @@ This contains your **local version** of the attribute values reference. The
 attribute catalog on the left works the same way as in the "[Attributes](attributes.md)"
 section (edits are immediately reflected in the shared reference). The values on the right are a copy of the main
 reference: existing values cannot be edited, but you can **add a new one** (it
-is displayed in italics and is stored locally only for the time being). Once you assign
+is displayed underlined and is stored locally only for the time being). Once you assign
 the new value to a product and perform **"Save"**, the server will add it to the shared
 reference — and it will become available to other employees.

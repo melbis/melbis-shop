@@ -158,10 +158,10 @@ function melbis_fmt_status(value, row)
     var res = '';
     switch (row.status_key) 
     {
-       case 'kExist':
+       case 'kGoodsExist':
           res = '<span class="badge badge-success">' + row.status_name + '</span>';
           break;      
-       case 'kAbsent':
+       case 'kGoodsAbsent':
           res = '<span class="badge badge-danger">' + row.status_name + '</span>';
           break;
     }    

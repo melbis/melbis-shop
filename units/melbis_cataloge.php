@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.462 @ 2026-09-23
+ * @version 6.5.1.465 @ 2026-09-23
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -22,10 +22,10 @@ function Main($mVars)
     // Create 
     $tpl = MELBIS()->TplCreate();    
     
-    // Find root - kFirst
+    // Find root - SHOP
     $command = "SELECT id, tlevel
                   FROM {DBNICK}_topic
-                 WHERE kind_key = 'kFirst'              
+                 WHERE skey = 'SHOP'              
                ";                    
     $root = MELBIS()->SqlSelectFlat(__LINE__, $command);         
         

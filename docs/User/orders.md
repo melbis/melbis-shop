@@ -22,8 +22,7 @@ table designer, and the built-in web module are common mechanics described in
 ## Order Versions
 
 The program stores the **order change history**. The **"Get All Order Versions"**
-button shows which employee edited the order and when; the active version is highlighted
-in red. Any version can be opened, and a new order can be created based on it
+button shows which employee edited the order and when. Any version can be opened, and a new order can be created based on it
 (**"Create New Order Based on Order Version"**). An important guarantee: even if
 saving the order is blocked by business logic, the system will still add a version —
 it simply will not make it the active one.

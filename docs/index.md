@@ -2,6 +2,7 @@
 
 * [Introduction](main.md)
 * [Tasks instead of interfaces](paradigm.md)
+* [Store charter](charter.md)
 
 ### 1. User Guide
 

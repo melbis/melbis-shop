@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.462 @ 2026-09-23
+ * @version 6.5.1.465 @ 2026-09-23
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -31,7 +31,7 @@ function Main($mVars)
                   JOIN {DBNICK}_topic t
                     ON t.id = ts.topic_id
                  WHERE s.no_visible = 0
-                   AND t.kind_key = 'kGoods'
+                   AND t.kind_key <> 'kDoc'
               GROUP BY s.id
               ORDER BY RAND()
                  LIMIT :HOW

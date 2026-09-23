@@ -38,7 +38,7 @@ Through the "Table Designer", commercial fields are displayed in the list, inclu
   chosen from the warehouses of the product's supplier;
 * **Qty** (availability), **Min. Qty**, **Order Step**;
 * **Type**, **State**, **Status** — configurable properties (values are set in
-  the "Settings Registry"); **Status** typically reflects availability ("In Stock",
+  the "Settings Registry"); **Status** typically reflects availability ("In stock",
   etc.);
 * **Brand**, **Rating** (Cold … Hot), **Reviews** (count and average
   score);
@@ -90,7 +90,7 @@ of products via "Group Assignments". The parameters themselves are defined in th
 The **"Product Warehouses"** button opens the **"Product Warehouses"** window —
 the list of the selected product's warehouses: **Warehouse**, **Qty** and free
 **Parameters**. The warehouse is chosen from the warehouses of the product's
-supplier; rows marked for deletion are highlighted until the save. The same data
+supplier; rows marked for deletion are shown struck through until the save. The same data
 is available right in the product list through the **Warehouse: Name / Qty /
 Parameters** columns.
 
