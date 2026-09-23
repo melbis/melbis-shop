@@ -22,7 +22,7 @@ The value of a field of `post` is a string, a number or a yes/no; a list of valu
 ```json
 {"url": "https://shop.example.com/", "debug": false, "post": null, "status": 200,
  "bytes": 9742, "time": 63, "title": "Home page",
- "file": "D:\\Melbis\\shop.example.com\\mcp\\melbis\\pages\\index.html",
+ "file": "D:\\Melbis\\shop.example.com\\mcp\\claude-code\\prices-sept\\pages\\index.html",
  "report": null, "found": null}
 ```
 
@@ -46,7 +46,7 @@ Then as text — the first 2000 characters of the page, if neither `find` nor `d
 ### The Report
 
 ```json
-"report": {"file": "D:\\Melbis\\shop.example.com\\mcp\\melbis\\pages\\index.report.json",
+"report": {"file": "D:\\Melbis\\shop.example.com\\mcp\\claude-code\\prices-sept\\pages\\index.report.json",
            "compile": 0.0099, "sql_count": 6, "sql_time": 0.0057, "cache": true,
            "template": "default", "lang": "ru",
            "units": {"columns": ["unit", "cache_on", "cache_allow", "queries", "query_time"],

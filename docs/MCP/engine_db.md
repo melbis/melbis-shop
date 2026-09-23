@@ -36,7 +36,7 @@ All work with data goes as a pool — a list of steps that the engine carries ou
 
 **There is no transaction.** An error stops the pool, but what was done before it stays. The tables the pool has taken into work it releases after an SQL error too; but if the query fell as a whole, the lock row stays, and `engine_db_unlocks` lifts it.
 
-**The volume.** A step that has returned more than 5000 rows refuses — narrow the query, or repeat the step with `"big": true`. The rows of a heavy step — one with `big` or with an answer over 100 000 bytes — go into the file `mcp\melbis\queries\<date_time>.<step name>.jsonl` of the store folder, one JSON object per line; in the answer the step leaves `rows`, the path `file` and `head` — the first three lines cut to 300 characters. A step with the field `output` writes the rows into the named file whatever the size. `big` lifts the limit of rows only: a wide table read whole can exhaust the server's memory.
+**The volume.** A step that has returned more than 5000 rows refuses — narrow the query, or repeat the step with `"big": true`. The rows of a heavy step — one with `big` or with an answer over 100 000 bytes — go into the file `queries\<date_time>.<step name>.jsonl` of the conversation folder, one JSON object per line; in the answer the step leaves `rows`, the path `file` and `head` — the first three lines cut to 300 characters. A step with the field `output` writes the rows into the named file whatever the size. `big` lifts the limit of rows only: a wide table read whole can exhaust the server's memory.
 
 **A large pool** is built by a script on this computer and passed as the file `pool_source` instead of `pool`: an absolute path or a path from the store folder.
 

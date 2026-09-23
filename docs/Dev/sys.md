@@ -117,6 +117,8 @@ $status_set = MELBIS()->SysKeyValues('STORE_STATUS_KEY');
 $name = $status_set[$store['status_key']] ?? '';
 ```
 
+Without a section code the door returns the whole registry — a map of `section => pairs`.
+
 ## 4. Options and Their Values
 
 Six doors of one shape. Every entity has its own pair of tables — "option" and "option values" — and they all answer the same way: **a list of options, each with its own list of values** under the `value` key. There is no key on either level.
@@ -173,6 +175,8 @@ Keying the values by `skey` is possible only where you know your own data: the s
 $option = MELBIS()->SysEntityValues('provider', $provider_id);
 $min_buy = $option['MIN_BUY'] ?? '';
 ```
+
+Without `$mId` the door returns everything at once — a map of `row id => its options`: a page with a list reads the options of all its rows in a single call.
 
 The answer is the `skey` of the chosen value, or, if the value has no symbolic name, its title; for an option with free input — the text itself. If several rows are entered against one option, the one entered last answers.
 
@@ -308,7 +312,7 @@ foreach ( $group['users'] as $user_id )
 
 A group nobody has been moved into yet is in the list — simply with an empty `users`.
 
-**`SysUserLoginCheck($mLogin, $mPassCode)`** — signing in: it returns the employee's identifier or zero. Zero means all of it at once — no such login, the password did not match, the person is blocked — and that is right: from the outside these cases must not be told apart.
+**`SysUserLoginCheck($mLogin, $mPassCode)`** — signing in: it returns the employee's identifier or zero. Zero means all of it at once — no such login, the password did not match, the person is blocked — and that is right: from the outside these cases must not be told apart. `$mPassCode` is not the password itself but its md5: that is how it is kept in the database, and it is compared string against string. With a raw password the answer is always zero.
 
 The verb in the name is not for decoration: this is a utility rather than a door — it reads without the cache, and it is the only one in the whole section that takes a secret. No door reads the password, it is not in the list of `SysUsers` columns, and the check itself never gets into shared memory.
 
@@ -328,6 +332,17 @@ Ten doors, one per family of rights. The first argument everywhere is the employ
 | `SysOrderOptionRight($mUserId, $mOptionId = 0)` | an order option: may it be edited in an order |
 | `SysOrderStoreOptionRight($mUserId, $mOptionId = 0)` | an option of a product inside an order: the same |
 | `SysSelfKeyRight($mUserId, $mCode = '')` | a store setting |
+
+**A mode is a single flag of a granted right, and none of them includes another.** A section has four of them: `frame` — the descriptions of the section's products, `price` — their prices, `ctrl` — the location of products in the section, `browse` — the section is visible in the Browser without the right to edit. An employee holding only `ctrl` gets "no" to a `browse` question. In the same way `info` and `value` of an info item live apart — the item itself and its values — and so do `read`, `write`, `remove` of a web option. When any of several rights will do, the door is asked once per mode:
+
+```php
+$allow = false;
+foreach ( ['browse', 'frame', 'price'] as $for )
+{
+    $right = MELBIS()->SysTopicRight($user_id, $topic_id, $for);
+    if ( $right ) $allow = true;
+}
+```
 
 The three order doors are three different questions about the same options. `SysOrderRight` asks about a **value**: an order is visible to whoever has been granted the values of its options, the status among them. The other two ask about an **option**: is the employee entitled to set a value for it in an order themselves. Blocks and limits (section 4.1) are not rights but rules: they restrict the choice, not the access.
 
@@ -460,6 +475,8 @@ The utilities themselves change the structure — where a node stands, in what o
 | `SysTreeDelete($mTable, $mId, $mScope = [])` | removes a node together with its branch | the number of rows removed |
 | `SysTreeRepair($mTable, $mScope = [])` | removes the nodes left without a parent and lays the rest out anew | `['gone' => …, 'moved' => …]` |
 
+Parent `0` in `SysTreeAdd` and `SysTreeMove` is the top level of the tree.
+
 Three things about writing are worth knowing in advance.
 
 **A row is born bare.** `SysTreeAdd` writes only the `id` and the scope's columns — the name, the type and everything else are filled in by the caller with their own `SqlUpdate`. The parent's rights the node does not inherit by itself either: until they have been copied, a new section or info item is seen by the owner alone. The second act is `SysTreeRightCopy`: it finds the table's twin `<table>_right` and writes the parent's grants over to the node. For a table without a twin there is nothing to copy, and the answer is zero — which is not an error.
@@ -531,7 +548,7 @@ The relation lives until the end of the request. A relation the engine already h
 
 **`SysFileEntities()`** — the entities files are attached to: the tables that have a `files_<table>` link by `elem_id` in the map. The list is read from the same map, so a link the store declares through `SysDependAdd` gets into it by itself.
 
-**`SysDependCount($mTable, $mIds)`** — how many rows would be left hanging if the named ones were removed. The answer is a map of `table => number`, only the non-zero ones. The count runs along the same chain as the sweep: the dependants of dependants are in the answer too. A row that two relations lead to is counted once — as once it will go. It must be asked **before** the deletion, while the rows are still in place:
+**`SysDependCount($mTable, $mIds)`** — how many rows would be left hanging if the named ones were removed; `$mIds` is a single identifier or a list. The answer is a map of `table => number`, only the non-zero ones. The count runs along the same chain as the sweep: the dependants of dependants are in the answer too. A row that two relations lead to is counted once — as once it will go. It must be asked **before** the deletion, while the rows are still in place:
 
 ```php
 $count = MELBIS()->SysDependCount('topic', $topic_id);

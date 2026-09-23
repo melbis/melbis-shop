@@ -16,7 +16,7 @@ The family has rules of its own — `shop.md` in the `Engine\MCP` folder. The fi
 
 ## The Page
 
-`shop_page` requests a page the way a visitor's browser does, and saves the HTML in `mcp\melbis\pages\`. Every read is a new visit: without cookies and without a session.
+`shop_page` requests a page the way a visitor's browser does, and saves the HTML in `pages\` of the conversation folder. Every read is a new visit: without cookies and without a session.
 
 **The page may come from the cache.** Saving a module's file resets the cache of that module only — what clears itself is described in "[Configuration and Cache](engine_dev.md)". If an edit is not visible on the page, the reason is sometimes the cache of another module, the one that prints the changed place.
 
@@ -53,7 +53,7 @@ The entry point runs a module only if:
 
 **The parameters** go the same way as the fields of a form — a list comes as an array — and the module gets them in one serialized argument: `post: serial` is declared in the manifest, the values lie in `$mVars['post']` — see "[Modular Scripts](../Dev/unit.md)". The service `login`, `secret` and `mod` the entry point removes before running the module.
 
-**The answer** passes through the parser like any page: templates, tags, cache. The whole of it is saved in `mcp\melbis\runs\<module>.txt`. If the module has fallen, the message, the file and the line the engine writes into the storefront's log `core/log/melbis/front.log`.
+**The answer** passes through the parser like any page: templates, tags, cache. The whole of it is saved in `runs\<module>.txt` of the conversation folder. If the module has fallen, the message, the file and the line the engine writes into the storefront's log `core/log/melbis/front.log`.
 
 **There are no rights for running.** A ready `agent_*` module can be run by anyone who has signed in to the store; to create or change a module — a login with the right "Direct access → Development → Modify data".
 

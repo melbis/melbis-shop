@@ -16,7 +16,7 @@ In the markup a file is named from the template group with the `{PATH}` tag: `<i
 
 An image does not go through the correspondence as text: it is downloaded and uploaded as a file.
 
-**`engine_image_load`** downloads a file onto this computer: by default into `mcp\melbis\` of the store folder, along the same path as on the server. The tool never reads the local copy instead of the server. png, jpeg, gif and webp come in the answer as an image as well, svg as text.
+**`engine_image_load`** downloads a file onto this computer: by default into the conversation folder, along the same path as on the server. The tool never reads the local copy instead of the server. png, jpeg, gif and webp come in the answer as an image as well, svg as text.
 
 The agent application may shrink the image before handing it to the model: Claude Code brings it down to 2000×2000 pixels and compresses it. The file on the disk stays an exact copy of the server's one.
 

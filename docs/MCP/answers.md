@@ -11,7 +11,7 @@ Every call of a tool gets one answer of one or several blocks and a mark of erro
   3. **the image** — for an image that has been downloaded.
 
   An empty block is not sent. Anything bulky — pages, images, large selections — the
-  server puts into `mcp\melbis\` of the store folder as a file and names the path.
+  server puts into the conversation folder as a file and names the path.
 
   If on connection the application has agreed on protocol version 2025-06-18 or a newer
   one, the data also comes in the result's `structuredContent` field — the same JSON

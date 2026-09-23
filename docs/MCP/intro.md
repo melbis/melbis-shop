@@ -52,7 +52,7 @@ An application opened on the store folder starts a server tied to this store: sw
 
 **Signing in under a user.** There is no separate user for the AI in the store: the agent works under a person's login, with their rights and in their name. The login-password pair the server takes itself — from the running program, and if it is closed, from the Windows registry (only when the "store passwords" box is ticked). The password never passes through the correspondence.
 
-**A right** is a row of the "AI Assistant" branch in the store user's rights. One right can open several MCP tools at once: "Direct access → Development → Read data", for example, opens the file map, the search, and loading a module. Five tools require no rights: `session_init`, `session_connect`, `session_rules_accept`, `shop_page`, `shop_run`. In detail — "[Sign-in, Rights, License](access.md)".
+**A right** is a row of the "AI Assistant" branch in the store user's rights. One right can open several MCP tools at once: "Direct access → Development → Read data", for example, opens the file map, the search, and loading a module. Six tools require no rights: `session_init`, `session_connect`, `session_rules_accept`, `session_clear`, `shop_page`, `shop_run`. In detail — "[Sign-in, Rights, License](access.md)".
 
 **The license** is a daily token that every request is signed with. The tokens are obtained by the program, the MCP server only reads them from the store folder. A license is issued for a "domain + login" pair and is shared by the user and their agent.
 
@@ -76,7 +76,7 @@ The name is made of the family, the subject and the action: `engine_php_save` �
 
 | The start of the name | The family |
 |---|---|
-| `session_` | signing in to the store and accepting the rules |
+| `session_` | signing in to the store, accepting the rules, and the conversation folders |
 | `engine_` | the store's files, data and settings through the engine |
 | `memory_` | the store's memory |
 | `tool_` | the store's AI tools |
@@ -88,7 +88,7 @@ The actions repeat from family to family: `load` — read, `save` — write an e
 
 **The distribution** is the program's installation folder. In it lie `MelbisMCP.exe` and the `Engine\MCP` folder — the texts for the agent: the starting instructions and the tools' rules that the server hands out, and the recipes in `Engine\MCP\Recipes\` — the order of actions for particular situations, which the agent reads itself by the links from the rules. Installation replaces the `Engine` folder as a whole, so texts of one's own are not put there: the rules of a particular store are kept in its memory.
 
-**The store folder** is the store's local folder on the computer. In it the program keeps the data and the settings, and the MCP server its own working folders:
+**The store folder** is the store's local folder on the computer. In it the program keeps the data and the settings, and the MCP server the conversation folders:
 
 | File or folder | What it is |
 |---|---|
@@ -98,9 +98,8 @@ The actions repeat from family to family: `load` — read, `save` — write an e
 | `*.xml` | the settings of the program's windows, the profiles among them |
 | `tokens\` | the daily license files: the program obtains them, the server only reads them |
 | `files\` | a copy of the element files folder from the server: both the program and `engine_files_load` fill it |
-| `mcp\<application>\` | the agent's working folder: reports, scripts, what has been downloaded to be studied. The name is the one the agent application called itself by |
-| `mcp\melbis\` | the server's disposable folder: downloaded pages, images, large query results. It can be wiped at any moment |
-| `.mcp.json`, `.claude\`, `.codex\`, `AGENTS.md` | how applications opened on this folder as a project start the server, tying it to this store, and call its tools without asking for permission — once the user has trusted the folder to the application. The program lays them down from `Engine\MCP\Setup\` of the distribution at every start, rewriting them whole |
+| `mcp\<application>\<topic>\` | the conversation folder: reports, scripts and what the agent has downloaded to be studied, and also everything the tools write — answer tables, storefront pages, query results, images, copies of the store. The application is the name the agent application called itself by, and the topic is the word the agent gave in `session_connect`. The folders stay until [`session_clear`](session_clear.md) removes them |
+| `.mcp.json`, `.claude\`, `.codex\`, `opencode.json`, `AGENTS.md` | how applications opened on this folder as a project start the server, tying it to this store, and call its tools without asking for permission — once the user has trusted the folder to the application. The program lays them down from `Engine\MCP\Setup\` of the distribution at every start, rewriting them whole |
 
 ## The Answer
 
@@ -109,7 +108,7 @@ Every call gets one answer: one block or several, and a mark of whether the call
 * **Success** — the data in JSON, if the tool returns any, and then the text: what this
   case calls for, the contents of a file, explanations. A downloaded image comes as a
   separate block — an image that the model sees. Anything bulky the server puts into
-  `mcp\melbis\` as a file and names the path.
+  the conversation folder as a file and names the path.
 * **A refusal** — one text block with a mark of error. The first word is usually a code
   in capitals with a colon (`ACCESS_DENIED:`, `NO_SETTINGS:`, `RULES_REQUIRED:`), and
   after it the explanation: what is wrong and who fixes it.

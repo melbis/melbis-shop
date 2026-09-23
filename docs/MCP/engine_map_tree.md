@@ -75,7 +75,7 @@ Everything the store is made of: the modules, the folders, the files and the ser
 The map's rows are written into a file, one per line: an object with the columns of its own table and the table's name in `table`. `path` narrows the file down too. In the answer — the file's path and the number of rows of every table:
 
 ```json
-{"file": "D:\\Melbis\\shop.example.com\\mcp\\claude-code\\map.jsonl",
+{"file": "D:\\Melbis\\shop.example.com\\mcp\\claude-code\\prices-sept\\map.jsonl",
  "rows": {"units": 57, "dirs": 61, "files": 108, "logs": 3}}
 ```
 

@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.461 @ 2026-09-23
+ * @version 6.5.1.462 @ 2026-09-23
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -143,7 +143,7 @@ table={DBNICK}_key_value|id|value_txt
 11=Файл из описания
 15=Базовый файл
 16=
-17=<MELBISSHOP ShopVersion="Melbis Shop v6.5.1.537"><JPEG FileType="2" Compress="95" Width="700" Hight="700" Smart="False" Base="False" Optim="False"/><FILE KindKey="kDefault" Base="False"/><MASK File="files/1899/12_30/00_00/" Pos="0" Alpha="0" SizeW="0" SizeH="0" Indent="0" Rotate="0"/><CANVAS Range="255" RangeBorder="10" Border="5" Color="16777215" Alpha="False"/><ROTATE Rotate="0" Mirror="False"/><EFFECTS Red="0" Green="0" Blue="0" Intensive="0" Contrast="0" Sharpen="10"/></MELBISSHOP>
+17=<MELBISSHOP ShopVersion="Melbis Shop v6.5.1.563"><FRAME Kind="2" Range="250" Border="1"/><JPEG FileType="2" Compress="85" Width="700" Hight="700" Smart="False" Base="False" Optim="False"/><FILE KindKey="kDefault" Base="False"/><MASK File="files/1899/12_30/00_00/" Pos="0" Alpha="0" SizeW="0" SizeH="0" Indent="0" Rotate="0"/><CANVAS Range="255" RangeBorder="10" Border="5" Color="16777215" Alpha="False"/><ROTATE Rotate="0" Mirror="False"/><EFFECTS Red="0" Green="0" Blue="0" Intensive="0" Contrast="0" Sharpen="10"/></MELBISSHOP>
 20=По умолчанию
 22=Исходный файл
 24=Файл из описания
@@ -280,7 +280,7 @@ table={DBNICK}_key_value|id|value_txt
 402=Штат
 403=По умолчанию
 404=По умолчанию
-405=<MELBISSHOP ShopVersion="Melbis Shop v6.5.1.537"><JPEG FileType="2" Compress="95" Resolution="3.00" Smart="True" Base="False" Optim="True"/><FILE KindKey="kDefault" Base="True"/><MASK File="files/1899/12_30/00_00/" Pos="0" Alpha="0" SizeW="0" SizeH="0" Indent="0" Rotate="0"/><CANVAS Range="255" RangeBorder="10" Border="0" Color="16777215" Alpha="False"/><ROTATE Rotate="0" Mirror="False"/><EFFECTS Red="0" Green="0" Blue="0" Intensive="0" Contrast="0" Sharpen="10"/></MELBISSHOP>
+405=<MELBISSHOP ShopVersion="Melbis Shop v6.5.1.563"><FRAME Kind="2" Range="250" Border="1"/><JPEG FileType="2" Compress="85" Resolution="3.00" Smart="True" Base="False" Optim="True"/><FILE KindKey="kDefault" Base="True"/><MASK File="files/1899/12_30/00_00/" Pos="0" Alpha="0" SizeW="0" SizeH="0" Indent="0" Rotate="0"/><CANVAS Range="255" RangeBorder="10" Border="0" Color="16777215" Alpha="False"/><ROTATE Rotate="0" Mirror="False"/><EFFECTS Red="0" Green="0" Blue="0" Intensive="0" Contrast="0" Sharpen="10"/></MELBISSHOP>
 424=Критическое
 425=Приказ
 426=Навык

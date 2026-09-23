@@ -37,7 +37,7 @@ The call `{"mod": "agent_hello", "params": {"name": "Melbis"}}` will answer `Hel
 
 ```json
 {"mod": "agent_hello", "status": 200, "bytes": 13, "time": 47,
- "file": "D:\\Melbis\\shop.example.com\\mcp\\melbis\\runs\\agent_hello.txt", "cut": false}
+ "file": "D:\\Melbis\\shop.example.com\\mcp\\claude-code\\prices-sept\\runs\\agent_hello.txt", "cut": false}
 ```
 
 Then as text — the module's answer, up to 8000 bytes.

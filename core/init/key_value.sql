@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.461 @ 2026-09-23
+ * @version 6.5.1.462 @ 2026-09-23
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -286,4 +286,4 @@ INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('4
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('427', 'AGENT_TOOL_KIND_KEY', 'kDefault', '1', '427');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('428', 'AGENT_TOOL_COMMAND_KIND_KEY', 'kDefault', '1', '428');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, sys_key, pos) VALUES ('429', 'AGENT_MEMORY_KIND_KEY', 'kDefault', '1', '429');
-UPDATE {DBNICK}_generator SET gen_value = 435 WHERE table_name = 'key_value';
+UPDATE {DBNICK}_generator SET gen_value = 444 WHERE table_name = 'key_value';

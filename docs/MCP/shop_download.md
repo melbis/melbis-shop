@@ -11,7 +11,7 @@ Copies the store's modules, profiles or database onto this computer: the engine 
 | Parameter | Type | What it is |
 |---|---|---|
 | [`action`] | string | what to copy: `modules` — by default, `profiles` or `database` |
-| [`output`] | string | where to unpack — an absolute path or a path from the store folder. `mcp\melbis\shop` by default |
+| [`output`] | string | where to unpack — an absolute path or a path from the store folder. `shop` in the conversation folder by default |
 
 | `action` | What is in the copy |
 |---|---|
@@ -22,7 +22,7 @@ Copies the store's modules, profiles or database onto this computer: the engine 
 ## The Answer
 
 ```json
-{"action": "modules", "folder": "D:\\Melbis\\shop.example.com\\mcp\\melbis\\shop", "files": 240}
+{"action": "modules", "folder": "D:\\Melbis\\shop.example.com\\mcp\\claude-code\\prices-sept\\shop", "files": 240}
 ```
 
 | Field | What it is |

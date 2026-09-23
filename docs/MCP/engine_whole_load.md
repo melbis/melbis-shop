@@ -21,7 +21,7 @@ The store's server packs the file into an archive, `MelbisMCP.exe` unpacks it an
 
 ```json
 {"path": "./../core/log/melbis/back.log",
- "file": "D:\\Melbis\\shop.example.com\\mcp\\claude-code\\back.log",
+ "file": "D:\\Melbis\\shop.example.com\\mcp\\claude-code\\prices-sept\\back.log",
  "bytes": 27090}
 ```
 

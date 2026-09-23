@@ -144,6 +144,7 @@
 * [session_init](MCP/session_init.md)
 * [session_connect](MCP/session_connect.md)
 * [session_rules_accept](MCP/session_rules_accept.md)
+* [session_clear](MCP/session_clear.md)
 
 **3.3 Engine**
 

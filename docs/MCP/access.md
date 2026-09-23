@@ -37,7 +37,7 @@ Behind every MCP tool there is a command of the engine — `AGENT_` and the name
 | Export | AI Tools | `AGENT_TOOL_EXPORT` | `tool_export` |
 | | Store | `AGENT_SHOP_DOWNLOAD` | `shop_download` |
 
-`session_init`, `session_connect`, `session_rules_accept`, `shop_page` and `shop_run` work without rights. One exception inside them: `shop_page` with `debug=true` reads the debugger's code from the configuration and therefore requires the "Get configuration" right.
+`session_init`, `session_connect`, `session_rules_accept`, `session_clear`, `shop_page` and `shop_run` work without rights. One exception inside them: `shop_page` with `debug=true` reads the debugger's code from the configuration and therefore requires the "Get configuration" right.
 
 The "Development" branch divides the work with the project's files into reading and changing only, and this is not a simplification: a login that may save a module can already do to the store everything the store itself can do. That is why "Modify data" includes "Read data": a save begins with loading the file.
 

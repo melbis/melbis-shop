@@ -56,7 +56,7 @@ The same path on one call of "File Import" from the distribution.
 
 ```json
 {"unit": "MELBIS_AGENT_IMPORT_FILES", "command": "CmdAdd",
- "params": {"profile": "catalog"}, "files_source": "mcp\\claude-code\\photos.json",
+ "params": {"profile": "catalog"}, "files_source": "mcp\\claude-code\\prices-sept\\photos.json",
  "into": "photos", "debug": true}
 ```
 
@@ -94,7 +94,7 @@ The fields the agent has written on an attachment beyond the ones the store know
 {"result": true, "message": "The tables asked for",
  "detail": {},
  "tables": {"currency": {"rows": 3,
-                         "file": "D:\\Melbis\\shop.example.com\\mcp\\melbis\\tables\\MELBIS_AGENT_CURRENCY.CmdList.currency.jsonl",
+                         "file": "D:\\Melbis\\shop.example.com\\mcp\\claude-code\\prices-sept\\tables\\MELBIS_AGENT_CURRENCY.CmdList.currency.jsonl",
                          "head": ["{\"id\":\"1\",\"name\":\"USD\"}", "…", "…"]}},
  "files": [],
  "time": {"server": 11, "module": 1, "trip": 46}}

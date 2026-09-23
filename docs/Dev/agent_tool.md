@@ -86,7 +86,7 @@ The difference is not one of convenience but of possibility: a batch of five hun
 $list = implode(',', $mParam['store_id']);   // int/json: the elements are already weighed
 ```
 
-Every element is weighed by the same type as a single value — which is exactly what makes substituting a list into `IN ( … )` safe. An empty list, and a list inside a list, are refused.
+Every element is weighed by the same type as a single value — which is why `int/json` is exactly what makes substituting a list into `IN ( … )` safe. An empty list, and a list inside a list, are refused.
 
 Multiplicity is a property of the registry row, not of the field as such: the same `price` may be `float/json` in a reading command (a range, a search) and `float` in a writing one, because a list cannot be written into a column.
 
@@ -144,7 +144,7 @@ There are five keys, and the response always has them:
 
 There are no machine code words in the response: `result` plus text is enough for the agent. The values in `detail` are named in words of the subject area — `id`, `version_id`, `found` — rather than `data1`.
 
-**Rows — only in `tables`.** Everything that may turn out longer than a few rows the command puts into `tables`. The MCP server writes every table into a file on the agent's computer and leaves in the answer the number of rows, the path to the file, and the first three rows. A list put into `detail` the agent will get whole, straight into the correspondence: a thousand products is hundreds of thousands of characters in its memory. This is how the `melbis_inc_agent_table` library answers a read:
+**Rows — only in `tables`.** Everything that may turn out longer than a few rows the command puts into `tables`. The MCP server writes every table into a file on the agent's computer and leaves in the answer the number of rows, the path to the file, and the first three rows. A list put into `detail` the agent will get whole, straight into the correspondence: a thousand products is hundreds of thousands of characters in its memory. Related data is returned as separate tables: the rows refer to one another by `id`, and the agent joins them with its own script. This is how the `melbis_inc_agent_table` library answers a read:
 
 ```php
 return [
@@ -195,7 +195,7 @@ The MCP server gives the agent the command's response with the same keys. It wri
 {"result": true, "message": "The tables asked for",
  "detail": {},
  "tables": {"currency": {"rows": 3,
-                         "file": "D:\\Melbis\\shop.example.com\\mcp\\melbis\\tables\\MELBIS_AGENT_CURRENCY.CmdList.currency.jsonl",
+                         "file": "D:\\Melbis\\shop.example.com\\mcp\\claude-code\\prices-sept\\tables\\MELBIS_AGENT_CURRENCY.CmdList.currency.jsonl",
                          "head": ["{\"id\":\"1\",\"code\":\"USD\"}", "…", "…"]}},
  "files": [],
  "time": {"server": 11, "module": 1, "trip": 46}}

@@ -11,7 +11,7 @@ Downloads a file from the images folder onto this computer. An image it shows in
 | Parameter | Type | What it is |
 |---|---|---|
 | `path` | string | the file's path: `templates/default/images/favicon.svg` |
-| [`output`] | string | where to write it on this computer — an absolute path or a path from the store folder. Without it — `mcp\melbis\` of the store folder and the same path as on the server |
+| [`output`] | string | where to write it on this computer — an absolute path or a path from the store folder. Without it — the conversation folder and the same path as on the server |
 
 The file is taken from the server every time and overwrites the local copy.
 
@@ -19,7 +19,7 @@ The file is taken from the server every time and overwrites the local copy.
 
 ```json
 {"path": "./../templates/default/images/favicon.svg",
- "file": "D:\\Melbis\\shop.example.com\\mcp\\melbis\\templates\\default\\images\\favicon.svg",
+ "file": "D:\\Melbis\\shop.example.com\\mcp\\claude-code\\prices-sept\\templates\\default\\images\\favicon.svg",
  "bytes": 846, "mime": "image/svg+xml"}
 ```
 

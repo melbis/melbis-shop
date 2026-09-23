@@ -35,9 +35,9 @@ The full form of the answer — the keys, the tables, the refusals, the crashes 
 
 A command's response always has the same keys. `result` is `true` or `false` with no "almost", `message` is human text that can be read out to the owner. `result: false` is a refusal, whoever does the refusing: the engine before the module, or the command itself by the rules of the subject area. `detail` holds the values the command returned, and their meaning is written in its description; `tables` holds its rows, and `files` the attachments it has kept for itself.
 
-**The rows of the tables do not come into the correspondence.** A command gives the data back under the `tables` key, and every table is written into its own file `mcp\melbis\tables\<unit>.<command>.<table>.jsonl` in the store folder, one JSON row per line of the file. Every call of that command overwrites the file. What stays in the answer is the number of rows, the path, and the first three rows, cut to 300 characters.
+**The rows of the tables do not come into the correspondence.** A command gives the data back under the `tables` key, and every table is written into its own file `tables\<unit>.<command>.<table>.jsonl` in the conversation folder, one JSON row per line of the file. Every call of that command overwrites the file. What stays in the answer is the number of rows, the path, and the first three rows, cut to 300 characters.
 
-**The `into` job** appends the tables into the file `mcp\melbis\tables\<into>.<table>.jsonl` as well — that is how a large selection read page by page is gathered into one file. This file only grows, and nobody cleans it.
+**The `into` job** appends the tables into the file `tables\<into>.<table>.jsonl` in the conversation folder as well — that is how a large selection read page by page is gathered into one file. This file only grows, and it goes only together with the conversation folder.
 
 **The time.** The answer carries how long the call lasted on the server, how much of that the module took, and the whole round trip by this computer's clock; with `debug` — also the number of the module's queries and their total time. A long module is the tool's own work, a long server with a fast module is the engine around it, a fast server with a long round trip is the road.
 
