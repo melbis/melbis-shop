@@ -28,7 +28,7 @@ An entity will do if the store has a `files_<entity>` table with a generator. In
 
 ## Kind and Order
 
-`kind_key` divides an element's files into groups, `kBase` by default. If the table's registry of kinds has rows, another kind is refused with a list of the allowed ones; if the registry is empty, any one will do. The order `pos` is counted inside the group: a new file goes to its end.
+`kind_key` divides an element's files into groups, `kBase` by default. If the table's registry of kinds has rows, another kind is refused with a list of the allowed ones; if the registry is empty, any one will do. The order `pos` of an element's files is shared by all the groups, as in the program: a new file goes to the end of the list.
 
 ## What Is Not There
 

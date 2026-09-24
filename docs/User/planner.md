@@ -9,9 +9,12 @@ a reminder.
 The window consists of three lists and an auxiliary panel:
 
 * **Users** — store employees;
-* **Tasks** — tasks of the selected user;
-* **Responses** — responses and comments on the selected task; below it is the
-  **"Add Comment"** field.
+* **Tasks** — tasks of the selected user; the task's text is shown below the list;
+* **Responses** — responses and comments on the selected task; below the list are
+  the text of the selected response and the **"Comment"** button.
+
+The texts of tasks and responses are shown with their formatting and images; the
+response list itself shows only the text.
 
 The **"Embedded Web Module"** panel displays additional information about the task
 (see "[Basic Operating Principles](basics.md)").
@@ -41,17 +44,20 @@ and "Your task has been completed" (see "[Dispatcher and Locks](dispatcher.md)")
 ## Creating a Task
 
 The **"Add Task"** button opens the task window with the following fields: **Name**,
-**Creator**, **Assignee**, **Type**, **State**, and **Notes**. The **"Private"**
-checkbox makes the task visible only to the creator and the assignee. A new task
-can only have the state **"New"**. Clicking **"Done"** creates the task and adds
-it to the list; its first condition is duplicated below the list for convenience.
+**Creator**, **Assignee**, **Type**, **State**, and **Notes**. The notes are
+written in the HTML editor: the two buttons at the end of the line open it in visual
+mode and in code mode, and an image can be inserted right into the text (see
+"[HTML Editor](html-editor.md)"). The **"Private"** checkbox makes the task
+visible only to the creator and the assignee. A new task can only have the state
+**"New"**. Clicking **"Done"** creates the task and adds it to the list; its first
+condition is duplicated below the list for convenience.
 
 ## Responses and State Changes
 
 A response to a task changes its state, so only the **current assignee** can add
 one — using the **"Add Response to Task"** button. If you only need to add a note
-to someone else's task without changing its state, use the quick **"Comment"**
-option.
+to someone else's task without changing its state, click **"Comment"**: the HTML
+editor opens, and once saved, the comment is added to the task at once.
 
 The task state and its assignee are governed by the following rules:
 

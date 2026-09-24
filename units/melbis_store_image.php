@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.465 @ 2026-09-23
+ * @version 6.5.1.466 @ 2026-09-24
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -27,11 +27,12 @@ function Main($mVars)
     // Every id the page collected
     $ids = MELBIS()->EnumGet('store', $id);
 
-    // Get image, elem_id keys it
+    // Get image, first place wins
     $command = "SELECT elem_id, upload_time, file_name
                   FROM {DBNICK}_files_store
                  WHERE kind_key = :KEY
                    AND elem_id IN ( $ids )
+              ORDER BY pos DESC
                 ";
     $param = [
         'key'   => $key

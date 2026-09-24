@@ -18,20 +18,46 @@ Brands, Parameters, Attributes, Catalog, Filters, Promo Blocks, as well as the
 Report Editor) and "Users". Such a window is recognized by the **"Pause"** and
 **"Read Only"** buttons at the bottom.
 
-When opened, the section's data is **locked on the server** for editing; if another
-employee has already opened the section, it will load in **read-only** mode. Buttons:
+When opened, the window **locks the section's data on the server** for you: while
+the lock is yours, the window has a **red frame**, and other employees can open
+the section only for reading.
 
-* **Save** — send changes to the server without closing the window (editing
-  continues);
-* **Save and Exit** — send changes and close the window, releasing the lock;
-* **Read Only** — release your lock and switch to view mode so another employee
-  can work with the data;
-* **Pause** — close the window without sending changes (the lock will be released after
-  a timeout);
-* **Cancel** — discard unsaved changes.
+If the section is already locked by another employee, the **"Tables Are Locked"**
+window appears with the name of whoever holds it:
 
-A "stuck" lock can be released in the "System" → "Locks" section (see
-"[Dispatcher and Locks](dispatcher.md)").
+* **Retry** — try again; the button repeats the attempt by itself, with a
+  countdown (the interval is "auto-retry on a lock" in
+  "[Connection](connection.md)");
+* **Open Read-only** — open the section for viewing;
+* **Unlock** — go to the "[Locks](dispatcher.md#locks)" window;
+* **Cancel** — do not open the section.
+
+Without that window, the section opens read-only if you have no right to save
+it or it is not the operation's "Allowed Time" at the moment (see
+"[Users](users.md)").
+
+The window's buttons:
+
+* **Save** — send changes to the server without closing the window; the lock
+  stays yours;
+* **Save and Exit** — send changes, release the lock and close the window;
+* **Read Only** — release your lock and stay in the window for viewing, so that
+  another employee can work with the data;
+* **Reopen** — the same button in read-only mode: load the section again and try
+  to take the lock;
+* **Pause** — close the window, keeping the lock yours and the changes on this
+  computer's disk; the next time you open it, work continues from the same place.
+  If your lock was released in the meantime, the section loads from the server
+  again, and the unsaved changes are lost;
+* **Cancel** — discard unsaved changes, release the lock and close the window;
+  the next time you open it, the data loads from the server.
+
+If you close the window with the cross while the lock is yours, the program asks
+what to do: "Pause", "Save and Exit" or "Cancel".
+
+A lock is never released by time on its own. A "stuck" lock — for example, one
+left on "Pause" on another computer — is released in the
+"[Locks](dispatcher.md#locks)" window.
 
 ### 2. Working in Portions
 

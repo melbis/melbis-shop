@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.465 @ 2026-09-23
+ * @version 6.5.1.466 @ 2026-09-24
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -226,10 +226,9 @@ function CmdPos($mUserId, $mParam)
     $gate = FILE\RightElem($mUserId, $entity, $mParam['elem_id']);
     if ( $gate !== true ) return $gate;
 
-    // The files of one group
+    // Every file of the element
     $scope = [
-        'elem_id'  => $mParam['elem_id'],
-        'kind_key' => $mParam['kind_key']
+        'elem_id'  => $mParam['elem_id']
         ];
 
     return TABLE\Pos($mUserId, 'files_'.$entity, $scope, $mParam);

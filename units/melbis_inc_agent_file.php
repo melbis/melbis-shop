@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.465 @ 2026-09-23
+ * @version 6.5.1.466 @ 2026-09-24
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -239,14 +239,14 @@ function RightElem($mUserId, $mEntity, $mElemId)
  **/
 function FileAll($mEntity, $mIds)
 {
-    // The order a template walks
+    // The order the program keeps
     $list = implode(',', $mIds);
     if ( $list == '' ) return [];
 
     $command = "SELECT *
                   FROM {DBNICK}_files_$mEntity
                  WHERE elem_id IN ( $list )
-              ORDER BY elem_id, kind_key, pos
+              ORDER BY elem_id, pos
                ";
 
     return MELBIS()->SqlSelect(__LINE__, $command);

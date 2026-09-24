@@ -17,7 +17,8 @@ description texts. Classes are prepared by a developer.
 
 An HTML document consists of nested elements (tags). The element bar at the bottom
 shows which tags surround the selected text; each element has an **ID**,
-**Class**, and **Style**, as well as the **"Styles"**, **"Events"**, and **"Console"** tabs.
+**Class**, **Title** (a tooltip, the `title` attribute), and **Style**, as well as the
+**"Styles"**, **"Events"**, and **"Console"** tabs.
 
 Element functions include: **"Add element and class"** (with a submenu of ready-made
 classes), **"Find element start/end"**, copying, cutting, and pasting
@@ -37,6 +38,11 @@ cluttering with extra tags), bold/italic/underline, alignment, indentation, and
 lists. **"Insert image"** and **"Image management"** open the object's files
 (see "[File Management](files.md)"); **"Assign link"** and
 **"Assign link to file"** create links.
+
+Scheduler notes and the agent's memory have no files of their own, so an image from
+the clipboard is written right into the text: pasting (**Ctrl+V**) or the
+**"Insert image"** button compresses it to WebP and puts it inside the HTML code.
+The editor asks for confirmation before inserting.
 
 ## Templates
 
