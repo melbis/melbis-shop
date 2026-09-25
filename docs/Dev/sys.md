@@ -506,6 +506,8 @@ Where there is no tree, the order is held by the `pos` column: reference directo
 
 One table may hold several lists — and then a **scope** tells them apart, the same one as in a tree: a column and its value. For tax rates that is `['group_id' => 3]`, for option values `['option_id' => 7]`.
 
+In the employee's working tables, with the `u_` prefix, an identifier repeats from one employee to another, so their scope always includes `user_id`.
+
 | Utility | What it does | What it answers |
 |---|---|---|
 | `SysPosShift($mTable, $mId, $mDown = false, $mScope = [])` | swaps a row with its neighbour | `true` or `false` |

@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.466 @ 2026-09-24
+ * @version 6.5.1.470 @ 2026-09-25
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -16,7 +16,6 @@ namespace MELBIS_AGENT_FILE;
 
 // Libraries
 use MELBIS_INC_AGENT_FILE as FILE;
-use MELBIS_INC_AGENT_SYSTEM as SYS;
 use MELBIS_INC_AGENT_TABLE as TABLE;
 
 
@@ -36,13 +35,14 @@ function CmdList($mUserId, $mParam)
         if ( $gate !== true ) return $gate;
     }
 
-    $rows = FILE\FileAll($entity, $mParam['elem_id']);
+    $rows = FILE\FileAll($entity, $mParam['elem_id'], $mUserId);
+    $table = FILE\Home($entity);
 
     return [
         'result'  => true,
         'message' => 'The files of the elements named',
         'tables'  => [
-            'files_'.$entity => $rows
+            $table => $rows
             ]
         ];
 }
@@ -57,6 +57,7 @@ function CmdAdd($mUserId, $mParam)
     $tables = [];
     $kept = [];
     $said = [];
+    $touched = [];
     foreach ( $mParam['files'] as $one )
     {
         $entity = $one['entity'];
@@ -65,22 +66,30 @@ function CmdAdd($mUserId, $mParam)
         $found = FILE\EntityOne($entity);
         if ( $found !== true )
         {
-            FILE\FileDrop($entity, $one['id'], $one['disk']);
+            FILE\FileDrop($entity, $one['id'], $one['disk'], $mUserId);
             $said[] = $one['real_name'].': '.$found['message'];
             continue;
         }
 
         $gate = FILE\RightElem($mUserId, $entity, $one['elem_id']);
+        if ( $gate === true ) $gate = FILE\Held($mUserId, $entity);
         if ( $gate !== true )
         {
-            FILE\FileDrop($entity, $one['id'], $one['disk']);
+            FILE\FileDrop($entity, $one['id'], $one['disk'], $mUserId);
             $said[] = $one['real_name'].': '.$gate['message'];
             continue;
         }
 
-        $row = FILE\FileOne($entity, $one['id']);
-        $tables['files_'.$entity][] = $row;
+        $row = FILE\FileOne($entity, $one['id'], $mUserId);
+        $table = FILE\Home($entity);
+        $tables[$table][] = $row;
         $kept[] = $row['id'];
+        $touched[$entity][] = $row['elem_id'];
+    }
+
+    foreach ( $touched as $entity => $elems )
+    {
+        FILE\Touched($mUserId, $entity, $elems);
     }
 
     // Answers files even when empty
@@ -115,12 +124,13 @@ function CmdMake($mUserId, $mParam)
 
     $entity = $mParam['entity'];
 
-    $was = FILE\FileOne($entity, $mParam['id']);
+    $table = FILE\Home($entity);
+    $was = FILE\FileOne($entity, $mParam['id'], $mUserId);
     if ( !isset($was['id']) )
     {
         return [
             'result'  => false,
-            'message' => 'No file ['.$mParam['id'].'] in files_'.$entity
+            'message' => 'No file ['.$mParam['id'].'] in '.$table
             ];
     }
 
@@ -145,17 +155,21 @@ function CmdMake($mUserId, $mParam)
             ];
     }
 
-    $tables = ['{DBNICK}_files_'.$entity];
-    $lock = SYS\TablesLock($tables, $mUserId);
-    if ( !$lock['result'] ) return $lock;
+    $hold = TABLE\Hold($mUserId, $table);
+    if ( !$hold['result'] ) return $hold;
 
     // One act of the workshop
     $made = FILE\Make($mUserId, $entity, $was, $mParam['profile'], $show,
                       $mParam['real_name'] ?? '');
 
-    SYS\TablesUnlock($tables, $mUserId);
+    TABLE\Release($mUserId, $table);
 
     if ( !$made['result'] ) return $made;
+
+    $elems = [$was['elem_id']];
+    FILE\Touched($mUserId, $entity, $elems);
+
+    $row = FILE\FileOne($entity, $made['id'], $mUserId);
 
     return [
         'result'  => true,
@@ -164,7 +178,7 @@ function CmdMake($mUserId, $mParam)
             'id' => $made['id']
             ],
         'tables'  => [
-            'files_'.$entity => [FILE\FileOne($entity, $made['id'])]
+            $table => [$row]
             ]
         ];
 }
@@ -188,8 +202,15 @@ function CmdUpdate($mUserId, $mParam)
     unset($fields['entity']);
 
     $ids = array_column($named['rows'], 'id');
+    $table = FILE\Home($entity);
 
-    return TABLE\Update($mUserId, 'files_'.$entity, $ids, $fields);
+    $said = TABLE\Update($mUserId, $table, $ids, $fields);
+    if ( !$said['result'] ) return $said;
+
+    $elems = array_column($named['rows'], 'elem_id');
+    FILE\Touched($mUserId, $entity, $elems);
+
+    return $said;
 }
 
 
@@ -207,9 +228,16 @@ function CmdRemove($mUserId, $mParam)
     if ( !$named['result'] ) return $named;
 
     $ids = array_column($named['rows'], 'id');
+    $table = FILE\Home($entity);
 
     $mParam['apply'] = true;
-    return TABLE\Remove($mUserId, 'files_'.$entity, $ids, $mParam);
+    $said = TABLE\Remove($mUserId, $table, $ids, $mParam);
+    if ( !$said['result'] ) return $said;
+
+    $elems = array_column($named['rows'], 'elem_id');
+    FILE\Touched($mUserId, $entity, $elems);
+
+    return $said;
 }
 
 
@@ -231,7 +259,14 @@ function CmdPos($mUserId, $mParam)
         'elem_id'  => $mParam['elem_id']
         ];
 
-    return TABLE\Pos($mUserId, 'files_'.$entity, $scope, $mParam);
+    $table = FILE\Home($entity);
+    $said = TABLE\Pos($mUserId, $table, $scope, $mParam);
+    if ( !$said['result'] ) return $said;
+
+    $elems = [$mParam['elem_id']];
+    FILE\Touched($mUserId, $entity, $elems);
+
+    return $said;
 }
 
 
@@ -242,10 +277,14 @@ function FileAllowed($mUserId, $mEntity, $mIds)
 {
     // Weighs the element of each
     $list = implode(',', $mIds);
+    $table = FILE\Home($mEntity);
+    $mine = '';
+    if ( $table != 'files_'.$mEntity ) $mine = 'AND user_id = '.(int)$mUserId;
 
     $command = "SELECT *
-                  FROM {DBNICK}_files_$mEntity
+                  FROM {DBNICK}_$table
                  WHERE id IN ( $list )
+                       $mine
                ";
     $rows = MELBIS()->SqlSelect(__LINE__, $command);
 
@@ -256,7 +295,7 @@ function FileAllowed($mUserId, $mEntity, $mIds)
 
         return [
             'result'  => false,
-            'message' => 'No files ['.$said.'] in files_'.$mEntity
+            'message' => 'No files ['.$said.'] in '.$table
             ];
     }
 

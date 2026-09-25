@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.466 @ 2026-09-24
+ * @version 6.5.1.470 @ 2026-09-25
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -28,6 +28,11 @@
  * TreeNodeAdd  - Seats a node
  * TreeBranch   - A node with all under
  *
+ * Names        - The tables of a schema
+ *
+ * Hold         - Takes a table to write
+ * Release      - Gives the table back
+ *
  **************************************************************************************************/
 
 
@@ -41,23 +46,29 @@ use MELBIS_INC_AGENT_SYSTEM as SYS;
 /**
  * Function Read
  **/
-function Read($mTable, $mMore = [])
+function Read($mTables, $mUserId = 0)
 {
-    $command = "SELECT *
-                  FROM {DBNICK}_$mTable
-               ";
-    $rows = MELBIS()->SqlSelect(__LINE__, $command);
+    $names = (array)$mTables;
 
-    $tables = [$mTable => $rows];
-
-    foreach ( $mMore as $table )
+    $tables = [];
+    foreach ( $names as $table )
     {
+        // A working table is one person's
+        $where = '';
+        $param_owner = [];
+        if ( str_starts_with($table, 'u_') )
+        {
+            $where = 'WHERE user_id = :USER_ID';
+            $param_owner = [
+                'user_id' => $mUserId
+                ];
+        }
+
         $command = "SELECT *
                       FROM {DBNICK}_$table
+                     $where
                    ";
-        $more = MELBIS()->SqlSelect(__LINE__, $command);
-
-        $tables[$table] = $more;
+        $tables[$table] = MELBIS()->SqlSelect(__LINE__, $command, $param_owner);
     }
 
     return [
@@ -184,18 +195,25 @@ function Update($mUserId, $mTable, $mIds, $mParam)
             ];
     }
 
-    $tables = ['{DBNICK}_'.$mTable];
-    $lock = SYS\TablesLock($tables, $mUserId);
-    if ( !$lock['result'] ) return $lock;
+    $hold = Hold($mUserId, $mTable);
+    if ( !$hold['result'] ) return $hold;
+
+    // A working row is one person's
+    $key = 'id';
+    if ( str_starts_with($mTable, 'u_') )
+    {
+        $key = ['user_id', 'id'];
+        $fields['user_id'] = $mUserId;
+    }
 
     foreach ( $mIds as $id )
     {
         $row = $fields;
         $row['id'] = $id;
-        MELBIS()->SqlUpdate(__LINE__, '{DBNICK}_'.$mTable, $row, 'id');
+        MELBIS()->SqlUpdate(__LINE__, '{DBNICK}_'.$mTable, $row, $key);
     }
 
-    SYS\TablesUnlock($tables, $mUserId);
+    Release($mUserId, $mTable);
 
     $changed = implode(', ', array_keys($fields));
 
@@ -226,18 +244,22 @@ function Remove($mUserId, $mTable, $mIds, $mParam = [])
             ];
     }
 
-    $tables = ['{DBNICK}_'.$mTable];
-    $lock = SYS\TablesLock($tables, $mUserId);
-    if ( !$lock['result'] ) return $lock;
+    $hold = Hold($mUserId, $mTable);
+    if ( !$hold['result'] ) return $hold;
+
+    // A working row is one person's
+    $mine = '';
+    if ( str_starts_with($mTable, 'u_') ) $mine = 'AND user_id = '.(int)$mUserId;
 
     $command = "DELETE
                   FROM {DBNICK}_$mTable
                  WHERE id IN ( $list )
+                       $mine
                ";
     MELBIS()->SqlQuery(__LINE__, $command);
     $gone = MELBIS()->SqlAffectedRows();
 
-    SYS\TablesUnlock($tables, $mUserId);
+    Release($mUserId, $mTable);
 
     $message = $gone.' row(s) of '.$mTable.' gone';
     $message .= SYS\DependSaid(SYS\DependSweep($mTable));
@@ -267,7 +289,11 @@ function Pos($mUserId, $mTable, $mScope, $mParam)
     $type = strtoupper(trim((string)$mParam['type']));
     $data = $mParam['data'] ?? [];
 
-    $was = PosRead($mTable, $mScope);
+    // A working list is one person's
+    $scope = $mScope;
+    if ( str_starts_with($mTable, 'u_') ) $scope['user_id'] = $mUserId;
+
+    $was = PosRead($mTable, $scope);
     if ( count($was) == 0 )
     {
         return [
@@ -307,9 +333,9 @@ function Pos($mUserId, $mTable, $mScope, $mParam)
                 ];
         }
 
-        $order = PosRead($mTable, $mScope, $field.' '.$way);
+        $order = PosRead($mTable, $scope, $field.' '.$way);
 
-        return PosWrite($mUserId, $mTable, $mScope, array_keys($order), 'sorted by '.$field.' '.$way);
+        return PosWrite($mUserId, $mTable, $scope, array_keys($order), 'sorted by '.$field.' '.$way);
     }
 
     if ( $type != 'POS' && $type != 'MOVE' )
@@ -352,7 +378,7 @@ function Pos($mUserId, $mTable, $mScope, $mParam)
                 ];
         }
 
-        return PosWrite($mUserId, $mTable, $mScope, $front, count($front).' row(s) to the front');
+        return PosWrite($mUserId, $mTable, $scope, $front, count($front).' row(s) to the front');
     }
 
     // Weighed before any writing
@@ -396,7 +422,7 @@ function Pos($mUserId, $mTable, $mScope, $mParam)
         array_splice($order, $to, 0, [$pair[0]]);
     }
 
-    return PosWrite($mUserId, $mTable, $mScope, $order, count($named).' row(s) shifted');
+    return PosWrite($mUserId, $mTable, $scope, $order, count($named).' row(s) shifted');
 }
 
 
@@ -422,13 +448,12 @@ function PosOwn($mTable, $mIds)
  **/
 function PosWrite($mUserId, $mTable, $mScope, $mOrder, $mSaid)
 {
-    $tables = ['{DBNICK}_'.$mTable];
-    $lock = SYS\TablesLock($tables, $mUserId);
-    if ( !$lock['result'] ) return $lock;
+    $hold = Hold($mUserId, $mTable);
+    if ( !$hold['result'] ) return $hold;
 
     $moved = MELBIS()->SysPosOrder($mTable, $mOrder, $mScope);
 
-    SYS\TablesUnlock($tables, $mUserId);
+    Release($mUserId, $mTable);
 
     return [
         'result'  => true,
@@ -732,6 +757,65 @@ function TreeBranch($mTable, $mId, $mScope = [])
     $rows = MELBIS()->SqlSelect(__LINE__, $command, $param_branch);
 
     return array_map('intval', array_column($rows, 'id'));
+}
+
+
+/**
+ * Function Names
+ **/
+function Names($mSchema, $mPrefix = '')
+{
+    // As a lock names them
+    $keys = array_keys($mSchema);
+
+    $said = [];
+    foreach ( $keys as $table )
+    {
+        $said[] = '{DBNICK}_'.$mPrefix.$table;
+    }
+
+    return $said;
+}
+
+
+/**
+ * Function Hold
+ **/
+function Hold($mUserId, $mTable)
+{
+    $tables = ['{DBNICK}_'.$mTable];
+
+    // A working table, under its hold
+    if ( str_starts_with($mTable, 'u_') )
+    {
+        $held = MELBIS()->SqlTableHeld(__LINE__, $tables, $mUserId);
+        if ( $held )
+        {
+            return [
+                'result' => true
+                ];
+        }
+
+        return [
+            'result'  => false,
+            'message' => 'The working table ['.$mTable.'] is not held by you - the tool of your personal workspace takes it first'
+            ];
+    }
+
+    return SYS\TablesLock($tables, $mUserId);
+}
+
+
+/**
+ * Function Release
+ **/
+function Release($mUserId, $mTable)
+{
+    // The hold stays with its tool
+    if ( str_starts_with($mTable, 'u_') ) return;
+
+    $tables = ['{DBNICK}_'.$mTable];
+    SYS\TablesUnlock($tables, $mUserId);
 }
 
 ?>

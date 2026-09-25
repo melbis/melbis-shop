@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.466 @ 2026-09-24
+ * @version 6.5.1.470 @ 2026-09-25
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -19,7 +19,7 @@ use MELBIS_INC_AGENT_TABLE as TABLE;
  **/
 function CmdList($mUserId, $mParam)
 {
-    return TABLE\Read('self_key', ['self_key_right', 'self_key_value']);
+    return TABLE\Read(['self_key', 'self_key_right', 'self_key_value']);
 }
 
 

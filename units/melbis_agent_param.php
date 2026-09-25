@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.466 @ 2026-09-24
+ * @version 6.5.1.470 @ 2026-09-25
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -19,7 +19,7 @@ use MELBIS_INC_AGENT_TABLE as TABLE;
  **/
 function CmdListCut($mUserId, $mParam)
 {
-    return TABLE\Read('param', ['param_value']);
+    return TABLE\Read(['param', 'param_value']);
 }
 
 
@@ -28,9 +28,9 @@ function CmdListCut($mUserId, $mParam)
  **/
 function CmdListFull($mUserId, $mParam)
 {
-    $more = ['param_value', 'param_key_set', 'param_value_key_set'];
+    $tables = ['param', 'param_value', 'param_key_set', 'param_value_key_set'];
 
-    return TABLE\Read('param', $more);
+    return TABLE\Read($tables);
 }
 
 

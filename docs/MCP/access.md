@@ -12,7 +12,7 @@ How the MCP server gets into the store, what the agent is allowed there and what
 
 ## Rights
 
-Behind every MCP tool there is a command of the engine — `AGENT_` and the name of the tool in capitals: `engine_php_save` → `AGENT_ENGINE_PHP_SAVE`. The commands are granted by the rights of the "AI Assistant" branch in the user's rights. In the language your program runs in the captions may differ.
+Behind every MCP tool there is a command of the engine — `AGENT_` and the name of the tool in capitals: `engine_php_save` → `AGENT_ENGINE_PHP_SAVE`; `tool_pool` calls the `tool_run` command and is granted by its right. The commands are granted by the rights of the "AI Assistant" branch in the user's rights. In the language your program runs in the captions may differ.
 
 | Branch | Right | Right key | Tools |
 |---|---|---|---|
@@ -21,7 +21,7 @@ Behind every MCP tool there is a command of the engine — `AGENT_` and the name
 | | Save | `AGENT_MEMORY_SAVE` | `memory_save` |
 | | Delete | `AGENT_MEMORY_REMOVE` | `memory_remove` |
 | Tools | Get list | `AGENT_TOOL_LIST` | `tool_list` |
-| | Execute | `AGENT_TOOL_RUN` | `tool_run` |
+| | Execute | `AGENT_TOOL_RUN` | `tool_run`, `tool_pool` |
 | Direct access → Store files | Load | `AGENT_ENGINE_FILES_LOAD` | `engine_files_load` |
 | | Add | `AGENT_ENGINE_FILES_ADD` | `engine_files_add` |
 | | Delete | `AGENT_ENGINE_FILES_REMOVE` | `engine_files_remove` |

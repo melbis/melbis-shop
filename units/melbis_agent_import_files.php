@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.466 @ 2026-09-24
+ * @version 6.5.1.470 @ 2026-09-25
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -52,6 +52,15 @@ function CmdAdd($mUserId, $mParam)
     foreach ( $mParam['files'] as $one )
     {
         $entity = $one['entity'];
+
+        // The workspace has its own door
+        $home = FILE\Home($entity);
+        if ( $home != 'files_'.$entity )
+        {
+            FILE\FileDrop($entity, $one['id'], $one['disk'], $mUserId);
+            $said[] = $one['real_name'].': the files of the personal workspace go by the File tool';
+            continue;
+        }
 
         $gate = FILE\RightElem($mUserId, $entity, $one['elem_id']);
         if ( $gate !== true )

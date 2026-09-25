@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.466 @ 2026-09-24
+ * @version 6.5.1.470 @ 2026-09-25
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -34,9 +34,9 @@ function CmdListCut($mUserId, $mParam)
  **/
 function CmdListFull($mUserId, $mParam)
 {
-    $more = ['info_right', 'info_key_set'];
+    $tables = ['info', 'info_right', 'info_key_set'];
 
-    return TABLE\Read('info', $more);
+    return TABLE\Read($tables);
 }
 
 

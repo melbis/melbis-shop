@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.466 @ 2026-09-24
+ * @version 6.5.1.470 @ 2026-09-25
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -358,7 +358,7 @@ function People($mMore)
                ";
     $users = MELBIS()->SqlSelect(__LINE__, $command);
 
-    $said = TABLE\Read($mMore[0], array_slice($mMore, 1));
+    $said = TABLE\Read($mMore);
     $tables = $said['tables'];
     $tables['user'] = $users;
 

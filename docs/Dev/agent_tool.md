@@ -206,7 +206,7 @@ The MCP server gives the agent the command's response with the same keys. It wri
   also `job` and `job_rows`;
 - `time` — `server`, `module`, and `trip`; with `debug` also `sql` and `sql_ms`.
 
-The table's file is overwritten by the next call of the same command. `result: false` comes to the agent with the mark of error and the same JSON. Everything the call accepts and gives back — "[tool_run](../MCP/tool_run.md)".
+The table's file is overwritten by the next call of the same command. `result: false` comes to the agent with the mark of error and the same JSON. Everything the call accepts and gives back — "[tool_run](../MCP/tool_run.md)", many calls at once — "[tool_pool](../MCP/tool_pool.md)".
 
 ### Examples
 

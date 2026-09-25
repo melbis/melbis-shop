@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.466 @ 2026-09-24
+ * @version 6.5.1.470 @ 2026-09-25
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -19,9 +19,9 @@ use MELBIS_INC_AGENT_TABLE as TABLE;
  **/
 function CmdList($mUserId, $mParam)
 {
-    $more = ['advert_text', 'advert_goods', 'advert_link', 'advert_key_set'];
+    $tables = ['advert', 'advert_text', 'advert_goods', 'advert_link', 'advert_key_set'];
 
-    return TABLE\Read('advert', $more);
+    return TABLE\Read($tables);
 }
 
 

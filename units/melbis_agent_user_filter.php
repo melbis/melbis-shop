@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.466 @ 2026-09-24
+ * @version 6.5.1.470 @ 2026-09-25
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -26,7 +26,7 @@ const PLACE_SET = "0, 1, 2";
  **/
 function CmdList($mUserId, $mParam)
 {
-    return TABLE\Read('user_filter', ['user_filter_param']);
+    return TABLE\Read(['user_filter', 'user_filter_param']);
 }
 
 

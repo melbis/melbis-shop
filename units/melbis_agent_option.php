@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.466 @ 2026-09-24
+ * @version 6.5.1.470 @ 2026-09-25
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -32,7 +32,7 @@ function CmdList($mUserId, $mParam)
     if ( !$place['result'] ) return $place;
     $where = $place['place'];
 
-    return TABLE\Read($where.'_key', [$where.'_key_value']);
+    return TABLE\Read([$where.'_key', $where.'_key_value']);
 }
 
 

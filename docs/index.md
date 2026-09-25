@@ -219,6 +219,7 @@
 * [Concept](MCP/tool.md)
 * [tool_list](MCP/tool_list.md)
 * [tool_run](MCP/tool_run.md)
+* [tool_pool](MCP/tool_pool.md)
 * [tool_export](MCP/tool_export.md)
 
 **3.6 Storefront**

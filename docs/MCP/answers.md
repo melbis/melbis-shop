@@ -12,11 +12,6 @@ Every call of a tool gets one answer of one or several blocks and a mark of erro
 
   An empty block is not sent. Anything bulky — pages, images, large selections — the
   server puts into the conversation folder as a file and names the path.
-
-  If on connection the application has agreed on protocol version 2025-06-18 or a newer
-  one, the data also comes in the result's `structuredContent` field — the same JSON
-  object, but as data rather than text. The text block with the data remains in place:
-  the MCP standard advises this for the sake of applications that read only text.
 * **A refusal** — always one text block with a mark of error. It usually begins with a code
   in capitals and a colon, and after it the explanation: what is wrong and who fixes it.
 

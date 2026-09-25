@@ -204,6 +204,8 @@ $store_id = MELBIS()->SqlGenId('store');
 
 The table name is passed **without a prefix** — as it is recorded in the `{DBNICK}_generator` table. The method atomically increments the counter and returns the new value. This scheme is used because identifiers must be synchronized between the server and the native client working with the same database. When there are many records, the counter is not moved one at a time — see 3.1.
 
+The employee's working tables, with the `u_` prefix, count identifiers for each employee by their own counter. For them `SqlGenId` and `SqlGenIdBlock` take the employee as the third argument — `SqlGenId('u_store', $user_id)`. The counter is taken from `{DBNICK}_generator_u`, and if the employee has never worked with the table yet, it is set up by the very first call.
+
 Helper methods:
 
 - `SqlLastInsertId()` — the last identifier issued by the DBMS itself. With an argument — `SqlLastInsertId($id)` — it does the opposite and sets it, the way `LAST_INSERT_ID(expr)` does in MySQL: the next call without an argument returns that value.
@@ -219,7 +221,7 @@ Import, recalculation, transfer — work where there is not one record but a tho
 $ids = MELBIS()->SqlGenIdBlock('store_param', count($values));
 ```
 
-The counter moves in a single query regardless of the block size, so a thousand identifiers cost the same as one. An empty request (`$mCount` less than one) returns an empty array and never goes to the database — there is no need to check the set size before the call. The table name, as with `SqlGenId`, is written without the prefix; if there is no such row in `{DBNICK}_generator`, execution stops with an error.
+The counter moves in a single query regardless of the block size, so a thousand identifiers cost the same as one. An empty request (`$mCount` less than one) returns an empty array and never goes to the database — there is no need to check the set size before the call. The table name, as with `SqlGenId`, is written without the prefix; if an ordinary table has no row in `{DBNICK}_generator`, execution stops with an error.
 
 **`SqlInsertBlock($mLine, $mTableName, $mRows)`** inserts an array of records in one query:
 
@@ -334,12 +336,26 @@ By default there is a zero there — "held by a storefront module", as it always
 
 **Occupancy does not depend on the owner.** Nobody will take an occupied table, including whoever holds it: a repeated `SqlTableLock` with the same `$mUserId` answers `false` too. The owner decides not "who may take it" but "who may release it".
 
+The exception is the employee's working tables, with the `u_` prefix: everyone has their own rows in them, so such a table is occupied only for the one who holds it. One employee's open window does not stop another from taking it.
+
 **`SqlTableUnlock` answers with the number of rows released.** A zero means there was nothing to release — most often because it was taken under one name and is being released under another, and the lock has stayed hanging:
 
 ```php
 if ( MELBIS()->SqlTableUnlock(__LINE__, '{DBNICK}_store', $user_id) === 0 )
 {
     // Taken under the wrong name: the table is still standing occupied
+}
+```
+
+The method releases only what `SqlTableLock` sets: a program window opened by the same employee holds the table with a row of its own, and the call does not touch that row.
+
+**Whether the employee holds the tables is answered by `SqlTableHeld($mLine, $mTables, $mUserId = 0)`.** `true` — every table named was taken by `SqlTableLock` in their name; a program window of the same employee does not count. The method only reads. It is needed when one call takes the lock and another one writes: the writer cannot take it again, because an occupied table is occupied for its own owner as well.
+
+```php
+if ( !MELBIS()->SqlTableHeld(__LINE__, '{DBNICK}_store', $user_id) )
+{
+    // The table is not taken by this employee — writing is not allowed
+    return '';
 }
 ```
 

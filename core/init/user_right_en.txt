@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.466 @ 2026-09-24
+ * @version 6.5.1.470 @ 2026-09-25
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -65,7 +65,7 @@ table={DBNICK}_oper|id|name
 106=Get section products
 191=Advanced Product Query
 16=Descriptions
-248=Personal Section
+248=Personal Workspace
 210=Refresh Settings
 17=Get
 18=Save

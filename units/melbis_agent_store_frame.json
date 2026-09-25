@@ -1,9 +1,11 @@
 {
-    "description": "Files of the elements",
+    "description": "Personal section of a person",
     "parameters": "",
     "tables": [],
     "includes": [
-        "melbis_inc_agent_file.php=1",
+        "melbis_inc_agent_query.php=1",
+        "melbis_inc_agent_store.php=1",
+        "melbis_inc_agent_system.php=1",
         "melbis_inc_agent_table.php=1"
     ],
     "cache_on": "0",

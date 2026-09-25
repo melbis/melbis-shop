@@ -19,17 +19,19 @@ Carries out one command of the store's AI tool.
 | [`debug`] | yes/no | add the number of the module's queries and their time to the time |
 | [`into`] | string | the name of a job in one word, with no path and no dots: the answer's tables are appended into the file `<into>.<table>.jsonl` as well, see "[The `into` job](tool.md)" |
 
-`params` and `params_source` are one and the same by two roads, and they cannot be named together; the same goes for `files` and `files_source`. A command without fields needs neither. A field with the value `null` counts as unnamed. What every field type accepts — "[AI Tools](../Dev/agent_tool.md)".
+`params` and `params_source` are one and the same by two roads, and they cannot be named together; the same goes for `files` and `files_source`. A command without fields needs neither. A field with the value `null` counts as unnamed. What every field type accepts — "[AI Tools](../Dev/agent_tool.md)". Many commands in one call — [`tool_pool`](tool_pool.md).
 
 An attachment entry:
 
 | Field | Type | What it is |
 |---|---|---|
 | `file` | string | the file on this computer — an absolute path or a path from the store folder |
-| `entity` | string | the entity — the table that owns the file, see "[Element Files](engine_files.md)" |
+| `entity` | string | the entity — the table that owns the file, see "[Element Files](engine_files.md)"; `u_store` and `u_info_value` are the working tables of the employee, the one who signed in |
 | `elem_id` | number | the id of the row the file belongs to |
 | [`kind_key`] | string | the kind of the file; `kBase` by default |
 | [`real_name`] | string | the name for people; the file's name by default |
+
+A file of a working table goes into `u_files_store` or `u_files_info_value` the same way the program puts it there: the row gets the employee, the number comes from their counter, the kinds are the same as for the files of a product or a value. A section held by this employee's AI tool takes the file under the same hold; a section held by the "Descriptions" window lets no writing in.
 
 ## The Path of the Call
 
@@ -155,7 +157,7 @@ return ['result' => true, 'message' => 'The tables asked for', 'tables' => ['cur
  "files": [], "time": {"server": 11, "module": 1, "trip": 46}}
 ```
 
-An application on protocol version 2025-06-18 or newer also gets the same object as data, in `structuredContent` — see "[Answers and Refusals](answers.md)". What every key means for the one who writes a tool — "The Command's Response" in "[AI Tools](../Dev/agent_tool.md)".
+What every key means for the one who writes a tool — "The Command's Response" in "[AI Tools](../Dev/agent_tool.md)".
 
 ## Refusals
 
@@ -177,7 +179,7 @@ An application on protocol version 2025-06-18 or newer also gets the same object
 | `The command [<command>] takes no files…` | attachments were sent to a command that does not accept them |
 | `The command [<command>] carries the files themselves - …` | the command requires attachments and there are none |
 | `Unknown element entity: <entity>`, `Element not found: <entity> id <id>`, `No group […]` | the attachment points at an unknown entity, at an element that does not exist, or at a file kind that is not its own |
-| `The table files_… is in work right now, and nothing was written…` | somebody else holds the attachments table; not one of them was written |
+| `The table files_… is in work right now, and nothing was written…` | somebody else holds the attachments table, and the working `u_files_…` one is held by the "Descriptions" window of the same employee; not one of them was written |
 | `unit is required…`, `command is required…` | the tool or the command is not named |
 | `into is the bare name of a job…` | `into` holds a path or a dot |
 | `These files come to more than … KB together…` | the attachments together are heavier than `MaxFileSize` from `Shop.ini`: if the command takes every file separately, they are sent in smaller batches, otherwise the owner raises the limit; a single file passes at any size |

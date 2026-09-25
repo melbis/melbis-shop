@@ -5,10 +5,10 @@ attributes, and other non-commercial data (plus retail price). This is
 the content half of working with a product; the commercial half is handled in "[Prices](prices.md)".
 Access control is described in "[Users](users.md)" and "[Catalog](catalog.md)".
 
-## Personal Section and Replication
+## Personal Workspace and Replication
 
 Many employees fill in descriptions simultaneously, so each person works in
-their own **personal section** — a local copy of the loaded products. Clicking
+their own **personal workspace** — a local copy of the loaded products. Clicking
 **"Save"** causes the server to reconcile your edits with the shared data; this
 procedure — **replication** — is performed automatically. Simultaneous edits
 to the same product enter the **"conflicting"** display mode: they must be
@@ -25,7 +25,7 @@ button saves edits locally without sending them to the shared store.
 
 ## Window Layout
 
-Two main tabs: **"Personal Section"** (working with products) and
+Two main tabs: **"Personal Workspace"** (working with products) and
 **"Attributes"** (your version of the attribute values reference).
 
 On the left — **"Catalog"**, on the right — **"Products"**. Loading, catalog and

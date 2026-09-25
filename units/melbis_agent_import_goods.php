@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.466 @ 2026-09-24
+ * @version 6.5.1.470 @ 2026-09-25
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -149,9 +149,10 @@ function CmdAdd($mUserId, $mParam)
         if ( isset($one['value']) )
         {
             $word = trim((string)$one['value']);
+            $key = mb_strtolower($word);
             if ( !isset($maps[$info_id]) ) $maps[$info_id] = ValueMap($info_id);
 
-            if ( !isset($maps[$info_id][$word]) )
+            if ( !isset($maps[$info_id][$key]) )
             {
                 if ( !$mParam['value_add'] )
                 {
@@ -167,11 +168,11 @@ function CmdAdd($mUserId, $mParam)
                     ];
                 MELBIS()->SqlInsert(__LINE__, '{DBNICK}_info_value', $value);
 
-                $maps[$info_id][$word] = $value['id'];
+                $maps[$info_id][$key] = $value['id'];
                 $born++;
             }
 
-            $fields['value_id'] = $maps[$info_id][$word];
+            $fields['value_id'] = $maps[$info_id][$key];
         }
 
         $row = $fields;
@@ -337,7 +338,10 @@ function ValueMap($mInfoId)
     $map = [];
     foreach ( $rows as $row )
     {
-        $map[trim($row['name'])] = $row['id'];
+        // Case aside, nothing else
+        $trimmed = trim($row['name']);
+        $key = mb_strtolower($trimmed);
+        $map[$key] = $row['id'];
     }
 
     return $map;

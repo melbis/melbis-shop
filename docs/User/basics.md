@@ -70,7 +70,7 @@ saving are described in the sections below.
 
 ### 3. Combined (Replication)
 
-This is how the **"Descriptions"** section works: data is taken into your **personal section**
+This is how the **"Descriptions"** section works: data is taken into your **personal workspace**
 (like a portion, but with a lock against simultaneous editing), and when saved it is
 **replicated** to the server and synchronized with the shared data. Simultaneous edits
 to the same product are marked as "conflicting". For more details, see "[Descriptions](descriptions.md)".

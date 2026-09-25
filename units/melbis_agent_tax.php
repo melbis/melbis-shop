@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.466 @ 2026-09-24
+ * @version 6.5.1.470 @ 2026-09-25
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -28,9 +28,9 @@ function CmdListCut($mUserId, $mParam)
  **/
 function CmdListFull($mUserId, $mParam)
 {
-    $more = ['tax_rate', 'tax_area', 'tax_rule', 'tax_area_key_set'];
+    $tables = ['tax_group', 'tax_rate', 'tax_area', 'tax_rule', 'tax_area_key_set'];
 
-    return TABLE\Read('tax_group', $more);
+    return TABLE\Read($tables);
 }
 
 

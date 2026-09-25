@@ -1,11 +1,12 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.466 @ 2026-09-24
+ * @version 6.5.1.470 @ 2026-09-25
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
  **************************************************************************************************
  *
+ * Home        - The files table of it
  * EntityOne   - Weighs one entity
  * EntityGone  - Refuses an element gone
  *
@@ -14,6 +15,8 @@
  * FileAll     - Reads files of the elements
  * FileOne     - Reads one file row
  * FileDrop    - Deletes row and picture
+ * Held        - The workspace held for it
+ * Touched     - Marks the element changed
  *
  * DiskPath    - The path of a row
  * DiskFolder  - The folder of a file
@@ -62,6 +65,22 @@ const MASK_POS = ['center', 'left-top', 'right-top', 'right-bottom', 'left-botto
 // No mask, as the editor
 const MASK_NONE = 'files/1899/12_30/00_00/';
 
+// The working twins of the workspace
+const FRAME = [
+    'u_store'      => 'u_files_store',
+    'u_info_value' => 'u_files_info_value'
+    ];
+
+
+/**
+ * Function Home
+ **/
+function Home($mEntity)
+{
+    // The workspace keeps its twins
+    return FRAME[$mEntity] ?? 'files_'.$mEntity;
+}
+
 
 /**
  * Function EntityOne
@@ -70,7 +89,9 @@ function EntityOne($mEntity)
 {
     // An unknown word refused early
     $entity = trim((string)$mEntity);
-    $all = MELBIS()->SysFileEntities();
+    $common = MELBIS()->SysFileEntities();
+    $frame = array_keys(FRAME);
+    $all = array_merge($common, $frame);
     if ( in_array($entity, $all) ) return true;
 
     $list = implode(', ', $all);
@@ -94,7 +115,9 @@ function EntityGone($mEntity, $mId)
         'info_value'  => 'the Attributes tool answers them',
         'brand'       => 'the Brands tool answers them',
         'key_value'   => 'the Basic settings tool answers them',
-        'advert_text' => 'the Promo blocks tool answers them'
+        'advert_text' => 'the Promo blocks tool answers them',
+        'u_store'      => 'the tool of the personal workspace answers them',
+        'u_info_value' => 'the tool of the personal workspace answers them'
         ];
     $said = $where[$mEntity] ?? 'its own tool answers them';
 
@@ -111,6 +134,41 @@ function EntityGone($mEntity, $mId)
 function RightElem($mUserId, $mEntity, $mElemId)
 {
     $elem_id = (int)$mElemId;
+
+    // The person's own workspace
+    if ( isset(FRAME[$mEntity]) )
+    {
+        $command = "SELECT *
+                      FROM {DBNICK}_$mEntity
+                     WHERE user_id = :USER_ID
+                       AND id = :ID
+                   ";
+        $param_own = [
+            'user_id' => $mUserId,
+            'id'      => $elem_id
+            ];
+        $row = MELBIS()->SqlSelectFlat(__LINE__, $command, $param_own);
+        if ( !isset($row['id']) ) return EntityGone($mEntity, $elem_id);
+        if ( $mEntity == 'u_store' ) return true;
+
+        // A value asks its characteristic
+        $allow = SYS\RightTable('info', $mUserId, 'value');
+
+        $command = "SELECT id
+                      FROM $allow
+                     WHERE id = :ID
+                   ";
+        $param_info = [
+            'id' => $row['info_id']
+            ];
+        $may = (int)MELBIS()->SqlSelectValue(__LINE__, $command, 0, $param_info);
+        if ( $may > 0 ) return true;
+
+        return [
+            'result'  => false,
+            'message' => 'The files of ['.$elem_id.'] are not yours'
+            ];
+    }
 
     // The Description right of section
     if ( $mEntity == 'store' )
@@ -237,15 +295,20 @@ function RightElem($mUserId, $mEntity, $mElemId)
 /**
  * Function FileAll
  **/
-function FileAll($mEntity, $mIds)
+function FileAll($mEntity, $mIds, $mUserId = 0)
 {
     // The order the program keeps
     $list = implode(',', $mIds);
     if ( $list == '' ) return [];
 
+    $table = Home($mEntity);
+    $mine = '';
+    if ( isset(FRAME[$mEntity]) ) $mine = 'AND user_id = '.(int)$mUserId;
+
     $command = "SELECT *
-                  FROM {DBNICK}_files_$mEntity
+                  FROM {DBNICK}_$table
                  WHERE elem_id IN ( $list )
+                       $mine
               ORDER BY elem_id, pos
                ";
 
@@ -256,11 +319,16 @@ function FileAll($mEntity, $mIds)
 /**
  * Function FileOne
  **/
-function FileOne($mEntity, $mId)
+function FileOne($mEntity, $mId, $mUserId = 0)
 {
+    $table = Home($mEntity);
+    $mine = '';
+    if ( isset(FRAME[$mEntity]) ) $mine = 'AND user_id = '.(int)$mUserId;
+
     $command = "SELECT *
-                  FROM {DBNICK}_files_$mEntity
+                  FROM {DBNICK}_$table
                  WHERE id = :ID
+                       $mine
                ";
     $param_file = [
         'id' => (int)$mId
@@ -273,12 +341,68 @@ function FileOne($mEntity, $mId)
 /**
  * Function FileDrop
  **/
-function FileDrop($mEntity, $mId, $mDisk)
+function FileDrop($mEntity, $mId, $mDisk, $mUserId = 0)
 {
+    $table = Home($mEntity);
+    $mine = '';
+    if ( isset(FRAME[$mEntity]) ) $mine = 'AND user_id = '.(int)$mUserId;
+
     // Born here, gone with it
-    MELBIS()->SqlDelete(__LINE__, '{DBNICK}_files_'.$mEntity, 'id', (int)$mId);
+    $command = "DELETE
+                  FROM {DBNICK}_$table
+                 WHERE id = :ID
+                       $mine
+               ";
+    $param_file = [
+        'id' => (int)$mId
+        ];
+    MELBIS()->SqlQuery(__LINE__, $command, $param_file);
+    MELBIS()->SqlTableChange(__LINE__, '{DBNICK}_'.$table, true);
 
     if ( $mDisk != '' && file_exists($mDisk) ) @unlink($mDisk);
+}
+
+
+/**
+ * Function Held
+ **/
+function Held($mUserId, $mEntity)
+{
+    if ( !isset(FRAME[$mEntity]) ) return true;
+
+    // The workspace's tool holds it
+    $table = Home($mEntity);
+    $tables = ['{DBNICK}_'.$table];
+    $held = MELBIS()->SqlTableHeld(__LINE__, $tables, $mUserId);
+    if ( $held ) return true;
+
+    return [
+        'result'  => false,
+        'message' => 'The working table ['.$table.'] is not held by you - the tool of your personal workspace takes it first'
+        ];
+}
+
+
+/**
+ * Function Touched
+ **/
+function Touched($mUserId, $mEntity, $mElemIds)
+{
+    if ( !isset(FRAME[$mEntity]) ) return;
+    if ( count($mElemIds) == 0 ) return;
+
+    // Marked as the window marks
+    $ids = array_map('intval', $mElemIds);
+    $list = implode(',', $ids);
+    $command = "UPDATE {DBNICK}_$mEntity
+                   SET was_update = 1
+                 WHERE user_id = :USER_ID
+                   AND id IN ( $list )
+               ";
+    $param_user = [
+        'user_id' => $mUserId
+        ];
+    MELBIS()->SqlQuery(__LINE__, $command, $param_user);
 }
 
 
@@ -586,7 +710,7 @@ function Make($mUserId, $mEntity, $mWas, $mProfile, $mShow, $mRealName = '')
     if ( !$paint['result'] ) return $paint;
 
     // Laid by the engine formula
-    $table = 'files_'.$mEntity;
+    $table = Home($mEntity);
     $now = MELBIS()->DateTime();
     $folder = DiskFolder($now);
     $dir = __DIR__.'/..'.$folder;
@@ -600,7 +724,7 @@ function Make($mUserId, $mEntity, $mWas, $mProfile, $mShow, $mRealName = '')
             ];
     }
 
-    $id = MELBIS()->SqlGenId($table);
+    $id = MELBIS()->SqlGenId($table, $mUserId);
     $ext = ( $mShow['type'] == 'jpeg' ) ? 'jpg' : $mShow['type'];
     $file_name = strtolower($table.'_'.$mUserId.'_'.$id).'.'.$ext;
 
@@ -624,7 +748,13 @@ function Make($mUserId, $mEntity, $mWas, $mProfile, $mShow, $mRealName = '')
     $real_name = trim((string)$mRealName);
     if ( $real_name == '' )
     {
-        $stem = pathinfo($mWas['real_name'], PATHINFO_FILENAME);
+        // Only the file's own extension goes
+        $stem = $mWas['real_name'];
+        $own = pathinfo($mWas['file_name'], PATHINFO_EXTENSION);
+        $tail = '.'.$own;
+        $size = strlen($tail);
+        $end = substr($stem, -$size);
+        if ( $own != '' && strcasecmp($end, $tail) == 0 ) $stem = substr($stem, 0, -$size);
         $real_name = $stem.' ('.$mProfile.').'.$ext;
     }
 
@@ -640,6 +770,9 @@ function Make($mUserId, $mEntity, $mWas, $mProfile, $mShow, $mRealName = '')
         'format_xml'  => '',
         'pos'         => $id
         ];
+
+    // A working row is one person's
+    if ( isset(FRAME[$mEntity]) ) $fields['user_id'] = $mUserId;
     MELBIS()->SqlInsert(__LINE__, '{DBNICK}_'.$table, $fields);
 
     $message = 'Made ['.$real_name.'] - '.$paint['width'].'x'.$paint['height'].' by ['.$mProfile.']';
