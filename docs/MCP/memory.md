@@ -1,6 +1,6 @@
 # Memory
 
-The `memory` family is the agent's memory of the store: the notes that lie in the store's database rather than on the computer or in the correspondence. The next session — on another computer, in another agent application — meets the same notes. What the memory looks like for people — "[AI Assistant](../User/ai-assistant.md)".
+The `memory` family is the agent's memory of the store: the notes that lie in the store's database rather than on the computer or in the correspondence. The next session — on another computer, in another agent application — meets the same notes. What the memory looks like for people — "[AI Assistant](../User/ai-assistant.md)". Working data needed later or by other assistants is kept by the "[Repository](repo.md)".
 
 ## Levels
 

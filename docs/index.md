@@ -1,7 +1,7 @@
 ## 📖 Melbis Shop
 
 * [Introduction](main.md)
-* [Tasks instead of interfaces](paradigm.md)
+* [Concept](paradigm.md)
 * [Store charter](charter.md)
 
 ### 1. User Guide
@@ -214,7 +214,14 @@
 * [memory_save](MCP/memory_save.md)
 * [memory_remove](MCP/memory_remove.md)
 
-**3.5 AI Tools**
+**3.5 Repository**
+
+* [Concept](MCP/repo.md)
+* [repo_list](MCP/repo_list.md)
+* [repo_read](MCP/repo_read.md)
+* [repo_write](MCP/repo_write.md)
+
+**3.6 AI Tools**
 
 * [Concept](MCP/tool.md)
 * [tool_list](MCP/tool_list.md)
@@ -222,7 +229,7 @@
 * [tool_pool](MCP/tool_pool.md)
 * [tool_export](MCP/tool_export.md)
 
-**3.6 Storefront**
+**3.7 Storefront**
 
 * [Concept](MCP/shop.md)
 * [shop_page](MCP/shop_page.md)

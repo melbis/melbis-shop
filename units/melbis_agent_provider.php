@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.470 @ 2026-09-25
+ * @version 6.5.1.475 @ 2026-09-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -19,7 +19,17 @@ use MELBIS_INC_AGENT_TABLE as TABLE;
  **/
 function CmdListCut($mUserId, $mParam)
 {
-    return TABLE\Read(['provider_group', 'provider']);
+    $said = TABLE\Read(['provider_group', 'provider']);
+
+    // Temporary: provider columns cut
+    $columns = ['id', 'group_id', 'skey', 'name', 'pos'];
+    $keep = array_flip($columns);
+    foreach ( $said['tables']['provider'] as $num => $row )
+    {
+        $said['tables']['provider'][$num] = array_intersect_key($row, $keep);
+    }
+
+    return $said;
 }
 
 

@@ -79,6 +79,7 @@ The name is made of the family, the subject and the action: `engine_php_save` â€
 | `session_` | signing in to the store, accepting the rules, and the conversation folders |
 | `engine_` | the store's files, data and settings through the engine |
 | `memory_` | the store's memory |
+| `repo_` | the store's repository: the topics and data of the employees' assistants |
 | `tool_` | the store's AI tools |
 | `shop_` | the store from outside: a storefront page, a module of one's own, a copy of the store |
 

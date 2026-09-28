@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.470 @ 2026-09-25
+ * @version 6.5.1.475 @ 2026-09-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -119,6 +119,8 @@ table={DBNICK}_key|id|name
 169=Komponenty AI
 170=Pamięć
 171=Typ
+176=Repozytorium
+177=Typ
 172=Narzędzia
 173=Typ
 174=Polecenia
@@ -292,3 +294,6 @@ table={DBNICK}_key_value|id|value_txt
 452=Dokument
 453=Katalog
 454=Galeria
+456=Domyślnie
+457=Osobisty
+458=Wspólny

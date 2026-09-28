@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.470 @ 2026-09-25
+ * @version 6.5.1.475 @ 2026-09-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -20,6 +20,8 @@ INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('advert_key_value
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('advert_key_set', 0);
 
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('agent_memory', 1);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('agent_repo', 3);
+INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('agent_repo_right', 1);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('agent_tool', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('agent_tool_command', 0);
 INSERT INTO {DBNICK}_generator (table_name, gen_value) VALUES ('agent_tool_param', 0);
@@ -195,4 +197,10 @@ INSERT INTO {DBNICK}_topic_store (id, topic_id, store_id, pos) VALUES (3, 7, 2, 
 INSERT INTO {DBNICK}_topic_store (id, topic_id, store_id, pos) VALUES (4, 8, 3, 1);
 
 INSERT INTO {DBNICK}_agent_memory (id, category, name, info, kind_key, body, edit_time, pos) VALUES (1, 'Working order', 'Store charter — read first', 'The store keeps a charter (catalog section CHARTER): how things are done here. On any working question read it first', 'kCritical', '<p>The store keeps a <b>charter</b>: how it works — processes, duties, rules for orders, suppliers, stock and goods, and its technical set-up.</p><ul><li><b>Where:</b> the catalog section <abbr title="topic.skey = CHARTER">Charter</abbr> with subsections by topic; every document is an item of the <abbr title="store.kind_key = kDoc">Document</abbr> type.</li><li><b>When:</b> on any working question find the documents on its topic in the charter first, and only then look at the data and the code.</li><li><b>How to read:</b> the AI tool “Browser” gives <abbr title="MELBIS_AGENT_STORE_BROWSE CmdTopic, section topic.skey = CHARTER, topic_sub = true">the list of charter documents</abbr> and <abbr title="MELBIS_AGENT_STORE_BROWSE CmdReadDescr">the text of a document</abbr>. Read only what the task needs.</li><li><b>How to work with it</b> is told in the charter itself: <abbr title="store.id = 1">How to use the charter</abbr>.</li><li><b>How to write:</b> documents of the charter and your own notes follow <abbr title="store.id = 4">How to write documents</abbr>.</li><li><b>What’s new:</b> once a session, but not more than once a day, read <abbr title="store.id = 2">What’s new</abbr> and show the person the new records.</li><li><b>Nothing on the topic yet:</b> when the person settles how something is done, offer to write it into the charter rather than into a note.</li><li><b>Language:</b> the charter comes as a sample in English. Before the first edit, translate its documents and this note into the language you speak with the person, and save them in it.</li></ul>', NOW(), 1);
+
+INSERT INTO {DBNICK}_agent_repo (id, name, descr, kind_key, tindex, tlevel, absindex, folder) VALUES (1, 'Personal', '', 'kDefault', 0, 0, 0, 1);
+INSERT INTO {DBNICK}_agent_repo (id, name, descr, kind_key, tindex, tlevel, absindex, folder) VALUES (2, 'Administrator', 'Working notes of the administrator’s assistant: unfinished work, interim results, drafts to go on with in another session', 'kPersonal', 1, 1, 1, 0);
+INSERT INTO {DBNICK}_agent_repo (id, name, descr, kind_key, tindex, tlevel, absindex, folder) VALUES (3, 'Shared', 'Material for the assistants of all the staff: parsed sites, ready scripts, summaries', 'kShared', 0, 0, 2, 0);
+
+INSERT INTO {DBNICK}_agent_repo_right (id, repo_id, user_id, group_id, topic_list, topic_create, topic_update, topic_remove, store_read, store_write) VALUES (1, 2, 1, NULL, 1, 1, 1, 1, 1, 1);
 

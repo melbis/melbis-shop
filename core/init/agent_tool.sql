@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.470 @ 2026-09-25
+ * @version 6.5.1.475 @ 2026-09-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -819,6 +819,7 @@ INSERT INTO {DBNICK}_agent_tool_param (id, command_id, name, descr, value_type, 
 INSERT INTO {DBNICK}_agent_tool_param (id, command_id, name, descr, value_type, value_req, value_def, pos) VALUES ('940', '250', 'id', 'id of the file, or several of them', 'int/json', '1', '', '2');
 INSERT INTO {DBNICK}_agent_tool_param (id, command_id, name, descr, value_type, value_req, value_def, pos) VALUES ('941', '250', 'kind_key', 'the group of the file - a value of the FILES_<ENTITY> code in the base settings', 'str', '0', '', '3');
 INSERT INTO {DBNICK}_agent_tool_param (id, command_id, name, descr, value_type, value_req, value_def, pos) VALUES ('942', '250', 'real_name', 'the name the manager reads', 'str', '0', '', '4');
+INSERT INTO {DBNICK}_agent_tool_param (id, command_id, name, descr, value_type, value_req, value_def, pos) VALUES ('1750', '250', 'format_xml', 'the additional information of the file, as [MShop:FFilesControl:TSFormat] keeps it; a derived picture holds there the recipe it was painted by', 'str', '0', '', '5');
 INSERT INTO {DBNICK}_agent_tool_param (id, command_id, name, descr, value_type, value_req, value_def, pos) VALUES ('944', '251', 'entity', 'the element table the files hang on, or u_store and u_info_value for the personal workspace; a table without files is answered with the list', 'str', '1', '', '1');
 INSERT INTO {DBNICK}_agent_tool_param (id, command_id, name, descr, value_type, value_req, value_def, pos) VALUES ('945', '251', 'id', 'id of the file, or several of them', 'int/json', '1', '', '2');
 INSERT INTO {DBNICK}_agent_tool_param (id, command_id, name, descr, value_type, value_req, value_def, pos) VALUES ('946', '252', 'entity', 'the element table the files hang on, or u_store and u_info_value for the personal workspace; a table without files is answered with the list', 'str', '1', '', '1');
@@ -1523,4 +1524,4 @@ INSERT INTO {DBNICK}_agent_tool_param (id, command_id, name, descr, value_type, 
 INSERT INTO {DBNICK}_agent_tool_param (id, command_id, name, descr, value_type, value_req, value_def, pos) VALUES ('1747', '428', 'seo_code', 'the code of it in the address of a page', 'str', '0', '', '6');
 INSERT INTO {DBNICK}_agent_tool_param (id, command_id, name, descr, value_type, value_req, value_def, pos) VALUES ('1748', '428', 'pos', 'the place in the list of its characteristic', 'int', '0', '', '7');
 INSERT INTO {DBNICK}_agent_tool_param (id, command_id, name, descr, value_type, value_req, value_def, pos) VALUES ('1749', '429', 'id', 'id of the value in u_info_value of the workspace, or several of them', 'int/json', '1', '', '1');
-UPDATE {DBNICK}_generator SET gen_value = 1749 WHERE table_name = 'agent_tool_param';
+UPDATE {DBNICK}_generator SET gen_value = 1750 WHERE table_name = 'agent_tool_param';

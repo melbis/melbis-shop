@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.470 @ 2026-09-25
+ * @version 6.5.1.475 @ 2026-09-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -119,6 +119,8 @@ table={DBNICK}_key|id|name
 169=Composants IA
 170=Mémoire
 171=Type
+176=Référentiel
+177=Type
 172=Outils
 173=Type
 174=Commandes
@@ -292,3 +294,6 @@ table={DBNICK}_key_value|id|value_txt
 452=Document
 453=Catalogue
 454=Galerie
+456=Par défaut
+457=Personnel
+458=Partagé

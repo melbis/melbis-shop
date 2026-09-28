@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.470 @ 2026-09-25
+ * @version 6.5.1.475 @ 2026-09-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -193,6 +193,9 @@ table={DBNICK}_oper|id|name
 418=Obtenir
 419=Enregistrer
 423=Exporter
+441=Référentiel
+442=Obtenir les sujets
+443=Obtenir les données
 8=Installation
 9=Obtenir les données
 10=Enregistrer les données
@@ -259,6 +262,10 @@ table={DBNICK}_oper|id|name
 410=Charger
 411=Enregistrer
 412=Supprimer
+444=Référentiel
+445=Obtenir la liste
+446=Lecture des données
+447=Modification des données
 407=Outils
 415=Obtenir la liste
 416=Exécuter

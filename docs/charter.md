@@ -60,7 +60,7 @@ own memory.
 
 ## Where to Go Next
 
-- "[Tasks Instead of Interfaces](paradigm.md)" — why a store is run by tasks rather
+- "[Concept](paradigm.md)" — why a store is run by tasks rather
   than by an interface.
 - "[AI Assistant](User/ai-assistant.md)" — connection, memory, and how to work
   with it.

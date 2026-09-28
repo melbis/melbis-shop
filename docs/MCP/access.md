@@ -20,6 +20,9 @@ Behind every MCP tool there is a command of the engine — `AGENT_` and the name
 | | Load | `AGENT_MEMORY_LOAD` | `memory_load` |
 | | Save | `AGENT_MEMORY_SAVE` | `memory_save` |
 | | Delete | `AGENT_MEMORY_REMOVE` | `memory_remove` |
+| Repository | Get list | `AGENT_REPO_LIST` | `repo_list` |
+| | Read data | `AGENT_REPO_READ` | `repo_read` |
+| | Modify data | `AGENT_REPO_WRITE` | `repo_write` |
 | Tools | Get list | `AGENT_TOOL_LIST` | `tool_list` |
 | | Execute | `AGENT_TOOL_RUN` | `tool_run`, `tool_pool` |
 | Direct access → Store files | Load | `AGENT_ENGINE_FILES_LOAD` | `engine_files_load` |

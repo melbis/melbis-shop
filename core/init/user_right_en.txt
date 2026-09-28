@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.470 @ 2026-09-25
+ * @version 6.5.1.475 @ 2026-09-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -193,6 +193,9 @@ table={DBNICK}_oper|id|name
 418=Get
 419=Save
 423=Export
+441=Repository
+442=Get topics
+443=Get data
 8=Installation
 9=Get data
 10=Save data
@@ -259,6 +262,10 @@ table={DBNICK}_oper|id|name
 410=Load
 411=Save
 412=Delete
+444=Repository
+445=Get list
+446=Read data
+447=Modify data
 407=Tools
 415=Get list
 416=Execute

@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.470 @ 2026-09-25
+ * @version 6.5.1.475 @ 2026-09-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -458,9 +458,7 @@ CREATE TABLE {DBNICK}_agent_tool (
    kind_key 	CHAR(100) DEFAULT 'kDefault' NOT NULL,
    unit 	      CHAR(100) DEFAULT '' NOT NULL,
    PRIMARY KEY (id),
-   KEY IDX1 (tindex),
-   KEY IDX2 (absindex),
-   KEY IDX3 (unit)
+   KEY IDX1 (unit)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -511,6 +509,80 @@ CREATE TABLE {DBNICK}_agent_tool_right (
    KEY IDX1 (command_id),
    KEY IDX2 (user_id),
    KEY IDX3 (group_id)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
+/**
+ * Table agent_repo
+ **/
+DROP TABLE IF EXISTS {DBNICK}_agent_repo;
+CREATE TABLE {DBNICK}_agent_repo (
+   id 	      INT UNSIGNED DEFAULT '0' NOT NULL,
+   skey 	      CHAR(32) DEFAULT '' NOT NULL,
+   name 	      CHAR(255) DEFAULT '' NOT NULL,
+   descr 	   MEDIUMTEXT DEFAULT ('') NOT NULL,
+   kind_key 	CHAR(100) DEFAULT 'kDefault' NOT NULL,
+   tindex 	   INT UNSIGNED DEFAULT '0' NOT NULL,
+   tlevel 	   INT UNSIGNED DEFAULT '0' NOT NULL,
+   absindex 	INT UNSIGNED DEFAULT '0' NOT NULL,
+   folder 	   TINYINT UNSIGNED DEFAULT '0' NOT NULL,   
+   PRIMARY KEY (id)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
+/**
+ * Table agent_repo_right
+ **/
+DROP TABLE IF EXISTS {DBNICK}_agent_repo_right;
+CREATE TABLE {DBNICK}_agent_repo_right (
+   id 	      INT UNSIGNED DEFAULT '0' NOT NULL,
+   repo_id 	   INT UNSIGNED DEFAULT NULL,
+   user_id 	   INT UNSIGNED DEFAULT NULL,
+   group_id 	INT UNSIGNED DEFAULT NULL,
+   topic_list 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   topic_create 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   topic_update 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   topic_remove 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   store_read 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   store_write 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   PRIMARY KEY (id),
+   KEY IDX1 (repo_id),
+   KEY IDX2 (user_id),
+   KEY IDX3 (group_id)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
+/**
+ * Table agent_repo_topic
+ **/
+DROP TABLE IF EXISTS {DBNICK}_agent_repo_topic;
+CREATE TABLE {DBNICK}_agent_repo_topic (
+   id 	      INT UNSIGNED NOT NULL AUTO_INCREMENT,
+   repo_id 	   INT UNSIGNED DEFAULT NULL,
+   name 	      CHAR(255) DEFAULT '' NOT NULL,
+   descr 	   MEDIUMTEXT DEFAULT ('') NOT NULL,
+   params 	   CHAR(255) DEFAULT '' NOT NULL,
+   PRIMARY KEY (id),
+   KEY IDX1 (repo_id)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
+/**
+ * Table agent_repo_store
+ **/
+DROP TABLE IF EXISTS {DBNICK}_agent_repo_store;
+CREATE TABLE {DBNICK}_agent_repo_store (
+   id 	      BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+   topic_id 	INT UNSIGNED DEFAULT NULL,
+   user_id 	   INT UNSIGNED DEFAULT NULL,
+   author 	   CHAR(100) DEFAULT '' NOT NULL,
+   comment 	   CHAR(255) DEFAULT '' NOT NULL,
+   body 	      MEDIUMTEXT DEFAULT ('') NOT NULL,
+   appendix 	MEDIUMTEXT DEFAULT ('') NOT NULL,
+   date_time 	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,
+   PRIMARY KEY (id),
+   KEY IDX1 (topic_id),
+   KEY IDX2 (user_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
