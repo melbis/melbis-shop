@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.476 @ 2026-09-28
+ * @version 6.5.1.477 @ 2026-09-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -121,6 +121,15 @@ function CmdAreaUpdate($mUserId, $mParam)
 function CmdAreaMove($mUserId, $mParam)
 {
     return TABLE\TreeMove($mUserId, 'tax_area', $mParam);
+}
+
+
+/**
+ * Function CmdAreaShift
+ **/
+function CmdAreaShift($mUserId, $mParam)
+{
+    return TABLE\TreeShift($mUserId, 'tax_area', $mParam);
 }
 
 

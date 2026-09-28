@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.476 @ 2026-09-28
+ * @version 6.5.1.477 @ 2026-09-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -209,6 +209,18 @@ function CmdAltMove($mUserId, $mParam)
     $scope['kind_key'] = $mParam['kind_key'];
 
     return TABLE\TreeMove($mUserId, 'topic_alt', $mParam, $scope);
+}
+
+
+/**
+ * Function CmdAltShift
+ **/
+function CmdAltShift($mUserId, $mParam)
+{
+    // Shifts inside its catalogue
+    $scope['kind_key'] = $mParam['kind_key'];
+
+    return TABLE\TreeShift($mUserId, 'topic_alt', $mParam, $scope);
 }
 
 

@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.476 @ 2026-09-28
+ * @version 6.5.1.477 @ 2026-09-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -47,6 +47,15 @@ function CmdUpdate($mUserId, $mParam)
 function CmdMove($mUserId, $mParam)
 {
     return TABLE\TreeMove($mUserId, 'self_key', $mParam);
+}
+
+
+/**
+ * Function CmdShift
+ **/
+function CmdShift($mUserId, $mParam)
+{
+    return TABLE\TreeShift($mUserId, 'self_key', $mParam);
 }
 
 

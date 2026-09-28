@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.476 @ 2026-09-28
+ * @version 6.5.1.477 @ 2026-09-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -81,6 +81,18 @@ function CmdMove($mUserId, $mParam)
     if ( !$said['result'] ) return $said;
 
     return TABLE\TreeMove($mUserId, 'info', $mParam);
+}
+
+
+/**
+ * Function CmdShift
+ **/
+function CmdShift($mUserId, $mParam)
+{
+    $said = InfoAllowed($mUserId, [$mParam['id']], 'info');
+    if ( !$said['result'] ) return $said;
+
+    return TABLE\TreeShift($mUserId, 'info', $mParam);
 }
 
 

@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.476 @ 2026-09-28
+ * @version 6.5.1.477 @ 2026-09-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -69,6 +69,21 @@ function CmdKeyMove($mUserId, $mParam)
     if ( !$place['result'] ) return $place;
 
     return TABLE\TreeMove($mUserId, $place['place'].'_key', PlaceFields($mParam));
+}
+
+
+/**
+ * Function CmdKeyShift
+ **/
+function CmdKeyShift($mUserId, $mParam)
+{
+    $place = PlaceOne($mParam['place']);
+    if ( !$place['result'] ) return $place;
+
+    $table = $place['place'].'_key';
+    $fields = PlaceFields($mParam);
+
+    return TABLE\TreeShift($mUserId, $table, $fields);
 }
 
 
