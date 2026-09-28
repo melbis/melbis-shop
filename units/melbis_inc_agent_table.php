@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.475 @ 2026-09-28
+ * @version 6.5.1.476 @ 2026-09-28
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -24,6 +24,7 @@
  *
  * TreeAdd      - Adds a node
  * TreeMove     - Moves a node and branch
+ * TreeShift    - Shifts a node among siblings
  * TreeRemove   - Deletes nodes with their branches
  * TreeNodeAdd  - Seats a node
  * TreeBranch   - A node with all under
@@ -634,6 +635,42 @@ function TreeMove($mUserId, $mTable, $mParam, $mScope = [])
     return [
         'result'  => true,
         'message' => 'The row of '.$mTable.' is moved'
+        ];
+}
+
+
+/**
+ * Function TreeShift
+ **/
+function TreeShift($mUserId, $mTable, $mParam, $mScope = [])
+{
+    $id = $mParam['id'];
+    $inc = $mParam['inc'];
+    $down = ( $inc > 0 );
+    $steps = abs($inc);
+
+    $tables = ['{DBNICK}_'.$mTable];
+    $lock = SYS\TablesLock($tables, $mUserId);
+    if ( !$lock['result'] ) return $lock;
+
+    // One neighbour a step
+    $done = 0;
+    while ( $done < $steps )
+    {
+        $shifted = MELBIS()->SysTreeShift($mTable, $id, $down, $mScope);
+        if ( !$shifted ) break;
+        $done++;
+    }
+
+    SYS\TablesUnlock($tables, $mUserId);
+
+    $way = ( $down ) ? 'down' : 'up';
+    $message = 'The row of '.$mTable.' is shifted '.$way.' by '.$done.' place(s)';
+    if ( $done < $steps ) $message .= ' - the edge of its parent';
+
+    return [
+        'result'  => true,
+        'message' => $message
         ];
 }
 
