@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.478 @ 2026-09-29
+ * @version 6.5.1.479 @ 2026-09-29
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -21,6 +21,10 @@
  * DiskPath    - The path of a row
  * DiskFolder  - The folder of a file
  * DiskPicture - What a picture really is
+ * DiskWebp    - Opens a webp, first frame too
+ *
+ * WebpChunks  - The chunks of a webp
+ * WebpNumber  - Three bytes, low first
  *
  * ProfileAll  - Reads the picture profiles
  * ProfileOne  - Reads one picture profile
@@ -463,6 +467,108 @@ function DiskPicture($mDisk)
 
 
 /**
+ * Function DiskWebp
+ **/
+function DiskWebp($mDisk)
+{
+    // A still opens at once
+    $image = @imagecreatefromwebp($mDisk);
+    if ( $image !== false ) return $image;
+
+    $bytes = @file_get_contents($mDisk);
+    if ( $bytes === false ) return false;
+
+    // The first frame of an animation
+    $chunks = WebpChunks($bytes);
+    $canvas = null;
+    $frames = [];
+    foreach ( $chunks as $chunk )
+    {
+        if ( $chunk['tag'] == 'VP8X' ) $canvas = $chunk['body'];
+        if ( $chunk['tag'] == 'ANMF' ) $frames[] = $chunk['body'];
+    }
+    if ( $canvas === null || count($frames) == 0 ) return false;
+
+    // Offsets are kept halved
+    $body = $frames[0];
+    $at_x = WebpNumber($body, 0) * 2;
+    $at_y = WebpNumber($body, 3) * 2;
+    $frame_w = WebpNumber($body, 6) + 1;
+    $frame_h = WebpNumber($body, 9) + 1;
+    $canvas_w = WebpNumber($canvas, 4) + 1;
+    $canvas_h = WebpNumber($canvas, 7) + 1;
+
+    // The frame as a still
+    $data = substr($body, 16);
+    $size = substr($body, 6, 6);
+    $head = 'VP8X'.pack('V', 10)."\x10\0\0\0".$size;
+    $inside = 'WEBP'.$head.$data;
+    $length = strlen($inside);
+    $still = 'RIFF'.pack('V', $length).$inside;
+
+    $frame = @imagecreatefromstring($still);
+    if ( $frame === false ) return false;
+
+    // Laid where a browser shows it
+    $image = imagecreatetruecolor($canvas_w, $canvas_h);
+    imagealphablending($image, false);
+    imagesavealpha($image, true);
+    $clear = imagecolorallocatealpha($image, 0, 0, 0, 127);
+    imagefill($image, 0, 0, $clear);
+    imagecopy($image, $frame, $at_x, $at_y, 0, 0, $frame_w, $frame_h);
+    imagedestroy($frame);
+
+    return $image;
+}
+
+
+/**
+ * Function WebpChunks
+ **/
+function WebpChunks($mBytes)
+{
+    // Chunks after the RIFF head
+    $chunks = [];
+    $total = strlen($mBytes);
+    $at = 12;
+    while ( $at + 8 <= $total )
+    {
+        $tag = substr($mBytes, $at, 4);
+        $size_at = $at + 4;
+        $size_bytes = substr($mBytes, $size_at, 4);
+        $size_word = unpack('V', $size_bytes);
+        $size = $size_word[1];
+
+        $body_at = $at + 8;
+        $chunks[] = [
+            'tag'  => $tag,
+            'body' => substr($mBytes, $body_at, $size)
+            ];
+
+        // An odd chunk is padded
+        $pad = $size & 1;
+        $at = $body_at + $size + $pad;
+    }
+
+    return $chunks;
+}
+
+
+/**
+ * Function WebpNumber
+ **/
+function WebpNumber($mBytes, $mAt)
+{
+    // Three bytes, low first
+    $part = substr($mBytes, $mAt, 3);
+    $word = $part."\0";
+    $number = unpack('V', $word);
+
+    return $number[1];
+}
+
+
+/**
  * Function ProfileAll
  **/
 function ProfileAll()
@@ -798,7 +904,7 @@ function MakePaint($mWhat, $mDisk, $mShow)
         'jpg'  => 'imagecreatefromjpeg',
         'png'  => 'imagecreatefrompng',
         'gif'  => 'imagecreatefromgif',
-        'webp' => 'imagecreatefromwebp'
+        'webp' => __NAMESPACE__.'\DiskWebp'
         ];
     $open = $doors[$mWhat['type']];
     $source = @$open($mDisk);
@@ -1134,7 +1240,7 @@ function MakeInk($mDisk)
         'jpg'  => 'imagecreatefromjpeg',
         'png'  => 'imagecreatefrompng',
         'gif'  => 'imagecreatefromgif',
-        'webp' => 'imagecreatefromwebp'
+        'webp' => __NAMESPACE__.'\DiskWebp'
         ];
     $open = $doors[$what['type']];
     $ink = @$open($mDisk);
