@@ -1,4 +1,17 @@
-# AI Tools
+# AI Components
+
+The **"Development → AI Components"** window holds everything the store gives the AI assistant, on three tabs:
+
+* **"AI Tools"** — commands written for your store, and the employees'
+  permissions for each of them;
+* **"AI Memory"** — the assistant's notes about the store and about working with
+  each employee;
+* **"AI Repository"** — sections in which the employees' assistants keep working
+  data for themselves and for each other.
+
+How the assistant uses all of this is described in "[AI Assistant](ai-assistant.md)". The window is edited **in lock mode**: changes are applied with the "Save" / "Save and Exit" buttons (see "[Three Data Working Modes](basics.md)"). The right "Development → AI Components → Get" allows opening the window, "Save" allows saving it.
+
+## AI Tools {#tools}
 
 Everything the AI assistant can do is the same in any Melbis store: files, data, trees, the storefront. **AI tools are the exception: the owner writes them for their own store.** Create a product exactly the way this store creates one, with its duplicate check and its price calculation; close an order by its rules.
 
@@ -16,13 +29,13 @@ A tool is worth creating when you see one of two things:
   guess which field you count duplicates by or where you take the price from: that
   is written in the module once.
 
-## Where They Are Created
-
-**"Development → AI Components"**, the "AI Tools" tab. On the left is the tool catalog, on the right are the commands of the selected tool and the permissions for each of them.
+On the left is the **"Tool Catalog"**, on the right the **"Tool Commands"** of the selected tool, and below them the selected command has two tabs: **"Command Parameters"** and **"Command Rights"**.
 
 The catalog is arranged like the other trees in the program: folder sections for grouping, with the group flag set by a button on the toolbar. **A folder is not a tool** — it has neither commands nor permissions, and the assistant does not see it.
 
-## The Tool Card
+A command can be moved to another tool: rows dragged from the command table onto a tool in the catalog move over to it. A folder does not accept them.
+
+### The Tool Card
 
 | Field | What it defines |
 |---|---|
@@ -34,7 +47,7 @@ The catalog is arranged like the other trees in the program: folder sections for
 
 The module is prepared by a developer — how such a module is arranged is described in the "[AI Tools](../Dev/agent_tool.md)" section of the developer guide.
 
-## Commands
+### Commands
 
 | Field | What it defines |
 |---|---|
@@ -53,7 +66,7 @@ The list of commands is also a guard against invention: a word the tool has not 
 
 The **line stream** type (`jsonl`) stands apart — it is for tools that load a batch of uniform records: products from a price list, attribute values, prices. The assistant passes either the lines themselves into such a field or a file from its own machine, one record per line — and then the data travels to the store bypassing the conversation. The difference is tangible: a hundred products take the assistant minutes to dictate, and a second to load from a file its own script has written.
 
-## Rights
+### Rights
 
 A right is granted **per command** — by a checkmark at the intersection of "command × employee or group". A tool has as many separate permissions as it has commands: you can allow reading the list without allowing adding and changing. The rights of an employee and of their groups add up.
 
@@ -63,7 +76,7 @@ A right is granted **per command** — by a checkmark at the intersection of "co
 
 > The assistant sees the full list of tools and commands regardless of rights — and about a command that has not been granted it answers with an address rather than "access denied": which command of which tool, and where it is granted. That address is what to pass to the administrator as is. An employee who is allowed to save AI settings owns all commands automatically — which is what the footnote under the permission tables says.
 
-## Ready-Made Tools
+### Ready-Made Tools
 
 The demonstration store ships with a ready-made set: products with their prices and descriptions, the catalog and attributes, files and image profiles, the settings registry, employees, scheduler tasks. The exact list does not live in the documentation — it is the store's data: the full and always fresh list stands in "Development → AI Components" on the "AI Tools" tab, and the assistant takes this same list before its first task.
 
@@ -84,3 +97,115 @@ A couple of examples of what that looks like:
   first and opened to the customer afterwards.
 
 They also serve as samples for developing your own.
+
+## AI Memory {#memory}
+
+Notes the assistant keeps about the store: working rules, employees' directives, decisions and their reasons. The assistant reads them at the start of work, so the next session — on another computer, in another application — does not start from scratch. The whole memory is visible here: whoever can open the window sees the notes of all employees.
+
+On the left is the **"Users"** tree: "All users", under it the groups, and in each group its employees. The node decides whose note it is:
+
+| Node | Whose note | Who writes it |
+|---|---|---|
+| "All users" | for all employees | the administrator, in this window |
+| group | for the group's employees, main or additional | the administrator, in this window |
+| employee | the employee's own | this employee's assistant, with their consent; the administrator — here |
+
+On the right are the **"Notes"** of the selected node, with rows coloured by type, and under the table the text of the current note. The order is changed with "Move Up" and "Move Down".
+
+**To hand a note over**, drag it from the table onto another node of the tree: the note moves there. With **Ctrl** held down it is copied — this is how a rule the assistant wrote down for one employee is given to the whole group while the author keeps it.
+
+While the window is open, the assistant can neither write a new note nor delete its own: the window holds the memory in work. When you are done, close it.
+
+### The Note Card
+
+| Field | What it defines |
+|---|---|
+| Type | the kind of note, see below |
+| Category | free words by which notes are grouped; the list offers the ones already in use, new ones can be typed in |
+| Time | when the note was last edited; set automatically |
+| Name | the note's short name |
+| Description for the AI assistant | one line on what the note is about |
+| Note text | the note itself; a double click opens the visual editor, the field's second button the source HTML |
+
+Whose note it is is not set in the card: it is the tree node under which the note was added.
+
+**The assistant reads memory in two passes:** first the names and descriptions of all notes, then the text of those that are relevant. So the description is written for that choice — what the note is about, not a retelling of it.
+
+| Type | What it is |
+|---|---|
+| Critical | what is observed in every session; the assistant reads these notes before any other work |
+| Directive | an employee's instruction |
+| Skill | how to work with this person |
+| Default | everything else |
+
+Custom types are added in the "[Settings Registry](registry.md)", on the "Basic Settings" tab; the assistant treats them as "Default".
+
+**When notes disagree,** "Critical", "Directive" and "Skill" outrank the other types, and among them a note for everyone outranks a group note, and a group note outranks a personal one.
+
+## AI Repository {#repo}
+
+Sections in which the employees' assistants keep working data — for themselves for later and for each other: unfinished work, intermediate results, parsed sites, ready scripts. Sections and their rights are set here, while topics and records are written by the assistants — in the window they are only read.
+
+On the left are the **"Repository Sections"** — a tree with the usual actions: add a section or subsection, edit, delete, move, drag a branch. A folder (the group flag) only groups sections: it has neither topics nor rights. A new subsection gets a copy of its parent's rights; after that they are edited separately.
+
+### The Section Card
+
+| Field | What it defines |
+|---|---|
+| Type | "Personal" — working data of one employee's assistant; "Shared" — what the assistants of all employees need; "Default" — no mark |
+| Name | the section's name in the tree |
+| Key | a short name by which the assistant can find the section |
+| Description for the AI assistant | what the section is for: by it the assistant decides what to put here |
+
+The type restricts nothing: who sees the section is decided by its rights.
+
+### Access Rights
+
+The **"Access Rights"** tab of the selected section: **"Permissions for User Groups"** and **"Permissions for Users"**, six checkboxes per row. A click on a cell sets or clears the checkbox.
+
+| Checkbox | What it allows the assistant |
+|---|---|
+| Topics — List | see the section's topics |
+| Topics — Create | create new topics |
+| Topics — Edit | change the name, description and parameters of any topic of the section |
+| Topics — Delete | delete any topic together with all its records |
+| Data — Read | read the topics' records |
+| Data — Write | add records |
+
+The rights of an employee and of their groups — main and additional — add up. A section without a single checkbox is invisible to the assistant. An employee with the right to save this window has all sections open with all checkboxes. A row with all checkboxes cleared is removed when the window is saved.
+
+The checkboxes decide which action goes through inside a section. The repository itself is opened to the assistant by the employee's rights in the "AI Assistant → Repository" branch (see "[Users and Access Rights](users.md)").
+
+**An employee's personal section.** Create a section with the "Personal" type, name its owner in the description, and give rights only to that employee. If everyone has a personal section, one memory note for everyone can tell the assistants how to find their own: for example, a "Personal" section whose key equals the employee's number (ID).
+
+### Topics and Data
+
+The **"Topics and Data"** tab shows what the assistants have written into the selected section. Everything comes from the server by buttons:
+
+* **"Get Section Topics"** — the **"Topics"** table: topic, description and
+  parameters — free words by which the topic is found;
+* **"Get Topic Data"** — the records of the selected topic in the **"Data"**
+  table.
+
+**A record does not change:** each new one is added to the topic, the latest is where the topic stands now, the earlier ones are its history. So "Get Topic Data" fetches only the records newer than those already received, and a record's text arrives when the cursor lands on it.
+
+A record has three tabs:
+
+* **"Summary"** — the time; the user — the employee whose assistant wrote it; the
+  author — the assistant itself: the model and its settings; the comment — one
+  line on what the record changed;
+* **"Content"** — the whole state of the topic;
+* **"Appendix"** — data attached to the record, which the assistant reads only
+  when it is needed.
+
+The content and the appendix are shown as **text**, as a **script** (with Python highlighting) or as an **HTML document** — the display is chosen in the list.
+
+Viewing topics and records is allowed by the rights "Development → AI Components → Repository → Get topics" and "Get data". The section checkboxes act on the assistants, not on this window.
+
+## Export {#export}
+
+The **"Export"** button on the tool catalog toolbar collects all tools with their commands and fields, their modules and libraries into one archive `<store> tools <date>.zip`. This is how a set of tools is moved to another store or kept in reserve. Permissions do not go into the archive — they are about the people of this store; nor do memory and the repository.
+
+The archive is assembled by the server from what has already been sent to it: unsaved changes in the window will not get into the archive, which the program warns about. The right "Development → AI Components → Export" is required.
+
+There is no loading back, and that is a decision: in every store the tools are refined for its own needs, so the archive is not rolled onto a store but compared with it. Give the archive to the assistant and ask it to carry over what has diverged — it will compare and carry things over point by point.

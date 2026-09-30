@@ -17,7 +17,7 @@ four tabs.
   change in the "[Settings](settings.md)" section; their names,
   input templates, values, and display permissions by groups and users are defined here.
 * **Additional Options** — fields of the store's own that it adds to its elements:
-  catalog sections, attributes, brands, suppliers and their warehouses,
+  catalog sections, attributes, brands, suppliers and their locations,
   parameters and parameter values, users and user groups, promo blocks, filters
   and tax areas.
 * **Individual Filters** — named SQL queries for products, orders, and
@@ -46,7 +46,7 @@ see new styles the next time they open the window or after "Refresh Settings".
 
 The tab declares the fields an element's ordinary card does not have. The
 **"Placement"** list chooses what the options belong to: **catalog sections**,
-**attributes**, **brands**, **suppliers**, **supplier warehouses**,
+**attributes**, **brands**, **suppliers**, **supplier locations**,
 **parameters**, **parameter values**, **users**, **user groups**, **promo
 blocks**, **filters**, **tax areas**. The sets are independent — the options of
 sections are not visible on brands and the other way round.

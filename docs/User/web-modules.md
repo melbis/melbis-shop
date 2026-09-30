@@ -27,6 +27,6 @@ can be safely opened from anywhere.
 
 Modules are added and configured in the "Development" → "Modules and Options" section:
 for external modules, you set the URL, key, authentication requirements, and the list of users
-with access; for built-in modules — the location (products, orders, customers,
+with access; for built-in modules — the placement (products, orders, customers,
 scheduler). For more details, see "[Modules and Options](module-options.md)". The general role
 of the built-in web module panel is described in "[Basic Operating Principles](basics.md)".

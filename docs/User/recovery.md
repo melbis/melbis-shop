@@ -2,7 +2,7 @@
 
 The "Recovery" section is for restoring previously deleted products or permanently deleting them.
 
-Deleting a product in the "[Prices](prices.md)", "[Location](location.md)" sections or
+Deleting a product in the "[Prices](prices.md)", "[Placement](location.md)" sections or
 when managing the catalog does not erase it permanently: the product stops being displayed
 in the store sections but is retained. This way, valuable descriptions, images, and
 attributes are not lost due to accidental deletion.

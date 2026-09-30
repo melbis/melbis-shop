@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.480 @ 2026-09-30
+ * @version 6.5.1.482 @ 2026-09-30
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -27,7 +27,7 @@ table={DBNICK}_key|id|name
 137=Proveedores
 138=Tipo
 139=Condición
-159=Almacenes
+159=Sedes
 160=Tipo
 108=Marcas
 109=Tipo
@@ -297,3 +297,5 @@ table={DBNICK}_key_value|id|value_txt
 456=Por defecto
 457=Personal
 458=Compartido
+459=Almacén
+460=Centro de servicio

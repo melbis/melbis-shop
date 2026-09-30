@@ -40,7 +40,7 @@ is built from it, and when the template group is switched, the paths update auto
 ```
 
 The language and template group can be switched from code — using the `LanguageSet` and
-`TemplateSet` methods before calling `Run` (see "Template Groups").
+`TemplateSet` methods (see "Template Groups").
 
 ## Visitor Session
 

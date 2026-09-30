@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.480 @ 2026-09-30
+ * @version 6.5.1.482 @ 2026-09-30
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -296,4 +296,6 @@ INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('456', 'AGENT_REPO_KIND_KEY', 'kDefault', '', '1', '456');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('457', 'AGENT_REPO_KIND_KEY', 'kPersonal', '', '0', '457');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('458', 'AGENT_REPO_KIND_KEY', 'kShared', '', '0', '458');
-UPDATE {DBNICK}_generator SET gen_value = 458 WHERE table_name = 'key_value';
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('459', 'PROVIDER_STOCK_KIND_KEY', 'kWarehouse', '', '0', '459');
+INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('460', 'PROVIDER_STOCK_KIND_KEY', 'kServiceCenter', '', '0', '460');
+UPDATE {DBNICK}_generator SET gen_value = 460 WHERE table_name = 'key_value';

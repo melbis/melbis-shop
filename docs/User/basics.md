@@ -62,7 +62,7 @@ left on "Pause" on another computer — is released in the
 ### 2. Working in Portions
 
 This is how sections with large volumes work — Prices, Price Lists, Orders, Customers,
-Reviews, Location. The entire table is not locked: you load only the required
+Reviews, Placement. The entire table is not locked: you load only the required
 **portion** of data (by section, search, or advanced query), edit it
 locally, and send it to the server as a **batch** using the "Save" button. Different employees
 work with different portions simultaneously. The mechanics of loading, display modes, and
@@ -116,7 +116,7 @@ becomes outdated.
 
 ## Catalog and Product Loading
 
-In product sections ("Prices", "Descriptions", "Location"), the catalog
+In product sections ("Prices", "Descriptions", "Placement"), the catalog
 is on the left and the product list is on the right. The catalog display mode switch determines
 what to show when a section is selected:
 
@@ -227,7 +227,7 @@ in the "Development" → "Modules and Options" section. For more details, see "[
 Employee access is set at two levels: **globally** — in the "System"
 → "Users" section, and **at the catalog section level** — in "Catalog" → "Access
 Rights". Commercial fields (the "Prices" section) and content (the "Descriptions" section) are two
-independent access planes, to which "Location" and "Browser" are added. The
+independent access planes, to which "Placement" and "Browser" are added. The
 first three grant the right to edit, the fourth only to look at a section's
 products in the "[Browser](browse.md)". For more details, see
 "[Users and Access Rights](users.md)" and "[Catalog](catalog.md)".

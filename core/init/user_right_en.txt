@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.480 @ 2026-09-30
+ * @version 6.5.1.482 @ 2026-09-30
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -82,7 +82,7 @@ table={DBNICK}_oper|id|name
 295=Get characteristic values
 297=Move characteristic values
 296=Move products
-73=Location
+73=Placement
 269=Refresh Settings
 117=Get products
 75=Save

@@ -333,7 +333,7 @@ Ten doors, one per family of rights. The first argument everywhere is the employ
 | `SysOrderStoreOptionRight($mUserId, $mOptionId = 0)` | an option of a product inside an order: the same |
 | `SysSelfKeyRight($mUserId, $mCode = '')` | a store setting |
 
-**A mode is a single flag of a granted right, and none of them includes another.** A section has four of them: `frame` — the descriptions of the section's products, `price` — their prices, `ctrl` — the location of products in the section, `browse` — the section is visible in the Browser without the right to edit. An employee holding only `ctrl` gets "no" to a `browse` question. In the same way `info` and `value` of an info item live apart — the item itself and its values — and so do `read`, `write`, `remove` of a web option. When any of several rights will do, the door is asked once per mode:
+**A mode is a single flag of a granted right, and none of them includes another.** A section has four of them: `frame` — the descriptions of the section's products, `price` — their prices, `ctrl` — the placement of products in the section, `browse` — the section is visible in the Browser without the right to edit. An employee holding only `ctrl` gets "no" to a `browse` question. In the same way `info` and `value` of an info item live apart — the item itself and its values — and so do `read`, `write`, `remove` of a web option. When any of several rights will do, the door is asked once per mode:
 
 ```php
 $allow = false;

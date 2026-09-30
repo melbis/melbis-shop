@@ -1,6 +1,6 @@
 # Web Console
 
-Many of the application's windows show web pages in an embedded panel: a section's storefront in "Location", a product card in "Descriptions", an order's service page, a web module. Each such panel is a full browser, and the **"Web Console"** gives it the familiar developer tools: the page tree, styles, network requests, JavaScript errors, and an execution console.
+Many of the application's windows show web pages in an embedded panel: a section's storefront in "Placement", a product card in "Descriptions", an order's service page, a web module. Each such panel is a full browser, and the **"Web Console"** gives it the familiar developer tools: the page tree, styles, network requests, JavaScript errors, and an execution console.
 
 ## How to Open It
 

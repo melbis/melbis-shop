@@ -3,7 +3,7 @@
 The "Browser" section is a quick look through the catalog: load products, find
 the ones you need, view them with an embedded web module, build a report. Product
 data cannot be edited here — that is what "[Descriptions](descriptions.md)",
-"[Prices](prices.md)" and "[Location](location.md)" are for.
+"[Prices](prices.md)" and "[Placement](location.md)" are for.
 
 Hence two uses. The first is a workplace for whoever needs to **look**: the
 section opens under a right of its own, and the person does not have to have
@@ -25,7 +25,7 @@ only what belongs to the Browser alone.
 ## What Shows Up in the Sections
 
 The tree shows the sections the employee has any right at all on:
-**"Browser"**, "Descriptions", "Prices" or "Location" — any one of them opens the
+**"Browser"**, "Descriptions", "Prices" or "Placement" — any one of them opens the
 section for viewing. The "Browser" right is granted where a person is meant to
 see products but not edit them; it is given in the "[Catalog](catalog.md)" on the
 "Access rights" tab, section by section.
@@ -68,7 +68,7 @@ or clear the list with the button.
 
 The buttons above the tree let you fix the catalog itself in passing: add a
 subsection, rename it, delete it, move it up and down; a section can be dragged
-into another with the mouse. All of this requires the **"Location"** right on the
+into another with the mouse. All of this requires the **"Placement"** right on the
 section — without it the server will reject the operation.
 
 ## Reports

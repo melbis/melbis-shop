@@ -19,4 +19,5 @@ and **"Permissions for Users"**: an "Access" checkbox at the intersection of an 
 and an employee.
 
 These are operational rights. Access to catalog sections — "Prices", "Descriptions",
-"Location" — is configured separately, in "[Catalog](catalog.md)" → "Access Rights".
+"Placement", "Browser" — is configured separately, in "[Catalog](catalog.md)" →
+"Access Rights".

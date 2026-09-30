@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.480 @ 2026-09-30
+ * @version 6.5.1.482 @ 2026-09-30
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -27,7 +27,7 @@ table={DBNICK}_key|id|name
 137=Fornitori
 138=Tipo
 139=Condizione
-159=Magazzini
+159=Sedi
 160=Tipo
 108=Marchi
 109=Tipo
@@ -297,3 +297,5 @@ table={DBNICK}_key_value|id|value_txt
 456=Predefinito
 457=Personale
 458=Condiviso
+459=Magazzino
+460=Centro assistenza

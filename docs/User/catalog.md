@@ -2,7 +2,7 @@
 
 The "Catalog" section (the "Structure" tab) is for managing store sections: their
 ordering, properties and options, as well as employee access rights to sections.
-Quick catalog functions are also available in "Prices", "Descriptions", and "Location", but full
+Quick catalog functions are also available in "Prices", "Descriptions", and "Placement", but full
 management is here.
 
 The window is organized around the **"Main Catalog"** on the left and a set of tabs on the right:
@@ -44,7 +44,7 @@ allow you to assemble separate menus from sections of the main catalog: select a
 ## Access Rights
 
 For each section, permissions are set for groups and users across four independent
-dimensions: **Descriptions**, **Prices**, **Location** (the latter also includes
+dimensions: **Descriptions**, **Prices**, **Placement** (the latter also includes
 management of the section itself — editing, moving, adding, and deleting) and
 **Browser**.
 
@@ -57,6 +57,6 @@ in sections with documents and regulations, for example.
 Users with management rights are granted access to all sections automatically;
 the **"Apply to Subsections"** button propagates permissions down the tree.
 
-Global access to the "Prices" / "Descriptions" / "Location" / "Browser" sections
+Global access to the "Prices" / "Descriptions" / "Placement" / "Browser" sections
 is configured in "[Users](users.md)", while here it is set granularly per catalog
 section.

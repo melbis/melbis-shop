@@ -1,6 +1,6 @@
-# Location
+# Placement
 
-The "Location" section is for moving products between sections of the store catalog. The same
+The "Placement" section is for moving products between sections of the store catalog. The same
 can be done in the "[Prices](prices.md)" section, but not in
 "[Descriptions](descriptions.md)": this allows giving content managers (e.g.,
 freelancers) access to arranging products across sections without exposing commercial or

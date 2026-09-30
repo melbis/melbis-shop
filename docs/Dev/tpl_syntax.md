@@ -187,7 +187,7 @@ Condition tags start with `*` and close the same way.
 
 **Conditions based on system tags:**
 
-* `{*TEMPLATE==mobi} … {TEMPLATE*}` — block only for the `mobi` template group; `{*LANG==ru,uk} … {LANG*}` — for the required languages. System tags (`{TEMPLATE}`, `{LANG}`, and others — see "System Constants") participate in conditions like regular variables, with all comparison operations. This is the primary way to serve multiple groups or languages from a single file — see "Template Groups → Shared Code Between Groups" for details. Inside such a block, system and global values are available, but not local module variables.
+* `{*TEMPLATE==mobi} … {TEMPLATE*}` — block only for the `mobi` template group; `{*LANG==ru,uk} … {LANG*}` — for the required languages. System tags (`{TEMPLATE}`, `{LANG}`, and others — see "System Constants") participate in conditions like regular variables, with all comparison operations. This is the primary way to serve multiple groups or languages from a single file — see "Template Groups → Shared Code Between Groups" for details. Inside such a block the module's simple tags are substituted, but not its loops and conditions: a block on a system or global value is frozen whole until the second pass — see "Global Array → Two-Pass Parsing and Caching".
 
 **Why there are no compound conditions (&&, ||)**
 

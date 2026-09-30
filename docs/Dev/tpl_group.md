@@ -60,8 +60,8 @@ active template group; **`LanguageSet($mLang)`** and **`LanguageGet()`** handle 
 language. Defaults for both are taken from `config.json` (`MELBIS_TEMPLATE` and
 `MELBIS_LANG`).
 
-Switching makes sense in the root script, **before calling `Run`** — that way the
-choice will apply to all modules on the page:
+In the root script, **before calling `Run`**, the choice applies to all modules of the
+page:
 
 ```php
 MELBIS()->TemplateSet('mobile');
@@ -69,6 +69,27 @@ MELBIS()->LanguageSet('en');
 
 MELBIS()->Run($entry_point, $entry_param);
 ```
+
+The group can be switched inside a module as well. From that point on, templates and the cache are taken from
+the new group — by the module itself and by the modules that run after it.
+A template a context has read before the switch is not read by that context a second time,
+so the templates of the new group are parsed in a new context:
+
+```php
+$was = MELBIS()->TemplateGet();
+MELBIS()->TemplateSet('mail');
+
+$tpl = MELBIS()->TplCreate();
+MELBIS()->TplParse($tpl, 'LETTER', 'letter');
+$letter = MELBIS()->TplFree($tpl, 'LETTER');
+
+MELBIS()->TemplateSet($was);
+```
+
+System tags — `{PATH}`, `{TEMPLATE}` and the rest — are substituted into the module's output
+after it returns, by the group that is set at that moment. The module in the example
+has returned the previous group, so `{PATH}` in its output leads into it. If the module's
+output must refer to the new group, it is not returned until the end of the module.
 
 A typical case is selecting the mobile group based on the visitor's device, or the language based on the URL segment. The device and preferred language are provided by the `AgentDevice` and
 `AgentLanguage` methods — see "Visitor".

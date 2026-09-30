@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.480 @ 2026-09-30
+ * @version 6.5.1.482 @ 2026-09-30
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -27,7 +27,7 @@ table={DBNICK}_key|id|name
 137=Suppliers
 138=Type
 139=State
-159=Warehouses
+159=Locations
 160=Type
 108=Brands
 109=Type
@@ -297,3 +297,5 @@ table={DBNICK}_key_value|id|value_txt
 456=Default
 457=Personal
 458=Shared
+459=Warehouse
+460=Service center

@@ -5,7 +5,7 @@ component** of a product is managed (prices, availability, discounts, parameters
 
 The program has a fundamental separation of access to products: the **"Prices"**
 section is for commercial fields, the **"[Descriptions](descriptions.md)"** section is for content
-(photos, descriptions, reviews, attributes), and **"[Location](location.md)"** is for
+(photos, descriptions, reviews, attributes), and **"[Placement](location.md)"** is for
 moving products through the catalog. Access to them is granted separately (see
 "[Users and Access Rights](users.md)" and "[Catalog](catalog.md)").
 
@@ -32,10 +32,10 @@ Through the "Table Designer", commercial fields are displayed in the list, inclu
   dropdown list shows the group name and discount range);
 * **Tax Group** — the product's tax profile, assigned from the
   "[Taxes](taxes.md)" reference book;
-* **Warehouse: Name**, **Warehouse: Qty**, **Warehouse: Parameters** — the
-  quantity of the product by the supplier's warehouses; a product with several
-  warehouses is shown as several rows, just as with parameters. The warehouse is
-  chosen from the warehouses of the product's supplier;
+* **Location: Name**, **Location: Qty**, **Location: Parameters** — the
+  quantity of the product by the supplier's locations; a product with several
+  locations is shown as several rows, just as with parameters. The location is
+  chosen from the locations of the product's supplier;
 * **Qty** (availability), **Min. Qty**, **Order Step**;
 * **Type**, **State**, **Status** — configurable properties (values are set in
   the "Settings Registry"); **Status** typically reflects availability ("In stock",
@@ -85,19 +85,19 @@ can be quickly edited directly in the list (the **"Parameter:"** panel) and assi
 of products via "Group Assignments". The parameters themselves are defined in the
 "[Parameters](parameters.md)" section.
 
-## Product Warehouses
+## Product Locations
 
-The **"Product Warehouses"** button opens the **"Product Warehouses"** window —
-the list of the selected product's warehouses: **Warehouse**, **Qty** and free
-**Parameters**. The warehouse is chosen from the warehouses of the product's
+The **"Product Locations"** button opens the window of the same name —
+the list of the selected product's locations: **Location**, **Qty** and free
+**Parameters**. The location is chosen from the locations of the product's
 supplier; rows marked for deletion are shown struck through until the save. The same data
-is available right in the product list through the **Warehouse: Name / Qty /
+is available right in the product list through the **Location: Name / Qty /
 Parameters** columns.
 
-In the "Group Assignments" a warehouse has a row of its own: modify/add, add,
-modify or delete a warehouse with its quantity and parameters. When a warehouse
-is assigned, the product also gets the supplier of that warehouse. The
-warehouses themselves are maintained in the "[Suppliers](suppliers.md)" section.
+In the "Group Assignments" a location has a row of its own: modify/add, add,
+modify or delete a location with its quantity and parameters. When a location
+is assigned, the product also gets the supplier of that location. The
+locations themselves are maintained in the "[Suppliers](suppliers.md)" section.
 
 ## Reports
 

@@ -43,7 +43,7 @@ developers.
 * **Brands** — a directory of product brands.
 * **Browser** — a quick look through the catalog's products: loading, searching, reports and web modules without the right to edit.
 * **Descriptions** — composing product descriptions (non-commercial data and retail price).
-* **Location** — moving products between catalog sections.
+* **Placement** — moving products between catalog sections.
 * **Prices** — the commercial side of a product: prices, availability, discounts, parameters (the logistician's workplace).
 * **Price Lists** — batch loading of suppliers' price lists.
 * **Recovery** — restoring deleted products or permanently removing them.
@@ -66,7 +66,7 @@ developers.
 * **Customer Options** — registration fields and customer groups.
 * **Report Editor** — creating reports and managing access rights to them.
 * **Modules and Options** — configuration of external and built-in web modules.
-* **AI Tools** — the catalog of the store's tools, their commands, and each employee's permissions for every command (see "[AI Tools](ai-tools.md)").
+* **AI Components** — everything the store gives the AI assistant: tools with permissions for every command, its memory and repository (see "[AI Components](ai-tools.md)").
 * **Server** — store server management.
 * **Installation** — initial setup of base and system functions, the keys of external services, copying and restoring the store.
 * **Workbench** — built-in IDE (see the developer guide, "[Workbench](../Dev/ide.md)").
