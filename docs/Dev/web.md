@@ -66,28 +66,15 @@ In the "Products" section, the `store_id` of the selected product is passed. In 
 
 For web modules, the standard demo store distribution includes the `melbis_inc_auth` library. It handles all the boilerplate code: user authentication via `login` + `pass_code`, storing the authentication state in a PHP session, checking access rights to the module, and routing POST calls between module functions.
 
-**The central function — `MELBIS_INC_AUTH_Router($module, $mVars)`** — performs the following steps in order:
+**The central function — `MELBIS_INC_AUTH\Router($mModule, $mVars)`** — performs the following steps in order:
 
 1. Checks whether a logout has been requested (`logout` in POST).
 2. Authenticates the user: via `login` + `pass_code` from POST, or from a previously saved session.
 3. Verifies the user's right to access the given module (based on the permissions table in the database).
-4. Writes global variables via `GlobalAssign('page', [...])`, available in all templates: authentication status (`auth`), `user_id`, and `mod` — the URL of the current module. The `{PAGE:MOD}` variable is used in templates as the base URL for AJAX requests.
-5. Routes the call: if the `func` parameter is passed in POST — calls the function `MODULE_NAME_{func}($userId, $mVars)`; the word in `func` is the function's Pascal tail (`GetCataloge`). Without `func`, `MODULE_NAME_Default($userId, $mVars)` is called.
+4. Writes global variables via `GlobalAssign('PAGE', [...])`, available in all templates: authentication status (`auth`), `user_id`, and `mod` — the URL of the current module. The `{PAGE:MOD}` variable is used in templates as the base URL for AJAX requests.
+5. Routes the call: if the `func` parameter is passed in POST — calls the module function with that name (`GetCataloge`), passing it `$userId` and `$mVars`. Without `func`, `Page` is called. Any function other than `Page` works only after login and with the right to the module — otherwise the answer is `Access denied`.
 
 Thanks to this, the entire main module function reduces to a single line:
-
-```php
-function MELBIS_WEB_SAMPLE($mVars)
-{
-    return MELBIS_INC_AUTH_Router(MELBIS()->UnitName(), $mVars);
-}
-```
-
-`MELBIS()->UnitName()` returns the name of the current module — it is passed to the router for rights verification and building the names of child functions.
-
----
-
-A module with a namespace is written the same way, only the main function is called `Main` and the library is called by its short name (see "Modular Scripts"):
 
 ```php
 namespace MELBIS_WEB_SAMPLE;
@@ -100,44 +87,45 @@ function Main($mVars)
 }
 ```
 
-Routing does not change along with it: the function name arrives as data, from POST, and `UnitFunc` assembles it — it checks both forms of the name, so one and the same router serves both flat modules and namespaced ones.
+`MELBIS()->UnitName()` returns the name of the current module — it is passed to the router for rights verification and for finding the module's functions.
 
-## Module Structure: the _Default Function
+The function name arrives as data, from POST, so the router calls it through `UnitFunc`: it assembles the full name from the running module — `MELBIS_WEB_SAMPLE\GetCataloge`, and in a module of the former form, without a namespace, `MELBIS_WEB_SAMPLE_GetCataloge`. One and the same router serves both forms.
 
-The `_Default` function is the entry point when the module is first opened. It receives `$mUserId` (or `null` if authentication failed) and the full `$mVars` array.
+---
+
+## Module Structure: the Page Function
+
+The `Page` function outputs the module's page: the router calls it when `func` is not passed. It is the only function the router calls even without login — it is also the one that shows the authentication form. It receives `$mUserId` (or `null` if no login took place) and the full `$mVars` array.
 
 ```php
-function MELBIS_WEB_SAMPLE_Default($mUserId, $mVars)
+function Page($mUserId, $mVars)
 {
     $tpl = MELBIS()->TplCreate();
 
     if ( $mUserId > 0 )
     {
-        // Prepare the user's permissions cache for working with web_key
-        MELBIS_INC_AUTH_WebKeyPrepare($mUserId);
-
         // Pass input variables to the template
         MELBIS()->TplAssign($tpl, 'VARS', var_export($mVars, true));
 
         // Pass order data for the reverse data transfer mechanism
         MELBIS()->TplAssign($tpl, 'ORDER', $mVars['post']['order'] ?? '{}');
 
-        MELBIS()->TplParse($tpl, 'SCRIPTS', 'scripts');
         MELBIS()->TplParse($tpl, 'CONTENT', 'page');
     }
     else
     {
         // User is not authenticated — show the login form
+        MELBIS()->TplAssign($tpl, 'ORDER', '{}');
         MELBIS()->TplParse($tpl, 'CONTENT', 'auth');
     }
 
-    MELBIS()->GlobalAppend('page', ['title' => 'Sample Web module']);
+    MELBIS()->GlobalAppend('PAGE:TITLE', 'Sample Web module');
 
     return MELBIS()->TplFinal($tpl, 'main');
 }
 ```
 
-The `auth.htm` template contains a call to the `melbis_web_auth` module — it renders the login form. After the form is submitted, `MELBIS_INC_AUTH_Router` processes the POST again, authenticates the user, and this time returns the main `page.htm` template.
+The `auth.htm` template contains a call to the `melbis_web_auth` module — it renders the login form. After the form is submitted, the router `AUTH\Router` processes the POST again, authenticates the user, and this time `Page` parses the main `page.htm` template.
 
 ---
 
@@ -152,7 +140,7 @@ $('#melbis_table_cataloge').bootstrapTable({
     url: '{PAGE:MOD}',
     method: 'post',
     queryParams: function(params) {
-        params.func = 'GetCataloge';  // the router will call MELBIS_WEB_SAMPLE_GetCataloge
+        params.func = 'GetCataloge';  // the router will call GetCataloge of this module
         return params;
     },
     pagination: true,
@@ -166,7 +154,7 @@ $('#melbis_table_cataloge').bootstrapTable({
 On the PHP side, the function receives control only if the user is authenticated, executes the query, and returns JSON:
 
 ```php
-function MELBIS_WEB_SAMPLE_GetCataloge($mUserId, $mVars)
+function GetCataloge($mUserId, $mVars)
 {
     $limit  = (int) $mVars['post']['limit'];
     $offset = (int) $mVars['post']['offset'];
@@ -193,9 +181,22 @@ The same principle applies to any other module functions — searching, filterin
 
 The most unique capability of embedded web modules is the ability to pass data **from the browser back to the Windows application** without additional HTTP requests.
 
-This is implemented via `console.log` with a special key. The application intercepts the browser's console output and, upon detecting the `MELBIS_ORDER_UPDATE` key, applies the received data to the order being edited.
+The page sends the application a message with the `window.chrome.webview.postMessage` method: an object with the event name in the `event` field and the data in the `data` field.
 
-The mechanism only works in the order editing window while the order has not yet been saved. In other sections (products, customers), the web module writes changes directly to the database via the standard SQL parser methods when needed.
+```javascript
+window.chrome.webview.postMessage({ event: 'MELBIS_ORDER_UPDATE', data: update });
+```
+
+The application understands two events:
+
+| Event | Where it works | What the application does |
+|---|---|---|
+| `MELBIS_ORDER_UPDATE` | the order editing window | applies `data` to the fields of the order being edited |
+| `MELBIS_PRINT` | any browser of the application | opens the Windows print dialog for the page |
+
+The `window.chrome.webview` object exists only in the application's browser. A module that is also opened in an ordinary browser checks for it before sending (an example is in the "Printing" section below).
+
+`MELBIS_ORDER_UPDATE` works while the order has not yet been saved. In other sections (products, customers), the web module writes changes directly to the database via the standard SQL parser methods when needed.
 
 A practical example: the module receives all the data of the open order from the application in JSON format, displays it in interactive tables, and allows the manager to edit individual fields directly in the browser.
 
@@ -232,15 +233,31 @@ $('.melbis_table_order').on('click-cell.bs.table', function(event, field, value,
             if (result != null) {
                 var update = {};
                 update[table] = [{id: row.id, [field]: result}];
-                // Pass the change to the application via the console
-                console.log('MELBIS_ORDER_UPDATE' + JSON.stringify(update));
+                // Pass the change to the application
+                window.chrome.webview.postMessage({ event: 'MELBIS_ORDER_UPDATE', data: update });
             }
         }
     });
 });
 ```
 
-The application reads the console output, recognizes the `MELBIS_ORDER_UPDATE` key, and applies the changes to the order fields in its interface.
+The application receives the `MELBIS_ORDER_UPDATE` event and applies the changes to the order fields in its interface.
+
+### Printing
+
+The `MELBIS_PRINT` event opens the classic Windows print dialog for the page: the choice of printer, number of copies and pages. The standard `window.print()` shows the browser's print preview inside the module panel itself instead.
+
+A print button that works both in the application and in an ordinary browser:
+
+```javascript
+function melbis_print() {
+    if (window.chrome && window.chrome.webview) {
+        window.chrome.webview.postMessage({ event: 'MELBIS_PRINT' });
+    } else {
+        window.print();
+    }
+}
+```
 
 ---
 
@@ -260,11 +277,11 @@ Configuring external modules — **"Development → Modules and Options", the "E
 
 Since external modules can also be opened from a regular browser, authentication here works in two modes automatically:
 
-**When opened from the application** — Melbis Shop passes `login` and `pass_code` in POST. `MELBIS_INC_AUTH_Router` authenticates the user without a form and immediately displays the content.
+**When opened from the application** — Melbis Shop passes `login` and `pass_code` in POST. `AUTH\Router` authenticates the user without a form and immediately displays the content.
 
-**When opened directly in a browser** — POST does not contain credentials, the router returns `$mUserId = null`, and the `_Default` function substitutes the authentication form template. After a successful login, the data is saved in the PHP session, and the form is no longer shown on subsequent requests.
+**When opened directly in a browser** — POST does not contain credentials, the router passes `$mUserId = null`, and the `Page` function substitutes the authentication form template. After a successful login, the data is saved in the PHP session, and the form is no longer shown on subsequent requests.
 
-The same module code works in both cases — the branching happens entirely automatically inside the `melbis_inc_auth` library. The developer only needs to correctly handle the `$mUserId == null` case in the `_Default` function.
+The same module code works in both cases — the branching happens entirely automatically inside the `melbis_inc_auth` library. The developer only needs to correctly handle the `$mUserId == null` case in the `Page` function.
 
 ---
 
@@ -278,19 +295,19 @@ Windows Melbis Shop
 index.php → Run('melbis_web_sample')
     │
     ▼
-MELBIS_WEB_SAMPLE($mVars)
+MELBIS_WEB_SAMPLE\Main($mVars)
     │
     ▼
-MELBIS_INC_AUTH_Router(...)
+MELBIS_INC_AUTH\Router(...)
     ├─ authentication + rights verification
-    ├─ func absent          → MELBIS_WEB_SAMPLE_Default($userId, $mVars)      → HTML
-    ├─ func = 'GetCataloge' → MELBIS_WEB_SAMPLE_GetCataloge($userId, $mVars)  → JSON
-    └─ func = 'GetGoods'    → MELBIS_WEB_SAMPLE_GetGoods($userId, $mVars)     → JSON
+    ├─ func absent          → MELBIS_WEB_SAMPLE\Page($userId, $mVars)         → HTML
+    ├─ func = 'GetCataloge' → MELBIS_WEB_SAMPLE\GetCataloge($userId, $mVars)  → JSON
+    └─ func = 'GetGoods'    → MELBIS_WEB_SAMPLE\GetGoods($userId, $mVars)     → JSON
 
 HTML page in the application's browser
     │  (only for the order editing window)
     ▼
-console.log('MELBIS_ORDER_UPDATE{"version":[...]}')
+postMessage({ event: 'MELBIS_ORDER_UPDATE', data: {"version":[...]} })
     │
     ▼
 Windows Melbis Shop — applies changes to the order

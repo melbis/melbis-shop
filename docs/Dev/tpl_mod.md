@@ -199,15 +199,15 @@ The second argument may be absent: the engine then takes the function of the sam
 Naming the function explicitly is needed when it is called differently or lies in another file. The default parameters can be kept with the short form as well, by passing `null` as the second argument:
 
 ```php
-MELBIS()->DefineCallback('Translate', MELBIS_INC_Translate(...), ['from' => 'en']);
+MELBIS()->DefineCallback('Translate', LANG\Translate(...), ['from' => 'en']);
 ```
-The three dots are PHP syntax: the function is passed as a value without being called. The name is resolved by the compiler, so the registration does not fall apart when the function is renamed or the library moves into a namespace. A string in quotes is accepted as well, but it does not survive every move.
+The three dots are PHP syntax: the function is passed as a value without being called. The name is resolved by the compiler — `LANG` here is the short name of the `MELBIS_INC_LANG` library from the `use` line — so the registration does not fall apart when the library is renamed. A string in quotes is accepted as well, but it does not know the short name and is written in full: `'MELBIS_INC_LANG\Translate'`.
 
 **The name is checked at registration.** If there is no such function, the engine says so at once — when the module is included, rather than the first time the modifier fires on the storefront.
 * Local registration / Override (`UnitCallbackCustom`):
 Called from within a specific module (after it is included). Adds a function or overrides a setting exclusively for the current module — does not propagate to submodules.
 ```php
-MELBIS()->UnitCallbackCustom('Translate', MELBIS_INC_Translate(...), ['from' => 'ru']);
+MELBIS()->UnitCallbackCustom('Translate', LANG\Translate(...), ['from' => 'ru']);
 ```
 * Additionally, the methods `UnitCallbackSet` and `UnitCallbackGet` are available for dynamically changing default parameters at runtime.
 
@@ -218,7 +218,7 @@ In the template you specify the alias (with the `$` sign) and, if needed, list *
 **Syntax:** `{MAIN_VARIABLE|$alias:ARG_1,ARG_2}`
 
 
-The alias is a case-sensitive key; by convention it matches the function's Pascal tail — one name is found by a single search in the template, in the registration, and in the declaration.
+The alias is a case-sensitive key; by convention it matches the function's name — one name is found by a single search in the template, in the registration, and in the declaration.
 
 **Example:** `{PRICE|$Discount:GROUP_ID,10,USD}`
 *(where `PRICE` and `GROUP_ID` are variables from the database, and `10` and `USD` are static text passed directly from the markup).*

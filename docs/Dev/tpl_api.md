@@ -100,10 +100,10 @@ return MELBIS()->TplFinal($tpl, 'main');
 The third argument is the name of a **post-processing function** through which the module's finished HTML is passed before being returned. The function is registered in advance, typically in a library module:
 
 ```php
-// Registration: name → function
-MELBIS()->DefinePostProd('minify', MELBIS_INC_BASE_Html(...));
+// Registration in the MELBIS_INC_BASE library: name → function
+MELBIS()->DefinePostProd('minify', Html(...));
 ```
-The three dots are PHP syntax: the function is passed as a value without being called. The name is resolved by the compiler, so the registration survives both a rename and the move of the library into a namespace; a string in quotes is accepted as well.
+The three dots are PHP syntax: the function is passed as a value without being called. The name is resolved by the compiler — here it is `MELBIS_INC_BASE\Html` from the library's own namespace — so the registration survives a rename of the library. A string in quotes is accepted as well, but it is written with the full name.
 
 ```php
 // Applied in any module
@@ -222,7 +222,9 @@ This is exactly why paths were introduced. Previously, to change a single nested
 Thus, a typical module workflow with the template engine looks like this:
 
 ```php
-function MELBIS_BASE_PAGE($mVars)
+namespace MELBIS_BASE_PAGE;
+
+function Main($mVars)
 {
     $tpl = MELBIS()->TplCreate();
 

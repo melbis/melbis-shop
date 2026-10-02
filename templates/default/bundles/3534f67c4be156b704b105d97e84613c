@@ -1,0 +1,10 @@
+{
+    "info": "Text and heading fonts",
+    "source": "statics\/base\/fonts.css",
+    "bundle": [
+        {
+            "name": "base.css",
+            "prior": 5
+        }
+    ]
+}

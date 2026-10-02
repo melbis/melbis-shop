@@ -21,7 +21,9 @@ A module is created by [`engine_php_add`](engine_php_add.md) and written by [`en
 
 ```php
 <?php
-function AGENT_HELLO($mVars)
+namespace AGENT_HELLO;
+
+function Main($mVars)
 {
     $name = $mVars['post']['name'] ?? 'world';
     $text = 'Hello, '.$name;

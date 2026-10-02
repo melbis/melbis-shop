@@ -30,7 +30,7 @@ Examples:
 melbis_base_page.php       — base page router
 melbis_store_card.php      — product card
 melbis_cataloge.php        — catalog
-melbis_inc_logic.php       — business logic library
+melbis_inc_logic_order.php — order handling library
 melbis_block_slider.php    — slider
 melbis_client_auth.php     — client authentication
 ```
@@ -64,7 +64,11 @@ In the "Workbench" tree, libraries are organized by this group — alongside reg
 ```
 melbis
     auth          melbis_inc_auth.php
-    logic         melbis_inc_logic.php
+    logic         melbis_inc_logic_common.php
+                  melbis_inc_logic_notify.php
+                  melbis_inc_logic_order.php
+                  melbis_inc_logic_order_calc.php
+                  melbis_inc_logic_order_edit.php
     web           melbis_inc_web_callback.php
                   melbis_inc_web_topic.php
     base          melbis_base_footer.php
@@ -76,73 +80,71 @@ melbis
                   melbis_cataloge_sub.php
 ```
 
-The purpose can be omitted if there is only one library in the group: `melbis_inc_logic.php` represents group `logic` with no purpose, while `melbis_inc_web_callback.php` represents group `web` with purpose `callback`.
+The purpose can be omitted if there is only one library in the group: `melbis_inc_auth.php` represents group `auth` with no purpose, while `melbis_inc_web_callback.php` represents group `web` with purpose `callback`.
 
 The idea is to keep a library close to the modules that use it: `melbis_inc_web_callback` and `melbis_inc_web_topic` belong to the web part of the project and are grouped under `web`, rather than being scattered among all other libraries.
 
 ## Functions in Module Scripts
 
-Each regular module contains a **main function** — its name exactly matches the module's filename written in uppercase. This is the function the parser calls:
-
-```php
-// File: melbis_store_card.php
-function MELBIS_STORE_CARD($mVars)
-{
-    ...
-}
-```
-
-The exception is library modules in the `inc` group. The parser does not call them, so they have no main function. Instead, they contain a set of helper functions that are explicitly called from other modules.
-
-Helper functions within the same module are named with the main function's name as a prefix, and their own name is written in **PascalCase** — every word capitalized, no underscores:
-
-```php
-function MELBIS_STORE_CARD_Price($mTpl, $mId)
-{
-    ...
-}
-
-function MELBIS_STORE_CARD_Features($mTpl, $mId)
-{
-    ...
-}
-```
-
-The change of case marks the name boundary: to the left of it is the module, to the right the function. The boundary is visible both to the eye and to tools — the IDE and the linter split the name without consulting the module tree, and a search for `Price` finds the declaration as well as the calls — the short ones through `UnitFunc` included (see "Utility Methods"). The entry point tells itself apart from the helpers for free along the way: it has no Pascal tail.
-
-Abbreviations in the tail are written as words: `SmsUrl`, `XmlLoad` — not `SMSUrl`, otherwise the prefix boundary is lost.
-
-This approach guarantees unique function names in PHP's global namespace and makes it immediately clear which module a given function belongs to.
-
-Functions in **library modules** (`inc`) follow the same naming scheme — prefixed with the library name:
-
-```php
-// File: melbis_inc_logic.php
-function MELBIS_INC_LOGIC_OrderCreate(...)  { ... }
-function MELBIS_INC_LOGIC_OrderCalc(...)    { ... }
-function MELBIS_INC_LOGIC_OrderEdit(...)    { ... }
-```
-
-> Projects with lowercase tails (`MELBIS_INC_LOGIC_order_create`) keep working as before — PHP does not distinguish case in function names. The Pascal tail is a convention for new code.
-
-## Names in a Module with a Namespace
-
-The prefix in names exists precisely because all PHP functions lie in a common space. A module or a library that has declared a space of its own gets rid of it: the file name moves into the `namespace` line, and only the Pascal tail is left in the function names.
+A module declares its own **namespace** — the name of its file in uppercase — and calls its **main function** `Main`. This is the function the parser calls:
 
 ```php
 // File: melbis_store_card.php
 namespace MELBIS_STORE_CARD;
 
-function Main($mVars)  { ... }
-function Price($mTpl, $mId)   { ... }
-function Features($mTpl, $mId) { ... }
+function Main($mVars)
+{
+    ...
+}
 ```
 
-The main function in such a file is called `Main`: the module name is already written above, and there is no point repeating it. Its case is now the same as the helpers' — what tells it apart is not the spelling but the name itself, reserved for the entry point. The parser looks for both forms, so flat modules with a main function named after the file keep working.
+The exception is library modules in the `inc` group. The parser does not call them, so they have no `Main` function. Instead, they contain a set of functions that are explicitly called from other modules.
 
-The full name of a function changes predictably along with this: the underscore before the tail becomes a backslash — `MELBIS_STORE_CARD_Price` turns into `MELBIS_STORE_CARD\Price`. The boundary between the module and the function stops being a convention and becomes a language construct, while a search for `Price` still finds both the declaration and the calls.
+Helper functions of a module have short names without prefixes, and the name is written in **PascalCase** — every word capitalized, no underscores:
 
-For more on converting a module and on what to check while doing it, see the "Modular Scripts" section.
+```php
+function Price($mTpl, $mId)
+{
+    ...
+}
+
+function Features($mTpl, $mId)
+{
+    ...
+}
+```
+
+The module name stands in the `namespace` line, and the full name of the function is `MELBIS_STORE_CARD\Price`. The boundary between the module and the function here is a backslash, a language construct: it is visible both to the eye and to tools — the IDE and the linter split the name without consulting the module tree, and a search for `Price` finds the declaration as well as the calls. The entry point is told apart from the helper functions by the name `Main` itself, reserved for it.
+
+Abbreviations are written as words: `SmsUrl`, `XmlLoad` — not `SMSUrl`.
+
+Functions of **library modules** (`inc`) are named the same way — in the namespace of their library:
+
+```php
+// File: melbis_inc_logic_order.php
+namespace MELBIS_INC_LOGIC_ORDER;
+
+function Create(...)    { ... }
+function Load(...)      { ... }
+function GoodsAdd(...)  { ... }
+```
+
+A calling module calls them through the library's short name — `LOGIC_ORDER\GoodsAdd(...)` (see "Library Modules").
+
+## Names in a Module without a Namespace
+
+Modules of past years declare no namespace, and all their functions lie in PHP's common space. That is why the names in them carry a prefix: the main function is named after the file in uppercase, the helpers — the same name with a Pascal tail:
+
+```php
+// File: melbis_store_card.php
+function MELBIS_STORE_CARD($mVars)                { ... }
+function MELBIS_STORE_CARD_Price($mTpl, $mId)     { ... }
+function MELBIS_STORE_CARD_Features($mTpl, $mId)  { ... }
+```
+
+Here the change of case marks the name boundary: to the left of it is the module, to the right the function. Lowercase tails (`MELBIS_STORE_CARD_price`) are allowed too: PHP does not distinguish case in function names.
+
+The parser looks for both forms of the main function, so such modules keep working. When a module is converted to a namespace, the underscore before the tail becomes a backslash — `MELBIS_STORE_CARD_Price` turns into `MELBIS_STORE_CARD\Price`. What else to check during the conversion is described in the "Modular Scripts" section.
 
 ## Variables in PHP Scripts
 

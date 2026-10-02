@@ -194,7 +194,9 @@ Each time the basic cache of a module is updated, old files will be deleted auto
 
 ```php
 // In the cache cleanup cron module:
-function MELBIS_CRON_CACHE_CLEAR($mVars)
+namespace MELBIS_CRON_CACHE_CLEAR;
+
+function Main($mVars)
 {
     MELBIS()->CacheBaseClear();     // clear basic cache
     MELBIS()->CacheTrickClear();    // clear Trick cache (deletes files older than "Max cache age")

@@ -10,7 +10,8 @@ $('#melbis_btn_logout').on('click', function()
 // Tabs activate in first
 $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) 
 {    
-    if ( $(e.target).data('init') != '' ) window[$(e.target).data('init')]();        
+    var init = $(e.target).data('init');
+    if ( init ) window[init]();        
 });
 
 // Init Table
@@ -135,7 +136,7 @@ $('.melbis_table_order').on('click-cell.bs.table', function (event, field, value
                 var update = {};    
                 update[table] = [];
                 update[table].push({id: row.id, [field]: result });               
-                console.log('MELBIS_ORDER_UPDATE' + JSON.stringify(update));
+                window.chrome.webview.postMessage({ event: 'MELBIS_ORDER_UPDATE', data: update });
             }                    
         }
     });    

@@ -96,7 +96,7 @@ opens it again:
 // Data from the session has already been read, now comes a long-running operation
 MELBIS()->SessionSuspend();
 
-$answer = MELBIS_INC_CURL_Post($url, $data);   // external API, takes several seconds
+$answer = CURL\Post($url, $data);   // external API, takes several seconds
 
 // The session is needed again — write the result
 MELBIS()->SessionResume();

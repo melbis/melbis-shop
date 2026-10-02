@@ -37,12 +37,7 @@ Above the editor are two fields: the module description and the declaration of i
 IDE uses these to build autocompletion suggestions when editing templates (see "Module
 Scripts").
 
-## 2. Store Online
-A built-in Chromium-based browser for instant visual testing of changes.
-
-*   **Quick Preview (`Ctrl + E`):** Pressing this shortcut in the code editor automatically saves all modified files and immediately refreshes the page in the built-in browser.
-
-## 3. Server DB and Local DB
+## 2. Server DB and Local DB
 A tool for executing, debugging, and testing SQL queries against the store's database.
 
 **Variable auto-replacement feature:**
@@ -58,7 +53,7 @@ SELECT * FROM {DBNICK}_topic WHERE id = :ID
 3. The keys will automatically be added to the right-hand auto-replacement block.
 4. Enter the actual values next to them and run the query.
 
-## 4. DB Statistics
+## 3. DB Statistics
 Summary information about the state of tables (sizes, indexes) and other system analytics needed by the developer to monitor database performance.
 
 ## Keyboard Shortcuts
@@ -73,7 +68,6 @@ Summary information about the state of tables (sizes, indexes) and other system 
 | `Ctrl+R` | Load content from server |
 | `Ctrl+Z` | Undo edit |
 | `Ctrl+Shift+Y` | Redo edit |
-| `Ctrl+E` | Save all files and open site preview |
 
 **SQL Editor (Server DB and Local DB)**
 

@@ -1,6 +1,6 @@
 {
     "info": "",
-    "source": "statics\/icons\/all.css",
+    "source": "statics\/base\/icons.css",
     "bundle": [
         {
             "name": "base.css",

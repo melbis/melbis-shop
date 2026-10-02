@@ -70,7 +70,6 @@ developers.
 * **Server** — store server management.
 * **Installation** — initial setup of base and system functions, the keys of external services, copying and restoring the store.
 * **Workbench** — built-in IDE (see the developer guide, "[Workbench](../Dev/ide.md)").
-* **Web Console** — web development console.
 
 ## "System" Tab
 

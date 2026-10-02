@@ -9,19 +9,19 @@ To connect a library to a regular module, simply check the box next to it in the
 
 ## The Namespace and the Short Name
 
-A library, like an ordinary module, can declare a namespace of its own — then its functions lose the prefix, and callers get the right to call them by a short name (see "Modular Scripts"):
+A library, like an ordinary module, declares a namespace of its own — the name of its file in upper case — and gives its functions short names, without prefixes (see "Modular Scripts"):
 
 ```php
 <?php
-namespace MELBIS_INC_LOGIC;
+namespace MELBIS_INC_LOGIC_ORDER;
 
-function OrderCreate($mOrder)
+function Create()
 {
     ...
 }
 ```
 
-The second half of the matter is **the short name the library will be called by**. The library declares it itself, and that is why it is the same across the whole store: `LOGIC\OrderCreate` reads the same in any file. The name is written in the parameter field above the editor: for an ordinary module that field holds the declared input parameters, and a library has none, so the field is taken by this instead.
+The second half of the matter is **the short name the library will be called by**. The library declares it itself, and that is why it is the same across the whole store: `LOGIC_ORDER\Create` reads the same in any file. The name is written in the parameter field above the editor: for an ordinary module that field holds the declared input parameters, and a library has none, so the field is taken by this instead.
 
 **There is one name.** The engine will not accept a comma-separated list on saving and answers `One alias only`, showing what stands in the field. Equal names on different libraries are not forbidden: they collide only in a file that has included both, and there the author of the file decides.
 
@@ -35,10 +35,12 @@ Let us look at three characteristic examples from the demonstration store.
 
 ## melbis_inc_web_topic — Temporary Tables
 
-This module contains a single function — `MELBIS_INC_WEB_TOPIC_Sub`. Its purpose: to build an in-memory temporary table containing all subsections of a given section, recursively traversing the category tree.
+The short name of this library is `TOPIC`. Its function `Sub` builds an in-memory temporary table containing all subsections of a given section, recursively traversing the category tree. The second function, `Menu`, returns the sections of one menu — it is called by `melbis_cataloge` and `melbis_cataloge_sub`.
 
 ```php
-function MELBIS_INC_WEB_TOPIC_Sub($mId)
+namespace MELBIS_INC_WEB_TOPIC;
+
+function Sub($mId)
 {
     $command = "CREATE TEMPORARY TABLE {DBNICK}_topic_sub ENGINE=MEMORY
                 WITH RECURSIVE topic_sub AS (
@@ -59,16 +61,20 @@ function MELBIS_INC_WEB_TOPIC_Sub($mId)
 }
 ```
 
-Why is this needed? When a module displays a list of products in a section, it must account not only for products in that section itself, but also for products in all its subsections. The same table will be needed by the attribute filter module. Instead of writing a recursive CTE in each of these modules, it is sufficient to call the library once — and the temporary table is ready for use in subsequent queries:
+Why is this needed? When a module displays a list of products in a section, it must account not only for products in that section itself, but also for products in all its subsections. The same table will be needed by the attribute filter module. Instead of writing a recursive CTE in each of these modules, it is sufficient to call `TOPIC\Sub` from the library once — and the temporary table is ready for use in subsequent queries:
 
 ```php
-// In the melbis_store_topic module:
-function MELBIS_STORE_TOPIC($mVars)
+// In the melbis_page_topic module:
+namespace MELBIS_PAGE_TOPIC;
+
+use MELBIS_INC_WEB_TOPIC as TOPIC;
+
+function Main($mVars)
 {
     $id = $mVars['id'];
 
     // Create a temporary table of subsections
-    MELBIS_INC_WEB_TOPIC_Sub($id);
+    TOPIC\Sub($id);
 
     // Now we can JOIN with {DBNICK}_topic_sub
     $command = "SELECT s.id
@@ -80,7 +86,8 @@ function MELBIS_STORE_TOPIC($mVars)
                   JOIN {DBNICK}_store s
                     ON ts.store_id = s.id
                  WHERE s.no_visible = 0
-              ORDER BY t.absindex, ts.pos
+              GROUP BY s.id
+              ORDER BY MIN(t.absindex), MIN(ts.pos)
                  LIMIT 100
                 ";
     $goods = MELBIS()->SqlSelect(__LINE__, $command);
@@ -92,16 +99,20 @@ function MELBIS_STORE_TOPIC($mVars)
 
 This module registers template engine modifiers. A callback is a PHP function that can be called directly from an HTML template as a variable modifier.
 
-Registration is placed in a wrapper function, with the callback itself defined alongside it:
+Registration is placed in the function `Define`, with the callbacks defined alongside it:
 
 ```php
 // In the melbis_inc_web_callback library:
-function MELBIS_INC_WEB_CALLBACK()
+namespace MELBIS_INC_WEB_CALLBACK;
+
+function Define()
 {
-    MELBIS()->DefineCallback('PageLink');
+    MELBIS()->DefineCallback('TopicLink');
+    MELBIS()->DefineCallback('StoreLink');
+    MELBIS()->DefineCallback('StatusName');
 }
 
-function MELBIS_INC_WEB_CALLBACK_PageLink($mVars)
+function TopicLink($mVars)
 {
     $link = ( $mVars['kind_key'] == 'kLink' ) ? $mVars['link'] : '/?topic_id='.$mVars['id'];
 
@@ -109,23 +120,27 @@ function MELBIS_INC_WEB_CALLBACK_PageLink($mVars)
 }
 ```
 
-The function's name is not written in the registration: the engine looks for `PageLink` in the same file the registration line stands in — here that is `MELBIS_INC_WEB_CALLBACK_PageLink`, and in a library with a namespace it would be `MELBIS_INC_WEB_CALLBACK\PageLink`. What counts is the file with the registration, not the module that called the wrapper.
+The function's name is not written in the registration: the engine looks for `TopicLink` in the same file the registration line stands in — here that is `MELBIS_INC_WEB_CALLBACK\TopicLink`, and in a library of the former form, without a namespace, it would be `MELBIS_INC_WEB_CALLBACK_TopicLink`. What counts is the file with the registration, not the module that called `Define`.
 
 Naming the function explicitly is only needed when its name differs from the modifier's or when it lies in another file:
 
 ```php
-MELBIS()->DefineCallback('PageLink', MELBIS_INC_WEB_CALLBACK_PageLink(...));
+MELBIS()->DefineCallback('TopicLink', CALLBACK\TopicLink(...));
 ```
 
-The three dots are not a shorthand in the example but PHP syntax: that is how a function is passed as a value without being called, and the name is resolved by the compiler rather than by a string in quotes. The string form (`'MELBIS_INC_WEB_CALLBACK_PageLink'`) works too, but after the library moves into a namespace it points into the void. Either form is checked by the engine at registration, so a non-existent name will not live to reach the storefront.
+The three dots are not a shorthand in the example but PHP syntax: that is how a function is passed as a value without being called, and the name is resolved by the compiler together with the `use` line rather than by a string in quotes. The string form (`'MELBIS_INC_WEB_CALLBACK\TopicLink'`) works too, but it does not know the short name from `use`: a name in quotes is written in full, and when the function moves it stays as it was. Either form is checked by the engine at registration, so a non-existent name will not live to reach the storefront.
 
-The wrapper is called by the **top-level module** — in the file body, before its main function:
+`Define` is called by the **top-level module** — in the file body, before its main function:
 
 ```php
-// In the page router module, e.g. melbis_base_page:
-MELBIS_INC_WEB_CALLBACK();
+// In the page router module melbis_base_page:
+namespace MELBIS_BASE_PAGE;
 
-function MELBIS_BASE_PAGE($mVars)
+use MELBIS_INC_WEB_CALLBACK as CALLBACK;
+
+CALLBACK\Define();
+
+function Main($mVars)
 {
     // ...
 }
@@ -135,17 +150,17 @@ A single such call is sufficient for the entire page. The callback registry is s
 
 Why in the file body rather than inside the module function: the body executes when the module is connected on every request, whereas the module function is not executed at all when served from cache — and the registration would never take place.
 
-After this, the `$PageLink` modifier becomes available in any template, computing the correct URL for a section based on its type:
+After this, the `$TopicLink` modifier becomes available in any template, computing the correct URL for a section based on its type:
 
 ```html
 {#MENU}
-    <a href="{ID|$PageLink:KIND_KEY,LINK}">{NAME|html}</a>
+    <a href="{ID|$TopicLink:KIND_KEY,LINK}">{NAME|html}</a>
 {MENU#}
 ```
 
-The modifier name is a case-sensitive key. By convention it matches the function's Pascal tail: one name is found by a single search in all three places — in the template, in the registration, and in the declaration. The tag then reads three classes of names at once: uppercase `ID` and `KIND_KEY` are data, lowercase `path` and `webp` are built-in modifiers, and `$PageLink` is a module function.
+The modifier name is a case-sensitive key. By convention it matches the function's name: one name is found by a single search in all three places — in the template, in the registration, and in the declaration. The tag then reads three classes of names at once: uppercase `ID` and `KIND_KEY` are data, lowercase `path` and `webp` are built-in modifiers, and `$TopicLink` is a module function.
 
-This is exactly how it is done in the demonstration store: the library is declared only by `melbis_base_page`, while the modifier is used in the templates of `melbis_cataloge` and `melbis_cataloge_sub`, where nothing is checked in the library list.
+This is exactly how it is done in the demonstration store: the `$TopicLink` modifier stands in the `melbis_cataloge` template, while the module itself does not include the callback library — it was declared by `melbis_base_page`. The exception is `melbis_cataloge_sub`: it is an entry point module, it is also called by a separate request, without a page around it, so it includes the library and calls `CALLBACK\Define()` itself.
 
 > **Registration must complete before the module is connected.** A module receives the callbacks that were registered by the time it itself was connected. The parent module always makes it in time: its PHP executes before the template is parsed, and nested modules are connected during parsing. A sibling that registers a callback later, however, will not affect an already-connected module — register higher up the tree, not from the side.
 
@@ -153,47 +168,34 @@ This is exactly how it is done in the demonstration store: the library is declar
 
 For more details on modifiers and callback syntax, see the "Modifiers" section.
 
-## melbis_inc_logic — Unified Business Logic
+## melbis_inc_logic_* — Unified Business Logic
 
-This is the most significant type of library module. `melbis_inc_logic` contains all functions for working with orders: creation, loading, editing, calculation, adding and removing products, discount calculation, and notifications:
+This is the most significant type of library module. In the demonstration store, the work with an order is spread across the libraries of the `logic` group: creating and loading an order, adding and removing products, discounts, calculation, writing, notifications:
 
-```
-MELBIS_INC_LOGIC_OrderCreate        — create a new order version
-MELBIS_INC_LOGIC_OrderLoad          — load the current version
-MELBIS_INC_LOGIC_OrderEdit          — open an order for editing
-MELBIS_INC_LOGIC_OrderCalc          — calculate totals
-MELBIS_INC_LOGIC_OrderGoodsAdd     — add a product to the order
-MELBIS_INC_LOGIC_OrderGoodsRemove  — remove a product from the order
-MELBIS_INC_LOGIC_OrderGoodsDiscount — calculate discounts
-MELBIS_INC_LOGIC_NotifyEvents       — check system events
-```
+| Library | Short name | Functions |
+|---|---|---|
+| `melbis_inc_logic_order` | `LOGIC_ORDER` | order version: `Create` — a new one, `Load` — the current one, `GoodsAdd` and `GoodsRemove` — add and remove a product, `GoodsSum` — the products total, `GoodsDiscount` — a product discount, `OptionSet` — an order option, and others |
+| `melbis_inc_logic_order_calc` | `LOGIC_ORDER_CALC` | `Run` — calculate an order version |
+| `melbis_inc_logic_order_edit` | `LOGIC_ORDER_EDIT` | `Run` — write an order version |
+| `melbis_inc_logic_notify` | `LOGIC_NOTIFY` | `Run` — the events the application's "Dispatcher" waits for |
+| `melbis_inc_logic_common` | `LOGIC_COMMON` | `Rate` — the currency rate, `Price` — a sum in the store currency |
 
 These functions are called from the shopping cart module on the storefront:
 
 ```php
 // In the melbis_basket module:
-$version = MELBIS()->SessionGetValue('order') ?? MELBIS_INC_LOGIC_OrderCreate();
-$version = MELBIS_INC_LOGIC_OrderGoodsAdd($version, $store_id);
-$version = MELBIS_INC_LOGIC_OrderCalc(null, $version);
-```
-
-The same cart, if the library has declared a namespace and the module has included it with a tick:
-
-```php
-// In the melbis_basket module:
 namespace MELBIS_BASKET;
 
-use MELBIS_INC_LOGIC as LOGIC;
+use MELBIS_INC_LOGIC_ORDER as LOGIC_ORDER;
+use MELBIS_INC_LOGIC_ORDER_CALC as LOGIC_ORDER_CALC;
 
 ...
-$version = MELBIS()->SessionGetValue('order') ?? LOGIC\OrderCreate();
-$version = LOGIC\OrderGoodsAdd($version, $store_id);
-$version = LOGIC\OrderCalc(null, $version);
+$version = MELBIS()->SessionGetValue('order') ?? LOGIC_ORDER\Create();
+$version = LOGIC_ORDER\GoodsAdd($version, $store_id);
+$version = LOGIC_ORDER_CALC\Run(null, $version);
 ```
 
-One clarification about the setting below: **the function the application calls is stored as a string in the settings registry**. A library moving into a namespace does not carry over to it — the name in the setting has to be corrected by hand to `MELBIS_INC_LOGIC\OrderCalc`.
-
-The key advantage of this approach is **unified business logic for both the website and the desktop application**. The very same functions from `melbis_inc_logic` are called by the Melbis Shop application when a manager works with orders through the Windows client. The configuration of called functions is done in the application via **the "Development → Settings Registry" menu, the "Basic Settings" tab, the "Called Modules" section**. For example, in the "Orders → Calculation" section, the library name and the function name that the application should call to calculate an order are specified.
+The key advantage of this approach is **unified business logic for both the website and the desktop application**. The very same functions of the `logic` libraries are called by the Melbis Shop application when a manager works with orders through the Windows client. The configuration of called functions is done in the application via **the "Development → Settings Registry" menu, the "Basic Settings" tab, the "Called Modules" section**. For example, in the "Orders → Calculation" section, the library `melbis_inc_logic_order_calc.php` and the function that the application should call to calculate an order — `MELBIS_INC_LOGIC_ORDER_CALC\Run` — are specified. **The function name is stored as a string** and is written in full, with the namespace: the code knows nothing about it, and when the function moves it is corrected by hand.
 
 This way, a customer placing an order through the website and a manager editing it in the application both work through the same PHP code — with no risk of logic divergence or synchronization errors.
 

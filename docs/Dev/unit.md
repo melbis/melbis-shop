@@ -8,10 +8,9 @@ The modules that come with the platform — the ones carrying the `melbis_` pref
 
 If logic of your own is needed — even one changed line in a calculation — **your own** module is created under your own prefix:
 
-1. add `<company>_inc_logic.php` (or an ordinary module of your own — the rule is the same);
-2. copy the functions you need into it from `melbis_*`;
-3. rename them with your prefix and edit them as much as you like;
-4. in the template or in the calling module, replace the call with your own.
+1. add `<company>_inc_logic.php` (or an ordinary module of your own — the rule is the same) with a namespace of your own: `namespace <COMPANY>_INC_LOGIC;`;
+2. copy the functions you need into it from `melbis_*` and edit them as much as you like — the names may stay, the `namespace` line makes them yours;
+3. in the template or in the calling module, replace the call with your own: the module tag or the `use` line.
 
 That is how every module of the delivery is dealt with: both the demonstration store and the ready-made AI tools.
 
@@ -29,24 +28,31 @@ When a module is opened in the editor, its interface consists of three parts:
 
 ## PHP File Structure
 
-A typical module looks like this:
+A typical module is the catalog menu `melbis_cataloge` from the demonstration store:
 
 ```php
 <?php
+namespace MELBIS_CATALOGE;
+
+use MELBIS_INC_WEB_TOPIC as TOPIC;
+
 /**
- * Function MELBIS_CATALOGE
+ * Function Main
  **/
-function MELBIS_CATALOGE($mVars)
+function Main($mVars)
 {
     // Create a template engine pointer
     $tpl = MELBIS()->TplCreate();
 
-    // Retrieve data from the database
-    $command = "SELECT id, name
+    // Find the catalog root
+    $command = "SELECT id, tlevel
                   FROM {DBNICK}_topic
-                 WHERE no_visible = 0
-              ORDER BY absindex";
-    $menu = MELBIS()->SqlSelect(__LINE__, $command);
+                 WHERE skey = 'SHOP'
+               ";
+    $root = MELBIS()->SqlSelectFlat(__LINE__, $command);
+
+    // Get the menu sections with a library function
+    $menu = TOPIC\Menu($root['id'], $root['tlevel']);
 
     // Pass data to the template engine
     MELBIS()->TplAssign($tpl, 'MENU', $menu);
@@ -56,65 +62,57 @@ function MELBIS_CATALOGE($mVars)
 }
 ```
 
-The main function is the only required part of a module. Its name matches the filename in uppercase. The parser calls exactly this function, passing the input parameters as the `$mVars` array.
+A module begins with the declaration of its **namespace** — the file name in upper case: `melbis_cataloge.php` → `MELBIS_CATALOGE`. The `use` line under it gives an included library a short name — more on that below, in the "Calling Library Functions" section.
 
-The module may contain any number of helper functions — they are named with the main function's name as a prefix (see the "Naming Conventions" section).
+The **main function** is called `Main` — it is the only required part of a module. It does not repeat the file name: that is already written in the `namespace` line. The parser calls exactly this function, passing the input parameters as the `$mVars` array.
 
-## Namespaces
+The module may contain any number of **helper functions**. They are called by their short name, with no prefixes — `Price($id)`: the module name stands in the `namespace` line, so `Price` from the product card will not collide with `Price` from the cart. How to name functions is in the "Naming Conventions" section.
 
-The prefix in function names exists for one reason: in PHP all functions live in a common space, and `Price` from the product card would collide with `Price` from the cart. A module can declare a space of its own — then the file name leaves the function names for a single line at the top, and the calls get shorter.
+Calls into the engine are written as usual: PHP looks for unqualified function names first in its own space and then in the global one, so `MELBIS()`, `count()`, and any function of a flat library are visible unchanged.
+
+## The Former Form: a Module Without a Namespace
+
+A module without a `namespace` line works too — that is how the modules of past years are written. All its functions lie in the common PHP space, so the names carry a prefix: the main function is called by the file name in upper case, the helper ones by the same name with a Pascal tail:
 
 ```php
 <?php
-namespace MELBIS_STORE_CARD;
-
-/**
- * Function Main
- **/
-function Main($mVars)
+function MELBIS_STORE_CARD($mVars)
 {
-    $price = Price($mVars['id']);
+    $price = MELBIS_STORE_CARD_Price($mVars['id']);
     ...
 }
 
-/**
- * Function Price
- **/
-function Price($mId)
+function MELBIS_STORE_CARD_Price($mId)
 {
     ...
 }
 ```
 
-The main function here is called `Main` rather than the file name: the module name is already written in the `namespace` line, and there is no point repeating it. The parser looks for both forms — first `MELBIS_STORE_CARD\Main`, then the former `MELBIS_STORE_CARD` — so nothing changes in the template, and the module call tag stays the same.
-
-The file's own helper functions are called by their short name with no prefixes at all — `Price($id)`. Calls into the engine work as before as well: PHP looks for unqualified function names first in its own space and then in the global one, so `MELBIS()`, `count()`, and any function of a flat library are visible unchanged.
-
-**Declaring it is voluntary and per-file.** A module without a `namespace` line works exactly as it did before; flat and namespaced modules live in one store quite happily and call each other.
+The parser looks for both forms of the main function — first `MELBIS_STORE_CARD\Main`, then `MELBIS_STORE_CARD` — so the module call tag in the template does not depend on the form. Flat modules and modules with a namespace live in one store and call each other. New code is written with a namespace, and how to convert an old module to it is in the "What to Check When Converting a Module" section.
 
 ## Calling Library Functions
 
-The functions of an included library that has also declared a space are called through a `use` line under the declaration of your own space:
+The functions of an included library are called through a `use` line under the declaration of your own space. This is how the product card `melbis_store_card` converts a price into the store currency:
 
 ```php
 namespace MELBIS_STORE_CARD;
 
-use MELBIS_INC_LOGIC as LOGIC;
+use MELBIS_INC_LOGIC_COMMON as LOGIC_COMMON;
 
 ...
-$version = LOGIC\OrderCreate($order);
+$store['price_curr'] = LOGIC_COMMON\Price($store['price'], $store['price_curr_id']);
 ```
 
 The word `as` is optional. Without it the library stays under its full name — which suits the case where it needs no short one, or has not declared one:
 
 ```php
-use MELBIS_INC_AGENT_TABLE;
+use MELBIS_INC_WEB_TOPIC;
 
 ...
-$rows = MELBIS_INC_AGENT_TABLE\Read($id);
+$menu = MELBIS_INC_WEB_TOPIC\Menu($id, $level);
 ```
 
-**The `use` line is obligatory in a module with a space.** Without it PHP resolves the name `MELBIS_INC_LOGIC\OrderCreate()` relative to the current space — it looks for `MELBIS_STORE_CARD\MELBIS_INC_LOGIC\OrderCreate` — and falls over at the moment of the call. The only way to do without `use` is a leading slash: `\MELBIS_INC_LOGIC\OrderCreate($order)`. In a flat module, on the contrary, `use` is not needed: there a name with a slash is global anyway.
+**The `use` line is obligatory in a module with a space.** Without it PHP resolves the name `MELBIS_INC_LOGIC_COMMON\Price()` relative to the current space — it looks for `MELBIS_STORE_CARD\MELBIS_INC_LOGIC_COMMON\Price` — and falls over at the moment of the call. The only way to do without `use` is a leading slash: `\MELBIS_INC_LOGIC_COMMON\Price($sum, $curr_id)`. In a flat module, on the contrary, `use` is not needed: there a name with a slash is global anyway.
 
 You will not have to write the line out by hand. Type `use` with a space and the Workbench shows the list of every library of the store: the full name of the space, the short name the library declared in brackets, and its description. The chosen entry is inserted as a finished line, together with `as` and the semicolon, and the library **ticks itself in the inclusions panel** at the same time — the code comes first, the manifest follows it. A tick that was already there is left alone, and the Workbench will never untick anything by itself.
 
@@ -124,7 +122,7 @@ The name in `use` is an alias inside one file, not a global rule: a library that
 
 ## What to Check When Converting a Module
 
-The move affects more than the function declarations. Three things in the file need to be looked over by eye:
+Moving a module of the former form into a namespace affects more than the function declarations. Three things in the file need to be looked over by eye:
 
 - **Class names do not fall back to the global space** — unlike functions. Inside a
   `namespace`, the call `new DateTime(...)` looks for `MELBIS_STORE_CARD\DateTime` and
@@ -132,13 +130,15 @@ The move affects more than the function declarations. Three things in the file n
   treacherous: `catch (\Exception $e)` without the slash turns into catching a
   non-existent class and simply never fires.
 - **Function names written as strings.** Registering a template modifier as
-  `MELBIS()->DefineCallback('page_link', 'MELBIS_STORE_CARD_page_link')` points into
-  the void after the move. The reliable form is the PHP 8.1 syntax, where the compiler
-  resolves the name: `DefineCallback('page_link', page_link(...))`. It survives both a
-  rename and a move of the function.
-- **Names that live in the settings.** The order handler function in the settings
-  registry and the AI tool function in the tool registry are stored as strings in the
-  database. The owner corrects those by hand: the code knows nothing about them.
+  `MELBIS()->DefineCallback('PageLink', 'MELBIS_STORE_CARD_PageLink')` points into
+  the void after the move — the engine reports it at once, when the module is connected.
+  It is more reliable not to write the name at all: `DefineCallback('PageLink')` finds
+  the function in its own file and survives the move by itself. If the function's name
+  differs from the modifier's, the PHP 8.1 syntax will do, where the compiler resolves
+  the name: `DefineCallback('PageLink', Link(...))`.
+- **Names that live in the settings.** The order handler function is stored as a string
+  in the settings registry — in the delivery it is `MELBIS_INC_LOGIC_ORDER_CALC\Run`.
+  The owner corrects it by hand: the code knows nothing about it.
 
 Old calls to your module from other files also need fixing after the move, but the edit is mechanical — the underscore before the function name becomes a backslash:
 

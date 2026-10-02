@@ -56,7 +56,6 @@
 * [Server](User/server.md)
 * [Installation](User/installation.md)
 * [Workbench](Dev/ide.md)
-* [Web console](User/web-console.md)
 
 **1.6 System**
 

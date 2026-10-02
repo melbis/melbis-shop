@@ -222,6 +222,11 @@ and displays information related to it.
 Which module to display is selected within the panel itself, and modules are configured
 in the "Development" → "Modules and Options" section. For more details, see "[Web Modules](web-modules.md)".
 
+The web console button in the panel's header opens the developer tools for the
+page shown: the element tree, styles, network requests, errors and the JavaScript
+console. They open in a separate window on top of the program. The same command —
+**"Open Web Console"** — is in the web module catalog and in the HTML editor.
+
 ## Access Rights
 
 Employee access is set at two levels: **globally** — in the "System"

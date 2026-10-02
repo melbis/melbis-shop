@@ -44,10 +44,20 @@ $base = [
     'MARK'      => '#fcf8e3'
     ];
 
+// System fonts, the common fallback
+$system = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"';
+
 // The fonts, as bootstrap names them
 $font = [
-    'FONT_SANS' => '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+    'FONT_SANS' => '"Inter", '.$system,
+    'FONT_HEAD' => '"Manrope", '.$system,
     'FONT_MONO' => 'SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace'
+    ];
+
+// Font folders, relative to bundle
+$path = [
+    'ICONS_PATH' => '../images/icons',
+    'FONTS_PATH' => '../images/fonts'
     ];
 
 // How far bootstrap moves a colour: the tail of the key, and the step behind it
@@ -104,6 +114,6 @@ foreach ( $vars as $name => $color )
     $more[$name.'_URL'] = PSV::url($color);
 }
 
-return array_merge($vars, $more, $font);
+return array_merge($vars, $more, $font, $path);
 
 ?>

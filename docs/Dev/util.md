@@ -10,42 +10,35 @@ uploaded file, aborting a page and serving a different one instead.
 **`UnitName()`** — the name of the currently executing module. Can be useful in library functions that need to know who called them (for example, to load language tags for that specific module):
 
 ```php
-$tags = MELBIS_INC_LANGS_Tags($tpl, MELBIS()->UnitName());
+$tags = LANGS\Tags($tpl, MELBIS()->UnitName());
 ```
 
 **`UnitParam()`** — the declared input parameters of all loaded modules, as an array of "module name → list of declarations". An introspection tool: needed by service and debug modules that build a project map, not by ordinary storefront code.
 
 ## Calling a Function of Your Own Module
 
-**`UnitFunc($mName, ...$mParams)`** calls a helper function of the current module by its short name: the engine automatically prepends the module prefix according to the naming convention (see "Naming Conventions").
+A function of your own whose name is known on the spot is called by the module simply by name — `Price($store, $currency)`: PHP assembles the full name `MELBIS_STORE_CARD\Price` itself from the `namespace` line.
 
-```php
-// Inside the melbis_store_card module, this will call MELBIS_STORE_CARD_Price()
-$price = MELBIS()->UnitFunc('Price', $store, $currency);
-```
-
-The point is not to save keystrokes, but to decouple the function call from the module name: if you rename the module and its functions, the call sites remain unchanged. If no function with that name exists, execution stops with an error.
-
-`UnitFunc` has exactly one boundary: it calls functions of **its own** module. A function that other modules call is a library function — its place is in an inc-module, it is called by its full name, and inside itself it also uses full names: the name context belongs to the calling module, and `UnitFunc` would build the name from that one.
-
-**In a module with a namespace the method is needed too, and for a more important reason.** A function of your own whose name is known on the spot is called there simply by name — `Price($store, $currency)`, with no `UnitFunc` at all. But a name that arrives as data is **not** resolved by PHP against the current space: a string in a variable is always taken as a full name, and `$func = 'Price'; $func();` will go looking for a global `Price`. Only something that knows the running module can assemble the right name — and that is what keeps `UnitFunc` useful:
+**`UnitFunc($mName, ...$mParams)`** is needed when the function name arrives **as data**. Such a name is **not** resolved by PHP against the current namespace: a string in a variable is always taken as a full name, and `$func = 'Price'; $func();` will go looking for a global `Price`. Only something that knows the running module can assemble the right name — and that is what `UnitFunc` does:
 
 ```php
 // Web module dispatcher: the function name came from POST
 return MELBIS()->UnitFunc($mVars['post']['func'], $mVars);
 ```
 
-The method checks both forms of the name itself — first `module\Name`, then the former `MODULE_Name` — so one and the same dispatcher works in a flat module and in a namespaced one.
+The method checks both forms of the name — first `MODULE\Name`, then the former `MODULE_Name` of a module without a namespace — so one and the same dispatcher works in a module of either form. In a module of the former form, `UnitFunc('Price', ...)` also frees the call from the prefix: the method completes `MELBIS_STORE_CARD_Price` itself. If no function with that name exists, execution stops with an error.
+
+`UnitFunc` has exactly one boundary: it calls functions of **its own** module. A function that other modules call is a library function — its place is in an inc-module, callers call it through a `use` line, and the library's functions call each other simply by name. `UnitFunc` is no good inside a library: the name context belongs to the calling module, and the method would build the name from that one.
 
 **`UnitRun($mUnit, $mFunc, ...$mParams)`** includes a module and runs its function **under that module's name** — as if it had been called from inside that module, which is why `UnitFunc` works within the call. This is the method the agent endpoint uses to run AI tools, and that is its only purpose.
 
 From a cached module the call is **forbidden** — the engine stops the page with an error. The reason lies in the dependencies: a query run under somebody else's name is ascribed to the wrong module, and the caller's cache stops depending on the table it actually reads. A module that needs another module's function needs a library: include it in the manifest and call the function by name directly — and the references will survive as well, which is what the paragraph below warns about.
 
 ```php
-$answer = MELBIS()->UnitRun('melbis_agent_user', 'MELBIS_AGENT_USER', $action, $user_id, $command, $params);
+$answer = MELBIS()->UnitRun('melbis_agent_user', 'MELBIS_AGENT_USER\CmdList', $user_id, $fields);
 ```
 
-The function name is passed here in full, so for a module with a namespace it is written through a slash — `'melbis_agent_user\Main'`.
+The function name is passed here in full, with the namespace: the command `CmdList` of the `melbis_agent_user` tool is the function `MELBIS_AGENT_USER\CmdList`.
 
 **References do not survive these methods.** The arguments are gathered into an array, and an array loses the link to the caller's variable, so a function with `&$` in its signature gets a copy and quietly works for nothing. Such functions are called by name directly — in a module with a namespace that is simply the ordinary short call.
 
@@ -77,7 +70,10 @@ returning an empty fragment into an already-assembling page, the page can be
 aborted and a completely different one sent to the browser.
 
 ```php
-function MELBIS_INC_404()
+// In the melbis_inc_web_error library:
+namespace MELBIS_INC_WEB_ERROR;
+
+function NotFound()
 {
     MELBIS()->Stop();
 
@@ -107,4 +103,5 @@ Line by line:
 * **`exit`** — neither `Stop()` nor `Halt()` interrupt PHP execution on their own.
 
 This pattern is convenient to keep in a library (`inc`) and call from any module
-that needs to abort a page.
+that needs to abort a page: `ERROR\NotFound();` after the line
+`use MELBIS_INC_WEB_ERROR as ERROR;`.

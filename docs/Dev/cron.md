@@ -177,7 +177,9 @@ flag must be enabled in the module's parameters in the IDE, otherwise the parser
 to run it on direct access.
 
 ```php
-function MELBIS_CRON_PRICE($mVars)
+namespace MELBIS_CRON_PRICE;
+
+function Main($mVars)
 {
     // Output to log, not to browser
     header('Content-Type: text/plain; charset=utf-8');
