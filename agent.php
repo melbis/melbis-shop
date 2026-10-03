@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.485 @ 2026-10-02
+ * @version 6.5.1.490 @ 2026-10-03
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -14,7 +14,7 @@ $login = preg_replace('/[^a-z_0-9]/i', '', $_POST['login'] ?? '');
 $secret = $_POST['secret'] ?? '';
 $mod = preg_replace('/[^a-z_0-9]/i', '', $_POST['mod'] ?? '');
 
-// The key the agent got from AGENT_CONNECT, kept in APCu under its login
+// The key the agent got from AGENT_SESSION_CONNECT, kept in APCu under its login
 $key = ( $login == '' ) ? false : apcu_fetch('MELBIS_AGENT_SECRET_'.$login);
 
 if ( $key === false || $secret == '' || $secret !== $key )
