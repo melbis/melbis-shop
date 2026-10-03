@@ -18,13 +18,13 @@ Two blocks: the data in JSON, then the file's body as text — as is, without es
 
 ```json
 {"path": "./../templates/default/statics/melbis/main.css",
- "bundle": {"param_info": "melbis.css: 1", "unit_info": ""}}
+ "bundle": {"parameters": "melbis.css: 1", "description": ""}}
 ```
 
 | Field | What it is |
 |---|---|
 | `path` | the file's path |
-| `bundle` | the bundle description in the shape `engine_static_save` takes it: `param_info` — the bundles with their priorities, `unit_info` — the file description. `null` if the file has neither bundles nor a description |
+| `bundle` | the bundle description in the shape `engine_static_save` takes it: `parameters` — the bundles with their priorities, `description` — the file description. `null` if the file has neither bundles nor a description |
 
 From a log larger than a megabyte only the last megabyte comes, and the body begins with the line `=== TRUNCATED: showing the last 1 MB of … MB, the older part is not loaded ===`. The whole log is downloaded by `engine_whole_load`.
 

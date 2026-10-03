@@ -35,7 +35,7 @@ Two blocks: first the session's data in JSON, then the text.
   "tools":   16,
   "tasks":   {"waiting": [{"state": "kNew", "name": "New", "count": 2}],
               "given":   [{"state": "kAccept", "name": "Accepted", "count": 1}]},
-  "granted": ["session_init", "session_connect", "session_clear", "session_rules_accept", "shop_page", "shop_run", "engine_map_tree"]
+  "granted": ["session_init", "session_connect", "session_clear", "session_rules_accept", "shop_page", "shop_module", "shop_agent", "engine_map_tree"]
 }
 ```
 

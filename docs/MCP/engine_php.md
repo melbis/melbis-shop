@@ -25,17 +25,17 @@ The modules' templates — the `.htm` files in the template groups — are the `
 
 | Key | What it sets |
 |---|---|
-| `unit_info` | the module's description for the hints in the program |
-| `param_info` | the module's input parameters: `id: int, key: str`. For a library — the short names it publishes, the ones the engine checks `use` against |
-| `table_info` | the tables the cache depends on: `store=1\|log=0`. The list the engine keeps by the module's queries, the developer only takes a table off — `log=0` |
+| `description` | the module's description for the hints in the program |
+| `parameters` | the module's input parameters: `id: int, key: str`. For a library — the short names it publishes, the ones the engine checks `use` against |
+| `tables` | the tables the cache depends on: `store=1\|log=0`. The list the engine keeps by the module's queries, the developer only takes a table off — `log=0` |
 | `includes` | the libraries included: `melbis_inc_logic.php=1` |
 | `cache_on`, `cache_time` | the basic cache: whether it is on, the update pause in minutes |
 | `lazy_load` | lazy loading |
-| `ajax_load` | the module is an entry point: it can be run straight from a root script |
+| `entry_point` | the module is an entry point: it can be run straight from a root script |
 | `trick_on`, `trick_load_idx`, `trick_load_max`, `trick_comp_max`, `trick_time_max` | the Trick cache: whether it is on, the interval and the limit of the server's load, the limit of the page build time in seconds, the greatest age of the cache in minutes |
 | `smart_on`, `smart_load_idx`, `smart_load_max`, `smart_comp_max` | the Smart cache: whether it is on, the interval and the load threshold, the page build time threshold in seconds |
 
-In the `.json` file itself four fields are named otherwise: `unit_info` is `description`, `param_info` is `parameters`, `table_info` is `tables`, `ajax_load` is `entry_point`. The tools speak by the names from the table.
+The keys are the same as in the `.json` file itself; only `tables` and `includes` are a string separated by `|` here, and a list in the file.
 
 ## What Saving Does
 

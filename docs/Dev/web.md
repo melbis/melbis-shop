@@ -8,7 +8,7 @@ This allows extending the application's functionality without modifying its code
 
 ## Embedded Web Modules
 
-Embedded modules work directly inside the application's working windows — "Products / Prices", "Business / Customers", "Business / Orders". To open an embedded web module in any of these windows, press `Ctrl+W` — a panel with an embedded browser will appear.
+Embedded modules work directly inside the application's working windows — the windows of products, orders, customers, the scheduler and translations. To open an embedded web module in any of these windows, press `Ctrl+W` — a panel with an embedded browser will appear.
 
 The key feature: when a manager navigates through records (selects a product, opens an order, switches to a customer), the application **automatically** sends a POST request to the module with the current window's context. The module always knows which object the manager is currently working with and can display relevant information — without any additional actions on their part.
 
@@ -29,7 +29,7 @@ There can be multiple such modules for each section — they are switched using 
 
 ### Configuration
 
-Embedded modules are configured in the application: **"Development → Modules and Options", the "Embedded Modules" tab**. Select a group ("Products", "Customer", "Orders") and add a module with the following parameters:
+Embedded modules are configured in the application: **"Development → Modules and Options", the "Embedded Modules" tab**. Select a place — products, orders, customers, the scheduler or the translator — and add a module with the following parameters:
 
 - **Name** — displayed in the module list and on the tab in the panel.
 - **Module URL** — the module's URL, e.g. `http://my-shop.com/?mod=melbis_web_sample`.
@@ -38,7 +38,21 @@ Embedded modules are configured in the application: **"Development → Modules a
 
 ### Parameters Passed by the Application
 
-With each request to an embedded module, the application sends a POST request with the current window's context. Below is the full set of parameters for the "Orders" section:
+With each request to an embedded module, the application sends a POST request with the current window's context. A field is sent only when its record is selected in the window; if several rows are selected, their numbers go separated by `;` in the field ending in `_set`.
+
+| Place | Window | Fields |
+|---|---|---|
+| products | "Placement", "Prices", "Browser", "Product Selection", "Descriptions" | `melbis` — an empty field that starts the window's request; `topic_id` — the section; `store_id` — the product; `store_set` — the selected products |
+| products | "Descriptions", the attribute values panel | the same fields plus `info_id` — the attribute, `info_value_id` — the value, `info_value_set` — the selected values |
+| orders | "Orders" | `order_id` — the order; `order_version_id` — the order version; `order_version_client_id` — the version's customer; `order_version_user_id` — the version's manager; `order_client_field_id` — the selected row of the order's customer fields; `order_store_id` — the selected row of the order's products; `order_option_id` — the selected row of the order's options; `order_set` — the selected orders |
+| orders | "Edit Order" | `order_id`, `parent_version_id` — the parent version, `order_version_id`, `order_version_client_id`, `order_version_user_id`, `order_client_field_id`, `client_field_id` — the customer field, `order_store_id`, `store_id` — the product of the selected row, `store_option_id` — the product option, `order_option_id` — the order option, and `order` — the whole order being edited |
+| customers | "Customers" | `client_id` — the customer; `client_field_id` — the selected row of the customer's fields; `client_set` — the selected customers |
+| scheduler | "Scheduler" | `melbis`; `task_id` — the task; `note_id` — the task's entry |
+| translator | "Translations" | `melbis`; `trans_id` — the translations section; `origin_id` — the source string; `origin_set` — the selected strings; `lang_id` — the selected translation row, the number of a `trans_lang` row, not of a language |
+
+In "Descriptions", the numbers of products and values are numbers of the main catalog, not of the rows of the Personal Workspace. The `order` field of the "Edit Order" window is JSON with the order's unsaved rows: the keys `new_orders_version`, `new_orders_client_field`, `new_orders_store`, `new_orders_store_option` and `new_orders_option`, each holding a list of rows with all their fields.
+
+With the "User identification required" flag, `login` and `pass_code` — the MD5 hash of the password — are added to any set. This is how a module's `$mVars` looks in the "Orders" window:
 
 ```php
 // $mVars in the module:
@@ -58,7 +72,7 @@ With each request to an embedded module, the application sends a POST request wi
 ]
 ```
 
-In the "Products" section, the `store_id` of the selected product is passed. In the "Customers" section — the client identifier. The password is passed as an MD5 hash.
+The AI assistant opens a module the same way — with the [`shop_module`](../MCP/shop_module.md) tool: it passes the window fields itself, and the MCP server adds the person's `login` and `pass_code`.
 
 ---
 

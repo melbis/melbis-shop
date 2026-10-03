@@ -18,7 +18,7 @@ Saves an existing PHP file: the code and, if it is passed, the module's manifest
 
 Either `content` or `content_source` is needed: a save with no body refuses, otherwise it would empty the file.
 
-**`manifest`** rewrites the module's `.json` whole. A key that is not in the object gets an empty value or a zero, so the manifest is passed in full — the easiest way is to take it from `engine_php_load` and change what is needed. The list of tables `table_info` the engine gathers anew after the save by the module's queries; only the tables taken off (`log=0`) stay. In the `includes` list it is the other way round: the entries taken off (`=0`) are not saved. Without `manifest` only the code changes, the `.json` is not touched.
+**`manifest`** rewrites the module's `.json` whole. A key that is not in the object gets an empty value or a zero, so the manifest is passed in full — the easiest way is to take it from `engine_php_load` and change what is needed. The list of tables `tables` the engine gathers anew after the save by the module's queries; only the tables taken off (`log=0`) stay. In the `includes` list it is the other way round: the entries taken off (`=0`) are not saved. Without `manifest` only the code changes, the `.json` is not touched.
 
 **`build`** raises the build number that a page hangs on its css and js — then the visitors' browsers will take the fresh statics. The module itself does not need this: its output the browser does not keep.
 

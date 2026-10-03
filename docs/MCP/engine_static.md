@@ -28,8 +28,8 @@ Which bundles a file belongs to is written in its bundle description. Here it is
 
 | Field | What it is |
 |---|---|
-| `param_info` | the bundles separated by commas, each with its priority after a colon: `melbis.css: 10, print.css: 2` |
-| `unit_info` | the file description |
+| `parameters` | the bundles separated by commas, each with its priority after a colon: `melbis.css: 10, print.css: 2` |
+| `description` | the file description |
 
 `engine_static_load` gives back the file's `bundle`, `engine_static_save` takes it in the same shape.
 

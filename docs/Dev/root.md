@@ -1,6 +1,6 @@
 # Root Scripts
 
-Root scripts are the entry points of your site. Typically, these are `index.php` and `cron.php`. Their purpose is minimal: initialize the platform, determine which module to run, and publish the result. There is no business logic in root scripts — it all resides in modules.
+Root scripts are the entry points of your site. Typically, these are `index.php` and `cron.php`, and for the AI agent — `agent.php`. Their purpose is minimal: initialize the platform, determine which module to run, and publish the result. There is no business logic in root scripts — it all resides in modules.
 
 > The only manual file inclusion in the entire project is `units/melbis.php`
 > on the first line. What exactly it initializes is described in the "melbis.php" section.
@@ -204,6 +204,69 @@ it declares a schedule using the `CronAdd` method and launches due tasks with a
 
 The schedule format, the structure of a cron module, protection against external calls, task logs,
 and error handling — in the "Task Scheduler" section.
+
+## agent.php
+
+The third root script is the entry point of the AI agent. Through it the MCP server runs
+the agent's modules: this is how the agent does work for which the store has no
+AI tool — a report across several tables, a check of the whole catalog, a one-off
+edit with its own logic. The script ships with the store, and it needs no editing.
+
+Like `index.php`, it starts with `require 'units/melbis.php'`, and then runs the
+module only if:
+
+1. the key in the request matches the one the store issued to the login when the agent signed in;
+2. the module name starts with `agent_`;
+3. the module exists in `units/`;
+4. the module is an entry point: `entry_point: 1` in the manifest, in the application — "Entry point
+   module".
+
+Otherwise the script answers with a refusal with code 403 or 404 and runs nothing. It removes
+the service fields of the request — `login`, `secret` and `mod` — and passes the rest to the module
+as one serialized argument: the module's manifest declares `post: serial`, and
+the values are in `$mVars['post']`. The module's response goes through the parser, like any
+page.
+
+A sample ships with the store — `units/agent_claude_sample.php`. It shows
+what the entry point passes to the module, and the agent uses it to check the channel:
+
+```php
+<?php
+namespace AGENT_CLAUDE_SAMPLE;
+
+function Main($mVars)
+{
+    $post = $mVars['post'] ?? [];
+
+    $hello = $post['hello'] ?? '';
+    $how = (int)( $post['how'] ?? 0 );
+
+    $keys = array_keys($mVars);
+    $post_keys = array_keys($post);
+
+    $answer = [
+        'time'      => date('Y-m-d H:i:s'),
+        'nick'      => MELBIS_DB_NICK,
+        'keys'      => $keys,
+        'post_keys' => $post_keys,
+        'hello'     => $hello,
+        'doubled'   => $how * 2
+        ];
+
+    return json_encode($answer, JSON_UNESCAPED_UNICODE);
+}
+?>
+```
+
+A run with the parameters `hello: world` and `how: 21` answers like this:
+
+```json
+{"time": "2026-10-03 12:47:00", "nick": "ms", "keys": ["post"],
+ "post_keys": ["hello", "how"], "hello": "world", "doubled": 42}
+```
+
+How the agent creates and runs its own modules — "[The Storefront](../MCP/shop.md)" and
+"[shop_agent](../MCP/shop_agent.md)" in the MCP server description.
 
 ## .htaccess
 

@@ -52,7 +52,7 @@ An application opened on the store folder starts a server tied to this store: sw
 
 **Signing in under a user.** There is no separate user for the AI in the store: the agent works under a person's login, with their rights and in their name. The login-password pair the server takes itself — from the running program, and if it is closed, from the Windows registry (only when the "store passwords" box is ticked). The password never passes through the correspondence.
 
-**A right** is a row of the "AI Assistant" branch in the store user's rights. One right can open several MCP tools at once: "Direct access → Development → Read data", for example, opens the file map, the search, and loading a module. Six tools require no rights: `session_init`, `session_connect`, `session_rules_accept`, `session_clear`, `shop_page`, `shop_run`. In detail — "[Sign-in, Rights, License](access.md)".
+**A right** is a row of the "AI Assistant" branch in the store user's rights. One right can open several MCP tools at once: "Direct access → Development → Read data", for example, opens the file map, the search, and loading a module. Seven tools require no rights: `session_init`, `session_connect`, `session_rules_accept`, `session_clear`, `shop_page`, `shop_module`, `shop_agent`. In detail — "[Sign-in, Rights, License](access.md)".
 
 **The license** is a daily token that every request is signed with. The tokens are obtained by the program, the MCP server only reads them from the store folder. A license is issued for a "domain + login" pair and is shared by the user and their agent.
 
@@ -81,7 +81,7 @@ The name is made of the family, the subject and the action: `engine_php_save` �
 | `memory_` | the store's memory |
 | `repo_` | the store's repository: the topics and data of the employees' assistants |
 | `tool_` | the store's AI tools |
-| `shop_` | the store from outside: a storefront page, a module of one's own, a copy of the store |
+| `shop_` | the store from outside: a storefront page, a web module through a person's eyes, a module of one's own, a copy of the store |
 
 The actions repeat from family to family: `load` — read, `save` — write an existing file, `add` — create, `rename` — rename or move, `remove` — delete. `dir_` before the action means the same for a folder.
 

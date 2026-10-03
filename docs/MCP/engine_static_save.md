@@ -13,12 +13,12 @@ Saves an existing statics file: the body and, if it is passed, the bundle descri
 | `path` | string | the file's path |
 | [`content`] | string | the file's new body |
 | [`content_source`] | string | a file on this computer — an absolute path or a path from the store folder — instead of `content`: the body goes byte for byte, without passing through the correspondence |
-| [`bundle`] | object | the bundle description: `param_info` and `unit_info`, the way `engine_static_load` gives them back |
+| [`bundle`] | object | the bundle description: `parameters` and `description`, the way `engine_static_load` gives them back |
 | [`build`] | yes/no | raise the store's build number |
 
 Either `content` or `content_source` is needed: a save without a body refuses, otherwise it would empty the file.
 
-**`bundle`** writes the bundle description whole, from both fields, and rebuilds the group's bundles at once. Without `bundle` the file keeps its old description; both fields empty — the file leaves all the bundles. In `param_info` the bundles are listed separated by commas, the priority after a colon: `melbis.css: 10, print.css: 2`. The bundle's name is written with the extension; Latin letters, digits, a dot and an underscore are allowed in it, everything else is cut out. In detail — "[Static Build](../Dev/tpl_bundle.md)".
+**`bundle`** writes the bundle description whole, from both fields, and rebuilds the group's bundles at once. Without `bundle` the file keeps its old description; both fields empty — the file leaves all the bundles. In `parameters` the bundles are listed separated by commas, the priority after a colon: `melbis.css: 10, print.css: 2`. The bundle's name is written with the extension; Latin letters, digits, a dot and an underscore are allowed in it, everything else is cut out. In detail — "[Static Build](../Dev/tpl_bundle.md)".
 
 **`build`** raises the build number the page hangs onto its css and js: without it the visitors' browsers go on taking the old files from their cache.
 

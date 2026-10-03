@@ -232,5 +232,6 @@
 
 * [Concept](MCP/shop.md)
 * [shop_page](MCP/shop_page.md)
-* [shop_run](MCP/shop_run.md)
+* [shop_module](MCP/shop_module.md)
+* [shop_agent](MCP/shop_agent.md)
 * [shop_download](MCP/shop_download.md)

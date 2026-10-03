@@ -288,7 +288,7 @@ use MELBIS_INC_AGENT_SYSTEM as SYS;
 $mine = SYS\RightOne('topic', $mUserId, 'descr', $topic_id);
 ```
 
-The aliases it publishes are named by the library in its own manifest, in the `param_info` field — the engine checks `use` against them when saving.
+The aliases it publishes are named by the library in its own manifest, in the `parameters` field — the engine checks `use` against them when saving.
 
 ## Backup and Update
 
