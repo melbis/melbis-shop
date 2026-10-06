@@ -107,7 +107,7 @@ After a module executes, its HTML result is saved to disk. On the next call with
 
 The engine knows by itself which tables a module depends on: it looks at the queries the module actually ran and writes the tables it found into the module's manifest. There is no need to mark them by hand — the list is gathered from the work as it happens and fills itself out as soon as the module turns to a new table.
 
-From there everything is as it was: at startup the parser loads the last modification time of all tables, and when any of the monitored ones is updated, the cache of the modules that depend on it becomes stale.
+The engine keeps the last modification time of every table in APCu and reads it when a module needs that table. When any of the monitored tables is updated, the cache of the modules that depend on it becomes stale. That is why a cache hit needs not a single query to the database.
 
 Only what the module ran with its own hands counts — including the queries inside the libraries it called. A library may hold a dozen functions with a dozen different tables: the list will get the tables of **the functions this module called**, not the whole of its contents. Two modules on one library get different lists.
 
@@ -121,7 +121,7 @@ The cache is removed across **every** template group, not only the one where the
 
 > **Important:** a module that depends neither on input parameters nor on tables is not cached at all — there is nothing in it to cache, and an empty list means exactly that.
 
-> **Important:** Tables are added to the monitored list only if they actually exist in the database at the time the parser starts. Therefore, temporary tables (`TEMPORARY TABLE`) created inside a module are **automatically excluded** from monitoring — there is no need to exclude them manually.
+> **Important:** only permanent tables get into the monitored list: on meeting a new table in a module's query, the engine checks it against the database. Therefore, temporary tables (`TEMPORARY TABLE`) created inside a module are **automatically excluded** from monitoring — there is no need to exclude them manually.
 
 > **Important:** libraries should be included **through the IDE** (the checkboxes in the library list) rather than with the PHP `require`/`include` functions or the `MELBIS()->UnitInc()` method. The tables will be counted either way — the engine ascribes a query to the module that ran it, wherever that query happens to lie. But the list of inclusions is needed for something else: by it the engine finds whose cache to reset when the library itself is saved. A module that included it around the list will be left with a stale cache.
 

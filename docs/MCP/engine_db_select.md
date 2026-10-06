@@ -82,7 +82,6 @@ A step that did not pass stops the pool. The answer comes with a mark of error a
 | `Too many rows: …. Narrow the query, or repeat this step with "big": true` | more than 5000 rows without `big` |
 | `Unknown table: …` | a table that does not exist is named in `table` |
 | `The id of this step takes a whole number, and […] is not one` | `ids` holds something other than a whole number |
-| `No step named … before this one` | `@name` refers to a step that is not there earlier |
 | the text of the database's error | an error in the query |
 
 Refusals before the pool starts:

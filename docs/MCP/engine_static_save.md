@@ -49,6 +49,7 @@ What else saving does — rebuilds the group's bundles, writes the version, rese
 | `<file>.psv gives no array of keys back` | the bundle's `.psv` gave no array of keys back; the file is already saved |
 | `PHP Runtime Exception` or `PHP Shutdown Exception`, then `File: …/<file>.psv : <line>` and the text of the error | an error in the code of the bundle's `.psv`; the file is already saved |
 | `Can't include file to bundle: <path>` | a bundle description has stayed from a file that is not on the disk; the file is already saved |
+| `The site failed the check after the new .htaccess - <address> answered <code> - the previous one is back, nothing was saved` | after the new `.htaccess` the home page did not answer with 2xx or 3xx, `core/mcp.php` did not answer with 200, or the site did not answer at all: the engine brought the previous file back |
 | `path is required` | `path` is not named |
 
 The common refusals — "[Answers and Refusals](answers.md)".

@@ -14,7 +14,7 @@ Let's walk through the structure of a typical root script line by line:
 require 'units/melbis.php';
 ```
 
-Including `units/melbis.php` initializes the entire platform environment: loads `config.json`, configures error handlers, registers the class autoloader, and creates a database connection. After this line, the `MELBIS()` function is available, returning the single parser instance. More details on what `melbis.php` does — at the end of this section.
+Including `units/melbis.php` initializes the entire platform environment: loads `config.json`, configures error handlers, registers the class autoloader, and prepares the database connection. The connection itself is opened at the first query to the database, so a page taken whole from the cache does without it. After this line, the `MELBIS()` function is available, returning the single parser instance. More details on what `melbis.php` does — at the end of this section.
 
 ---
 
@@ -304,3 +304,10 @@ next to the project by a developer.
 The `lazy/` rule is mandatory if the project uses lazy module loading — it redirects all platform AJAX requests to `index.php` with the `?lazy` flag.
 
 If needed, SEO-friendly URL routes, HTTPS redirects, and static asset caching rules can also be placed here.
+
+An error in `.htaccess` breaks the whole site at once, together with the `core/*.php` entry points
+through which it could be fixed. So the engine, having saved `.htaccess` from the program
+or from an AI agent, right away asks its own site from the same server: the home page and
+`core/mcp.php`. The file stays only if the home page answered normally and `core/mcp.php`
+with code 200. An error, a closed entry point or a silent server bring the previous file back,
+and the save gets a refusal.

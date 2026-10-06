@@ -146,6 +146,56 @@ Here the change of case marks the name boundary: to the left of it is the module
 
 The parser looks for both forms of the main function, so such modules keep working. When a module is converted to a namespace, the underscore before the tail becomes a backslash — `MELBIS_STORE_CARD_Price` turns into `MELBIS_STORE_CARD\Price`. What else to check during the conversion is described in the "Modular Scripts" section.
 
+## Comments
+
+A comment stands above the line or block it refers to and fits into one line: it says what the next step does rather than retelling the code. Detailed explanations belong in the documentation, not in the source.
+
+Next to the code editor in the "Workbench" window there is the tree of the module's functions. Ordinary comments do not get into it, but headings of two kinds do, and by them the module reads like a table of contents.
+
+**A step heading** is a comment with a line of hyphens of the same length under it. In the tree it is shown under its function:
+
+```php
+function Verify($mUserId, $mVersion, $mVersionBefore)
+{
+    // Store options, blocked pairs
+    //-----------------------------
+    ...
+
+    // Order options, blocked pairs
+    //-----------------------------
+    ...
+}
+```
+
+**A group heading** is a comment between functions with a line of `=` signs up to the 80th column under it. In the tree the group becomes a folder: the functions that follow the heading are shown inside it, up to the next group or the end of the file.
+
+```php
+// Locks
+//==============================================================================
+
+
+/**
+ * Function TablesLock
+ **/
+function TablesLock($mTables, $mUserId = 0)
+```
+
+A library's header lists its functions with a few words of explanation each. An empty line in the header separates the same families as the groups in the code:
+
+```php
+ * TablesLock   - Takes the tables into work
+ * TablesUnlock - Hands them back, marked
+ *
+ * TreePath     - The path of a node
+ * TreePathFind - A node by its path
+```
+
+When to put headings:
+
+- **steps** — in a long function with at least three steps; a short function needs none;
+- **groups** — when a module's functions fall into several families: the commands of different entities, helper functions;
+- **length** — three to five words: the tree panel is narrow and cuts long headings.
+
 ## Variables in PHP Scripts
 
 | Variable type | Rule | Example |

@@ -33,7 +33,7 @@ Either `pool` or `pool_source` is needed, but not both.
 | `clear_dependent` | `table` | sweeps away the rows of the dependent tables left without an owner | `cleared` |
 | `change` | `tables` | marks the tables as changed | `tables` |
 
-Any step can have a `name`: then its `value` or `insert_id` is lent to the following steps as `@name`.
+Any step can have a `name`: then its `value` or `insert_id` is lent to the following steps as `@name`. A string with `@` that is not followed by the name of a step above goes as it is: it is data, for example the nickname `@princesa1` in an email field.
 
 **`generate`** takes an id from the generator. A generator belongs to the tables for which `engine_db_tables` shows `gen`; for the rest the id is issued by the DBMS itself through `AUTO_INCREMENT`, and the step refuses for them. There is a generator without a table too: `store_clann` issues the number of a product's clan for the field `clann` of the table `store`.
 
@@ -120,7 +120,6 @@ A step that did not pass stops the pool. The answer comes with a mark of error a
 | `This sweep is not for the agent: …` | a sweep of `user` or `user_group` |
 | `Unlock before this sweep: …` | a sweep while the pool holds tables |
 | `No dependent list for …` | the table has no dependents written down |
-| `No step named … before this one` | `@name` refers to a step that is not there earlier |
 | `Unknown step: …` | there is no such step |
 | the text of the database's error | an error in the query |
 

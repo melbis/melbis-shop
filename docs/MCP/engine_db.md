@@ -30,7 +30,7 @@ All work with data goes as a pool — a list of steps that the engine carries ou
 
 **The values go into `params`.** In the text of the query one writes `:NAME` in capital letters, and puts the value into `params` under that name in any case. That way a quote, an apostrophe or a foreign alphabet does not break the query.
 
-**`@name`** substitutes the result of an earlier step with that `name`: an id from the generator, the `insert_id` of an insert, the id of a new tree node. It works in `params`, in the values of the rows of `insert`, in the `id` and `parent_id` of the tree steps and in the `ids` of the `dependent` step. The `select` step lends no values.
+**`@name`** substitutes the result of an earlier step with that `name`: an id from the generator, the `insert_id` of an insert, the id of a new tree node. It works in `params`, in the values of the rows of `insert`, in the `id` and `parent_id` of the tree steps and in the `ids` of the `dependent` step. The `select` step lends no values. A string with `@` that is not followed by the name of a step above goes as it is, as data.
 
 **The text of the query goes to the database as it is written** — one command per step. On the way only two things are done to it. `{DBNICK}` is replaced everywhere, even inside a string in quotes. `:NAME` becomes a parameter only if `params` holds such a name — but then everywhere, and the same word inside a string in quotes breaks the step. The escaping is the database's own: `\'`, `\\`, `''`.
 

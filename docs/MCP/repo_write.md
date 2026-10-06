@@ -13,11 +13,11 @@ Writes into the repository: creates, edits and removes topics, adds records.
 | `action` | string | `topic_create`, `topic_update`, `topic_remove` or `store_write` |
 | [`repo`] | number | the section's number from `repo_list` — for `topic_create` |
 | [`topic`] | number | the topic's number from `topic_list` — for the other actions |
-| [`name`] | string | the topic's name; required for `topic_create` |
+| [`name`] | string | the topic's name, up to 255 characters; required for `topic_create` |
 | [`descr`] | string | what is in the topic: by it others decide whether to read it |
-| [`params`] | string | the topic's free words, one line — the topic is found by them too |
-| [`author`] | string | who writes the record: the model, its effort and the like; required for `store_write` |
-| [`comment`] | string | one line about what the record changed |
+| [`params`] | string | the topic's free words, one line up to 255 characters — the topic is found by them too |
+| [`author`] | string | who writes the record: the model, its effort and the like, up to 100 characters; required for `store_write` |
+| [`comment`] | string | one line up to 255 characters about what the record changed |
 | [`body`] | string | the text of the record — the whole state of the topic; required for `store_write` |
 | [`body_source`] | string | a UTF-8 file on this computer — an absolute path or a path from the store folder — with the text of the record, instead of `body` |
 | [`appendix`] | string | data to the record, read only when it is needed |
