@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.491 @ 2026-10-03
+ * @version 6.5.1.492 @ 2026-10-06
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -23,6 +23,7 @@ function CmdAdd($mUserId, $mParam)
     $profile = trim((string)( $mParam['profile'] ?? '' ));
 
     // One profile per pack
+    //---------------------
     $show = [];
     if ( $profile != '' )
     {
@@ -46,6 +47,7 @@ function CmdAdd($mUserId, $mParam)
     }
 
     // The right of each element
+    //--------------------------
     $tables = [];
     $kept = [];
     $said = [];
@@ -88,6 +90,7 @@ function CmdAdd($mUserId, $mParam)
     if ( !$lock['result'] ) return $lock;
 
     // A second picture where asked
+    //-----------------------------
     $rows = [];
     $born = 0;
     $ids = [];

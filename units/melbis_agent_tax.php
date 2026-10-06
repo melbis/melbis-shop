@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.491 @ 2026-10-03
+ * @version 6.5.1.492 @ 2026-10-06
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -12,6 +12,10 @@ namespace MELBIS_AGENT_TAX;
 
 // Libraries
 use MELBIS_INC_AGENT_TABLE as TABLE;
+
+
+// Tax groups
+//==============================================================================
 
 
 /**
@@ -70,6 +74,10 @@ function CmdPos($mUserId, $mParam)
 }
 
 
+// Rates
+//==============================================================================
+
+
 /**
  * Function CmdRateAdd
  **/
@@ -95,6 +103,10 @@ function CmdRateRemove($mUserId, $mParam)
 {
     return TABLE\Remove($mUserId, 'tax_rate', $mParam['id'], $mParam);
 }
+
+
+// Areas
+//==============================================================================
 
 
 /**
@@ -142,6 +154,10 @@ function CmdAreaRemove($mUserId, $mParam)
 }
 
 
+// Rules
+//==============================================================================
+
+
 /**
  * Function CmdRuleAdd
  **/
@@ -168,6 +184,10 @@ function CmdRuleRemove($mUserId, $mParam)
     $mParam['apply'] = true;
     return TABLE\Remove($mUserId, 'tax_rule', $mParam['id'], $mParam);
 }
+
+
+// Options
+//==============================================================================
 
 
 /**

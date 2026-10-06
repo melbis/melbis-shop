@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.491 @ 2026-10-03
+ * @version 6.5.1.492 @ 2026-10-06
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -44,6 +44,10 @@ namespace MELBIS_INC_AGENT_TABLE;
 use MELBIS_INC_AGENT_SYSTEM as SYS;
 
 
+// Reading
+//==============================================================================
+
+
 /**
  * Function Read
  **/
@@ -78,6 +82,10 @@ function Read($mTables, $mUserId = 0)
         'tables'  => $tables
         ];
 }
+
+
+// Rows
+//==============================================================================
 
 
 /**
@@ -233,10 +241,12 @@ function Remove($mUserId, $mTable, $mIds, $mParam = [])
     $list = implode(',', $mIds);
 
     // Counted while the rows stand
+    //-----------------------------
     $depend = SYS\DependCount($mTable, $mIds);
     $relate = SYS\RelateCount($mTable, $mIds);
 
     // Without apply only the forecast
+    //--------------------------------
     if ( !( $mParam['apply'] ?? false ) )
     {
         return [
@@ -249,6 +259,7 @@ function Remove($mUserId, $mTable, $mIds, $mParam = [])
     if ( !$hold['result'] ) return $hold;
 
     // A working row is one person's
+    //------------------------------
     $mine = '';
     if ( str_starts_with($mTable, 'u_') ) $mine = 'AND user_id = '.(int)$mUserId;
 
@@ -266,6 +277,7 @@ function Remove($mUserId, $mTable, $mIds, $mParam = [])
     $message .= SYS\DependSaid(SYS\DependSweep($mTable));
 
     // The relation flag clears them
+    //------------------------------
     if ( $mParam['relation'] ?? false )
     {
         $message .= SYS\RelateSaid(SYS\RelateSweep($mTable));
@@ -282,6 +294,10 @@ function Remove($mUserId, $mTable, $mIds, $mParam = [])
 }
 
 
+// Order of a list
+//==============================================================================
+
+
 /**
  * Function Pos
  **/
@@ -291,6 +307,7 @@ function Pos($mUserId, $mTable, $mScope, $mParam)
     $data = $mParam['data'] ?? [];
 
     // A working list is one person's
+    //-------------------------------
     $scope = $mScope;
     if ( str_starts_with($mTable, 'u_') ) $scope['user_id'] = $mUserId;
 
@@ -383,6 +400,7 @@ function Pos($mUserId, $mTable, $mScope, $mParam)
     }
 
     // Weighed before any writing
+    //---------------------------
     $named = [];
     foreach ( $data as $one )
     {
@@ -411,6 +429,7 @@ function Pos($mUserId, $mTable, $mScope, $mParam)
     }
 
     // One after another, in turn
+    //---------------------------
     $order = array_keys($was);
     foreach ( $named as $pair )
     {
@@ -494,6 +513,10 @@ function PosRead($mTable, $mScope, $mOrder = 'pos, id')
 }
 
 
+// Option rows
+//==============================================================================
+
+
 /**
  * Function KeySetAdd
  **/
@@ -569,6 +592,10 @@ function KeySetRemove($mUserId, $mFamily, $mIds)
         'message' => 'The rows of '.$mFamily.'_key_set are gone'
         ];
 }
+
+
+// Trees
+//==============================================================================
 
 
 /**
@@ -681,6 +708,7 @@ function TreeShift($mUserId, $mTable, $mParam, $mScope = [])
 function TreeRemove($mUserId, $mTable, $mIds, $mParam = [], $mScope = [])
 {
     // The whole branch, not root
+    //---------------------------
     $branch = [];
     foreach ( $mIds as $id )
     {
@@ -692,10 +720,12 @@ function TreeRemove($mUserId, $mTable, $mIds, $mParam = [], $mScope = [])
     }
 
     // Counted while the rows stand
+    //-----------------------------
     $depend = SYS\DependCount($mTable, $branch);
     $relate = SYS\RelateCount($mTable, $branch);
 
     // Without apply only the forecast
+    //--------------------------------
     if ( !( $mParam['apply'] ?? false ) )
     {
         return [
@@ -709,6 +739,7 @@ function TreeRemove($mUserId, $mTable, $mIds, $mParam = [], $mScope = [])
     if ( !$lock['result'] ) return $lock;
 
     // One node a door
+    //----------------
     foreach ( $mIds as $id )
     {
         MELBIS()->SysTreeDelete($mTable, $id, $mScope);
@@ -720,6 +751,7 @@ function TreeRemove($mUserId, $mTable, $mIds, $mParam = [], $mScope = [])
     $message .= SYS\DependSaid(SYS\DependSweep($mTable));
 
     // The relation flag clears them
+    //------------------------------
     if ( $mParam['relation'] ?? false )
     {
         $message .= SYS\RelateSaid(SYS\RelateSweep($mTable));
@@ -797,6 +829,10 @@ function TreeBranch($mTable, $mId, $mScope = [])
 }
 
 
+// Schemas
+//==============================================================================
+
+
 /**
  * Function Names
  **/
@@ -813,6 +849,10 @@ function Names($mSchema, $mPrefix = '')
 
     return $said;
 }
+
+
+// The hold
+//==============================================================================
 
 
 /**

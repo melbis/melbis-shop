@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.491 @ 2026-10-03
+ * @version 6.5.1.492 @ 2026-10-06
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -20,6 +20,10 @@ use MELBIS_INC_AGENT_SYSTEM as SYS;
 use MELBIS_INC_AGENT_TABLE as TABLE;
 
 
+// Codes
+//==============================================================================
+
+
 /**
  * Function CmdList
  **/
@@ -27,6 +31,10 @@ function CmdList($mUserId, $mParam)
 {
     return TABLE\Read(['key', 'key_value']);
 }
+
+
+// Values
+//==============================================================================
 
 
 /**
@@ -89,6 +97,10 @@ function CmdValuePos($mUserId, $mParam)
 
     return TABLE\Pos($mUserId, 'key_value', $scope, $mParam);
 }
+
+
+// Helpers
+//==============================================================================
 
 
 /**

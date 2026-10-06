@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.491 @ 2026-10-03
+ * @version 6.5.1.492 @ 2026-10-06
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -8,9 +8,12 @@
  *
  * Topic        - The goods of named sections
  * Query        - The same, found by query
+ *
  * LinkTopic    - Hangs goods in a section
  * TopicBranch  - The sections into a table
+ *
  * DefaultFill  - What a goods is born
+ *
  * Allowed      - The goods of this person
  * SlaveAllowed - The rows on such goods
  *
@@ -23,6 +26,10 @@ namespace MELBIS_INC_AGENT_STORE;
 // Libraries
 use MELBIS_INC_AGENT_SYSTEM as SYS;
 use MELBIS_INC_AGENT_QUERY as QUERY;
+
+
+// Finding goods
+//==============================================================================
 
 
 /**
@@ -80,6 +87,7 @@ function Topic($mUserId, $mPlace, $mSchema, $mParam)
 function Query($mUserId, $mPlace, $mSchema, $mParam)
 {
     // Asked nothing, it signs itself
+    //-------------------------------
     $query = $mParam['query'] ?? [];
     if ( count($query) == 0 ) return QUERY\Sign($mSchema);
 
@@ -90,6 +98,7 @@ function Query($mUserId, $mPlace, $mSchema, $mParam)
     if ( !$page['result'] ) return $page;
 
     // The query what, right where
+    //----------------------------
     $allow = SYS\RightTable('topic', $mUserId, $mPlace);
 
     $command = "FROM {DBNICK}_topic_store ts
@@ -101,6 +110,7 @@ function Query($mUserId, $mPlace, $mSchema, $mParam)
                 ";
 
     // The block of both queries
+    //--------------------------
     $from = $command;
     $param = $said['param'];
 
@@ -110,6 +120,7 @@ function Query($mUserId, $mPlace, $mSchema, $mParam)
     $offset = $page['offset'];
 
     // One row of the page
+    //--------------------
     $pull = QUERY\PullStore($from, $limit, $offset, $param);
     $tables = QUERY\PullFull($mSchema, $pull);
 
@@ -129,6 +140,10 @@ function Query($mUserId, $mPlace, $mSchema, $mParam)
         'tables'  => $tables
         ];
 }
+
+
+// Sections
+//==============================================================================
 
 
 /**
@@ -195,6 +210,10 @@ function TopicBranch($mIds, $mSub)
 }
 
 
+// Defaults
+//==============================================================================
+
+
 /**
  * Function DefaultFill
  **/
@@ -216,6 +235,10 @@ function DefaultFill($mRow)
 
     return array_merge($born, $mRow);
 }
+
+
+// Guards
+//==============================================================================
 
 
 /**

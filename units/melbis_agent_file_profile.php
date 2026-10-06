@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.491 @ 2026-10-03
+ * @version 6.5.1.492 @ 2026-10-06
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -19,6 +19,10 @@ namespace MELBIS_AGENT_FILE_PROFILE;
 // Libraries
 use MELBIS_INC_AGENT_FILE as FILE;
 use MELBIS_INC_AGENT_TABLE as TABLE;
+
+
+// Profiles
+//==============================================================================
 
 
 /**
@@ -202,12 +206,17 @@ function CmdRemove($mUserId, $mParam)
 }
 
 
+// Helpers
+//==============================================================================
+
+
 /**
  * Function MustSet
  **/
 function MustSet($mParam, $mSet)
 {
     // The sense of the recipe
+    //------------------------
     $said = [];
 
     if ( isset($mParam['type']) )
@@ -227,6 +236,7 @@ function MustSet($mParam, $mSet)
     }
 
     // A size, or the megapixels of a picture of its own shape - one kind at a time
+    //-----------------------------------------------------------------------------
     $sized = ( isset($mParam['width']) || isset($mParam['height']) );
     if ( $sized && isset($mParam['resolution']) )
     {
@@ -250,6 +260,7 @@ function MustSet($mParam, $mSet)
     if ( $sized ) $mSet['resolution'] = null;
 
     // Every number with its range
+    //----------------------------
     $ranges = [
         'quality'      => [4, 100],
         'width'        => [10, 50000],
@@ -298,6 +309,7 @@ function MustSet($mParam, $mSet)
     }
 
     // A mask word into path
+    //----------------------
     if ( isset($mParam['mask']) )
     {
         $word = trim((string)$mParam['mask']);
@@ -362,6 +374,7 @@ function MustSet($mParam, $mSet)
     $mSet['mask_file'] = $mSet['mask_file'] ?? '';
 
     // Without a size there is no profile
+    //-----------------------------------
     $sides = ( isset($mSet['width']) && isset($mSet['height']) );
     if ( !$sides && !isset($mSet['resolution']) )
     {

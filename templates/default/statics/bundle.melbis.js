@@ -1,5 +1,5 @@
 /*       Melbis Shop auto bundle report       */
-/*         Create: 2026-10-03 14:47:37        */
+/*         Create: 2026-10-06 17:30:20        */
 
 /*   #1    main.js                         32 ln     1 kb    /templates/default/statics/melbis/main.js                     */
 /*   #10   scripts.js                      56 ln     1 kb    /templates/default/units/melbis_cataloge/scripts.js           */
@@ -7,13 +7,13 @@
 
 
 /***************************************************************************************************
- * @version 6.5.1.491 @ 2026-10-03
+ * @version 6.5.1.492 @ 2026-10-06
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov    
  **************************************************************************************************/
          
-// Serialize Object
+// Serialize Object 
 $.fn.melbis_serial = function()
 {
     var o = {};
@@ -40,7 +40,7 @@ $.fn.melbis_serial = function()
 
 
 // Navbar
-//-------
+//==============================================================================
 
 // Start
 $(document).ready(function() 
@@ -97,7 +97,7 @@ $('.dropdown-menu').on('click', 'a.dropdown-toggle', function(event)
 
 
 // Basket
-//-------
+//==============================================================================
 
 // Add to basket - the button carries its goods, so the markup around it is free
 $(document).on('click', '.melbis_btn_add', function(event)

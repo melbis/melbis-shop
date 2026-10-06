@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.491 @ 2026-10-03
+ * @version 6.5.1.492 @ 2026-10-06
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -120,12 +120,17 @@ const SCHEMA = [
         ]
     ];
 
+// Orders
+//==============================================================================
+
+
 /**
  * Function CmdQuery
  **/
 function CmdQuery($mUserId, $mParam)
 {
     // Asked nothing, it signs itself
+    //-------------------------------
     $query = $mParam['query'] ?? [];
     if ( count($query) == 0 ) return QUERY\Sign(SCHEMA);
 
@@ -138,6 +143,7 @@ function CmdQuery($mUserId, $mParam)
     $param = $said['param'];
 
     // The keeper meets every order
+    //-----------------------------
     $allow = MELBIS()->SysOrderRight($mUserId);
     if ( empty($allow) )
     {
@@ -148,6 +154,7 @@ function CmdQuery($mUserId, $mParam)
     }
 
     // One granted value is enough
+    //----------------------------
     if ( $allow !== true )
     {
         $table = SYS\RightTable('order', $mUserId);
@@ -168,6 +175,7 @@ function CmdQuery($mUserId, $mParam)
     }
 
     // The block of both queries
+    //--------------------------
     $from = $command;
 
     $found = QUERY\TotalCount($from, $param);
@@ -176,6 +184,7 @@ function CmdQuery($mUserId, $mParam)
     $offset = $page['offset'];
 
     // One row of the page
+    //--------------------
     $pull = QUERY\PullOrders($from, $limit, $offset, $param);
     $tables = QUERY\PullFull(SCHEMA, $pull);
 
@@ -195,6 +204,10 @@ function CmdQuery($mUserId, $mParam)
         'tables'  => $tables
         ];
 }
+
+
+// The version
+//==============================================================================
 
 
 /**
@@ -272,6 +285,10 @@ function CmdOptionSet($mUserId, $mParam)
         'detail'  => $version
         ];
 }
+
+
+// Count and save
+//==============================================================================
 
 
 /**

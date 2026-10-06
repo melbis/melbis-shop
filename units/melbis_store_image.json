@@ -1,9 +1,7 @@
 {
     "description": "Print goods image",
     "parameters": "id: int, key: str",
-    "tables": [
-        "files_store=1"
-    ],
+    "tables": [],
     "includes": [],
     "cache_on": "0",
     "cache_time": "0",

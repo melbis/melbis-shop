@@ -1,5 +1,5 @@
 // Basket
-//-------
+//==============================================================================
 
 // Add to basket - the button carries its goods, so the markup around it is free
 $(document).on('click', '.melbis_btn_add', function(event)

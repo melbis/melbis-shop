@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.491 @ 2026-10-03
+ * @version 6.5.1.492 @ 2026-10-06
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -23,12 +23,14 @@ use MELBIS_INC_LOGIC_COMMON as LOGIC_COMMON;
 function Run($mUserId, $mVersion)
 {
     // Normalize and verify
+    //---------------------
     $before = LOGIC_ORDER\Before($mUserId, $mVersion);
     $mVersion = LOGIC_ORDER\Normalize($mUserId, $mVersion);          
     $mVersion = LOGIC_ORDER\Verify($mUserId, $mVersion, $before);          
     if ( $mVersion['result']['value'] != 'OK' ) return $mVersion;      
                 
     // No goods      
+    //---------
     if ( !isset($mVersion['store']) )
     {                                
         $mVersion['total_sum'] = 0;       
@@ -40,6 +42,7 @@ function Run($mUserId, $mVersion)
     $goods_sum = LOGIC_ORDER\GoodsSum($mVersion);            
     
     // Calculate goods
+    //----------------
     foreach ( $mVersion['store'] as &$mStore )
     { 
         if ( $mStore['recalc'] == 1 )
@@ -53,6 +56,7 @@ function Run($mUserId, $mVersion)
     unset($mStore);        
     
     // Calculate total sum
+    //--------------------
     $goods_sum = LOGIC_ORDER\GoodsSum($mVersion, 'out_price');
     foreach ( $mVersion['option'] as $option )
     {             

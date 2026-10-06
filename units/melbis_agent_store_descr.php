@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.491 @ 2026-10-03
+ * @version 6.5.1.492 @ 2026-10-06
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -78,6 +78,10 @@ const SCHEMA = [
         'pos'      => 'int'
         ]
     ];
+
+
+// Goods
+//==============================================================================
 
 
 /**
@@ -168,6 +172,10 @@ function CmdUpdate($mUserId, $mParam)
 }
 
 
+// Characteristics
+//==============================================================================
+
+
 /**
  * Function CmdInfoAdd
  **/
@@ -213,6 +221,10 @@ function CmdInfoRemove($mUserId, $mParam)
     $mParam['apply'] = true;
     return TABLE\Remove($mUserId, 'store_info', $said['ids'], $mParam);
 }
+
+
+// Bindings and clans
+//==============================================================================
 
 
 /**

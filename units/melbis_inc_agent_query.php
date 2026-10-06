@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.491 @ 2026-10-03
+ * @version 6.5.1.492 @ 2026-10-06
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -9,14 +9,17 @@
  * Sign          - The schema, flat
  * PageLimit     - How much of the answer
  * TotalCount    - How much the block reaches
+ *
  * PullCreate    - The ids of a page
  * PullStore     - One page of the goods
  * PullOrders    - One page of the orders
  * PullFull      - Every table of the schema
+ *
  * SqlBuild      - Json query into one WHERE
  * SqlNode       - One node of a query
  * SqlLeaf       - One condition of a query
  * SqlValue      - The values of a leaf
+ *
  * Tie           - The ends of a stitch
  * Mark          - The column of that role
  * Kind          - The role and the type
@@ -41,6 +44,10 @@ const TYPE_OPER = [
 
 // How many conditions a query
 const LEAF_MAX = 20;
+
+// Signature and paging
+//==============================================================================
+
 
 /**
  * Function Sign
@@ -123,6 +130,10 @@ function TotalCount($mFrom, $mParam = [], $mColumn = '')
 
     return (int)MELBIS()->SqlSelectValue(__LINE__, $command, 0, $mParam);
 }
+
+
+// Pulls
+//==============================================================================
 
 
 /**
@@ -217,6 +228,10 @@ function PullFull($mSchema, $mTable)
 }
 
 
+// Building SQL
+//==============================================================================
+
+
 /**
  * Function SqlBuild
  **/
@@ -276,6 +291,7 @@ function SqlNode($mSchema, $mTable, $mAlias, $mNode, &$mState)
     }
 
     // A list is an AND
+    //-----------------
     if ( isset($mNode[0]) )
     {
         $said = [];
@@ -335,6 +351,7 @@ function SqlNode($mSchema, $mTable, $mAlias, $mNode, &$mState)
     }
 
     // What is left is table
+    //----------------------
     $table = array_key_first($mNode);
     if ( !isset($mSchema[$table]) )
     {
@@ -355,6 +372,7 @@ function SqlNode($mSchema, $mTable, $mAlias, $mNode, &$mState)
     }
 
     // The schema says what meets
+    //---------------------------
     $tie = Tie($mSchema, $table);
     if ( count($tie) == 0 )
     {
@@ -372,6 +390,7 @@ function SqlNode($mSchema, $mTable, $mAlias, $mNode, &$mState)
     if ( !$part['result'] ) return $part;
 
     // An EXISTS, never a join
+    //------------------------
     $sql = "EXISTS ( SELECT 1
                                        FROM {DBNICK}_$table $alias
                                       WHERE $alias.$key = $mAlias.$home
@@ -519,6 +538,10 @@ function SqlValue($mType, $mOper, $mValue, $mField, &$mState)
         'sql'    => 'IN ( '.implode(', ', $bound).' )'
         ];
 }
+
+
+// Schema roles
+//==============================================================================
 
 
 /**

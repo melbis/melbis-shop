@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.491 @ 2026-10-03
+ * @version 6.5.1.492 @ 2026-10-06
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -32,6 +32,7 @@ function CmdAdd($mUserId, $mParam)
     $param_def = Defaults($mParam, 'param');
 
     // Weighs every section at once
+    //-----------------------------
     $topics = [];
     foreach ( $mParam['goods'] as $row )
     {
@@ -65,6 +66,7 @@ function CmdAdd($mUserId, $mParam)
     if ( !$lock['result'] ) return $lock;
 
     // The map ref to id
+    //------------------
     $ids = MELBIS()->SqlGenIdBlock('store', count($mParam['goods']));
     $made = [];
     $rows = [];
@@ -124,6 +126,7 @@ function CmdAdd($mUserId, $mParam)
     }
 
     // A word against its values
+    //--------------------------
     $maps = [];
     $born = 0;
     $info_how = 0;
@@ -191,6 +194,7 @@ function CmdAdd($mUserId, $mParam)
     }
 
     // The parameters go by id
+    //------------------------
     $param_how = 0;
     $write = [];
     foreach ( ( $mParam['param'] ?? [] ) as $said )

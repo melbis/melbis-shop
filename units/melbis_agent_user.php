@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.491 @ 2026-10-03
+ * @version 6.5.1.492 @ 2026-10-06
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -22,6 +22,10 @@ use MELBIS_INC_AGENT_TABLE as TABLE;
 
 // The columns a read gives
 const FIELDS_READ = "id, group_id, add_group_id, login, name, phone, email, params, is_blocked";
+
+
+// People
+//==============================================================================
 
 
 /**
@@ -198,6 +202,10 @@ function CmdPassword($mUserId, $mParam)
 }
 
 
+// Groups
+//==============================================================================
+
+
 /**
  * Function CmdGroupAdd
  **/
@@ -252,6 +260,10 @@ function CmdGroupPos($mUserId, $mParam)
 }
 
 
+// Rights
+//==============================================================================
+
+
 /**
  * Function CmdRightAdd
  **/
@@ -291,6 +303,10 @@ function CmdRightRemove($mUserId, $mParam)
 }
 
 
+// Options
+//==============================================================================
+
+
 /**
  * Function CmdKeyAdd
  **/
@@ -318,6 +334,10 @@ function CmdKeyRemove($mUserId, $mParam)
 }
 
 
+// Group options
+//==============================================================================
+
+
 /**
  * Function CmdGroupKeyAdd
  **/
@@ -343,6 +363,10 @@ function CmdGroupKeyRemove($mUserId, $mParam)
 {
     return TABLE\KeySetRemove($mUserId, 'user_group', $mParam['id']);
 }
+
+
+// Helpers
+//==============================================================================
 
 
 /**

@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.491 @ 2026-10-03
+ * @version 6.5.1.492 @ 2026-10-06
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -18,6 +18,10 @@ namespace MELBIS_AGENT_INFO;
 // Libraries
 use MELBIS_INC_AGENT_SYSTEM as SYS;
 use MELBIS_INC_AGENT_TABLE as TABLE;
+
+
+// Characteristics
+//==============================================================================
 
 
 /**
@@ -106,6 +110,10 @@ function CmdRemove($mUserId, $mParam)
 
     return TABLE\TreeRemove($mUserId, 'info', $said['ids'], $mParam);
 }
+
+
+// Values
+//==============================================================================
 
 
 /**
@@ -203,6 +211,10 @@ function CmdValuePos($mUserId, $mParam)
 }
 
 
+// Rights
+//==============================================================================
+
+
 /**
  * Function CmdRightAdd
  **/
@@ -240,6 +252,10 @@ function CmdRightRemove($mUserId, $mParam)
 }
 
 
+// Options
+//==============================================================================
+
+
 /**
  * Function CmdKeyAdd
  **/
@@ -265,6 +281,10 @@ function CmdKeyRemove($mUserId, $mParam)
 {
     return TABLE\KeySetRemove($mUserId, 'info', $mParam['id']);
 }
+
+
+// Helpers
+//==============================================================================
 
 
 /**

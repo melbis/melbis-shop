@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.491 @ 2026-10-03
+ * @version 6.5.1.492 @ 2026-10-06
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -58,6 +58,10 @@ const SCHEMA = [
     ];
 
 
+// Finding goods
+//==============================================================================
+
+
 /**
  * Function CmdTopic
  **/
@@ -74,6 +78,10 @@ function CmdQuery($mUserId, $mParam)
 {
     return STORE\Query($mUserId, 'place', SCHEMA, $mParam);
 }
+
+
+// Places
+//==============================================================================
 
 
 /**
@@ -190,6 +198,10 @@ function CmdPos($mUserId, $mParam)
 
     return TABLE\Pos($mUserId, 'topic_store', $scope, $mParam);
 }
+
+
+// Helpers
+//==============================================================================
 
 
 /**

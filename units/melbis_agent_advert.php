@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.491 @ 2026-10-03
+ * @version 6.5.1.492 @ 2026-10-06
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -12,6 +12,10 @@ namespace MELBIS_AGENT_ADVERT;
 
 // Libraries
 use MELBIS_INC_AGENT_TABLE as TABLE;
+
+
+// Promo blocks
+//==============================================================================
 
 
 /**
@@ -70,6 +74,10 @@ function CmdRemove($mUserId, $mParam)
 }
 
 
+// Texts
+//==============================================================================
+
+
 /**
  * Function CmdTextAdd
  **/
@@ -107,6 +115,10 @@ function CmdTextPos($mUserId, $mParam)
 
     return TABLE\Pos($mUserId, 'advert_text', $scope, $mParam);
 }
+
+
+// Goods
+//==============================================================================
 
 
 /**
@@ -149,6 +161,10 @@ function CmdGoodsPos($mUserId, $mParam)
 }
 
 
+// Links
+//==============================================================================
+
+
 /**
  * Function CmdLinkAdd
  **/
@@ -187,6 +203,10 @@ function CmdLinkPos($mUserId, $mParam)
 
     return TABLE\Pos($mUserId, 'advert_link', $scope, $mParam);
 }
+
+
+// Options
+//==============================================================================
 
 
 /**

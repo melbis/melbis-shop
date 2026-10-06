@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.491 @ 2026-10-03
+ * @version 6.5.1.492 @ 2026-10-06
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -76,6 +76,10 @@ const FRAME = [
     ];
 
 
+// Entities
+//==============================================================================
+
+
 /**
  * Function Home
  **/
@@ -132,6 +136,10 @@ function EntityGone($mEntity, $mId)
 }
 
 
+// Rights
+//==============================================================================
+
+
 /**
  * Function RightElem
  **/
@@ -140,6 +148,7 @@ function RightElem($mUserId, $mEntity, $mElemId)
     $elem_id = (int)$mElemId;
 
     // The person's own workspace
+    //---------------------------
     if ( isset(FRAME[$mEntity]) )
     {
         $command = "SELECT *
@@ -175,6 +184,7 @@ function RightElem($mUserId, $mEntity, $mElemId)
     }
 
     // The Description right of section
+    //---------------------------------
     if ( $mEntity == 'store' )
     {
         $command = "SELECT id
@@ -205,6 +215,7 @@ function RightElem($mUserId, $mEntity, $mElemId)
     }
 
     // The Description right on it
+    //----------------------------
     if ( $mEntity == 'topic' )
     {
         $command = "SELECT id
@@ -233,6 +244,7 @@ function RightElem($mUserId, $mEntity, $mElemId)
     }
 
     // The right of the characteristic
+    //--------------------------------
     if ( $mEntity == 'info' || $mEntity == 'info_value' )
     {
         $info_id = $elem_id;
@@ -282,6 +294,7 @@ function RightElem($mUserId, $mEntity, $mElemId)
     }
 
     // The operation is the gate
+    //--------------------------
     $command = "SELECT id
                   FROM {DBNICK}_$mEntity
                  WHERE id = :ID
@@ -294,6 +307,10 @@ function RightElem($mUserId, $mEntity, $mElemId)
 
     return true;
 }
+
+
+// File rows
+//==============================================================================
 
 
 /**
@@ -410,6 +427,10 @@ function Touched($mUserId, $mEntity, $mElemIds)
 }
 
 
+// Files on the disk
+//==============================================================================
+
+
 /**
  * Function DiskPath
  **/
@@ -472,6 +493,7 @@ function DiskPicture($mDisk)
 function DiskWebp($mDisk)
 {
     // A still opens at once
+    //----------------------
     $image = @imagecreatefromwebp($mDisk);
     if ( $image !== false ) return $image;
 
@@ -479,6 +501,7 @@ function DiskWebp($mDisk)
     if ( $bytes === false ) return false;
 
     // The first frame of an animation
+    //--------------------------------
     $chunks = WebpChunks($bytes);
     $canvas = null;
     $frames = [];
@@ -499,6 +522,7 @@ function DiskWebp($mDisk)
     $canvas_h = WebpNumber($canvas, 7) + 1;
 
     // The frame as a still
+    //---------------------
     $data = substr($body, 16);
     $size = substr($body, 6, 6);
     $head = 'VP8X'.pack('V', 10)."\x10\0\0\0".$size;
@@ -510,6 +534,7 @@ function DiskWebp($mDisk)
     if ( $frame === false ) return false;
 
     // Laid where a browser shows it
+    //------------------------------
     $image = imagecreatetruecolor($canvas_w, $canvas_h);
     imagealphablending($image, false);
     imagesavealpha($image, true);
@@ -520,6 +545,10 @@ function DiskWebp($mDisk)
 
     return $image;
 }
+
+
+// Webp
+//==============================================================================
 
 
 /**
@@ -566,6 +595,10 @@ function WebpNumber($mBytes, $mAt)
 
     return $number[1];
 }
+
+
+// Profiles
+//==============================================================================
 
 
 /**
@@ -736,6 +769,10 @@ function BoxSize($mResolution, $mRatio)
 }
 
 
+// Masks
+//==============================================================================
+
+
 /**
  * Function MaskMap
  **/
@@ -788,12 +825,17 @@ function MaskWord($mPath)
 }
 
 
+// Painting
+//==============================================================================
+
+
 /**
  * Function Make
  **/
 function Make($mUserId, $mEntity, $mWas, $mProfile, $mShow, $mRealName = '')
 {
     // The picture alone
+    //------------------
     if ( !function_exists('imagecreatetruecolor') )
     {
         return [
@@ -816,6 +858,7 @@ function Make($mUserId, $mEntity, $mWas, $mProfile, $mShow, $mRealName = '')
     if ( !$paint['result'] ) return $paint;
 
     // Laid by the engine formula
+    //---------------------------
     $table = Home($mEntity);
     $now = MELBIS()->DateTime();
     $folder = DiskFolder($now);
@@ -835,6 +878,7 @@ function Make($mUserId, $mEntity, $mWas, $mProfile, $mShow, $mRealName = '')
     $file_name = strtolower($table.'_'.$mUserId.'_'.$id).'.'.$ext;
 
     // File first, row second
+    //-----------------------
     $laid = false;
     if ( $mShow['type'] == 'jpeg' ) $laid = imagejpeg($paint['image'], $dir.$file_name, $mShow['quality']);
     if ( $mShow['type'] == 'png' ) $laid = imagepng($paint['image'], $dir.$file_name);
@@ -850,6 +894,7 @@ function Make($mUserId, $mEntity, $mWas, $mProfile, $mShow, $mRealName = '')
     }
 
     // The new file stands last, and may keep the group it already has
+    //----------------------------------------------------------------
     $kind = ( $mShow['group_base'] ) ? $mWas['kind_key'] : $mShow['group'];
     $real_name = trim((string)$mRealName);
     if ( $real_name == '' )
@@ -900,6 +945,7 @@ function Make($mUserId, $mEntity, $mWas, $mProfile, $mShow, $mRealName = '')
 function MakePaint($mWhat, $mDisk, $mShow)
 {
     // Opened by its type
+    //-------------------
     $doors = [
         'jpg'  => 'imagecreatefromjpeg',
         'png'  => 'imagecreatefrompng',
@@ -922,9 +968,11 @@ function MakePaint($mWhat, $mDisk, $mShow)
     $blue = hexdec(substr($hex, 4, 2));
 
     // The frame the profile finds, before the picture is turned
+    //----------------------------------------------------------
     if ( $mShow['frame_auto'] ) $source = MakeFrame($source, $red, $green, $blue, $mShow);
 
     // Mirror and turn, then fit
+    //--------------------------
     if ( $mShow['mirror'] ) imageflip($source, IMG_FLIP_HORIZONTAL);
     if ( $mShow['rotate'] != 0 )
     {
@@ -934,6 +982,7 @@ function MakePaint($mWhat, $mDisk, $mShow)
     }
 
     // The area itself, the size of the profile, or its megapixels in the shape of the area
+    //-------------------------------------------------------------------------------------
     $source_w = imagesx($source);
     $source_h = imagesy($source);
     if ( $mShow['size_base'] )
@@ -973,6 +1022,7 @@ function MakePaint($mWhat, $mDisk, $mShow)
     }
 
     // The canvas takes the shape of the area
+    //---------------------------------------
     if ( $mShow['smart'] )
     {
         $by_w = $box_w / $source_w;
@@ -982,6 +1032,7 @@ function MakePaint($mWhat, $mDisk, $mShow)
     }
 
     // Fitted into the canvas, then two margins off the long side
+    //-----------------------------------------------------------
     $scale = max($source_w / $box_w, $source_h / $box_h);
     $fit_w = (int)round($source_w / $scale);
     $fit_h = (int)round($source_h / $scale);
@@ -1026,6 +1077,7 @@ function MakePaint($mWhat, $mDisk, $mShow)
     imagedestroy($source);
 
     // The effects GD can paint
+    //-------------------------
     if ( $mShow['red'] != 0 || $mShow['green'] != 0 || $mShow['blue'] != 0 )
     {
         imagefilter($canvas, IMG_FILTER_COLORIZE, $mShow['red'], $mShow['green'], $mShow['blue']);
@@ -1044,6 +1096,7 @@ function MakePaint($mWhat, $mDisk, $mShow)
     }
 
     // The mask goes last
+    //-------------------
     if ( $mShow['mask_file'] != '' && $mShow['mask_alpha'] > 0 )
     {
         MakeMask($canvas, $canvas_w, $canvas_h, $mShow);
@@ -1067,6 +1120,7 @@ function MakeFrame($mImage, $mRed, $mGreen, $mBlue, $mShow)
     $high = imagesy($mImage);
 
     // The edges are read off a smaller copy
+    //--------------------------------------
     $scale = max($wide, $high) / FRAME_SIDE;
     if ( $scale < 1 ) $scale = 1;
     $scan_w = (int)round($wide / $scale);
@@ -1079,6 +1133,7 @@ function MakeFrame($mImage, $mRed, $mGreen, $mBlue, $mShow)
     imagecopyresampled($scan, $mImage, 0, 0, 0, 0, $scan_w, $scan_h, $wide, $high);
 
     // A light tone and the background itself are no picture
+    //------------------------------------------------------
     $level = $mShow['frame_range'];
     $left = $scan_w;
     $top = $scan_h;
@@ -1114,6 +1169,7 @@ function MakeFrame($mImage, $mRed, $mGreen, $mBlue, $mShow)
     }
 
     // The indent stays inside the picture
+    //------------------------------------
     $pad = (int)round(min($scan_w, $scan_h) * $mShow['frame_border'] / 100);
     $left = max(0, $left - $pad);
     $top = max(0, $top - $pad);
@@ -1127,6 +1183,7 @@ function MakeFrame($mImage, $mRed, $mGreen, $mBlue, $mShow)
     if ( $cut_w == $wide && $cut_h == $high ) return $mImage;
 
     // The cut carries what the source had, alpha included
+    //----------------------------------------------------
     $cut = imagecreatetruecolor($cut_w, $cut_h);
     imagealphablending($cut, false);
     imagesavealpha($cut, true);
@@ -1143,11 +1200,13 @@ function MakeFrame($mImage, $mRed, $mGreen, $mBlue, $mShow)
 function MakeMask($mCanvas, $mCanvasW, $mCanvasH, $mShow)
 {
     // The mask as ink with its own alpha
+    //-----------------------------------
     $disk = __DIR__.'/../'.$mShow['mask_file'];
     $ink = MakeInk($disk);
     if ( $ink === false ) return;
 
     // Turned first, as the canvas turns
+    //----------------------------------
     if ( $mShow['mask_rotate'] != 0 )
     {
         $angle = -1 * $mShow['mask_rotate'];
@@ -1160,6 +1219,7 @@ function MakeMask($mCanvas, $mCanvasW, $mCanvasH, $mShow)
     }
 
     // Fitted into its frame of the picture, a zero side sets no limit
+    //----------------------------------------------------------------
     $ink_w = imagesx($ink);
     $ink_h = imagesy($ink);
     $scale = 0;
@@ -1184,6 +1244,7 @@ function MakeMask($mCanvas, $mCanvasW, $mCanvasH, $mShow)
     }
 
     // The indent follows the shorter side
+    //------------------------------------
     $pad = (int)round(min($mCanvasW, $mCanvasH) * $mShow['mask_indent'] / 100);
     $solid = $mShow['mask_alpha'] / 255;
 
@@ -1336,6 +1397,10 @@ function MakeSkip($mShow)
 
     return implode(', ', $skipped);
 }
+
+
+// Colours
+//==============================================================================
 
 
 /**

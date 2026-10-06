@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.491 @ 2026-10-03
+ * @version 6.5.1.492 @ 2026-10-06
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -12,6 +12,10 @@ namespace MELBIS_AGENT_BRAND;
 
 // Libraries
 use MELBIS_INC_AGENT_TABLE as TABLE;
+
+
+// Brands
+//==============================================================================
 
 
 /**
@@ -66,6 +70,10 @@ function CmdPos($mUserId, $mParam)
 {
     return TABLE\Pos($mUserId, 'brand', [], $mParam);
 }
+
+
+// Options
+//==============================================================================
 
 
 /**

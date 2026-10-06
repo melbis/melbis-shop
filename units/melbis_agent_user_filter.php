@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.491 @ 2026-10-03
+ * @version 6.5.1.492 @ 2026-10-06
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -19,6 +19,10 @@ use MELBIS_INC_AGENT_TABLE as TABLE;
 
 // The places a filter stands
 const PLACE_SET = "0, 1, 2";
+
+
+// Filters
+//==============================================================================
 
 
 /**
@@ -83,6 +87,10 @@ function CmdPos($mUserId, $mParam)
 }
 
 
+// Value lists
+//==============================================================================
+
+
 /**
  * Function CmdParamAdd
  **/
@@ -118,6 +126,10 @@ function CmdParamPos($mUserId, $mParam)
 {
     return TABLE\Pos($mUserId, 'user_filter_param', [], $mParam);
 }
+
+
+// Helpers
+//==============================================================================
 
 
 /**

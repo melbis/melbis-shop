@@ -1,17 +1,20 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.491 @ 2026-10-03
+ * @version 6.5.1.492 @ 2026-10-06
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
  **************************************************************************************************
  *
  * Main    - Runs what the form names
+ *
  * Plus    - Puts a goods in
  * Minus   - Takes a goods out
+ *
  * Goods   - Prints the basket goods
  * Fields  - Prints the buyer fields
  * Options - Prints the order options
+ *
  * Save    - Counts and saves the order
  *
  **************************************************************************************************/
@@ -23,6 +26,10 @@ use MELBIS_INC_LOGIC_ORDER_CALC as LOGIC_ORDER_CALC;
 use MELBIS_INC_LOGIC_ORDER_EDIT as LOGIC_ORDER_EDIT;
 
 
+// Page
+//==============================================================================
+
+
 /** 
  * Function Main
  **/
@@ -30,6 +37,10 @@ function Main($mVars)
 { 
     return MELBIS()->UnitFunc($mVars['post']['func'] ?? '', $mVars);  
 } 
+
+
+// Actions
+//==============================================================================
 
 
 /** 
@@ -81,6 +92,10 @@ function Minus($mVars)
     // Return goods list
     return Goods($mVars);     
 } 
+
+
+// Blocks
+//==============================================================================
 
 
 /** 
@@ -189,6 +204,10 @@ function Options($mVars)
 } 
 
 
+// Saving
+//==============================================================================
+
+
 /** 
  * Function Save
  **/
@@ -204,6 +223,7 @@ function Save($mVars)
     $version['option'] = $version['option'] ?? [];
     
     // Update fields     
+    //--------------
     foreach ( $version['client'] as &$row )
     { 
         $id = $row['field_id'];
@@ -214,6 +234,7 @@ function Save($mVars)
     unset($row);
         
     // Update options                      
+    //---------------
     foreach ( $version['option'] as &$row )
     {           
         $id = $row['option_id'];        
@@ -230,6 +251,7 @@ function Save($mVars)
     MELBIS()->SessionSetValue('order', $version);                                          
 
     // Verify cart    
+    //------------
     if ( empty($version['store']) )
     {  
         $data['result'] = 'ERROR_EMPTY';
@@ -239,6 +261,7 @@ function Save($mVars)
     }   
 
     // Verify calculation
+    //-------------------
     if ( $version['result']['value'] != 'OK' )
     {
         $data['result'] = $version['result']['value'];
@@ -251,6 +274,7 @@ function Save($mVars)
     $result = LOGIC_ORDER_EDIT\Run(null, $version);
     
     // Error exists?
+    //--------------
     if ( $result['value'] != 'OK' )
     {  
         $data['result'] = $result['value'];

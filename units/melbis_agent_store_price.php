@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.491 @ 2026-10-03
+ * @version 6.5.1.492 @ 2026-10-06
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -90,6 +90,10 @@ const SCHEMA = [
         ]
     ];
 
+// Goods
+//==============================================================================
+
+
 /**
  * Function CmdTopic
  **/
@@ -176,6 +180,10 @@ function CmdUpdate($mUserId, $mParam)
 }
 
 
+// Parameters
+//==============================================================================
+
+
 /**
  * Function CmdParamAdd
  **/
@@ -220,6 +228,10 @@ function CmdParamRemove($mUserId, $mParam)
     $mParam['apply'] = true;
     return TABLE\Remove($mUserId, 'store_param', $said['ids'], $mParam);
 }
+
+
+// Stock
+//==============================================================================
 
 
 /**

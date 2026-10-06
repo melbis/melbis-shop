@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.491 @ 2026-10-03
+ * @version 6.5.1.492 @ 2026-10-06
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -100,6 +100,7 @@ function GetCataloge($mUserId, $mVars)
 function GetGoods($mUserId, $mVars)
 { 
     // Vars
+    //-----
     $topic_id = (int) $mVars['post']['id'];     
     $search = $mVars['post']['search'] ?? '';
     $limit = (int) $mVars['post']['limit'];
@@ -108,6 +109,7 @@ function GetGoods($mUserId, $mVars)
     $sort .= ( $mVars['post']['order'] == 'asc' ) ? ' ASC' : ' DESC';
     
     // Conditions                          
+    //-----------
     $cond = '';    
     if ( !empty($search) )
     {
@@ -115,6 +117,7 @@ function GetGoods($mUserId, $mVars)
     }            
                         
     // Get data, the price raw
+    //------------------------
     $command = "SELECT s.id, 
                        s.code_shop, 
                        s.name, 
@@ -136,6 +139,7 @@ function GetGoods($mUserId, $mVars)
     $data = MELBIS()->SqlSelectLimit(__LINE__, $command, $offset, $limit, $param);
     
     // Calc                   
+    //-----
     $status = MELBIS()->SysKeyValues('STORE_STATUS_KEY');
     foreach ( $data['rows'] as &$row )
     {

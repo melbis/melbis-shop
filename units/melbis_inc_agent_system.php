@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.491 @ 2026-10-03
+ * @version 6.5.1.492 @ 2026-10-06
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -30,12 +30,17 @@
 namespace MELBIS_INC_AGENT_SYSTEM;
 
 
+// Rights
+//==============================================================================
+
+
 /**
  * Function RightTable
  **/
 function RightTable($mKind, $mUserId, $mPlace = '')
 {
     // What every kind names
+    //----------------------
     $of_kind = [
         'topic' => ['topic', 'topic_right', 'topic_id', 'PUT_TOPIC_RIGHT',
                     ['descr'  => ['for_frame'],
@@ -50,12 +55,14 @@ function RightTable($mKind, $mUserId, $mPlace = '')
     list( $tree, $satellite, $key, $oper, $of_place ) = $of_kind[$mKind];
 
     // One table a request
+    //--------------------
     static $made = [];
     $mark = ( $mPlace == '' ) ? 'any' : $mPlace;
     $table = '{DBNICK}_tmp_allow_'.$mKind.'_'.$mark;
     if ( isset($made[$mUserId][$mKind][$mark]) ) return $table;
 
     // A kind without flags asks the grant itself, a place asks any of its flags
+    //--------------------------------------------------------------------------
     $right = 'r.id IS NOT NULL';
     if ( count($of_place) > 0 )
     {
@@ -119,6 +126,10 @@ function RightOne($mKind, $mUserId, $mPlace, $mId)
 }
 
 
+// Locks
+//==============================================================================
+
+
 /**
  * Function TablesLock
  **/
@@ -155,6 +166,10 @@ function TablesUnlock($mTables, $mUserId = 0)
     MELBIS()->SqlTableChange(__LINE__, $mTables, false);
     MELBIS()->SqlTableUnlock(__LINE__, $mTables, $mUserId);
 }
+
+
+// Dependent rows
+//==============================================================================
 
 
 /**
@@ -231,6 +246,10 @@ function DependSaid($mReport)
 
     return '. Swept with them - '.implode(', ', $said);
 }
+
+
+// Relations
+//==============================================================================
 
 
 /**
@@ -311,6 +330,10 @@ function RelateSaid($mReport)
 
     return '. References cleared - '.implode(', ', $said);
 }
+
+
+// Tree paths
+//==============================================================================
 
 
 /**

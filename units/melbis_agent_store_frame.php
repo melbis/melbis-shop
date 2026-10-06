@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.491 @ 2026-10-03
+ * @version 6.5.1.492 @ 2026-10-06
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -121,6 +121,10 @@ const SCHEMA = [
     ];
 
 
+// The workspace
+//==============================================================================
+
+
 /**
  * Function CmdLock
  **/
@@ -172,6 +176,10 @@ function CmdLoad($mUserId, $mParam)
 }
 
 
+// Taking goods in
+//==============================================================================
+
+
 /**
  * Function CmdTakeTopic
  **/
@@ -192,6 +200,10 @@ function CmdTakeQuery($mUserId, $mParam)
 
     return Take($mUserId, $said);
 }
+
+
+// Goods
+//==============================================================================
 
 
 /**
@@ -334,6 +346,10 @@ function CmdRemove($mUserId, $mParam)
 }
 
 
+// Characteristics
+//==============================================================================
+
+
 /**
  * Function CmdInfoAdd
  **/
@@ -415,6 +431,10 @@ function CmdInfoRemove($mUserId, $mParam)
 
     return SlaveRemove($mUserId, 'store_info', $ids);
 }
+
+
+// Values of the lists
+//==============================================================================
 
 
 /**
@@ -519,6 +539,7 @@ function CmdValueUpdate($mUserId, $mParam)
     }
 
     // The lists must be yours
+    //------------------------
     $column = array_column($said['rows'], 'info_id');
     $infos = array_unique($column);
     foreach ( $infos as $info_id )
@@ -533,6 +554,7 @@ function CmdValueUpdate($mUserId, $mParam)
     }
 
     // One word once a list
+    //---------------------
     if ( isset($fields['name']) )
     {
         if ( count($ids) > 1 )
@@ -556,6 +578,7 @@ function CmdValueUpdate($mUserId, $mParam)
     }
 
     // Marked as the window marks
+    //---------------------------
     $fields['was_update'] = 1;
     $fields['user_id'] = $mUserId;
     $key = ['user_id', 'id'];
@@ -625,6 +648,10 @@ function CmdValueRemove($mUserId, $mParam)
         'message' => $count.' value(s) out of the personal workspace, with the rows of goods pointing at them; the store keeps its own'
         ];
 }
+
+
+// Bindings and clans
+//==============================================================================
 
 
 /**
@@ -732,6 +759,10 @@ function CmdClannNew($mUserId, $mParam)
 }
 
 
+// Guards
+//==============================================================================
+
+
 /**
  * Function Held
  **/
@@ -804,6 +835,10 @@ function Changed($mUserId, $mIds)
         ];
     MELBIS()->SqlQuery(__LINE__, $command, $param_user);
 }
+
+
+// Value words
+//==============================================================================
 
 
 /**
@@ -978,6 +1013,10 @@ function ValueAdd($mUserId, $mInfoId, $mFields)
 }
 
 
+// Rows of the goods
+//==============================================================================
+
+
 /**
  * Function Drop
  **/
@@ -1123,6 +1162,10 @@ function SlaveRemove($mUserId, $mTable, $mIds)
 }
 
 
+// Taking
+//==============================================================================
+
+
 /**
  * Function Take
  **/
@@ -1137,6 +1180,7 @@ function Take($mUserId, $mSaid)
     if ( !$held['result'] ) return $held;
 
     // The search tells the page
+    //--------------------------
     $page = $mSaid['message'];
     $detail = [
         'found' => $mSaid['detail']['found']
@@ -1153,6 +1197,7 @@ function Take($mUserId, $mSaid)
     }
 
     // Already in the workspace
+    //-------------------------
     $list = implode(',', $ids);
     $command = "SELECT id, base_id, was_update
                   FROM {DBNICK}_u_store
@@ -1195,6 +1240,7 @@ function Take($mUserId, $mSaid)
     }
 
     // The card, piece by piece
+    //-------------------------
     $list = implode(',', $take);
 
     // The lists the cards use
@@ -1244,6 +1290,7 @@ function TakeValues($mUserId, $mInfoIds)
         ];
 
     // Untouched values follow the catalogue
+    //--------------------------------------
     $command = "UPDATE {DBNICK}_u_info_value v
                   JOIN {DBNICK}_info_value iv
                     ON iv.id = v.base_id
@@ -1260,6 +1307,7 @@ function TakeValues($mUserId, $mInfoIds)
     MELBIS()->SqlQuery(__LINE__, $command, $param_user);
 
     // Their files come anew
+    //----------------------
     $command = "DELETE f
                   FROM {DBNICK}_u_files_info_value f
                   JOIN {DBNICK}_u_info_value v
@@ -1273,6 +1321,7 @@ function TakeValues($mUserId, $mInfoIds)
     MELBIS()->SqlQuery(__LINE__, $command, $param_user);
 
     // Values the workspace lacks
+    //---------------------------
     $command = "INSERT INTO {DBNICK}_u_info_value
                        ( id, user_id, base_id, was_update, info_id, name, descr, kind_key, params, seo_code, pos )
                 SELECT :ROW_FIRST - 1 + ROW_NUMBER() OVER ( ORDER BY iv.id ), :USER_ID, iv.id, 0, iv.info_id,
@@ -1290,6 +1339,7 @@ function TakeValues($mUserId, $mInfoIds)
     TakeRows('u_info_value', $insert, $from, $param_user);
 
     // The files of untouched values
+    //------------------------------
     $command = "INSERT INTO {DBNICK}_u_files_info_value
                        ( id, base_id, user_id, elem_id, kind_key, file_name, file_size, upload_time, upload_ok,
                          real_name, parent_id, format_xml, pos )
