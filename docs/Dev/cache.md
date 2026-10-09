@@ -111,6 +111,8 @@ The engine keeps the last modification time of every table in APCu and reads it 
 
 Only what the module ran with its own hands counts — including the queries inside the libraries it called. A library may hold a dozen functions with a dozen different tables: the list will get the tables of **the functions this module called**, not the whole of its contents. Two modules on one library get different lists.
 
+A query answered by memory counts too. `SqlSelectStatic`, `SqlSelectEnum` and the `Sys*` doors record the table behind the module even when the answer came from APCu or the archive and the database was never reached. A query from a callback is recorded behind the module in whose template the callback fired.
+
 The "Tables" tab in the IDE shows the gathered list, and one action is left to the developer — to **untick** a table the cache must not depend on. Usually that is a log or a counter: written to often, and with no effect on the output. An unticked box holds forever — it survives a save, and the engine will never write that table back.
 
 **Saving a file resets the cache.** The rule is one and the same for code and for markup: save a module's `.php` or its `.htm` template, and the basic and Trick caches of that module are gone, with nothing left to clear by hand. Saving a library removes the cache from every module that includes it.

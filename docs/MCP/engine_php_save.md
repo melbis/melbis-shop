@@ -35,7 +35,7 @@ What the save does besides — rewrites the file whole, clears the cache, writes
 | `path` | the path of the saved file |
 | `manifest` | whether the `.json` was rewritten |
 | `build` | whether the build number was raised |
-| `warning` | the remarks of the module's check in one line after `Warning!`: `Undeclared` — a call of a function from a library that is not in `includes`; `Unused` — a library is included but not used; `One alias only` — the library publishes more than one short name; `Alias differs` — `use` calls the library by a name other than the one it publishes; `Namespace missing` — the library publishes a short name, and the file has no namespace. Empty if there are no remarks; a root script is not checked |
+| `warning` | the remarks of the module's check in one line after `Warning!`: `Undeclared` — a call of a function from a library that is not in `includes`; `Unused` — a library is included, but the module neither calls its functions nor declares it with a `use` line without `as`; `One alias only` — the library publishes more than one short name; `Alias differs` — `use` calls the library by a name other than the one it publishes; `Namespace missing` — the library publishes a short name, and the file has no namespace. Empty if there are no remarks; a root script is not checked |
 
 ## Refusals
 

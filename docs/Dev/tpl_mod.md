@@ -256,3 +256,15 @@ The associative part of the array is assembled with priority layering:
 3. **(Highest) Additional keys from the template:** If the developer explicitly passed a key (e.g., `FROM`) that matches a PHP default setting, **the value from the HTML template completely overwrites the default**.
 
 This way, simple functions can just access `$mParam[0]`, `$mParam[1]` without being tied to what the variable was called in the template, while complex functions can control business logic by overriding string keys.
+
+#### 4. The Callback and the Database
+
+A callback runs while the template is parsed: on every row of a loop, and on a global or system variable — on every request, even when the module is served from the cache. So a callback reads from the database only through what in normal work answers from the APCu cache and is static in essence: the `Sys*` reference directories and rights, and `SqlSelectStatic`. Doors that count, write or check a sign-in are not fit for a callback.
+
+An answer from APCu does not cancel the dependency: the engine records the table behind the module in whose template the callback fired, at its first build, and from then on the module depends on it permanently. Only a module with a cache records it. A callback on a global or system variable fires after the cache already, but the module records the table all the same. Its cache does not depend on that table, and when it changes the module is rebuilt for nothing — such a table is unticked on the "Tables" tab (see "Caching").
+
+We strongly advise against:
+
+- **live queries** — `SqlSelect`, `SqlSelectEnum` and the rest: that is a query on every row or on every page;
+- **the callback's own memory** — `static`, a global variable. The engine does not see reads from it: only the first module of the page records the table behind itself, the others cache the result with no link to it and keep serving the old one after it changes. Which module turns out to be the first depends on the page, so the error is unpredictable;
+- **complex selections by the row's data.** That is the module's work: it gathers the data before `TplAssign`, and the callback only formats.

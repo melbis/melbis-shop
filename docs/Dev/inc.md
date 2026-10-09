@@ -31,6 +31,8 @@ Filling in the name without declaring a `namespace` is not possible: on saving t
 
 A declared name is a recommendation for the whole store rather than a ban. A module may give a library any name in its own file, but on saving it will get `Alias differs` with both variants: the one in the file and the one in the library's manifest. The warning does not stand in the way of saving — it is there so that one library is not called differently in different files without a reason.
 
+A library that a module includes but does not call is declared with a `use` line with the full name and without `as`. Such a library works by the inclusion itself — for example, the code in the body of its file registers callbacks for nested modules. Without this line the engine warns `Unused` on saving: the library is included, but not one of its functions is called in the module.
+
 Let us look at three characteristic examples from the demonstration store.
 
 ## melbis_inc_web_topic — Temporary Tables
@@ -164,7 +166,7 @@ This is exactly how it is done in the demonstration store: the `$TopicLink` modi
 
 > **Registration must complete before the module is connected.** A module receives the callbacks that were registered by the time it itself was connected. The parent module always makes it in time: its PHP executes before the template is parsed, and nested modules are connected during parsing. A sibling that registers a callback later, however, will not affect an already-connected module — register higher up the tree, not from the side.
 
-> **The library's tables are available only to the module that declared it.** If a callback reads data from the database, those tables will be added to the cache dependency list only for the top-level module; nested modules will not be aware of them and will not be rebuilt when they change. For callbacks that merely format passed values this does not matter, but a library that reads from the database should also be attached to the modules where it is used.
+> **A callback that reads the database.** The tables a callback reads through the engine's doors go into the cache dependencies of the module in whose template it fired. What reading is acceptable for a callback — "Modifiers" → "The Callback and the Database".
 
 For more details on modifiers and callback syntax, see the "Modifiers" section.
 
