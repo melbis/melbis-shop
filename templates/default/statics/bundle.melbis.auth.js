@@ -1,12 +1,3 @@
-/*       Melbis Shop auto bundle report       */
-/*         Create: 2026-10-06 17:30:20        */
-
-/*   #1    bootstrap-table.js           12725 ln   453 kb    /templates/default/statics/base/bs/bootstrap-table.js         */
-/*   #2    bootbox.js                    1247 ln    39 kb    /templates/default/statics/base/bootbox.js                    */
-/*   #10   scripts.js                      42 ln     1 kb    /templates/default/units/melbis_web_auth/scripts.js           */
-/*   #15   scripts.js                     172 ln     5 kb    /templates/default/units/melbis_web_sample/scripts.js         */
-
-
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('jquery')) :
   typeof define === 'function' && define.amd ? define(['jquery'], factory) :

@@ -24,9 +24,8 @@ base.js: 4, print.css: 2
 
 Priority is optional: without it, the file gets `0`. The bundle name becomes the name of
 the output file, so the extension is specified directly in it — `base.js`,
-`melbis.css`, `melbis.auth.js`. The name may contain Latin letters, digits, dots, and
-underscores; all other characters are stripped — in particular the hyphen, so
-`melbis-auth.js` will become `melbisauth.js`.
+`melbis.css`, `melbis.auth.js`. The name may contain Latin letters, digits, dots,
+hyphens and underscores; all other characters are stripped.
 
 ## What Can Be Bundled
 
@@ -59,19 +58,23 @@ templates/default/statics/bundle.melbis.js
 
 A rebuild is triggered on **every save** of a file that has the bundle line filled in, and it rebuilds all bundles in the group from scratch.
 
-A composition report is prepended to the file:
+Only the bodies of the files get into the built file. The composition report is written by the engine
+separately, past the storefront, and the Workbench shows it when the bundle is opened
+in the tree:
 
 ```
-/*       Melbis Shop auto bundle report       */
-/*         Create: 2026-07-17 15:39:56        */
+/*   Melbis Shop auto bundle report                                                                                */
+/*   Bundle: /templates/default/statics/bundle.melbis.js                                                           */
+/*   Create: 2026-10-10 19:49:48                                                                                   */
 
-/*   #1    main.js       32 ln    1 kb    /templates/default/statics/melbis/main.js            */
-/*   #10   scripts.js    57 ln    1 kb    /templates/default/units/melbis_cataloge/scripts.js  */
-/*   #15   scripts.js    77 ln    3 kb    /templates/default/units/melbis_base_page/scripts.js */
+/*   #1    main.js                         32 ln     1 kb    /templates/default/statics/melbis/main.js             */
+/*   #10   scripts.js                      56 ln     1 kb    /templates/default/units/melbis_cataloge/scripts.js   */
+/*   #15   scripts.js                      75 ln     3 kb    /templates/default/units/melbis_base_page/scripts.js  */
 ```
 
 It shows what was included and in what order — this is the first place to look
-when it's unclear whose code ran first.
+when it's unclear whose code ran first. The report opens read-only:
+the bundle is written by the build alone.
 
 > Bundling is concatenation only. No minification, transpilation, or path rewriting
 > inside CSS takes place: files are joined in priority order as-is.

@@ -74,6 +74,16 @@ With the "User identification required" flag, `login` and `pass_code` — the MD
 
 The AI assistant opens a module the same way — with the [`shop_module`](../MCP/shop_module.md) tool: it passes the window fields itself, and the MCP server adds the person's `login` and `pass_code`.
 
+### The User's Language
+
+The application's browser works in the language chosen in the application and puts it first in the `Accept-Language` header of every request. The module learns it by the same method as the language of a storefront visitor (see "[Visitor](visitor.md)", the "Browser Language" section):
+
+```php
+$lang = MELBIS()->AgentLanguage(['ru', 'uk', 'en'], 'en');
+```
+
+An external module opened in an ordinary browser gets the language of that browser this way, so the same code works in both cases. When the AI assistant opens the module, there is no header, and the method returns the default value.
+
 ---
 
 ## The melbis_inc_auth Library

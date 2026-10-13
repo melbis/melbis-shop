@@ -33,6 +33,10 @@ Which bundles a file belongs to is written in its bundle description. Here it is
 
 `engine_static_load` gives back the file's `bundle`, `engine_static_save` takes it in the same shape.
 
+`statics/bundle.<name>` itself is given back by `engine_static_load` as the composition report: which
+files went in and in what order. The body of the bundle, as the storefront gets it, is taken by
+`engine_whole_load`.
+
 ## What Saving Does
 
 * **Overwrites the file whole** and **creates nothing**: a new file is added by

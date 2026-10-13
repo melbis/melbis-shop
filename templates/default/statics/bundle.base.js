@@ -1,9 +1,3 @@
-/*       Melbis Shop auto bundle report       */
-/*         Create: 2026-10-06 17:30:20        */
-
-/*   #2    bootstrap.js                     7 ln    81 kb    /templates/default/statics/base/bs/bootstrap.js               */
-
-
 /*!
   * Bootstrap v4.6.2 (https://getbootstrap.com/)
   * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)

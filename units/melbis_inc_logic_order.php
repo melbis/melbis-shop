@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.496 @ 2026-10-09
+ * @version 6.5.1.497 @ 2026-10-13
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -534,7 +534,7 @@ function Load($mUserId, $mOrderId)
     $command = "SELECT *
                   FROM {DBNICK}_orders_client_field 
                  WHERE version_id = :VERSION_ID
-              ORDER BY id
+              ORDER BY field_absindex, id
                ";    
     $param = [
         'version_id' => $version_id
@@ -553,7 +553,7 @@ function Load($mUserId, $mOrderId)
     $command = "SELECT *
                   FROM {DBNICK}_orders_store 
                  WHERE version_id = :VERSION_ID 
-              ORDER BY id
+              ORDER BY pos, id
                ";  
     $param = [
         'version_id' => $version_id
@@ -571,7 +571,7 @@ function Load($mUserId, $mOrderId)
                       FROM {DBNICK}_orders_store_option 
                      WHERE version_id = :VERSION_ID
                        AND order_store_id = :STORE_ID
-                  ORDER BY id
+                  ORDER BY option_pos, id
                    ";          
         $param = [
             'version_id' => $version_id,
@@ -594,7 +594,7 @@ function Load($mUserId, $mOrderId)
     $command = "SELECT *
                   FROM {DBNICK}_orders_option 
                  WHERE version_id = :VERSION_ID
-              ORDER BY id
+              ORDER BY option_pos, id
                ";     
     $param = [
         'version_id' => $version_id
