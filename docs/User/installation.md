@@ -36,6 +36,17 @@ The **"Blocking user access for backup"** group — the **start time** and the *
 
 The **"Keep a log of store users' actions"** checkbox turns on the recording of employees' actions.
 
+### Browser Code
+
+If a proxy with bot protection stands in front of the site, for example Cloudflare, it may not let in the program's built-in browser and the AI agent: to it their requests look like a robot's. The **"Browser code"** field sets a password by which the proxy recognizes them. The program gets the code from the server after signing in and appends it to the built-in browser's User-Agent, the MCP server — to the User-Agent of its requests. Only employees who have signed in know the code, so it cannot be faked just by calling oneself the program.
+
+In Cloudflare this takes two rules with the **Skip** action:
+
+- **URI Path** starts with `/core/` — the exchange of the program and the agent with the engine. It is protected by the login and the license, and without this rule the program will not sign in and will not get the code.
+- **User Agent** contains `<code>` — the site's pages and web modules in the built-in browser and at the agent.
+
+The **"Generate"** button puts in a random code of 16 characters. It can be changed at any moment: the program gets the new code at the next exchange with the server, and a browser window that is already open — the next time it opens.
+
 ### Demonstration Mode
 
 While the marker file `admin.here` lies in the store's root, the store runs in demonstration mode: no license is required, user rights are not checked — whoever signs in counts as an administrator — and no action log is kept. The marker is placed by the server installation so that a new store can be entered before there is either a license or a single employee.

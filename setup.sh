@@ -252,6 +252,7 @@ rm -rf /tmp/master.zip /tmp/melbis-shop-master
 
 echo "Creating Melbis Shop config.json..."
 melbis_debug_key=$(openssl rand -hex 8)
+melbis_browser_key=$(openssl rand -hex 8)
 cat > /var/melbis/www/config.json << EOF
 {
     "MELBIS_DB_HOST_NAME": "db",
@@ -272,6 +273,7 @@ cat > /var/melbis/www/config.json << EOF
     "MELBIS_ROOT": "/",
     "MELBIS_BUILD": "1",
     "MELBIS_DEBUG_CODE": "${melbis_debug_key}",
+    "MELBIS_BROWSER_CODE": "${melbis_browser_key}",
     "MELBIS_USER_LOG": false,
     "MELBIS_IP_LIST": "",
     "MELBIS_BACKUP_TIME_BEGIN": "05:00:00",

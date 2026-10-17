@@ -40,6 +40,7 @@ While a window of the program holds the `agent_memory` table, the write does not
 |---|---|
 | `No note of yours with id … - memory_list shows your notes` | the agent has no note of its own with this number — including when it is a group's note or one for everyone |
 | `name is required` | the new note has no name |
+| `<field> is <n> characters, the field takes <limit> - nothing was written` | `name`, `category` or `info` is longer than its limit; nothing is written |
 | `No kind […] among the notes - the store keeps: …` | the kind is not in the registry; the allowed ones are listed |
 | `id is the number of a note, as memory_list shows it` | the number is not an integer greater than zero |
 | `The table agent_memory is in work right now, and nothing was written…` | a window of the program holds the table |

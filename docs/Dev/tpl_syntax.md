@@ -50,6 +50,12 @@ and which "branch" of the markup to display is decided by the `main.htm` templat
 * Inclusion is a **pure text substitution** that happens once, at the very beginning of template parsing, before loops, conditions, and variables are processed. Therefore, the included file receives **the same data context** as the location where the tag appears: the same local module variables, the same global array, and if the tag is inside a loop — the data of the current row (`{ROW}`, `{NUM1}`, etc.) for that specific iteration.
 * Inclusions can be nested (a partial inside a partial), but not infinitely — if an accidental circular reference occurs, the parser will stop and write an error to the log.
 
+**A template of another group.** After the name, a template group can be named after a colon — the way its folder is named: `{^CARD:mobile}` includes `card.htm` of the same module from the `mobile` group, whatever group the page is built in. Latin letters, digits, `_` and `-` are allowed in the group's name.
+
+* If the named group has no such file or it is empty, the file of the same name from the default group is taken — the same as for a tag without a group.
+* `{^NAME}` tags inside the included file are looked for in the same named group: the fragment brings its parts with it.
+* `{PATH}` and `{TEMPLATE}` in such a file lead into the page's group: the group in the tag chooses only the template's text.
+
 **Important limitation:** you cannot split a single loop or condition block across two different inclusions — that is, you cannot put the opening `{#STORE}` in one file and the closing `{STORE#}` in another. Each included file must be a self-contained markup fragment.
 
 **Recommendations:**

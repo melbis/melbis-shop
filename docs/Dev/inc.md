@@ -6,6 +6,7 @@ In a library's name, after `inc` comes its own group — `melbis_inc_web_callbac
 
 To connect a library to a regular module, simply check the box next to it in the IDE's right panel — the parser will load it automatically before running the module, making all its functions available.
 
+A library includes other libraries with the same checkboxes. The parser loads them along the tree of inclusions, each one once, and everything a library depends on is loaded before the library itself. The loader allows two libraries to check each other, and they call each other's functions without trouble. But the first to load in such a circle is the one the walk reached later, and that depends on the module's checkbox. So the code in the body of such a library's file, outside the functions, does not call the other library's functions: in one module it will work, in another it will stop on `Call to undefined function`.
 
 ## The Namespace and the Short Name
 

@@ -42,7 +42,8 @@ Detection happens in two steps. First, the browser itself is queried: Chromium o
 HTTPS sends the client hint `Sec-CH-UA-Mobile`, which is not a guess but the
 browser's own report about itself. If the hint is absent — Safari, Firefox, and
 search bots do not send it — the `User-Agent` is parsed against sets of keywords:
-tablet patterns first, then phone patterns. If nothing matches — `desktop`.
+tablet patterns first, then phone patterns. If nothing matches — `desktop`. Android without the word `Mobi` counts
+as a tablet: Android phones always send it, and tablets do not.
 
 The tablet is intentionally separated from the phone: whether to treat it as a
 mobile version or a full version is a project decision, not an engine decision.

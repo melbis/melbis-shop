@@ -38,7 +38,7 @@ The active group is set in `config.json` (the `MELBIS_TEMPLATE` parameter) or vi
 
 ## Shared Code Between Groups
 
-An additional group rarely differs from `default` entirely — usually it contains the same templates with minor modifications. Full duplication is unnecessary; there are two mechanisms for this.
+An additional group rarely differs from `default` entirely — usually it contains the same templates with minor modifications. Full duplication is unnecessary; there are three mechanisms for this.
 
 **An empty file inherits the default group.** If an `.htm` file in a group is empty (or absent), the engine takes the file with the same name from the `MELBIS_TEMPLATE` group. An empty `templates/mobi/units/melbis_cataloge/main.htm` will serve the content of `templates/default/units/melbis_cataloge/main.htm`. Such an empty file reads as an explicit marker "everything here is the same as in `default`" — unlike a full copy, where you can't tell later whether it contains differences or not. Inheritance is single-level — only to `default`, not chained; if the file is missing from both the group and `default`, the build will log an error.
 
@@ -50,6 +50,8 @@ An additional group rarely differs from `default` entirely — usually it contai
 ```
 
 The file lives in `default`, and `mobi` pulls it in via an empty inheritor file; under each group its own branch is active, because `{TEMPLATE}` differs. You can branch by language the same way — `{*LANG==ru} … {LANG*}`. Condition syntax is covered in the "Template Syntax" section.
+
+**A template of another group — by name.** The tag `{^CARD:mobi}` includes the module's `card.htm` from the `mobi` group, whatever group the page is built in; a file that `mobi` does not have comes from `default`. In detail — in the "Template Syntax" section.
 
 Inheritance applies only to `.htm` files: static assets (`.js`/`.css`) are built per their own group (see "Static Asset Build"). A shared script is usually kept as a single file and branched internally by version, passing it from the template — `<script>var TEMPLATE = "{TEMPLATE}";</script>`.
 
