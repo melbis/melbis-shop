@@ -11,7 +11,7 @@ The `shop` family works with the store from outside: it opens a storefront page 
 
 `shop_page`, `shop_module` and `shop_agent` require no rights: they go to the site, not to the engine, and the right to a module is checked by the module itself. One exception: `shop_page` with `debug=true` asks the engine for the debugger's code and therefore requires the right "Get configuration". `shop_download` requires the right "Export → Store".
 
-All the MCP server's requests — to pages, to `agent.php` and to `core/mcp.php` — go from this computer with the User-Agent `MelbisShop-MCP`. If a browser code is set in the store, the server appends it to the User-Agent, and the proxy in front of the site lets the requests through by it — "[Installation](../User/installation.md)", the "Security" section.
+All the MCP server's requests — to pages, to `agent.php` and to `core/mcp.php` — go from this computer with the User-Agent `MelbisShop-MCP`. If an access code is set in the store, the server appends it to the User-Agent, and the proxy in front of the site lets the requests through by it. The server takes the code before every request from the store's settings, where the program keeps it — "[Installation](../User/installation.md)", the "Security" section.
 
 ## The Rules
 

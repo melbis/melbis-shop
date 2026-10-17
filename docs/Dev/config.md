@@ -32,7 +32,7 @@ Example configuration file:
     "MELBIS_DEBUG_CODE":   "",
     "MELBIS_USER_LOG":     false,
     "MELBIS_IP_LIST":      "",
-    "MELBIS_BROWSER_CODE": "",
+    "MELBIS_ACCESS_CODE":  "",
     "MELBIS_BACKUP_TIME_BEGIN": "05:00:00",
     "MELBIS_BACKUP_TIME_END":   "05:30:00"
 }
@@ -77,7 +77,7 @@ Example configuration file:
 | `MELBIS_DEBUG_CODE` | Secret key for enabling debug mode. To activate the debugger, add the parameter `?debug_on_KEY` to the URL, where `KEY` is the value of this parameter. If the value is empty, the debugger is disabled. |
 | `MELBIS_USER_LOG` | Enables (`true`) user activity logging. |
 | `MELBIS_IP_LIST` | Comma-separated list of IP addresses. If set, access to the site will only be allowed from these addresses. Useful for restricting access during development. |
-| `MELBIS_BROWSER_CODE` | The store's code for a proxy in front of the site, for example Cloudflare. The engine gives it to an employee who has signed in, and the program's built-in browser and the MCP server append it to the User-Agent of their requests. An empty value — nothing is appended. How to set up the proxy — "[Installation](../User/installation.md)", the "Security" section. |
+| `MELBIS_ACCESS_CODE` | The store's code for a proxy in front of the site, for example Cloudflare. The engine gives it to an employee who has signed in, the program keeps it in the store's settings, and the program itself, its built-in browser and the MCP server append it to the User-Agent of every request to the site. An empty value — nothing is appended. How to set up the proxy — "[Installation](../User/installation.md)", the "Security" section. |
 
 ## Backup Parameters
 

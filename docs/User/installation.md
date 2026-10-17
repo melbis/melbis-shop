@@ -36,16 +36,20 @@ The **"Blocking user access for backup"** group — the **start time** and the *
 
 The **"Keep a log of store users' actions"** checkbox turns on the recording of employees' actions.
 
-### Browser Code
+### Access Code
 
-If a proxy with bot protection stands in front of the site, for example Cloudflare, it may not let in the program's built-in browser and the AI agent: to it their requests look like a robot's. The **"Browser code"** field sets a password by which the proxy recognizes them. The program gets the code from the server after signing in and appends it to the built-in browser's User-Agent, the MCP server — to the User-Agent of its requests. Only employees who have signed in know the code, so it cannot be faked just by calling oneself the program.
+If a proxy with bot protection stands in front of the site, for example Cloudflare, it may not let in the program and the AI agent: to it their requests look like a robot's. The **"Access code"** field sets a password by which the proxy recognizes them. The program, its built-in browser and the MCP server append it to the User-Agent of every request to the site. Only employees who have signed in know the code, so it cannot be faked just by calling oneself the program.
 
-In Cloudflare this takes two rules with the **Skip** action:
+The program gets the code from the server after signing in and keeps it in the store's settings on this computer, so from the next start the code goes already with the first request. The MCP server takes the code from the same place before each of its requests.
 
-- **URI Path** starts with `/core/` — the exchange of the program and the agent with the engine. It is protected by the login and the license, and without this rule the program will not sign in and will not get the code.
-- **User Agent** contains `<code>` — the site's pages and web modules in the built-in browser and at the agent.
+In Cloudflare this takes two rules, in this order:
 
-The **"Generate"** button puts in a random code of 16 characters. It can be changed at any moment: the program gets the new code at the next exchange with the server, and a browser window that is already open — the next time it opens.
+- **Skip**: **User Agent** contains `<code>` — the program, its browser and the agent pass by the checks.
+- **Block**: **URI Path** starts with `/core/` — the exchange with the engine is closed to everyone who has no code.
+
+The **"Generate"** button puts in a random code of 16 characters.
+
+While the program does not know the code — at a new workplace or after the code is changed — the **Block** rule will not let it in. Pause it until the program signs in and gets the code, then turn it on again. The code is changed the same way: **Block** on pause, the new code here and in the **Skip** rule, and **Block** back on once every workplace has been in touch. A built-in browser window that is already open takes the new code the next time it opens.
 
 ### Demonstration Mode
 
