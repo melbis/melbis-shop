@@ -1,12 +1,11 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.505 @ 2026-10-17
+ * @version 6.5.1.506 @ 2026-10-17
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
  **************************************************************************************************
  *
- * Define     - Declares the template callbacks
  * TopicLink  - The address of a section
  * StoreLink  - The address of a goods
  * StatusName - The status of a goods
@@ -15,18 +14,15 @@
 
 namespace MELBIS_INC_WEB_CALLBACK;
 
-/** 
- * Function Define
- **/
-function Define()
-{        
-    // Register 
-    MELBIS()->DefineCallback('TopicLink');
-    MELBIS()->DefineCallback('StoreLink');
-    MELBIS()->DefineCallback('StatusName');
-}       
+// Register the template callbacks
+MELBIS()->DefineCallback('TopicLink');
+MELBIS()->DefineCallback('StoreLink');
+MELBIS()->DefineCallback('StatusName');
 
- 
+
+// ————— Public —————
+//==================================================================================================
+
 
 /** 
  * Function TopicLink
@@ -38,6 +34,7 @@ function TopicLink($mVars)
     return $link;
 } 
 
+
 /** 
  * Function StoreLink
  **/
@@ -45,6 +42,7 @@ function StoreLink($mVars)
 { 
     return '/?store_id='.$mVars[0];
 } 
+
 
 /** 
  * Function StatusName

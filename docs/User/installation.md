@@ -38,13 +38,13 @@ The **"Keep a log of store users' actions"** checkbox turns on the recording of 
 
 ### Access Code
 
-If a proxy with bot protection stands in front of the site, for example Cloudflare, it may not let in the program and the AI agent: to it their requests look like a robot's. The **"Access code"** field sets a password by which the proxy recognizes them. The program, its built-in browser and the MCP server append it to the User-Agent of every request to the site. Only employees who have signed in know the code, so it cannot be faked just by calling oneself the program.
+If a proxy with bot protection stands in front of the site, for example Cloudflare, it may not let in the program and the AI assistant: to it their requests look like a robot's. The **"Access code"** field sets a password by which the proxy recognizes them. The program, its built-in browser and the MCP server append it to the User-Agent of every request to the site. Only employees who have signed in know the code, so it cannot be faked just by calling oneself the program.
 
 The program gets the code from the server after signing in and keeps it in the store's settings on this computer, so from the next start the code goes already with the first request. The MCP server takes the code from the same place before each of its requests.
 
 In Cloudflare this takes two rules, in this order:
 
-- **Skip**: **User Agent** contains `<code>` — the program, its browser and the agent pass by the checks.
+- **Skip**: **User Agent** contains `<code>` — the program, its browser and the AI assistant pass by the checks.
 - **Block**: **URI Path** starts with `/core/` — the exchange with the engine is closed to everyone who has no code.
 
 The **"Generate"** button puts in a random code of 16 characters.

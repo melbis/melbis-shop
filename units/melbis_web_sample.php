@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.505 @ 2026-10-17
+ * @version 6.5.1.506 @ 2026-10-17
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -16,11 +16,11 @@
 namespace MELBIS_WEB_SAMPLE;
 
 use MELBIS_INC_AUTH as AUTH;
-use MELBIS_INC_WEB_CALLBACK as CALLBACK;
 use MELBIS_INC_LOGIC_COMMON as LOGIC_COMMON;
 
-// Define Callback, the header
-CALLBACK\Define(); 
+
+// ————— Public —————
+//==================================================================================================
 
 
 /** 

@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.505 @ 2026-10-17
+ * @version 6.5.1.506 @ 2026-10-17
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -8,7 +8,6 @@
  *
  * Home        - The files table of it
  * EntityOne   - Weighs one entity
- * EntityGone  - Refuses an element gone
  *
  * RightElem   - Weighs the element right
  *
@@ -18,6 +17,17 @@
  * Held        - The workspace held for it
  * Touched     - Marks the element changed
  *
+ * ProfileAll  - Reads the picture profiles
+ * ProfileOne  - Reads one picture profile
+ * ProfileShow - The recipe in agent words
+ * ProfileXml  - The recipe into its body
+ *
+ * MaskMap     - The masks with a picture
+ *
+ * Make        - Derives a picture
+ *
+ * EntityGone  - Refuses an element gone
+ *
  * DiskPath    - The path of a row
  * DiskFolder  - The folder of a file
  * DiskPicture - What a picture really is
@@ -26,16 +36,10 @@
  * WebpChunks  - The chunks of a webp
  * WebpNumber  - Three bytes, low first
  *
- * ProfileAll  - Reads the picture profiles
- * ProfileOne  - Reads one picture profile
- * ProfileShow - The recipe in agent words
- * ProfileXml  - The recipe into its body
  * BoxSize     - Megapixels in a shape
  *
- * MaskMap     - The masks with a picture
  * MaskWord    - The mask behind a path
  *
- * Make        - Derives a picture
  * MakePaint   - The recipe onto the picture
  * MakeMask    - The mask over the canvas
  * MakeInk     - The mask picture as ink
@@ -76,8 +80,11 @@ const FRAME = [
     ];
 
 
+// ————— Public —————
+//==================================================================================================
+
 // Entities
-//==============================================================================
+//==================================================================================================
 
 
 /**
@@ -111,33 +118,8 @@ function EntityOne($mEntity)
 }
 
 
-/**
- * Function EntityGone
- **/
-function EntityGone($mEntity, $mId)
-{
-    $where = [
-        'store'       => 'the Browser tool answers the goods',
-        'topic'       => 'the Catalog tool answers them',
-        'info'        => 'the Attributes tool answers them',
-        'info_value'  => 'the Attributes tool answers them',
-        'brand'       => 'the Brands tool answers them',
-        'key_value'   => 'the Basic settings tool answers them',
-        'advert_text' => 'the Promo blocks tool answers them',
-        'u_store'      => 'the tool of the personal workspace answers them',
-        'u_info_value' => 'the tool of the personal workspace answers them'
-        ];
-    $said = $where[$mEntity] ?? 'its own tool answers them';
-
-    return [
-        'result'  => false,
-        'message' => 'No '.$mEntity.' ['.$mId.'] in the store - '.$said
-        ];
-}
-
-
 // Rights
-//==============================================================================
+//==================================================================================================
 
 
 /**
@@ -310,7 +292,7 @@ function RightElem($mUserId, $mEntity, $mElemId)
 
 
 // File rows
-//==============================================================================
+//==================================================================================================
 
 
 /**
@@ -427,178 +409,8 @@ function Touched($mUserId, $mEntity, $mElemIds)
 }
 
 
-// Files on the disk
-//==============================================================================
-
-
-/**
- * Function DiskPath
- **/
-function DiskPath($mRow)
-{
-    // The formula both sides use
-    return __DIR__.'/..'.DiskFolder($mRow['upload_time']).$mRow['file_name'];
-}
-
-
-/**
- * Function DiskFolder
- **/
-function DiskFolder($mUploadTime)
-{
-    // The day and hour, foldered
-    list( $date, $time ) = explode(' ', $mUploadTime);
-    list( $y, $m, $d ) = explode('-', $date);
-    list( $h, $n, $s ) = explode(':', $time);
-
-    return '/files/'.$y.'/'.$m.'_'.$d.'/'.$h.'_'.$n.'/';
-}
-
-
-/**
- * Function DiskPicture
- **/
-function DiskPicture($mDisk)
-{
-    // What the file really is
-    $what = [
-        'type'   => '',
-        'width'  => 0,
-        'height' => 0
-        ];
-
-    if ( !file_exists($mDisk) ) return $what;
-
-    $size = @getimagesize($mDisk);
-    if ( $size === false ) return $what;
-
-    $names = [
-        IMAGETYPE_JPEG => 'jpg',
-        IMAGETYPE_PNG  => 'png',
-        IMAGETYPE_GIF  => 'gif',
-        IMAGETYPE_WEBP => 'webp'
-        ];
-
-    $what['type'] = $names[$size[2]] ?? '';
-    $what['width'] = (int)$size[0];
-    $what['height'] = (int)$size[1];
-
-    return $what;
-}
-
-
-/**
- * Function DiskWebp
- **/
-function DiskWebp($mDisk)
-{
-    // A still opens at once
-    //----------------------
-    $image = @imagecreatefromwebp($mDisk);
-    if ( $image !== false ) return $image;
-
-    $bytes = @file_get_contents($mDisk);
-    if ( $bytes === false ) return false;
-
-    // The first frame of an animation
-    //--------------------------------
-    $chunks = WebpChunks($bytes);
-    $canvas = null;
-    $frames = [];
-    foreach ( $chunks as $chunk )
-    {
-        if ( $chunk['tag'] == 'VP8X' ) $canvas = $chunk['body'];
-        if ( $chunk['tag'] == 'ANMF' ) $frames[] = $chunk['body'];
-    }
-    if ( $canvas === null || count($frames) == 0 ) return false;
-
-    // Offsets are kept halved
-    $body = $frames[0];
-    $at_x = WebpNumber($body, 0) * 2;
-    $at_y = WebpNumber($body, 3) * 2;
-    $frame_w = WebpNumber($body, 6) + 1;
-    $frame_h = WebpNumber($body, 9) + 1;
-    $canvas_w = WebpNumber($canvas, 4) + 1;
-    $canvas_h = WebpNumber($canvas, 7) + 1;
-
-    // The frame as a still
-    //---------------------
-    $data = substr($body, 16);
-    $size = substr($body, 6, 6);
-    $head = 'VP8X'.pack('V', 10)."\x10\0\0\0".$size;
-    $inside = 'WEBP'.$head.$data;
-    $length = strlen($inside);
-    $still = 'RIFF'.pack('V', $length).$inside;
-
-    $frame = @imagecreatefromstring($still);
-    if ( $frame === false ) return false;
-
-    // Laid where a browser shows it
-    //------------------------------
-    $image = imagecreatetruecolor($canvas_w, $canvas_h);
-    imagealphablending($image, false);
-    imagesavealpha($image, true);
-    $clear = imagecolorallocatealpha($image, 0, 0, 0, 127);
-    imagefill($image, 0, 0, $clear);
-    imagecopy($image, $frame, $at_x, $at_y, 0, 0, $frame_w, $frame_h);
-    imagedestroy($frame);
-
-    return $image;
-}
-
-
-// Webp
-//==============================================================================
-
-
-/**
- * Function WebpChunks
- **/
-function WebpChunks($mBytes)
-{
-    // Chunks after the RIFF head
-    $chunks = [];
-    $total = strlen($mBytes);
-    $at = 12;
-    while ( $at + 8 <= $total )
-    {
-        $tag = substr($mBytes, $at, 4);
-        $size_at = $at + 4;
-        $size_bytes = substr($mBytes, $size_at, 4);
-        $size_word = unpack('V', $size_bytes);
-        $size = $size_word[1];
-
-        $body_at = $at + 8;
-        $chunks[] = [
-            'tag'  => $tag,
-            'body' => substr($mBytes, $body_at, $size)
-            ];
-
-        // An odd chunk is padded
-        $pad = $size & 1;
-        $at = $body_at + $size + $pad;
-    }
-
-    return $chunks;
-}
-
-
-/**
- * Function WebpNumber
- **/
-function WebpNumber($mBytes, $mAt)
-{
-    // Three bytes, low first
-    $part = substr($mBytes, $mAt, 3);
-    $word = $part."\0";
-    $number = unpack('V', $word);
-
-    return $number[1];
-}
-
-
 // Profiles
-//==============================================================================
+//==================================================================================================
 
 
 /**
@@ -755,22 +567,8 @@ function ProfileXml($mSet)
 }
 
 
-/**
- * Function BoxSize
- **/
-function BoxSize($mResolution, $mRatio)
-{
-    // Megapixels spread over a shape, the width leads
-    $pixels = $mResolution * 1000000;
-    $width = (int)round(sqrt($pixels * $mRatio));
-    $height = (int)round($width / $mRatio);
-
-    return [$width, $height];
-}
-
-
 // Masks
-//==============================================================================
+//==================================================================================================
 
 
 /**
@@ -808,25 +606,8 @@ function MaskMap()
 }
 
 
-/**
- * Function MaskWord
- **/
-function MaskWord($mPath)
-{
-    // Zero folder means no mask
-    if ( $mPath == '' || $mPath == MASK_NONE || substr($mPath, -1) == '/' ) return '';
-
-    foreach ( MaskMap() as $mask )
-    {
-        if ( $mask['path'] == $mPath ) return $mask['name'];
-    }
-
-    return $mPath;
-}
-
-
 // Painting
-//==============================================================================
+//==================================================================================================
 
 
 /**
@@ -937,6 +718,251 @@ function Make($mUserId, $mEntity, $mWas, $mProfile, $mShow, $mRealName = '')
         'message' => $message
         ];
 }
+
+
+// ————— Private —————
+//==================================================================================================
+
+// Entities
+//==================================================================================================
+
+
+/**
+ * Function EntityGone
+ **/
+function EntityGone($mEntity, $mId)
+{
+    $where = [
+        'store'       => 'the Browser tool answers the goods',
+        'topic'       => 'the Catalog tool answers them',
+        'info'        => 'the Attributes tool answers them',
+        'info_value'  => 'the Attributes tool answers them',
+        'brand'       => 'the Brands tool answers them',
+        'key_value'   => 'the Basic settings tool answers them',
+        'advert_text' => 'the Promo blocks tool answers them',
+        'u_store'      => 'the tool of the personal workspace answers them',
+        'u_info_value' => 'the tool of the personal workspace answers them'
+        ];
+    $said = $where[$mEntity] ?? 'its own tool answers them';
+
+    return [
+        'result'  => false,
+        'message' => 'No '.$mEntity.' ['.$mId.'] in the store - '.$said
+        ];
+}
+
+
+// Files on the disk
+//==================================================================================================
+
+
+/**
+ * Function DiskPath
+ **/
+function DiskPath($mRow)
+{
+    // The formula both sides use
+    return __DIR__.'/..'.DiskFolder($mRow['upload_time']).$mRow['file_name'];
+}
+
+
+/**
+ * Function DiskFolder
+ **/
+function DiskFolder($mUploadTime)
+{
+    // The day and hour, foldered
+    list( $date, $time ) = explode(' ', $mUploadTime);
+    list( $y, $m, $d ) = explode('-', $date);
+    list( $h, $n, $s ) = explode(':', $time);
+
+    return '/files/'.$y.'/'.$m.'_'.$d.'/'.$h.'_'.$n.'/';
+}
+
+
+/**
+ * Function DiskPicture
+ **/
+function DiskPicture($mDisk)
+{
+    // What the file really is
+    $what = [
+        'type'   => '',
+        'width'  => 0,
+        'height' => 0
+        ];
+
+    if ( !file_exists($mDisk) ) return $what;
+
+    $size = @getimagesize($mDisk);
+    if ( $size === false ) return $what;
+
+    $names = [
+        IMAGETYPE_JPEG => 'jpg',
+        IMAGETYPE_PNG  => 'png',
+        IMAGETYPE_GIF  => 'gif',
+        IMAGETYPE_WEBP => 'webp'
+        ];
+
+    $what['type'] = $names[$size[2]] ?? '';
+    $what['width'] = (int)$size[0];
+    $what['height'] = (int)$size[1];
+
+    return $what;
+}
+
+
+/**
+ * Function DiskWebp
+ **/
+function DiskWebp($mDisk)
+{
+    // A still opens at once
+    //----------------------
+    $image = @imagecreatefromwebp($mDisk);
+    if ( $image !== false ) return $image;
+
+    $bytes = @file_get_contents($mDisk);
+    if ( $bytes === false ) return false;
+
+    // The first frame of an animation
+    //--------------------------------
+    $chunks = WebpChunks($bytes);
+    $canvas = null;
+    $frames = [];
+    foreach ( $chunks as $chunk )
+    {
+        if ( $chunk['tag'] == 'VP8X' ) $canvas = $chunk['body'];
+        if ( $chunk['tag'] == 'ANMF' ) $frames[] = $chunk['body'];
+    }
+    if ( $canvas === null || count($frames) == 0 ) return false;
+
+    // Offsets are kept halved
+    $body = $frames[0];
+    $at_x = WebpNumber($body, 0) * 2;
+    $at_y = WebpNumber($body, 3) * 2;
+    $frame_w = WebpNumber($body, 6) + 1;
+    $frame_h = WebpNumber($body, 9) + 1;
+    $canvas_w = WebpNumber($canvas, 4) + 1;
+    $canvas_h = WebpNumber($canvas, 7) + 1;
+
+    // The frame as a still
+    //---------------------
+    $data = substr($body, 16);
+    $size = substr($body, 6, 6);
+    $head = 'VP8X'.pack('V', 10)."\x10\0\0\0".$size;
+    $inside = 'WEBP'.$head.$data;
+    $length = strlen($inside);
+    $still = 'RIFF'.pack('V', $length).$inside;
+
+    $frame = @imagecreatefromstring($still);
+    if ( $frame === false ) return false;
+
+    // Laid where a browser shows it
+    //------------------------------
+    $image = imagecreatetruecolor($canvas_w, $canvas_h);
+    imagealphablending($image, false);
+    imagesavealpha($image, true);
+    $clear = imagecolorallocatealpha($image, 0, 0, 0, 127);
+    imagefill($image, 0, 0, $clear);
+    imagecopy($image, $frame, $at_x, $at_y, 0, 0, $frame_w, $frame_h);
+    imagedestroy($frame);
+
+    return $image;
+}
+
+
+// Webp
+//==================================================================================================
+
+
+/**
+ * Function WebpChunks
+ **/
+function WebpChunks($mBytes)
+{
+    // Chunks after the RIFF head
+    $chunks = [];
+    $total = strlen($mBytes);
+    $at = 12;
+    while ( $at + 8 <= $total )
+    {
+        $tag = substr($mBytes, $at, 4);
+        $size_at = $at + 4;
+        $size_bytes = substr($mBytes, $size_at, 4);
+        $size_word = unpack('V', $size_bytes);
+        $size = $size_word[1];
+
+        $body_at = $at + 8;
+        $chunks[] = [
+            'tag'  => $tag,
+            'body' => substr($mBytes, $body_at, $size)
+            ];
+
+        // An odd chunk is padded
+        $pad = $size & 1;
+        $at = $body_at + $size + $pad;
+    }
+
+    return $chunks;
+}
+
+
+/**
+ * Function WebpNumber
+ **/
+function WebpNumber($mBytes, $mAt)
+{
+    // Three bytes, low first
+    $part = substr($mBytes, $mAt, 3);
+    $word = $part."\0";
+    $number = unpack('V', $word);
+
+    return $number[1];
+}
+
+
+// Profiles
+//==================================================================================================
+
+
+/**
+ * Function BoxSize
+ **/
+function BoxSize($mResolution, $mRatio)
+{
+    // Megapixels spread over a shape, the width leads
+    $pixels = $mResolution * 1000000;
+    $width = (int)round(sqrt($pixels * $mRatio));
+    $height = (int)round($width / $mRatio);
+
+    return [$width, $height];
+}
+
+
+// Masks
+//==================================================================================================
+
+
+/**
+ * Function MaskWord
+ **/
+function MaskWord($mPath)
+{
+    // Zero folder means no mask
+    if ( $mPath == '' || $mPath == MASK_NONE || substr($mPath, -1) == '/' ) return '';
+
+    foreach ( MaskMap() as $mask )
+    {
+        if ( $mask['path'] == $mPath ) return $mask['name'];
+    }
+
+    return $mPath;
+}
+
+
+// Painting
+//==================================================================================================
 
 
 /**
@@ -1400,7 +1426,7 @@ function MakeSkip($mShow)
 
 
 // Colours
-//==============================================================================
+//==================================================================================================
 
 
 /**

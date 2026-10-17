@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.505 @ 2026-10-17
+ * @version 6.5.1.506 @ 2026-10-17
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -158,7 +158,8 @@ function MELBIS_halt($mType, $mFile, $mError, $mInfo = '')
         @file_put_contents($log_file, $log, FILE_APPEND | LOCK_EX);        
     }
     
-    // Backup time
+    // Backup time   
+    //------------
     $backup_now = false;    
     $error_header = '500 Internal Server Error';
     if ( $config_exist )

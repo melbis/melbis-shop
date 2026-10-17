@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.505 @ 2026-10-17
+ * @version 6.5.1.506 @ 2026-10-17
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -16,7 +16,10 @@ namespace MELBIS_INC_LOGIC_ORDER_EDIT;
 use MELBIS_INC_LOGIC_ORDER as LOGIC_ORDER;
 use MELBIS_INC_LOGIC_COMMON as LOGIC_COMMON;
 
-                                                                                           
+
+// ————— Public —————
+//==================================================================================================
+
 
 /** 
  * Function Run

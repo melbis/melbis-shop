@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.505 @ 2026-10-17
+ * @version 6.5.1.506 @ 2026-10-17
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -13,6 +13,10 @@ namespace MELBIS_AGENT_IMPORT_FILES;
 // Libraries
 use MELBIS_INC_AGENT_FILE as FILE;
 use MELBIS_INC_AGENT_SYSTEM as SYS;
+
+
+// ————— Public —————
+//==================================================================================================
 
 
 /**

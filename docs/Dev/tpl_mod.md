@@ -190,7 +190,7 @@ The callback mechanism uses strict registration and passes all data to the funct
 There are two levels of registration: global and local (at the level of a specific module).
 
 * Global registration (`DefineCallback`):
-Writes to the core's shared registry, which is copied into each unit upon inclusion — so the callback is available to all modules, including nested submodules. It is sufficient to register it once in the top-level module: there is no need to attach the library to each nested module where the modifier is used (see "Library Modules"). Registration must be done **at the top level** of the library or module (not inside a function body): the top level is executed on every request when the file is included, whereas the module function is not run when serving from cache.
+Writes to the core's shared registry, which is copied into each unit upon inclusion. The registration stands **in the body of the library's file** (not inside a function): the body runs on inclusion on every request, whereas a module's function does not run when served from the cache. Every module in whose template the modifier stands includes this library itself — then the modifier works both on a page and in the answer to a separate request (see "Library Modules").
 ```php
 MELBIS()->DefineCallback('Translate');
 ```

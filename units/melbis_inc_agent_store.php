@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.505 @ 2026-10-17
+ * @version 6.5.1.506 @ 2026-10-17
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -10,12 +10,13 @@
  * Query        - The same, found by query
  *
  * LinkTopic    - Hangs goods in a section
- * TopicBranch  - The sections into a table
  *
  * DefaultFill  - What a goods is born
  *
  * Allowed      - The goods of this person
  * SlaveAllowed - The rows on such goods
+ *
+ * TopicBranch  - The sections into a table
  *
  **************************************************************************************************/
 
@@ -28,8 +29,11 @@ use MELBIS_INC_AGENT_SYSTEM as SYS;
 use MELBIS_INC_AGENT_QUERY as QUERY;
 
 
+// ————— Public —————
+//==================================================================================================
+
 // Finding goods
-//==============================================================================
+//==================================================================================================
 
 
 /**
@@ -143,7 +147,7 @@ function Query($mUserId, $mPlace, $mSchema, $mParam)
 
 
 // Sections
-//==============================================================================
+//==================================================================================================
 
 
 /**
@@ -168,50 +172,8 @@ function LinkTopic($mTopicId, $mIds)
 }
 
 
-/**
- * Function TopicBranch
- **/
-function TopicBranch($mIds, $mSub)
-{
-    $named = array_map('intval', (array)$mIds);
-    $list = implode(',', $named);
-
-    $command = "DROP TEMPORARY TABLE IF EXISTS {DBNICK}_tmp_branch";
-    MELBIS()->SqlQuery(__LINE__, $command);
-
-    if ( $mSub )
-    {
-        $command = "CREATE TEMPORARY TABLE {DBNICK}_tmp_branch ENGINE = MEMORY
-                    WITH RECURSIVE branch AS (
-                         SELECT id
-                           FROM {DBNICK}_topic
-                          WHERE id IN ( $list )
-                          UNION ALL
-                         SELECT t.id
-                           FROM {DBNICK}_topic t
-                           JOIN branch b
-                             ON t.tindex = b.id
-                    )
-                         SELECT id
-                           FROM branch
-                       ";
-    }
-    else
-    {
-        $command = "CREATE TEMPORARY TABLE {DBNICK}_tmp_branch ENGINE = MEMORY
-                         SELECT id
-                           FROM {DBNICK}_topic
-                          WHERE id IN ( $list )
-                       ";
-    }
-    MELBIS()->SqlQuery(__LINE__, $command);
-
-    return '{DBNICK}_tmp_branch';
-}
-
-
 // Defaults
-//==============================================================================
+//==================================================================================================
 
 
 /**
@@ -238,7 +200,7 @@ function DefaultFill($mRow)
 
 
 // Guards
-//==============================================================================
+//==================================================================================================
 
 
 /**
@@ -312,6 +274,52 @@ function SlaveAllowed($mUserId, $mTable, $mIds, $mPlace)
         'result' => true,
         'ids'    => $ids
         ];
+}
+
+
+// ————— Private —————
+//==================================================================================================
+
+
+/**
+ * Function TopicBranch
+ **/
+function TopicBranch($mIds, $mSub)
+{
+    $named = array_map('intval', (array)$mIds);
+    $list = implode(',', $named);
+
+    $command = "DROP TEMPORARY TABLE IF EXISTS {DBNICK}_tmp_branch";
+    MELBIS()->SqlQuery(__LINE__, $command);
+
+    if ( $mSub )
+    {
+        $command = "CREATE TEMPORARY TABLE {DBNICK}_tmp_branch ENGINE = MEMORY
+                    WITH RECURSIVE branch AS (
+                         SELECT id
+                           FROM {DBNICK}_topic
+                          WHERE id IN ( $list )
+                          UNION ALL
+                         SELECT t.id
+                           FROM {DBNICK}_topic t
+                           JOIN branch b
+                             ON t.tindex = b.id
+                    )
+                         SELECT id
+                           FROM branch
+                       ";
+    }
+    else
+    {
+        $command = "CREATE TEMPORARY TABLE {DBNICK}_tmp_branch ENGINE = MEMORY
+                         SELECT id
+                           FROM {DBNICK}_topic
+                          WHERE id IN ( $list )
+                       ";
+    }
+    MELBIS()->SqlQuery(__LINE__, $command);
+
+    return '{DBNICK}_tmp_branch';
 }
 
 ?>

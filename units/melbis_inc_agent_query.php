@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.505 @ 2026-10-17
+ * @version 6.5.1.506 @ 2026-10-17
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -16,11 +16,12 @@
  * PullFull      - Every table of the schema
  *
  * SqlBuild      - Json query into one WHERE
+ *
+ * Tie           - The ends of a stitch
+ *
  * SqlNode       - One node of a query
  * SqlLeaf       - One condition of a query
  * SqlValue      - The values of a leaf
- *
- * Tie           - The ends of a stitch
  * Mark          - The column of that role
  * Kind          - The role and the type
  * Allowed       - The columns of a table
@@ -45,8 +46,12 @@ const TYPE_OPER = [
 // How many conditions a query
 const LEAF_MAX = 20;
 
+
+// ————— Public —————
+//==================================================================================================
+
 // Signature and paging
-//==============================================================================
+//==================================================================================================
 
 
 /**
@@ -133,7 +138,7 @@ function TotalCount($mFrom, $mParam = [], $mColumn = '')
 
 
 // Pulls
-//==============================================================================
+//==================================================================================================
 
 
 /**
@@ -229,7 +234,7 @@ function PullFull($mSchema, $mTable)
 
 
 // Building SQL
-//==============================================================================
+//==================================================================================================
 
 
 /**
@@ -275,6 +280,29 @@ function SqlBuild($mSchema, $mQuery, $mAlias)
         'leaf'   => $state['leaf']
         ];
 }
+
+
+// Schema roles
+//==================================================================================================
+
+
+/**
+ * Function Tie
+ **/
+function Tie($mSchema, $mTable)
+{
+    $root = array_key_first($mSchema);
+
+    $home = Mark($mSchema[$root], 'PK');
+    $key = Mark($mSchema[$mTable], 'FK');
+    if ( $home == '' || $key == '' ) return [];
+
+    return [$key, $home];
+}
+
+
+// ————— Private —————
+//==================================================================================================
 
 
 /**
@@ -537,25 +565,6 @@ function SqlValue($mType, $mOper, $mValue, $mField, &$mState)
         'result' => true,
         'sql'    => 'IN ( '.implode(', ', $bound).' )'
         ];
-}
-
-
-// Schema roles
-//==============================================================================
-
-
-/**
- * Function Tie
- **/
-function Tie($mSchema, $mTable)
-{
-    $root = array_key_first($mSchema);
-
-    $home = Mark($mSchema[$root], 'PK');
-    $key = Mark($mSchema[$mTable], 'FK');
-    if ( $home == '' || $key == '' ) return [];
-
-    return [$key, $home];
 }
 
 

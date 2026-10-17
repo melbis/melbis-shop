@@ -167,34 +167,48 @@ function Verify($mUserId, $mVersion, $mVersionBefore)
 }
 ```
 
-**A group heading** is a comment between functions with a line of `=` signs up to the 80th column under it. In the tree the group becomes a folder: the functions that follow the heading are shown inside it, up to the next group or the end of the file.
+**A group heading** is a comment between functions with a line of `=` signs up to the 100th column, the width of the file's header, under it. In the tree the group becomes a folder: the functions that follow the heading are shown inside it, up to the next group or the end of the file.
+
+The functions of a module and of a library are divided into two sections. A section is the same group heading, only the name stands between dashes; in the tree it looks like a dividing line.
 
 ```php
-// Locks
-//==============================================================================
+// ————— Public —————
+//==================================================================================================
+```
+
+- **Public** — what is called from outside. For a module that is the engine, the page or AJAX: `Main` and the functions called by `func`. For a library — other modules. The section is always written, even above a single function.
+- **Private** — helpers: they are called only from inside and are not needed on their own. This is always the last section; no helpers — no section. A self-sufficient function stays in Public, even if for now it is called only from inside — like `LOGIC_COMMON\Rate`, the currency rate.
+
+Inside a section the functions are divided into groups by topic — when there are many of them and the topics differ. A module's `Main` stands in the first group. A small section needs no groups: the functions go right under it.
+
+```php
+// ————— Public —————
+//==================================================================================================
+
+// Actions
+//==================================================================================================
 
 
 /**
- * Function TablesLock
+ * Function Main
  **/
-function TablesLock($mTables, $mUserId = 0)
+function Main($mVars)
 ```
 
-A library's header lists its functions with a few words of explanation each. An empty line in the header separates the same families as the groups in the code:
+Before every heading — two empty lines, after a group heading — two as well, between a section and its first group — one.
+
+A module's header lists its functions with a few words of explanation each. An empty line in the header separates the same groups as the headings in the code:
 
 ```php
- * TablesLock   - Takes the tables into work
- * TablesUnlock - Hands them back, marked
+ * Main    - Runs what the form names
+ * Plus    - Puts a goods in
+ * Minus   - Takes a goods out
  *
- * TreePath     - The path of a node
- * TreePathFind - A node by its path
+ * Goods   - Prints the basket goods
+ * Fields  - Prints the buyer fields
 ```
 
-When to put headings:
-
-- **steps** — in a long function with at least three steps; a short function needs none;
-- **groups** — when a module's functions fall into several families: the commands of different entities, helper functions;
-- **length** — three to five words: the tree panel is narrow and cuts long headings.
+Step headings are put in a long function with at least three steps; a short function needs none. The length of any heading is three to five words: the tree panel is narrow and cuts long ones.
 
 ## Variables in PHP Scripts
 

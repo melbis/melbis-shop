@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.505 @ 2026-10-17
+ * @version 6.5.1.506 @ 2026-10-17
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -13,6 +13,12 @@
 namespace MELBIS_PAGE_STORE;
 
 use MELBIS_INC_LOGIC_COMMON as LOGIC_COMMON;
+use MELBIS_INC_WEB_CALLBACK;
+
+
+// ————— Public —————
+//==================================================================================================
+
 
 /**
  * Function Main

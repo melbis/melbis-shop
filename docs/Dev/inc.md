@@ -102,18 +102,16 @@ function Main($mVars)
 
 This module registers template engine modifiers. A callback is a PHP function that can be called directly from an HTML template as a variable modifier.
 
-Registration is placed in the function `Define`, with the callbacks defined alongside it:
+Registration stands in the body of the library's file, and the callbacks below, next to it:
 
 ```php
 // In the melbis_inc_web_callback library:
 namespace MELBIS_INC_WEB_CALLBACK;
 
-function Define()
-{
-    MELBIS()->DefineCallback('TopicLink');
-    MELBIS()->DefineCallback('StoreLink');
-    MELBIS()->DefineCallback('StatusName');
-}
+// Register the template callbacks
+MELBIS()->DefineCallback('TopicLink');
+MELBIS()->DefineCallback('StoreLink');
+MELBIS()->DefineCallback('StatusName');
 
 function TopicLink($mVars)
 {
@@ -123,7 +121,7 @@ function TopicLink($mVars)
 }
 ```
 
-The function's name is not written in the registration: the engine looks for `TopicLink` in the same file the registration line stands in — here that is `MELBIS_INC_WEB_CALLBACK\TopicLink`, and in a library of the former form, without a namespace, it would be `MELBIS_INC_WEB_CALLBACK_TopicLink`. What counts is the file with the registration, not the module that called `Define`.
+The function's name is not written in the registration: the engine looks for `TopicLink` in the same file the registration line stands in — here that is `MELBIS_INC_WEB_CALLBACK\TopicLink`, and in a library without a namespace — `MELBIS_INC_WEB_CALLBACK_TopicLink`. That is why the short registration stands in the library itself: in a module's file the same line would look for a function of the module.
 
 Naming the function explicitly is only needed when its name differs from the modifier's or when it lies in another file:
 
@@ -133,27 +131,23 @@ MELBIS()->DefineCallback('TopicLink', CALLBACK\TopicLink(...));
 
 The three dots are not a shorthand in the example but PHP syntax: that is how a function is passed as a value without being called, and the name is resolved by the compiler together with the `use` line rather than by a string in quotes. The string form (`'MELBIS_INC_WEB_CALLBACK\TopicLink'`) works too, but it does not know the short name from `use`: a name in quotes is written in full, and when the function moves it stays as it was. Either form is checked by the engine at registration, so a non-existent name will not live to reach the storefront.
 
-`Define` is called by the **top-level module** — in the file body, before its main function:
+The body of a library's file runs once per request — when the first module includes it. A module is included on every request, even when its result is taken from the cache, so the registration stands in the file body rather than inside a function: a function would not run at all when the result is served from the cache.
+
+The library is included by **every module in whose template the modifier stands**: with the checkbox in the right panel and with a `use` line with the full name and without `as`. The module does not call the library's functions — it works by the inclusion itself:
 
 ```php
-// In the page router module melbis_base_page:
-namespace MELBIS_BASE_PAGE;
+// In the section menu module melbis_cataloge:
+namespace MELBIS_CATALOGE;
 
-use MELBIS_INC_WEB_CALLBACK as CALLBACK;
-
-CALLBACK\Define();
-
-function Main($mVars)
-{
-    // ...
-}
+use MELBIS_INC_WEB_TOPIC as TOPIC;
+use MELBIS_INC_WEB_CALLBACK;
 ```
 
-A single such call is sufficient for the entire page. The callback registry is shared across the entire request, and each subsequent module receives a copy of it at the moment it is connected — so in the templates of nested modules (`melbis_cataloge`, the product card, and others) the modifier works on its own, and **there is no need to attach the library to them**.
+This way the modifier works wherever the module is shown: on a page, in the header of another entry point and in the answer to a separate request, when there is no page around the module at all. A module that uses no modifiers itself does not need the library, even if modules with modifiers are shown inside it: they include it themselves.
 
-Why in the file body rather than inside the module function: the body executes when the module is connected on every request, whereas the module function is not executed at all when served from cache — and the registration would never take place.
+The callback registry is shared across the whole request: a module gets the callbacks registered by the moment it is included. A module's own libraries are included before the module itself, so its own `use` line always makes it in time.
 
-After this, the `$TopicLink` modifier becomes available in any template, computing the correct URL for a section based on its type:
+In the template of such a module the `$TopicLink` modifier is available, computing the correct URL for a section based on its type:
 
 ```html
 {#MENU}
@@ -163,9 +157,7 @@ After this, the `$TopicLink` modifier becomes available in any template, computi
 
 The modifier name is a case-sensitive key. By convention it matches the function's name: one name is found by a single search in all three places — in the template, in the registration, and in the declaration. The tag then reads three classes of names at once: uppercase `ID` and `KIND_KEY` are data, lowercase `path` and `webp` are built-in modifiers, and `$TopicLink` is a module function.
 
-This is exactly how it is done in the demonstration store: the `$TopicLink` modifier stands in the `melbis_cataloge` template, while the module itself does not include the callback library — it was declared by `melbis_base_page`. The exception is `melbis_cataloge_sub`: it is an entry point module, it is also called by a separate request, without a page around it, so it includes the library and calls `CALLBACK\Define()` itself.
-
-> **Registration must complete before the module is connected.** A module receives the callbacks that were registered by the time it itself was connected. The parent module always makes it in time: its PHP executes before the template is parsed, and nested modules are connected during parsing. A sibling that registers a callback later, however, will not affect an already-connected module — register higher up the tree, not from the side.
+This is how it is done in the demonstration store: `$TopicLink` stands in the templates of the menu `melbis_cataloge` and the submenu `melbis_cataloge_sub`, `$StoreLink` and `$StatusName` — in the product card `melbis_store_card` and on the product page `melbis_page_store`, and each of them includes the library itself. The submenu is also called by a separate request `/?mod=melbis_cataloge_sub`, without a page around it, and the section menu is also shown in the header of the web module `melbis_web_sample`. The page router `melbis_base_page` does not include the library: there are no modifiers in its templates.
 
 > **A callback that reads the database.** The tables a callback reads through the engine's doors go into the cache dependencies of the module in whose template it fired. What reading is acceptable for a callback — "Modifiers" → "The Callback and the Database".
 

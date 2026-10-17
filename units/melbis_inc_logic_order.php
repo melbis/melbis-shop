@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.505 @ 2026-10-17
+ * @version 6.5.1.506 @ 2026-10-17
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -11,10 +11,12 @@
  * Verify        - What the shop refuses
  * Before        - The order as it stands
  * Load          - The version standing now
+ *
  * GoodsAdd      - Puts a goods in
  * GoodsRemove   - Takes a goods out
  * GoodsSum      - The sum of the goods
  * GoodsDiscount - The discount of one goods
+ *
  * OptionSet     - Sets an order option
  *
  **************************************************************************************************/
@@ -23,8 +25,15 @@
 namespace MELBIS_INC_LOGIC_ORDER; 
 
 use MELBIS_INC_LOGIC_COMMON as LOGIC_COMMON;
-                                            
-                                               
+
+
+// ————— Public —————
+//==================================================================================================
+
+// Version
+//==================================================================================================
+
+
 /** 
  * Function Create
  **/   
@@ -630,7 +639,10 @@ function Load($mUserId, $mOrderId)
     return $version;                            
 }    
 
- 
+
+// Goods
+//==================================================================================================
+
 
 /** 
  * Function GoodsAdd
@@ -762,8 +774,6 @@ function GoodsSum($mVersion, $mPriceType = 'store_price')
 } 
 
 
- 
-
 /** 
  * Function GoodsDiscount
  **/   
@@ -801,6 +811,10 @@ function GoodsDiscount($mKindKey, $mSum, $mStoreId)
     
     return (int) $disc_proc;
 }
+
+
+// Options
+//==================================================================================================
 
 
 /** 
