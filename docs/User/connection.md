@@ -47,6 +47,12 @@ adds that itself. The **login** and the **password** are an employee's account
 in the store, and the same account decides the rights to everything you do in
 the application.
 
+The **secure access code** is needed when a proxy with bot protection stands in front of
+the site, for example Cloudflare: by it the proxy lets the program and the AI
+assistant through. At a new workplace it is entered once, after that the program
+updates the code itself at every exchange with the server. Where it is set for the whole store —
+"[Installation](installation.md)", the "Security" section.
+
 The **"Store passwords in the system registry"** checkbox spares you typing the
 password at every start. An unticked box means "do not store": the passwords
 saved earlier are erased on saving.

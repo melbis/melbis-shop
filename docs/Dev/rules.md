@@ -208,7 +208,7 @@ A module's header lists its functions with a few words of explanation each. An e
  * Fields  - Prints the buyer fields
 ```
 
-Step headings are put in a long function with at least three steps; a short function needs none. The length of any heading is three to five words: the tree panel is narrow and cuts long ones.
+Step headings are put in a long function with at least three steps; a short function needs none. A heading is no longer than five words: the tree panel is narrow and cuts long ones.
 
 ## Variables in PHP Scripts
 

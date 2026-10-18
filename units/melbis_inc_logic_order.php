@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.506 @ 2026-10-17
+ * @version 6.5.1.507 @ 2026-10-18
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -556,46 +556,47 @@ function Load($mUserId, $mOrderId)
         $version['client'][] = $field;        
     }      
     
-    // Get Goods 
+    // Get goods options
+    //------------------
+    $command = "SELECT *
+                  FROM {DBNICK}_orders_store_option
+                 WHERE version_id = :VERSION_ID
+              ORDER BY option_pos, id
+               ";
+    $param = [
+        'version_id' => $version_id
+        ];
+    $options = MELBIS()->SqlSelect(__LINE__, $command, $param);
+    $store_options = [];
+    foreach ( $options as $option )
+    {
+        $store_id = $option['order_store_id'];
+        unset($option['id']);
+        unset($option['version_id']);
+        unset($option['order_store_id']);
+        $store_options[$store_id][] = $option;
+    }
+
+    // Get Goods
     //----------
     $version['store'] = [];
     $command = "SELECT *
-                  FROM {DBNICK}_orders_store 
-                 WHERE version_id = :VERSION_ID 
+                  FROM {DBNICK}_orders_store
+                 WHERE version_id = :VERSION_ID
               ORDER BY pos, id
-               ";  
+               ";
     $param = [
         'version_id' => $version_id
-        ];                             
+        ];
     $stores = MELBIS()->SqlSelect(__LINE__, $command, $param);
-    foreach ( $stores as $store ) 
+    foreach ( $stores as $store )
     {
         $store_id = $store['id'];
         unset($store['id']);
-        unset($store['version_id']);                    
-        
-        // Get goods options
-        $store['store_option'] = [];
-        $command = "SELECT * 
-                      FROM {DBNICK}_orders_store_option 
-                     WHERE version_id = :VERSION_ID
-                       AND order_store_id = :STORE_ID
-                  ORDER BY option_pos, id
-                   ";          
-        $param = [
-            'version_id' => $version_id,
-            'store_id'   => $store_id
-            ];                     
-        $options = MELBIS()->SqlSelect(__LINE__, $command, $param);
-        foreach ( $options as $option ) 
-        {
-            unset($option['id']);   
-            unset($option['version_id']);
-            unset($option['order_store_id']);
-            $store['store_option'][] = $option;            
-        }               
-        $version['store'][] = $store;                
-    }   
+        unset($store['version_id']);
+        $store['store_option'] = $store_options[$store_id] ?? [];
+        $version['store'][] = $store;
+    }
     
     // Get Options  
     //------------

@@ -40,7 +40,7 @@ The **"Keep a log of store users' actions"** checkbox turns on the recording of 
 
 If a proxy with bot protection stands in front of the site, for example Cloudflare, it may not let in the program and the AI assistant: to it their requests look like a robot's. The **"Access code"** field sets a password by which the proxy recognizes them. The program, its built-in browser and the MCP server append it to the User-Agent of every request to the site. Only employees who have signed in know the code, so it cannot be faked just by calling oneself the program.
 
-The program gets the code from the server after signing in and keeps it in the store's settings on this computer, so from the next start the code goes already with the first request. The MCP server takes the code from the same place before each of its requests.
+The program gets the code from the server at every exchange and keeps it in the store's connection parameters on this computer, so from the next start the code goes already with the first request. The MCP server takes the code from the same place before each of its requests.
 
 In Cloudflare this takes two rules, in this order:
 
@@ -49,7 +49,9 @@ In Cloudflare this takes two rules, in this order:
 
 The **"Generate"** button puts in a random code of 16 characters.
 
-While the program does not know the code — at a new workplace or after the code is changed — the **Block** rule will not let it in. Pause it until the program signs in and gets the code, then turn it on again. The code is changed the same way: **Block** on pause, the new code here and in the **Skip** rule, and **Block** back on once every workplace has been in touch. A built-in browser window that is already open takes the new code the next time it opens.
+At a new workplace the code is entered once: the "[Connection](connection.md#connect)" window, the **"Secure access code"** field. Then the program passes the proxy from the very first request.
+
+The code is changed without stopping work: for the time of the switch put both codes into the **Skip** rule (`contains <old>` or `contains <new>`) and set the new code here. Every workplace gets it at the next exchange with the server, after which the old code can be taken out of the rule. A workplace that was switched off all this time enters the new code in the "Connection" window by hand. A built-in browser window that is already open takes the new code the next time it opens.
 
 ### Demonstration Mode
 
