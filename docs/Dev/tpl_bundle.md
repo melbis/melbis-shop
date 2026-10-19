@@ -74,6 +74,9 @@ keeping a copy of the file.
 A deleted file leaves the other group's bundle at the nearest build of that group — when
 any file with a bundle is saved in it.
 
+Small differences of a shared file for one of the groups are kept in the file itself — by a condition, see
+"Conditions".
+
 ## Build Output
 
 The assembled file is placed in the `statics/` directory of the same template group, with the prefix
@@ -326,6 +329,42 @@ Uncaught Error: Call to undefined method Melbis\MelbisShop\PhpStyleVar::url()
 
 In both cases the previously built bundle is left untouched: the storefront goes
 on serving the last successful build until the file is corrected.
+
+---
+
+## Conditions
+
+Small differences need no second file: a piece of a shared file can be kept
+only in some of the bundles — by a condition, as in templates.
+
+```css
+.card { padding: 1rem; }
+{*COMPACT}
+.card { padding: .5rem; }
+{COMPACT*}
+```
+
+The condition is checked at the build, by the keys of the bundle being built:
+
+* `{*KEY}…{KEY*}` — the piece stays if the key is not empty and not `0`;
+* `{*KEY==a,b}…{KEY*}` — if the key's value is in the list;
+* `{*KEY!=a,b}…{KEY*}` — if it is not in the list.
+
+The keys are the same as for substitution: everything the `.psv` files of this bundle returned, and two
+that the build adds itself: `TEMPLATE` — the group the bundle is built for, and `BUNDLE` — its name.
+A shared file from one group in another group's bundle sees `TEMPLATE` and the keys of the group it is built into.
+
+A flag in `.psv` is handier than a group's name. The shared file speaks of a property of the layout —
+`{*COMPACT}` — and which group needs it is decided by that group's theme: a new group gets the
+behaviour with one line in its `.psv`, without touching the shared file. A condition by group —
+`{*TEMPLATE==mobi}` — fits one-off differences, and by bundle —
+`{*BUNDLE==print.css}` — when the file goes into several bundles of one group.
+
+Conditions are parsed in any bundle, even without `.psv`. A key that does not exist
+counts as empty, and the Workbench warns about it after the save the same way
+as about an unknown substitution key. A block with another key inside a kept one
+is parsed too; a block with the same key inside is not: the first closing closes
+the outer one.
 
 ---
 
