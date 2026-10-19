@@ -47,6 +47,33 @@ That's the whole point: a module keeps its script alongside its own templates, w
 easy to edit and find, while the code arrives at the storefront in a shared file, adding no
 extra requests.
 
+## A Bundle of Another Group
+
+A file can also go into a bundle of another template group. Before the bundle's name the group is written after a
+slash — the way its folder is named:
+
+```
+melbis.js: 15, mobi/melbis.js: 15
+```
+
+A script with such a line gets into `bundle.melbis.js` of its own group and into
+`bundle.melbis.js` of the `mobi` group. This way one group takes shared code from another without
+keeping a copy of the file.
+
+* In the other group's bundle the file takes its place by its own priority among that group's files.
+* The `.psv` keys are taken from the bundle the file is built into: a shared `buttons.css`
+  in the bundle of the `mobi` group takes on that group's theme.
+* Saving the file rebuilds the bundles of its own group and of all the groups named in
+  the line before the save and after it. An entry erased from the line takes the file out of
+  the other group's bundle too.
+* In the composition report another group's file shows with its full path — from its own group.
+* A group that does not exist gives a warning on saving,
+  `Warning! Unknown: mobi (template group);`, and the entry stays: the group can
+  be set up later.
+
+A deleted file leaves the other group's bundle at the nearest build of that group — when
+any file with a bundle is saved in it.
+
 ## Build Output
 
 The assembled file is placed in the `statics/` directory of the same template group, with the prefix

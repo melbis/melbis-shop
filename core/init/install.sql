@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.508 @ 2026-10-19
+ * @version 6.5.1.510 @ 2026-10-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -2252,6 +2252,7 @@ CREATE TABLE {DBNICK}_field (
    parent_id	INT UNSIGNED DEFAULT NULL,
    fixed_set 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    read_only 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   order_skip 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    mask_edit	CHAR(255) DEFAULT '' NOT NULL,
    PRIMARY KEY (id)   
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};

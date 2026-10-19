@@ -63,7 +63,7 @@ In this mode a warning and a **"Switch to working mode"** button are visible at 
 
 The **"Secrets"** tab holds the keys the store introduces itself to other services with: the keys of payment systems, the tokens of delivery and mailing services, its own signatures for links. These are values that must be shown to nobody and that a working store nevertheless needs every day.
 
-The table has two columns — **Constant** and **Value**; a long value is visible in full and edited in the field below the table. A row is added with the button on the panel or with the `Insert` key, and deleted with the button next to it or with the `Delete` key, with a confirmation.
+The table has two columns — **Constant** and **Value**; the rows are ordered by the constant's name, and a long value is visible in full and edited in the field below the table. A row is added with the button on the panel or with the `Insert` key, and deleted with the button next to it or with the `Delete` key, with a confirmation.
 
 The **Constant** is the name the key is visible by in the code of the store's modules, so it must consist of Latin letters, digits and the underscore, and must not start with a digit. Names beginning with `MELBIS_` are taken by the platform itself: with that prefix it separates its own parameters from yours. An unsuitable name will not get through — the save will not start until the row is corrected.
 

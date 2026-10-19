@@ -53,7 +53,7 @@ The file lives in `default`, and `mobi` pulls it in via an empty inheritor file;
 
 **A template of another group — by name.** The tag `{^CARD:mobi}` includes the module's `card.htm` from the `mobi` group, whatever group the page is built in; a file that `mobi` does not have comes from `default`. In detail — in the "Template Syntax" section.
 
-Inheritance applies only to `.htm` files: static assets (`.js`/`.css`) are built per their own group (see "Static Asset Build"). A shared script is usually kept as a single file and branched internally by version, passing it from the template — `<script>var TEMPLATE = "{TEMPLATE}";</script>`.
+Inheritance applies only to `.htm` files: static assets (`.js`/`.css`) are built per their own group, and a shared file of one group goes into another group's bundle through that group's name in the bundle line — `mobi/melbis.js` (see "Static Asset Build"). A shared script is usually kept as a single file and branched internally by version, passing it from the template — `<script>var TEMPLATE = "{TEMPLATE}";</script>`.
 
 ## Switching Group and Language from Code
 

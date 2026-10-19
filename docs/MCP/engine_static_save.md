@@ -18,7 +18,7 @@ Saves an existing statics file: the body and, if it is passed, the bundle descri
 
 Either `content` or `content_source` is needed: a save without a body refuses, otherwise it would empty the file.
 
-**`bundle`** writes the bundle description whole, from both fields, and rebuilds the group's bundles at once. Without `bundle` the file keeps its old description; both fields empty — the file leaves all the bundles. In `parameters` the bundles are listed separated by commas, the priority after a colon: `melbis.css: 10, print.css: 2`. The bundle's name is written with the extension; Latin letters, digits, a dot and an underscore are allowed in it, everything else is cut out. In detail — "[Static Build](../Dev/tpl_bundle.md)".
+**`bundle`** writes the bundle description whole, from both fields, and rebuilds at once the bundles of its own group and of the groups named in the line. Without `bundle` the file keeps its old description; both fields empty — the file leaves all the bundles. In `parameters` the bundles are listed separated by commas, the priority after a colon: `melbis.css: 10, print.css: 2`. The bundle's name is written with the extension; Latin letters, digits, a dot and an underscore are allowed in it, everything else is cut out. A bundle of another group is written after a slash: `mobi/melbis.css: 10`. In detail — "[Static Build](../Dev/tpl_bundle.md)".
 
 **`build`** raises the build number the page hangs onto its css and js: without it the visitors' browsers go on taking the old files from their cache.
 
@@ -36,7 +36,7 @@ What else saving does — rebuilds the group's bundles, writes the version, rese
 | `path` | the saved file's path |
 | `bundle` | whether the bundle description was passed |
 | `build` | whether the build number was raised |
-| `warning` | the keys that the build found in none of the bundle's `.psv` files, in one line: `Warning! Unknown: PRIMARY_HOWER (buttons.css);`. It lists the misses in all the group's bundles, whatever file is being saved. Empty if there are no misses or there was no build |
+| `warning` | the keys that the build found in none of the bundle's `.psv` files, in one line: `Warning! Unknown: PRIMARY_HOWER (buttons.css);`. It lists the misses in all the group's bundles, whatever file is being saved, and the groups from the bundle line that do not exist: `Unknown: mobi (template group);`. Empty if there are no misses or there was no build |
 
 ## Refusals
 

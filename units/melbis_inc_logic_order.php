@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.508 @ 2026-10-19
+ * @version 6.5.1.510 @ 2026-10-19
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -56,6 +56,9 @@ function Create()
     $version['client'] = [];
     foreach ( MELBIS()->SysFieldValues() as $field )
     {
+        // Card-only fields stay out
+        if ( $field['order_skip'] ) continue;
+
         $version['client'][] = [
             'field_id'          => $field['id'],
             'field_skey'        => $field['skey'],

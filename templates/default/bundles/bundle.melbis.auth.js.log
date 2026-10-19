@@ -1,6 +1,6 @@
 /*   Melbis Shop auto bundle report                                                                                 */
 /*   Bundle: /templates/default/statics/bundle.melbis.auth.js                                                       */
-/*   Create: 2026-10-13 13:57:29                                                                                    */
+/*   Create: 2026-10-19 14:19:52                                                                                    */
 
 /*   #1    bootstrap-table.js           12725 ln   453 kb    /templates/default/statics/base/bs/bootstrap-table.js  */
 /*   #2    bootbox.js                    1247 ln    39 kb    /templates/default/statics/base/bootbox.js             */
