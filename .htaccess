@@ -21,5 +21,8 @@ RewriteRule ^core/(cache|class|init|log|tmp|trick)/ - [F]
 RewriteRule ^units/ - [F]
 RewriteRule ^templates/[^/]+/units/ - [F]
 
+# Deny composer: its files list the packages and their versions
+RewriteRule ^(composer\.(json|lock)|vendor/) - [F]
+
 # Lazy
 RewriteRule ^lazy/$ index.php?lazy [L,QSA]

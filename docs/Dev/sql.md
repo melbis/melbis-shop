@@ -194,6 +194,8 @@ MELBIS()->SqlDelete(__LINE__, '{DBNICK}_store_param', 'store_id', $store_id);
 
 For `SqlUpdate`, the condition fields are listed in the same `$fields` array: the engine distributes the array itself — whatever is named in `$mKeyField` goes into `WHERE`, the rest goes into `SET`. The condition can be composite: `MELBIS()->SqlUpdate(__LINE__, $table, $fields, ['store_id', 'param_id'])`.
 
+Many rows at once are written with the block methods — see 3.1.
+
 `SqlDelete` accepts either a "field, value" pair or a full array of conditions: `MELBIS()->SqlDelete(__LINE__, $table, ['store_id' => $id, 'param_id' => $param])`.
 
 **Identifiers for new records are issued by `SqlGenId`**, not `AUTO_INCREMENT`:
@@ -213,7 +215,7 @@ Helper methods:
 
 ### 3.1. Batch Writing
 
-Import, recalculation, transfer — work where there is not one record but a thousand. A loop of `SqlGenId` and `SqlInsert` costs three queries per row there; the block methods do the same in a handful of queries.
+Import, recalculation, transfer — work where there is not one record but a thousand. A loop of `SqlGenId` and `SqlInsert` costs three queries per row there, a loop of `SqlUpdate` one query per row. The block methods do the same in a handful of queries: three thousand rows are updated by a single `SqlUpdateBlock` twenty times faster than by a loop.
 
 **`SqlGenIdBlock($mTableName, $mCount)`** claims a range of identifiers and returns them as a ready-made array:
 
@@ -252,6 +254,32 @@ What you need to know about the set of rows:
   at the end.
 
 A long set is split by the engine itself — a prepared query holds a limited number of values, and a network packet a limited volume. The parts go as separate queries, so a block on its own promises no "all or nothing": if the write has to be indivisible, wrap the call in a transaction (see 5) or take the tables with a lock (see 6).
+
+**`SqlInsertUpdateBlock($mLine, $mTableName, $mRows)`** — the same insert, but a row whose key already exists in the table is not added but rewritten. The match is looked for by the table's primary key or unique index, so the key must be in every row. This is how a set where some records already exist and others do not yet is saved with one call: the known rows go with their own `id`, the new ones with those issued by `SqlGenIdBlock`.
+
+```php
+$count = MELBIS()->SqlInsertUpdateBlock(__LINE__, '{DBNICK}_client_field', $rows);
+```
+
+The number of affected rows is returned as MySQL counts them: an inserted row counts as 1, a rewritten one as 2, one left unchanged as 0. A key that is not in the table starts a new row, so a wrong `id` here means an extra record.
+
+**`SqlUpdateBlock($mLine, $mTableName, $mRows, $mKeyField)`** only rewrites: rows that are not in the table are skipped, no new ones appear. The key is given as for `SqlUpdate` — a single column or a list — and is part of every row; the remaining columns of the row are what gets written.
+
+```php
+$rows = [];
+foreach ( $prices as $store_id => $price )
+{
+    $rows[] = [
+        'id'    => $store_id,
+        'price' => $price
+        ];
+}
+$count = MELBIS()->SqlUpdateBlock(__LINE__, '{DBNICK}_store', $rows, 'id');
+```
+
+The number of changed rows is returned. A key met twice in the set gets the values of the last row — as with ordinary `SqlUpdate` calls in a row.
+
+The rules for the set of rows and the check before the first query are the same for both methods as for `SqlInsertBlock`. They also split a long set into parts by themselves, `SqlUpdateBlock` into no more than 250 rows each, so it promises no "all or nothing" without a transaction either.
 
 ## 4. Writing with a Raw Query and Cache Invalidation
 

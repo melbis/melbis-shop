@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.511 @ 2026-10-19
+ * @version 6.5.1.515 @ 2026-10-21
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -2290,6 +2290,7 @@ CREATE TABLE {DBNICK}_field_value (
    code 	      CHAR(255) DEFAULT '' NOT NULL,
    name 	      CHAR(255) DEFAULT '' NOT NULL,
    kind_key 	CHAR(100) DEFAULT 'kDefault' NOT NULL,
+   use_default TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY IDX1 (field_id),

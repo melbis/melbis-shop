@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.511 @ 2026-10-19
+ * @version 6.5.1.515 @ 2026-10-21
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -50,7 +50,8 @@ function Main($mVars)
     MELBIS()->TplAssign($tpl, 'GOODS', $goods);
 
     // Save store for static
-    MELBIS()->EnumSet('store', array_column($goods, 'id'));
+    $ids = array_column($goods, 'id');
+    MELBIS()->EnumSet('store', $ids);
 
     // Final
     return MELBIS()->TplFinal($tpl, 'main');

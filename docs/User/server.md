@@ -8,6 +8,8 @@ The progress of any operation is visible in the **log** at the bottom of the win
 
 The **"Connection"** tab holds the parameters shared by the whole window: the server's **IP address**, the **root password**, and the store's **domain name**. The password is not saved: the field is cleared when the window closes.
 
+The **"Allow the AI assistant to access the server while this window is open"** checkbox lets the AI assistant onto the server: it runs commands and transfers files as root by itself instead of dictating them to you. The program gives it the address and the password only while the window is open, the password is entered and the checkbox is ticked; when the window closes, the checkbox is cleared. The assistant never sees the password itself, and Claude Code shows you each of its actions on the server for confirmation. In detail — "[Server](../MCP/remote.md)" in the section about the MCP server.
+
 ## Installation
 
 The **"Installation"** tab, the **"Install server"** button — a full automatic installation: the application downloads the project's setup script and deploys the server for the given domain and the current version of the platform.
@@ -24,7 +26,8 @@ The **"Maintenance"** tab:
   version of the application. The result is unpredictable if the server was
   configured by hand, so make a backup before updating.
 * **"Status report"** — server diagnostics. It changes nothing and only writes
-  information about the state of the store's services to the log.
+  information about the state of the store's services and the certificate's
+  expiry date to the log.
 
 ## Console
 
@@ -71,9 +74,13 @@ The whole household of the store lies in `/var/melbis`:
 | `melbis_shop` | `melbis/melbis-shop:v<version>` | `php:8.3-apache` with the curl, mysqli, xml, zip, iconv, gd, intl and APCu extensions and the ionCube Loader; the engine's core in the image is encoded |
 | `melbis_proxy` | `nginx:latest` | ports 80 and 443, encryption, passing the requests on to apache |
 
+nginx answers only to the domain given at installation — it is written in `server_name` in `nginx.conf`. A request with another name or to the bare IP address nginx drops without an answer, and an HTTPS one as early as the handshake. This way scanners that go through addresses do not reach the store. A new domain or subdomain is written into `server_name`, and a certificate is issued for it; the assistant will do this itself if it is let onto the server.
+
 The containers have no logs of their own: everything is written as files into `/var/melbis/log`.
 
-On the machine itself there are a 4 GB swap file, a daily log rotation that keeps seven copies, `fail2ban`, the `ufw` firewall with SSH, 80 and 443 open, and two cron jobs: renewing the certificate at 3:00 and the store's `cron.php` once a minute (see "[Task Scheduler](../Dev/cron.md)").
+In the nginx log (`log/nginx/access.log`) the first field of a line is the visitor's address as the `CF-Connecting-IP` header named it, and the last one, in quotes, is the address the request actually came from. Through Cloudflare the last one is its server; on a direct visit the addresses match. Different addresses where the last one does not belong to Cloudflare mean the header was forged.
+
+On the machine itself there are a 4 GB swap file, a daily log rotation that keeps seven copies, `fail2ban` and the `ufw` firewall with SSH, 80 and 443 open. The certificate is renewed by the system timer `certbot.timer`, and the hook `/etc/letsencrypt/renewal-hooks/deploy/melbis.sh` copies the new certificate into `/var/melbis/certs` after each renewal and rereads the nginx settings — without a restart, the site does not stop. There is one cron job: the store's `cron.php` once a minute (see "[Task Scheduler](../Dev/cron.md)").
 
 ### The Default Limits
 
@@ -87,5 +94,11 @@ On the machine itself there are a 4 GB swap file, a daily log rotation that keep
 | APCu | 64 MB | `apc.shm_size` of the image | the static query cache and the Smart statistics live here; after a container restart it is empty |
 | file cache | 1 GB | the disk in memory `/var/melbis/cache` | |
 | MySQL index buffer | 512 MB | `key_buffer_size` in `my.cnf` | the main buffer of the MyISAM tables; `innodb_buffer_pool_size` (128 MB) hardly works here |
+| nginx connections | 512 | `events` in `nginx.conf`, the nginx default | new visitors wait, the nginx error log shows `worker_connections are not enough` |
+| Apache processes | 150 | `MaxRequestWorkers` of the image | requests wait their turn at nginx |
+
+The installation is designed for a small store and for a minimum of looking after, so its limits work as a brake. A wave of requests from a bot or an attack runs into them, and the server fends it off instead of bringing the database down with a thousand simultaneous queries.
+
+When the store grows, the limits are raised deliberately and in this order: first the resources — the hosting plan; then protection against bots in front of the site — Cloudflare or per-address limits in nginx; and only then the nginx connections, the Apache processes and the MySQL buffers. Without protection, raised limits will let the same attack straight into the database.
 
 The memory of a minimal server is already spread out, and the reserve is held by the swap. Raising the MySQL buffers "for speed" on such a machine is a straight path to the system starting to stop processes. Resources are added by changing the hosting plan, not by editing `my.cnf`.

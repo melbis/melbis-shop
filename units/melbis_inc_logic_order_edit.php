@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.511 @ 2026-10-19
+ * @version 6.5.1.515 @ 2026-10-21
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -92,45 +92,47 @@ function Run($mUserId, $mVersion)
         MELBIS()->SqlInsert(__LINE__, '{DBNICK}_client', $client);        
         
         // Save client field
-        $client_field['client_id'] = $client['id'];
         if ( is_array($mVersion['client']) )
         {
-            foreach ( $mVersion['client'] as $item ) 
+            $count = count($mVersion['client']);
+            $ids = MELBIS()->SqlGenIdBlock('client_field', $count);
+            $rows = [];
+            foreach ( $mVersion['client'] as $item )
             {
-                $client_field['id'] = MELBIS()->SqlGenId('client_field');
-                $client_field['field_id'] = $item['field_id'];
-                $client_field['value_id'] = $item['value_id'];
-                $client_field['value_txt'] = $item['value_txt'];
-                MELBIS()->SqlInsert(__LINE__, '{DBNICK}_client_field', $client_field);
+                $id = array_shift($ids);
+                $rows[] = [
+                    'id'        => $id,
+                    'client_id' => $client['id'],
+                    'field_id'  => $item['field_id'],
+                    'value_id'  => $item['value_id'],
+                    'value_txt' => $item['value_txt']
+                    ];
             }
-        }                                                                 
+            MELBIS()->SqlInsertBlock(__LINE__, '{DBNICK}_client_field', $rows);
+        }
     } 
     else
     {
         // Update client fields    
         if ( is_array($mVersion['client']) )
         {        
+            $field_set = array_column(MELBIS()->SysFieldValues(), null, 'id');
+            $rows = [];
             foreach ( $mVersion['client'] as $item ) 
             {
-                $command = "UPDATE {DBNICK}_client_field cfv,
-                                   {DBNICK}_field cf
-                               SET cfv.value_txt = :VALUE_TXT,
-                                   cfv.value_id = :VALUE_ID 
-                             WHERE cfv.client_id = :CLIENT_ID
-                               AND cfv.field_id = :FIELD_ID
-                               AND cfv.field_id = cf.id 
-                               AND cf.read_only = 0
-                            ";        
-                $param = [ 
+                // Read-only fields stay put
+                if ( $field_set[$item['field_id']]['read_only'] ) continue;
+
+                $rows[] = [
                     'client_id' => $client['id'],
                     'field_id'  => $item['field_id'],
-                    'value_txt' => $item['value_txt'],
-                    'value_id'  => $item['value_id']                    
-                    ]; 
-                MELBIS()->SqlQuery(__LINE__, $command, $param);
-                MELBIS()->SqlTableChange(__LINE__, '{DBNICK}_client_field');
+                    'value_id'  => $item['value_id'],
+                    'value_txt' => $item['value_txt']
+                    ];
             }
-        }             
+            $keys = ['client_id', 'field_id'];
+            MELBIS()->SqlUpdateBlock(__LINE__, '{DBNICK}_client_field', $rows, $keys);
+        }
     } 
     
     // Update client last date                                           
@@ -142,47 +144,69 @@ function Run($mUserId, $mVersion)
     // Save client field      
     if ( is_array($mVersion['client']) )
     {
-        foreach ( $mVersion['client'] as $item ) 
-        {    
+        $rows = [];
+        foreach ( $mVersion['client'] as $item )
+        {
             $item['version_id'] = $version['id'];
-            MELBIS()->SqlInsert(__LINE__, '{DBNICK}_orders_client_field', $item);            
+            $rows[] = $item;
         }
-    }   
+        MELBIS()->SqlInsertBlock(__LINE__, '{DBNICK}_orders_client_field', $rows);
+    }
 
     // Store
     //------   
     if ( is_array($mVersion['store']) )
     {
-        foreach ( $mVersion['store'] as $item ) 
-        {                                
-            $item['version_id'] = $version['id'];            
-            $store = $item;
-            unset($store['store_option']);            
-            MELBIS()->SqlInsert(__LINE__, '{DBNICK}_orders_store', $store);
-            $store_id = MELBIS()->SqlLastInsertId();
-    
-            // Order Store Option                     
+        $rows = [];
+        foreach ( $mVersion['store'] as $item )
+        {
+            $item['version_id'] = $version['id'];
+            unset($item['store_option']);
+            $rows[] = $item;
+        }
+        MELBIS()->SqlInsertBlock(__LINE__, '{DBNICK}_orders_store', $rows);
+
+        // The rows in the order written
+        $command = "SELECT id
+                      FROM {DBNICK}_orders_store
+                     WHERE version_id = :VERSION_ID
+                  ORDER BY id
+                   ";
+        $param = [
+            'version_id' => $version['id']
+            ];
+        $stores = MELBIS()->SqlSelect(__LINE__, $command, $param);
+        $ids = array_column($stores, 'id');
+
+        // Order Store Option
+        $options = [];
+        foreach ( $mVersion['store'] as $item )
+        {
+            $store_id = array_shift($ids);
             if ( isset($item['store_option']) )
             {
                 foreach ( $item['store_option'] as $option ) 
                 {                                            
                     $option['version_id'] = $version['id'];
-                    $option['order_store_id'] = $store_id;                                
-                    MELBIS()->SqlInsert(__LINE__, '{DBNICK}_orders_store_option', $option);                
-                }      
+                    $option['order_store_id'] = $store_id;
+                    $options[] = $option;
+                }
             }
         }
-    }         
+        MELBIS()->SqlInsertBlock(__LINE__, '{DBNICK}_orders_store_option', $options);
+    }
     
     // Options
     //--------  
     if ( is_array($mVersion['option']) )
     {
-        foreach ( $mVersion['option'] as $item ) 
-        {  
+        $rows = [];
+        foreach ( $mVersion['option'] as $item )
+        {
             $item['version_id'] = $version['id'];
-            MELBIS()->SqlInsert(__LINE__, '{DBNICK}_orders_option', $item);
-        } 
+            $rows[] = $item;
+        }
+        MELBIS()->SqlInsertBlock(__LINE__, '{DBNICK}_orders_option', $rows);
     }
               
     

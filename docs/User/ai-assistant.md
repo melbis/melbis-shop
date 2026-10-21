@@ -29,13 +29,14 @@ It sees the whole store:
 | Item files | attaches product photos and attachments, and fetches them back |
 | Store copy | fetches the store's entire code, profiles, or a database dump — the same as the program's "Copy store" button; `config.json` is not included in the copy |
 | Storefront | opens store pages as a visitor and reads the debugger report |
+| Server | runs commands and moves files on the store's server — while you let it in in the "[Server](server.md)" window |
 | Documentation | reads the manuals and table descriptions straight from the distribution — which is why its answers about Melbis are specific rather than general |
 
 ## Setup
 
 **"System → Connection → AI Assistant"** — and there is nothing to set up there. The tab holds a ready **MCP server configuration** and a **"Copy"** button: copy it and paste it into the settings of your agent application, where it asks about MCP servers. Nothing else is needed from you — which store is open the assistant works out by itself.
 
-The same configuration, but tied to a single store, the program puts into the store's own folder — for applications that open a folder as a project: `.mcp.json` and `.claude\settings.json` are read by Claude Code, `.codex\config.toml` and `AGENTS.md` by Codex, `opencode.json` and the same `AGENTS.md` by OpenCode. An assistant started from them works **with that store only**, whatever is open in the program: open the store's folder, and the correspondence about different stores does not pile up in one heap. Once the application asks whether you trust this folder and you confirm, the assistant will call its tools without asking permission for every call: its limits are set by your rights in the store. The files are rewritten every time the program starts, so adding anything of your own to them is pointless; they are taken from the `Engine\MCP\Setup\` folder of the distribution.
+The same configuration, but tied to a single store, the program puts into the store's own folder — for applications that open a folder as a project: `.mcp.json` and `.claude\settings.json` are read by Claude Code, `.codex\config.toml` and `AGENTS.md` by Codex, `opencode.json` and the same `AGENTS.md` by OpenCode. An assistant started from them works **with that store only**, whatever is open in the program: open the store's folder, and the correspondence about different stores does not pile up in one heap. Once the application asks whether you trust this folder and you confirm, the assistant will call its tools without asking permission for every call: its limits are set by your rights in the store. The exception is work on the server: Claude Code shows you every such command for confirmation. The files are rewritten every time the program starts, so adding anything of your own to them is pointless; they are taken from the `Engine\MCP\Setup\` folder of the distribution.
 
 There is no login or password here: the assistant signs in to the store **as you**, with the same pair you used to sign in to the program on the "Connection Parameters" tab.
 

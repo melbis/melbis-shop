@@ -235,3 +235,10 @@
 * [shop_module](MCP/shop_module.md)
 * [shop_agent](MCP/shop_agent.md)
 * [shop_download](MCP/shop_download.md)
+
+**3.8 Server**
+
+* [Concept](MCP/remote.md)
+* [remote_exec](MCP/remote_exec.md)
+* [remote_load](MCP/remote_load.md)
+* [remote_save](MCP/remote_save.md)

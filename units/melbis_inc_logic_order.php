@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.511 @ 2026-10-19
+ * @version 6.5.1.515 @ 2026-10-21
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -41,15 +41,16 @@ function Create()
 {
     $now = MELBIS()->DateTime('now');  
     
-    $version =  array('order_id'            => null, 
-                      'user_id'             => null, 
-                      'client_id'           => null,  
-                      'date_time'           => $now, 
-                      'total_sum'           => 0,
-                      'order_code'          => '', 
-                      'order_version_id'    => null,
-                      'order_date_time'     => $now 
-                      );
+    $version = [
+        'order_id'            => null, 
+        'user_id'             => null, 
+        'client_id'           => null,  
+        'date_time'           => $now, 
+        'total_sum'           => 0,
+        'order_code'          => '', 
+        'order_version_id'    => null,
+        'order_date_time'     => $now 
+        ];
 
     // Client - the registry answers
     //-------
@@ -58,6 +59,8 @@ function Create()
     {
         // Card-only fields stay out
         if ( $field['order_skip'] ) continue;
+
+        $value = array_column($field['value'], null, 'use_default')[1] ?? [];
 
         $version['client'][] = [
             'field_id'          => $field['id'],
@@ -69,11 +72,11 @@ function Create()
             'field_folder'      => $field['folder'],
             'field_kind_key'    => $field['kind_key'],
             'field_spec_key'    => $field['spec_key'],
-            'value_id'          => null,
-            'value_skey'        => '',
-            'value_code'        => '',
-            'value_kind_key'    => '',
-            'value_txt'         => ''
+            'value_id'          => $value['id'] ?? null,
+            'value_skey'        => $value['skey'] ?? '',
+            'value_code'        => $value['code'] ?? '',
+            'value_kind_key'    => $value['kind_key'] ?? '',
+            'value_txt'         => $value['name'] ?? ''
             ];
     }
 
@@ -142,6 +145,10 @@ function Normalize($mUserId, $mVersion)
             'value_kind_key'    => $one['kind_key'] ?? ''
             ];
         
+        if ( $row['fixed_set'] == 1 && !isset($value['value_id']) && isset($temp['value_id']) )
+        {
+            $value = array_merge($value, $temp);
+        }
         if ( $row['fixed_set'] == 0 )
         {                                                  
             if ( $value['value_txt'] != $field['value_txt'] )
@@ -713,6 +720,9 @@ function GoodsAdd($mVersion, $mStoreId, $mAmount = 1, $mPriceOut = 0)
         $store['store_price'] = LOGIC_COMMON\Price($store['store_price'], $store['price_curr_id']);
         $store['store_price2'] = LOGIC_COMMON\Price($store['store_price2'], $store['price2_curr_id']);
         $store['store_price3'] = LOGIC_COMMON\Price($store['store_price3'], $store['price3_curr_id']);
+
+        // No supplier stock chosen
+        $store['store_stock_id'] = null;
         $store['out_price'] = $mPriceOut;
         $store['amount'] = $mAmount;
         $store['notice'] = '';

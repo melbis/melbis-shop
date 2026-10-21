@@ -42,6 +42,8 @@ Behind every MCP tool there is a command of the engine — `AGENT_` and the name
 
 `session_init`, `session_connect`, `session_rules_accept`, `session_clear`, `shop_page`, `shop_module` and `shop_agent` work without rights. One exception inside them: `shop_page` and `shop_module` with `debug=true` read the debugger's code from the configuration and therefore require the "Get configuration" right.
 
+`remote_exec`, `remote_load` and `remote_save` work without rights as well: they do not turn to the engine, and they are let onto the server by the program's "Server" window while the owner keeps it open with the root password and the access checkbox — "[The Server](remote.md)".
+
 The "Development" branch divides the work with the project's files into reading and changing only, and this is not a simplification: a login that may save a module can already do to the store everything the store itself can do. That is why "Modify data" includes "Read data": a save begins with loading the file.
 
 **The rights belong to the person.** The agent signs in under the user's login, so with one employee it can do more than with another, in one and the same store.

@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "Start installation (v30)"
+echo "Start installation (v31)"
 
 
 wait_apt() {
@@ -166,11 +166,31 @@ echo "Creating nginx.conf..."
 cat <<'EOF'> /var/melbis/nginx.conf
 events {}
 http {
+    # The client as the header names it, and at the end who actually connected
+    log_format melbis '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" "$http_user_agent" '
+                      '"$realip_remote_addr"';
+    access_log /var/log/nginx/access.log melbis;
+
+    # No version in the headers and the error pages
+    server_tokens off;
+
+    # Any name but ours is dropped, the bare IP of scanners too
+    server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+        listen 443 ssl default_server;
+        listen [::]:443 ssl default_server;
+        ssl_reject_handshake on;
+        return 444;
+    }
+
     server {
         listen 80;
         listen [::]:80;
         listen 443 ssl;
         listen [::]:443 ssl;
+        server_name __DOMAIN_NAME__;
         client_max_body_size 64M;
         ssl_certificate /etc/nginx/certs/fullchain.pem;
         ssl_certificate_key /etc/nginx/certs/privkey.pem;
@@ -203,6 +223,8 @@ http {
     }
 }
 EOF
+# The template is quoted for the variables of nginx, so the domain goes in here
+sed -i "s/__DOMAIN_NAME__/${domain_name}/" /var/melbis/nginx.conf
 
 echo "Creating my.cnf for MySQL..."
 cat <<'EOF'> /var/melbis/my.cnf
@@ -316,9 +338,15 @@ else
     docker compose exec -T nginx nginx -s reload </dev/null
 fi
 
-echo "Configuring automatic SSL renewal in cron..."
-CRON_JOB="0 3 * * * certbot renew --quiet && cp -Lf /etc/letsencrypt/live/${domain_name}/* /var/melbis/certs/ && cd /var/melbis && docker compose restart nginx"
-(crontab -l 2>/dev/null; echo "$CRON_JOB") | crontab -
+echo "Configuring SSL renewal hook..."
+mkdir -p /etc/letsencrypt/renewal-hooks/deploy
+cat <<'EOF' > /etc/letsencrypt/renewal-hooks/deploy/melbis.sh
+#!/bin/sh
+# A renewed certificate goes to nginx; certbot runs this only after a real renewal
+cp -Lf "$RENEWED_LINEAGE/fullchain.pem" "$RENEWED_LINEAGE/privkey.pem" /var/melbis/certs/
+docker exec melbis_proxy nginx -s reload
+EOF
+chmod +x /etc/letsencrypt/renewal-hooks/deploy/melbis.sh
 
 echo "Configuring melbis shop cron job..."
 APP_CRON="* * * * * /usr/bin/docker exec melbis_shop php /var/www/html/cron.php > /dev/null 2>&1"
