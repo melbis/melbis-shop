@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "Start installation (v31)"
+echo "Start installation (v32)"
 
 
 wait_apt() {
@@ -349,7 +349,7 @@ EOF
 chmod +x /etc/letsencrypt/renewal-hooks/deploy/melbis.sh
 
 echo "Configuring melbis shop cron job..."
-APP_CRON="* * * * * /usr/bin/docker exec melbis_shop php /var/www/html/cron.php > /dev/null 2>&1"
+APP_CRON="* * * * * /usr/bin/docker exec -u www-data melbis_shop php /var/www/html/cron.php > /dev/null 2>&1"
 (crontab -l 2>/dev/null || true; echo "$APP_CRON") | crontab -
 
 echo "Configuring fail2ban..."
