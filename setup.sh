@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "Start installation (v32)"
+echo "Start installation (v33)"
 
 
 wait_apt() {
@@ -14,8 +14,10 @@ wait_apt() {
 
 domain_name=$1
 melbis_version=$2
-if [ -z "$domain_name" ]; then
-    echo "Error: Domain name is required."    
+# Checked before anything is wiped: a missing domain shifts the version into its place
+if ! echo "$domain_name" | grep -q '[a-zA-Z]' || ! echo "$melbis_version" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+    echo "Error: the call is setup.sh <domain> <version>, for example: setup.sh shop.example.com 6.5.1"
+    echo "Got domain [$domain_name] and version [$melbis_version]; nothing was changed."
     exit 1
 fi
 
