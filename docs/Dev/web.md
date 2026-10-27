@@ -34,7 +34,7 @@ Embedded modules are configured in the application: **"Development → Modules a
 - **Name** — displayed in the module list and on the tab in the panel.
 - **Module URL** — the module's URL, e.g. `http://my-shop.com/?mod=melbis_web_sample`.
 - **Key** — the module's symbolic code (e.g., `melbis_web_sample`). Used for access rights verification.
-- **User identification required** — if this flag is enabled, the application additionally passes the `login` and `pass_code` (MD5 hash of the password) fields in POST. This allows the module to authenticate the user and verify their permissions.
+- **User identification required** — if this flag is enabled, the application additionally passes the `login`, `stamp` and `sign` fields in POST — the login, the time and the sign-in signature. This allows the module to authenticate the user and verify their permissions.
 
 ### Parameters Passed by the Application
 
@@ -52,7 +52,7 @@ With each request to an embedded module, the application sends a POST request wi
 
 In "Descriptions", the numbers of products and values are numbers of the main catalog, not of the rows of the Personal Workspace. The `order` field of the "Edit Order" window is JSON with the order's unsaved rows: the keys `new_orders_version`, `new_orders_client_field`, `new_orders_store`, `new_orders_store_option` and `new_orders_option`, each holding a list of rows with all their fields.
 
-With the "User identification required" flag, `login` and `pass_code` — the MD5 hash of the password — are added to any set. This is how a module's `$mVars` looks in the "Orders" window:
+With the "User identification required" flag, `login`, `stamp` and `sign` are added to any set: `stamp` is the time in GMT, `sign` is a signature of the string `login|time|WEB` with a key computed from the password. The password itself never leaves the application. This is how a module's `$mVars` looks in the "Orders" window:
 
 ```php
 // $mVars in the module:
@@ -67,12 +67,13 @@ With the "User identification required" flag, `login` and `pass_code` — the MD
         'order_store_id'          => '2',
         'order_option_id'         => '3',
         'login'                   => 'admin',
-        'pass_code'               => '21232f297a57a5a743894a0e4a801fc3',
+        'stamp'                   => '2026-10-27 09:15:00',
+        'sign'                    => 'RjaLSFiSrdVFBXJ/r+Ud+TtICKvNeF5s3s/hlQwXatv37woccBwsDvduIBM6fh0Pp2lJxA4PvA0zzwwCVYvODw==',
     ]
 ]
 ```
 
-The AI assistant opens a module the same way — with the [`shop_module`](../MCP/shop_module.md) tool: it passes the window fields itself, and the MCP server adds the person's `login` and `pass_code`.
+The AI assistant opens a module the same way — with the [`shop_module`](../MCP/shop_module.md) tool: it passes the window fields itself, and the MCP server adds the person's `login`, `stamp` and `sign`.
 
 ### The User's Language
 
@@ -88,12 +89,12 @@ An external module opened in an ordinary browser gets the language of that brows
 
 ## The melbis_inc_auth Library
 
-For web modules, the standard demo store distribution includes the `melbis_inc_auth` library. It handles all the boilerplate code: user authentication via `login` + `pass_code`, storing the authentication state in a PHP session, checking access rights to the module, and routing POST calls between module functions.
+For web modules, the standard demo store distribution includes the `melbis_inc_auth` library. It handles all the boilerplate code: user authentication by signature (`login`, `stamp`, `sign`), storing the authentication state in a PHP session, checking access rights to the module, and routing POST calls between module functions.
 
 **The central function — `MELBIS_INC_AUTH\Router($mModule, $mVars)`** — performs the following steps in order:
 
 1. Checks whether a logout has been requested (`logout` in POST).
-2. Authenticates the user: via `login` + `pass_code` from POST, or from a previously saved session.
+2. Authenticates the user: via `login`, `stamp` and `sign` from POST — through `SysUserSignCheck` — or from a previously saved session.
 3. Verifies the user's right to access the given module (based on the permissions table in the database).
 4. Writes global variables via `GlobalAssign('PAGE', [...])`, available in all templates: authentication status (`auth`), `user_id`, and `mod` — the URL of the current module. The `{PAGE:MOD}` variable is used in templates as the base URL for AJAX requests.
 5. Routes the call: if the `func` parameter is passed in POST — calls the module function with that name (`GetCataloge`), passing it `$userId` and `$mVars`. Without `func`, `Page` is called. Any function other than `Page` works only after login and with the right to the module — otherwise the answer is `Access denied`.
@@ -287,7 +288,7 @@ function melbis_print() {
 
 ## External Web Modules
 
-External modules differ from embedded ones in one fundamental way: they are not tied to a specific application window and do not receive the current record's context. Instead, when opened from the application, only the user's authentication parameters (`login`, `pass_code`) are passed.
+External modules differ from embedded ones in one fundamental way: they are not tied to a specific application window and do not receive the current record's context. Instead, when opened from the application, only the user's authentication parameters (`login`, `stamp`, `sign`) are passed.
 
 Access to external modules is available through the **"Business / Web Modules"** section — this contains a browser with a catalog of all available modules in the left panel. In addition, any of these modules can be opened in a regular browser on any device — a tablet, smartphone, or a workstation without the application installed.
 
@@ -301,9 +302,11 @@ Configuring external modules — **"Development → Modules and Options", the "E
 
 Since external modules can also be opened from a regular browser, authentication here works in two modes automatically:
 
-**When opened from the application** — Melbis Shop passes `login` and `pass_code` in POST. `AUTH\Router` authenticates the user without a form and immediately displays the content.
+**When opened from the application** — Melbis Shop passes `login`, `stamp` and `sign` in POST. `AUTH\Router` authenticates the user without a form and immediately displays the content.
 
 **When opened directly in a browser** — POST does not contain credentials, the router passes `$mUserId = null`, and the `Page` function substitutes the authentication form template. After a successful login, the data is saved in the PHP session, and the form is no longer shown on subsequent requests.
+
+The sign-in form signs by itself: the `melbis_crypto_sign` function from `statics/melbis/main.js` computes the key from the password in the browser and sends the same `login`, `stamp` and `sign` — the password never leaves the browser. The signature is made by the browser's built-in WebCrypto, so the form works only over https and in browsers with Ed25519: Chrome 137, Firefox 129, Safari 17 and newer.
 
 The same module code works in both cases — the branching happens entirely automatically inside the `melbis_inc_auth` library. The developer only needs to correctly handle the `$mUserId == null` case in the `Page` function.
 
@@ -314,7 +317,7 @@ The same module code works in both cases — the branching happens entirely auto
 ```
 Windows Melbis Shop
     │
-    │  POST: store_id / order_id / login / pass_code
+    │  POST: store_id / order_id / login / stamp / sign
     ▼
 index.php → Run('melbis_web_sample')
     │

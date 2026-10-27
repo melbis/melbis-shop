@@ -3,6 +3,7 @@
     "parameters": "id: int",
     "tables": [
         "currency=1",
+        "key_value=1",
         "store=1"
     ],
     "includes": [

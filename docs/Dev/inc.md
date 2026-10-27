@@ -165,14 +165,13 @@ For more details on modifiers and callback syntax, see the "Modifiers" section.
 
 ## melbis_inc_logic_* — Unified Business Logic
 
-This is the most significant type of library module. In the demonstration store, the work with an order is spread across the libraries of the `logic` group: creating and loading an order, adding and removing products, discounts, calculation, writing, notifications:
+This is the most significant type of library module. In the demonstration store, the work with an order is spread across the libraries of the `logic` group: creating and loading an order, adding and removing products, discounts, calculation, writing:
 
 | Library | Short name | Functions |
 |---|---|---|
 | `melbis_inc_logic_order` | `LOGIC_ORDER` | order version: `Create` — a new one, `Load` — the current one, `GoodsAdd` and `GoodsRemove` — add and remove a product, `GoodsSum` — the products total, `GoodsDiscount` — a product discount, `OptionSet` — an order option, and others |
 | `melbis_inc_logic_order_calc` | `LOGIC_ORDER_CALC` | `Run` — calculate an order version |
 | `melbis_inc_logic_order_edit` | `LOGIC_ORDER_EDIT` | `Run` — write an order version |
-| `melbis_inc_logic_notify` | `LOGIC_NOTIFY` | `Run` — the events the application's "Dispatcher" waits for |
 | `melbis_inc_logic_common` | `LOGIC_COMMON` | `Rate` — the currency rate, `Price` — a sum in the store currency |
 
 These functions are called from the shopping cart module on the storefront:

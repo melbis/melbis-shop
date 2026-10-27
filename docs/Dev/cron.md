@@ -53,10 +53,12 @@ When installed with the standard installer, everything is already configured: th
 has the following line added:
 
 ```
-* * * * * /usr/bin/docker exec melbis_shop php /var/www/html/cron.php > /dev/null 2>&1
+* * * * * /usr/bin/docker exec -u www-data melbis_shop php /var/www/html/cron.php > /dev/null 2>&1
 ```
 
-and `cron.php` is located in the project root. Direct browser access to it is blocked
+and `cron.php` is located in the project root. The script runs as the same user
+as the storefront, `www-data`: its tasks are requests to the site itself, and they
+need no root rights. Direct browser access to it is blocked
 by an `.htaccess` rule (`RewriteRule ^cron.php$ - [F]`).
 
 The system crontab calls the script **every minute** and never changes

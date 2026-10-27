@@ -11,7 +11,7 @@ The `shop` family works with the store from outside: it opens a storefront page 
 
 `shop_page`, `shop_module` and `shop_agent` require no rights: they go to the site, not to the engine, and the right to a module is checked by the module itself. One exception: `shop_page` with `debug=true` asks the engine for the debugger's code and therefore requires the right "Get configuration". `shop_download` requires the right "Export → Store".
 
-All the MCP server's requests — to pages, to `agent.php` and to `core/mcp.php` — go from this computer with the User-Agent `MelbisShop-MCP`. If an access code is set in the store, the server appends it to the User-Agent, and the proxy in front of the site lets the requests through by it. The server takes the code before every request from the store's settings, where the program keeps it — "[Installation](../User/installation.md)", the "Security" section.
+All the MCP server's requests — to pages, to `agent.php` and to `core/mcp.php` — go from this computer with the User-Agent `MelbisShop-MCP`. If an access code is set in the store and the employee has a license for today, the server appends it to the User-Agent, and the proxy in front of the site lets the requests through by it. The server takes the code before every request from the store's settings, where the program keeps it — "[Installation](../User/installation.md)", the "Security" section.
 
 ## The Rules
 
@@ -42,7 +42,7 @@ With the field `post` the call becomes a form submission. That is how everything
 
 ## The Web Module
 
-`shop_module` opens a built-in or external web module the way the program opens it: a POST in the name of the session's person — the server adds `login` and `pass_code` itself — with the window's fields that the agent passed. That is how the modules a manager sees in the program's windows are checked and developed. The answer is saved into `modules\` of the conversation folder; with `debug` the debugger's report comes, as for a page.
+`shop_module` opens a built-in or external web module the way the program opens it: a POST in the name of the session's person — the server adds `login`, `stamp` and `sign` itself — with the window's fields that the agent passed. That is how the modules a manager sees in the program's windows are checked and developed. The answer is saved into `modules\` of the conversation folder; with `debug` the debugger's report comes, as for a page.
 
 **`shop_module` has cookies of its own**: the module's session is kept between calls and does not mix with the cookies of `shop_page`, so the page stays the page of an anonymous visitor.
 

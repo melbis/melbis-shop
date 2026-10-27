@@ -65,7 +65,6 @@ In the "Workbench" tree, libraries are organized by this group — alongside reg
 melbis
     auth          melbis_inc_auth.php
     logic         melbis_inc_logic_common.php
-                  melbis_inc_logic_notify.php
                   melbis_inc_logic_order.php
                   melbis_inc_logic_order_calc.php
                   melbis_inc_logic_order_edit.php

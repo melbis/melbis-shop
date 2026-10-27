@@ -20,7 +20,7 @@ agent application ──(stdio)──> MelbisMCP.exe ──(HTTP)──> the sto
   and the application decides whether that suits it.
 * **MelbisMCP.exe** lies in the program's installation folder. It works out by
   itself which store to sign in to, takes the login and the password itself, and
-  signs the requests with the license — the same way the program does.
+  signs the requests with the license and the password key — the same way the program does.
 * **The engine** accepts the server's requests at its entry point `core/mcp.php`,
   checks the rights the same way as for the program, and carries out the command.
 
@@ -50,7 +50,7 @@ The captions of the program's windows and fields are given here in English: in t
 
 An application opened on the store folder starts a server tied to this store: switching in the program does not affect it, and two stores can be run in two windows. A server without a tie signs in to the store last opened in the program and follows it: while another store is open there, the tools refuse with `STORE_SWITCHED`.
 
-**Signing in under a user.** There is no separate user for the AI in the store: the agent works under a person's login, with their rights and in their name. The login-password pair the server takes itself — from the running program, and if it is closed, from the Windows registry (only when the "store passwords" box is ticked). The password never passes through the correspondence.
+**Signing in under a user.** There is no separate user for the AI in the store: the agent works under a person's login, with their rights and in their name. The login-password pair the server takes itself — from the running program, and if it is closed, from the Windows registry (only when the "store passwords" box is ticked). The password never passes through the correspondence and does not go to the store: the server computes a key from it and signs every request with it.
 
 **A right** is a row of the "AI Assistant" branch in the store user's rights. One right can open several MCP tools at once: "Direct access → Development → Read data", for example, opens the file map, the search, and loading a module. Ten tools require no rights: `session_init`, `session_connect`, `session_rules_accept`, `session_clear`, `shop_page`, `shop_module`, `shop_agent` and the three `remote_*` — they are let onto the server by the program's "Server" window. In detail — "[Sign-in, Rights, License](access.md)".
 

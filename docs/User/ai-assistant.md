@@ -13,7 +13,10 @@ Three things are required for this to work:
   each employee has their own; how much and for what depends on the program
   chosen, and OpenCode can also work for free.
 * **Rights from the "AI Assistant" branch**, granted to your store user. The
-  assistant needs no separate account and never has one — see "Rights".
+  assistant needs no separate account — see "Rights". A login of its own is had
+  only by the [AI Dispatcher](ai-dispatcher.md), which works without a person.
+
+**Python** is worth installing on the same computer right away: the assistant processes data with its own scripts — it parses price lists and exports, reconciles lists, prepares files for import. A script handles thousands of rows in seconds and does not spend the subscription on going through rows in the conversation.
 
 Do not confuse it with **AI Help** — that one is built into the Workbench editor, sees only the text you show it, and changes nothing (developer guide, "[AI Help](../Dev/ai_help.md)"). The rule is simple: fits in a single file — AI Help; needs the store itself — the assistant.
 
@@ -38,7 +41,7 @@ It sees the whole store:
 
 The same configuration, but tied to a single store, the program puts into the store's own folder — for applications that open a folder as a project: `.mcp.json` and `.claude\settings.json` are read by Claude Code, `.codex\config.toml` and `AGENTS.md` by Codex, `opencode.json` and the same `AGENTS.md` by OpenCode. An assistant started from them works **with that store only**, whatever is open in the program: open the store's folder, and the correspondence about different stores does not pile up in one heap. Once the application asks whether you trust this folder and you confirm, the assistant will call its tools without asking permission for every call: its limits are set by your rights in the store. The exception is work on the server: Claude Code shows you every such command for confirmation. The files are rewritten every time the program starts, so adding anything of your own to them is pointless; they are taken from the `Engine\MCP\Setup\` folder of the distribution.
 
-There is no login or password here: the assistant signs in to the store **as you**, with the same pair you used to sign in to the program on the "Connection Parameters" tab.
+There is no login or password here: the assistant signs in to the store **as you**, with the same pair you used to sign in to the program on the "Credentials" tab.
 
 It obtains that pair on its own, by one of two routes. **The program is running** — it answers the assistant straight from its own memory. **The program is closed** — from the Windows registry, where the password is stored encrypted, but only if the "store passwords" box is ticked. There is no third route: **naming the password in correspondence is not allowed** — the assistant will not accept it, and it never appears there.
 
@@ -48,7 +51,7 @@ The **"Check Connection"** button walks the whole path for real — license, pas
 
 The AI assistant **works in your store with your own hands**, so the question of what it is allowed to do is settled where it is settled for people: in the user's rights.
 
-It has no separate account. What it has is a **separate branch in the operations registry — "AI Assistant"** — and that is not a formality: the `Load` right for a person and the `AI Assistant → Direct access → Development → Read data` right for their assistant are different rows. So you can keep your own hands full and leave the assistant with read access only — and the other way around, whoever has not been granted the branch at all simply has no assistant.
+It has no separate account — only the [AI Dispatcher](ai-dispatcher.md) has one. What it has is a **separate branch in the "Operation Catalog" — "AI Assistant"** — and that is not a formality: the `Load` right for a person and the `AI Assistant → Direct access → Development → Read data` right for their assistant are different rows. So you can keep your own hands full and leave the assistant with read access only — and the other way around, whoever has not been granted the branch at all simply has no assistant.
 
 Three consequences follow, worth keeping in mind:
 

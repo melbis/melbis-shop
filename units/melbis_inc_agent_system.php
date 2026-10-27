@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.517 @ 2026-10-22
+ * @version 6.5.1.520 @ 2026-10-27
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -86,8 +86,7 @@ function RightTable($mKind, $mUserId, $mPlace = '')
                   LEFT JOIN {DBNICK}_$satellite r
                          ON r.$key = t.id
                   LEFT JOIN {DBNICK}_user u
-                         ON ( u.group_id = r.group_id
-                              OR u.add_group_id = r.group_id )
+                         ON u.group_id = r.group_id
                       WHERE ( :SEE_ALL = 1
                               OR ( $right
                                    AND ( r.user_id = :USER_ID

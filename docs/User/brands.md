@@ -21,4 +21,5 @@ is edited **in lock mode** — changes are applied using the "Save"
 
 The list of values for the **Type** field is extended by a developer in the "Settings Registry" (see
 "[Settings Registry](registry.md)"). A brand is assigned to products in the
-"[Descriptions](descriptions.md)" and "[Prices](prices.md)" sections.
+"[Descriptions](descriptions.md)" and "[Prices](prices.md)" sections. A brand is
+linked to suppliers in the "[Suppliers](suppliers.md)" section.

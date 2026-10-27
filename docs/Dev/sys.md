@@ -2,7 +2,7 @@
 
 A store keeps dozens of reference directories in its database: the settings registry, product and order options, customer fields, currencies, suppliers, languages, the application's operations, web modules, employees and the rights granted to them. A module reads all of this constantly and almost never changes it.
 
-The `Sys*` methods come in two kinds. **Doors** read these directories, each one its own source with **one and the same query** — sections 3 to 8. **Utilities** do the system work every module would otherwise write for itself: they walk down a door's answer, look at a table's schema, rebuild a tree, count and sweep dependencies — sections 9 to 13. Two utilities stand among the doors of their own sections: writing a setting and checking a sign-in.
+The `Sys*` methods come in two kinds. **Doors** read these directories, each one its own source with **one and the same query** — sections 3 to 8. **Utilities** do the system work every module would otherwise write for itself: they walk down a door's answer, look at a table's schema, rebuild a tree, count and sweep dependencies — sections 9 to 14. Two utilities stand among the doors of their own sections: writing a setting and checking a sign-in.
 
 **Why a door, when the query fits in three lines.** Currencies really can be fetched with an ordinary `SELECT` — but writing it yourself means starting *a query text of your own*. The static cache is addressed by text: a different text is a second entry, its own copy of the same data and its own trip to the database on a miss. And it is enough to move a space or a line break for the text to become different — and then there are three entries.
 
@@ -44,13 +44,13 @@ $mine = $provider[$provider_id] ?? [];
 
 The row loses nothing in the process: a supplier holds `group_id` inside it, a warehouse holds `provider_id` — the way up is known from the row itself. In detail — section 9.
 
-**A derived field comes on top of the columns, not instead of them.** A door may add to a row something the table does not hold, if that spares every store one and the same calculation: this is how a currency got its `rate` and an employee their `group`. The real columns stay where they were.
+**A derived field comes on top of the columns, not instead of them.** A door may add to a row something the table does not hold, if that spares every store one and the same calculation: this is how a currency got its `rate` and a group of employees its `users` list. The real columns stay where they were.
 
 **A row without a symbolic name is in the list as well.** The door does not pick out "only those with a `skey`": the set is maintained by the store owner, an unnamed row there is an ordinary thing, and the data refers to it by `id`. A currency without a `skey` stands in a product's `price_curr_id`, and without it in the list the price cannot be worked out. Whoever needs only the named ones filters them out themselves.
 
 **Three doors answer with a map, and that is a decision rather than a lag.** `SysKeyValues` returns "key → value" pairs, where the row is degenerate into the pair itself; `SysEntityValues` — the projection "what is set on the entity", not the rows of a table; `SysTableSkey` — addressing by name, the very thing it exists for. These three have a slice argument.
 
-**The utilities each answer in their own way.** A family level, a schema, the number of a new node, a count of dependencies, a report on a sweep — these are answers of another kind, and every utility states its own shape on the spot: sections 9 through 13.
+**The utilities each answer in their own way.** A family level, a schema, the number of a new node, a count of dependencies, a report on a sweep — these are answers of another kind, and every utility states its own shape on the spot: sections 9 through 14.
 
 **The fields are named after the table's columns.** What is written in `install.sql` and in the table description is what is in the row: `kind_key`, `tindex`, `is_blocked`, `modify_sum`. There is no second vocabulary to learn, and a `grep` by the column name finds both the queries and the modules.
 
@@ -66,13 +66,15 @@ Freshness does not suffer from it. A static entry's address is assembled from th
 
 The mark stays put only for a write that goes past the engine: a raw query from an SQL tool, an external script, an edit made by hand in the database. But such an edit shows up neither in the rights, nor in the prices, nor in the products — that is a property of going around, not of particular tables.
 
-For the most part the utilities do not go to the database at all: both `SysPick*` walk the ready array a door has already brought, while the tree doors and `SysSelfKeyModify` write. But three of them read, and each without the static cache — for a reason of its own.
+For the most part the utilities do not go to the database at all: both `SysPick*` walk the ready array a door has already brought, while the tree doors, `SysSelfKeyModify` and the event log write. But four of them read, and each without the static cache — for a reason of its own.
 
-**`SysUserLoginCheck`** — the verb in the name says this is a check and not a list. The password is not put into shared memory: the static cache keeps a query's parameters inside the entry itself, and the password would lie there in the open. A sign-in always goes to the database.
+**`SysUserSignCheck`** — the verb in the name says this is a check and not a list. The employee's key is read from the database at every sign-in: a new password and a block take effect at once, without waiting for the cache.
 
 **`SysTableColumns`** — its query text holds not a single table of the store, which means there is no mark by which the entry could be cancelled. The schema is remembered for the duration of the request: within one request the columns do not change.
 
 **`SysDependCount`** counts against the live database: the query is assembled for the call, and the answer has to be exact as of now — it is what the decision to delete rests on.
+
+**`SysUserEventList`** — a log, not a reference directory: it changes every second, and the cache entry would be reset on every insert. Every call goes to the database.
 
 A door keeps nothing in the request's memory: every call goes to the static cache anew, and any write moves the address there. So a change made earlier on the same page is visible to everyone who asks after it.
 
@@ -208,12 +210,12 @@ foreach ( MELBIS()->SysOrderOptionBlocks() as $block )
 }
 ```
 
-**A limit's `right` is not a right but an addressee.** The rows of `order_option_limit_right` say *who* the ban applies to: `user_id` — an employee, `group_id` — a group; an empty one arrives as zero. This is not the family of rights (section 8): there a door answers "is it allowed", while here it returns a rule with a text of its own, and the store's owner falls under it like everyone else if they have been named. Whether the rule concerns a person the module decides itself — by `group` from `SysUsers`:
+**A limit's `right` is not a right but an addressee.** The rows of `order_option_limit_right` say *who* the ban applies to: `user_id` — an employee, `group_id` — a group; an empty one arrives as zero. This is not the family of rights (section 8): there a door answers "is it allowed", while here it returns a rule with a text of its own, and the store's owner falls under it like everyone else if they have been named. Whether the rule concerns a person the module decides itself — by `group_id` from `SysUsers`:
 
 ```php
 $user_set = MELBIS()->SysUsers();
 $person = array_column($user_set, null, 'id');
-$group = $person[$user_id]['group'] ?? [];
+$group_id = $person[$user_id]['group_id'] ?? 0;
 
 foreach ( MELBIS()->SysOrderOptionLimits() as $limit )
 {
@@ -222,7 +224,7 @@ foreach ( MELBIS()->SysOrderOptionLimits() as $limit )
 
     foreach ( $limit['right'] as $right )
     {
-        $mine = ( $right['user_id'] === $user_id || in_array($right['group_id'], $group, true) );
+        $mine = ( $right['user_id'] === $user_id || ( $group_id > 0 && $right['group_id'] === $group_id ) );
         if ( !$mine ) continue;
 
         $message = $limit['message'];
@@ -296,7 +298,7 @@ foreach ( $menu as $module )
 
 ## 7. People
 
-**`SysUsers()`** — the store's employees. Besides their own `group_id` and `add_group_id` columns each one carries a derived field `group` — both groups in one list, the empty one thrown out.
+**`SysUsers()`** — the store's employees. A person's group lies in their `group_id` column, and whoever has not been moved anywhere yet arrives with zero.
 
 **`SysUserGroups()`** — the groups, and inside each one, under the `users` key, the **identifiers** of its people rather than their rows: people have a door of their own, and the group names them instead of copying them. It unfolds in two lines:
 
@@ -312,9 +314,9 @@ foreach ( $group['users'] as $user_id )
 
 A group nobody has been moved into yet is in the list — simply with an empty `users`.
 
-**`SysUserLoginCheck($mLogin, $mPassCode)`** — signing in: it returns the employee's identifier or zero. Zero means all of it at once — no such login, the password did not match, the person is blocked — and that is right: from the outside these cases must not be told apart. `$mPassCode` is not the password itself but its md5: that is how it is kept in the database, and it is compared string against string. With a raw password the answer is always zero.
+**`SysUserSignCheck($mLogin, $mStamp, $mSign)`** — sign-in by signature: it returns the employee's identifier or zero. Zero means all of it at once — no such login, the signature did not match, the time ran out, the person is blocked — and that is right: from the outside these cases must not be told apart. `$mSign` is an Ed25519 signature of the string `login|time|WEB` in base64, made with a key computed from the password; `$mStamp` is the time of the signature in GMT in the form `YYYY-MM-DD hh:mm:ss`, valid within ±10 minutes. The word `WEB` separates a sign-in to a web module from the program's requests: a signature of one does not fit the other. The program and the MCP server add `login`, `stamp` and `sign` to the module's post themselves; the form in a browser signs with the `melbis_crypto_sign` function from `statics/melbis/main.js` of the demo store.
 
-The verb in the name is not for decoration: this is a utility rather than a door — it reads without the cache, and it is the only one in the whole section that takes a secret. No door reads the password, it is not in the list of `SysUsers` columns, and the check itself never gets into shared memory.
+The verb in the name is not for decoration: this is a utility rather than a door — it reads without the cache. The password is in no door and nowhere in the database: only the employee's public key lies there, and it is not in the list of `SysUsers` columns either.
 
 ## 8. Rights
 
@@ -406,7 +408,7 @@ $stock = MELBIS()->SysPickBranch($group_set, 'provider/stock', 'id');
 $rate = MELBIS()->SysPickBranch(MELBIS()->SysTaxAreaRules(), 'rule/rate', 'id');
 ```
 
-A row met twice becomes one: an employee in two groups arrives once, because the map is keyed by `id`.
+A row met twice becomes one: the map is keyed by `id`, and a repeat lands in the same place.
 
 Without `$mKey` the answer is a list with no key. An unknown key in the path stops the walk with a list of what the row does hold, and returns `$mDefault` — an empty array by default, so `isset` by key works even after a miss.
 
@@ -426,7 +428,7 @@ $key = MELBIS()->SysPickFlat($keys, 'skey');
 $min = $key['MIN_BUY'] ?? [];
 ```
 
-What is thrown out is **everything that is an array** — both a nested level and a derived field that is a list. An employee loses `group` along with `provider`, but `group_id` and `add_group_id` stay where they were, so no data is lost: only the convenient summary goes.
+What is thrown out is **everything that is an array** — both a nested level and a derived field that is a list. A supplier group loses its nested `provider`, a group of employees its `users` list, but the columns stay where they were: only the convenient summary goes.
 
 ## 10. The Table Schema
 
@@ -595,7 +597,81 @@ The pass is built like the hard one — a pre-check by count, a latch per table,
 
 Nulling is a matter of last resort, and nothing calls it by itself: the hard sweep does not touch these rows, and the decision to untie the products from a deleted currency is taken by whoever deleted the currency.
 
-## 14. What Does Not Belong Here
+## 14. The Event Log {#events}
+
+The log is the store's way of telling employees and the AI dispatcher that something has happened. The engine writes a row into it when an operation with an event key in the operations registry is performed. A module writes one too, when something of its own happens: an order on the storefront, a payment system's answer. The program's Dispatcher polls the log, and a notification with the same key plays a sound or launches a command. How events are built as a whole — where they come from, how they reach the program and how to set up your own — is in "[Event Tracking](events.md)".
+
+| Door | What it does |
+|---|---|
+| `SysUserEventAdd($mKeyName, $mData = [], $mState = 'ALONE', $mUserIds = [], $mGroupIds = [])` | writes an event and answers with its `id` |
+| `SysUserEventList($mFromId = 0, $mKeyName = '', $mState = '', $mLimit = 100)` | events after `$mFromId` in ascending `id` order, no more than `$mLimit` |
+| `SysUserEventLoad($mId)` | one event by its number; `[]` if there is none |
+| `SysUserEventLast($mKeyName = '', $mState = '', $mBeforeTime = '')` | the last event — of the log, of a key or of a state, and with `$mBeforeTime` the last one before that time; `[]` if there is none |
+| `SysUserEventState($mId, $mState, $mFromState = '')` | sets the event's state and answers with a word |
+| `SysUserEventClear($mBeforeTime, $mStateIn = [])` | deletes events older than `$mBeforeTime` and answers how many were deleted |
+
+```php
+$data_order = [
+    'order_id'  => $order_id,
+    'client_id' => $client_id
+    ];
+$event_id = MELBIS()->SysUserEventAdd('kNewOrder', $data_order);
+```
+
+**The key** is the event's code; by it a Dispatcher notification recognizes its own.
+
+**The data** is the module's array. The door puts it into the log as is, and `SysUserEventList` gives it back as an array. An event of a program operation carries the `user_id` of whoever performed it, and `command`.
+
+**The recipients** are lists of employee and group `id`s. Empty lists mean the event is for everyone. An employee's Dispatcher sees an event if it is for everyone or if the lists hold the employee or their group.
+
+**The state** is a word the store agrees on. The engine writes `ALONE` unless the registry has set another one. From then on the state is changed by whoever handles the event.
+
+**Taking an event into work** means changing its state on the condition of the previous one. Of two handlers arriving at the same moment, only one gets `ACCEPT`:
+
+```php
+$event_set = MELBIS()->SysUserEventList($from_id, 'kSystem', 'ALONE');
+foreach ( $event_set as $event )
+{
+    $take = MELBIS()->SysUserEventState($event['id'], 'LAUNCH', 'ALONE');
+    if ( $take != 'ACCEPT' ) continue;
+
+    // The work on the event
+
+    MELBIS()->SysUserEventState($event['id'], 'DONE');
+}
+```
+
+| Word | What it means |
+|---|---|
+| `ACCEPT` | the state is written or already was such |
+| `ABSENT` | there is no such event |
+| `TAKEN` | the event is already in another state: someone took it earlier |
+
+`TAKEN` happens only with `$mFromState`. Without it the door simply sets the state.
+
+**Pages.** `SysUserEventList` gives no more than `$mLimit` rows. The next page is read with `$mFromId` equal to the last `id` received. Pages go by number, not by time: each event has a number of its own, while one second can hold several events.
+
+**From what time to read.** The cursor for a time is the number of the last event before it:
+
+```php
+$yesterday = MELBIS()->DateTime('-1 day');
+$before = MELBIS()->SysUserEventLast('', '', $yesterday);
+$from_id = $before['id'] ?? 0;
+$event_set = MELBIS()->SysUserEventList($from_id, 'kNewOrder');
+```
+
+`SysUserEventLoad` and `SysUserEventLast` give an event in the same form as a `SysUserEventList` row.
+
+**Cleanup.** The log grows with every event, and it is cleaned by whoever runs the handling, for example a scheduled task once a day:
+
+```php
+$before = MELBIS()->DateTime('-7 days');
+MELBIS()->SysUserEventClear($before, ['DONE']);
+```
+
+Cleanup does not knock the Dispatcher's mark off: the program asks for events after the last `id` it has seen.
+
+## 15. What Does Not Belong Here
 
 The reference doors read **reference directories**, not the store's data. Products, orders, customers, catalog sections and the bindings to them are read with the ordinary `Sql*` methods: their volume grows along with the store, and a whole list would not pay off there.
 

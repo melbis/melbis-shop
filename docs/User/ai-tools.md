@@ -1,6 +1,6 @@
 # AI Components
 
-The **"Development → AI Components"** window holds everything the store gives the AI assistant, on three tabs:
+The **"Development → AI Components"** window holds everything the store gives the AI assistant and the [AI Dispatcher](ai-dispatcher.md), on three tabs:
 
 * **"AI Tools"** — commands written for your store, and the employees'
   permissions for each of them;
@@ -9,7 +9,7 @@ The **"Development → AI Components"** window holds everything the store gives 
 * **"AI Repository"** — sections in which the employees' assistants keep working
   data for themselves and for each other.
 
-How the assistant uses all of this is described in "[AI Assistant](ai-assistant.md)". The window is edited **in lock mode**: changes are applied with the "Save" / "Save and Exit" buttons (see "[Three Data Working Modes](basics.md)"). The right "Development → AI Components → Get" allows opening the window, "Save" allows saving it.
+How the assistant uses all of this is described in "[AI Assistant](ai-assistant.md)"; how the dispatcher is taught to use it — in "[AI Dispatcher](ai-dispatcher.md)". The window is edited **in lock mode**: changes are applied with the "Save" / "Save and Exit" buttons (see "[Three Data Working Modes](basics.md)"). The right "Development → AI Components → Get" allows opening the window, "Save" allows saving it.
 
 ## AI Tools {#tools}
 
@@ -72,6 +72,8 @@ A right is granted **per command** — by a checkmark at the intersection of "co
 
 **Rights are handed out to people, not to the assistant.** The assistant works on behalf of the employee who started it (see "[AI Assistant](ai-assistant.md)"), and the grant is counted for that person. Hence the fact that the same tool can do different things for different employees.
 
+**The AI Dispatcher has a login of its own** (see "[AI Dispatcher](ai-dispatcher.md)"), and commands are granted to it the same way as to an employee — with a checkmark on its row. Grant only those its notes name: it works without a person, and the grant is the only thing that limits it.
+
 **The command, the grant, and the fields are all checked by the engine itself, before the module.** An unknown word, a command that has not been granted, and a field that does not match all come back as a ready-made refusal, and the module never sees them — what is left for it are the rules of the subject area.
 
 > The assistant sees the full list of tools and commands regardless of rights — and about a command that has not been granted it answers with an address rather than "access denied": which command of which tool, and where it is granted. That address is what to pass to the administrator as is. An employee who is allowed to save AI settings owns all commands automatically — which is what the footnote under the permission tables says.
@@ -110,6 +112,8 @@ On the left is the **"Users"** tree: "All users", under it the groups, and in ea
 | group | for the group's employees, main or additional | the administrator, in this window |
 | employee | the employee's own | this employee's assistant, with their consent; the administrator — here |
 
+**The AI Dispatcher's notes** lie under its login, like an employee's, but they are written by the administrator, here: the dispatcher has nobody to ask for consent. They are its working routine and a note for each event key. A note for everyone that suits only people begins with a line saying it is not for the dispatcher's login — see "[AI Dispatcher](ai-dispatcher.md)".
+
 On the right are the **"Notes"** of the selected node, with rows coloured by type, and under the table the text of the current note. The order is changed with "Move Up" and "Move Down".
 
 **To hand a note over**, drag it from the table onto another node of the tree: the note moves there. With **Ctrl** held down it is copied — this is how a rule the assistant wrote down for one employee is given to the whole group while the author keeps it.
@@ -134,7 +138,7 @@ Whose note it is is not set in the card: it is the tree node under which the not
 | Type | What it is |
 |---|---|
 | Critical | what is observed in every session; the assistant reads these notes before any other work |
-| Directive | an employee's instruction |
+| Directive | an employee's instruction; for the AI Dispatcher — what to do on an event |
 | Skill | how to work with this person |
 | Default | everything else |
 
@@ -177,6 +181,8 @@ The rights of an employee and of their groups — main and additional — add up
 The checkboxes decide which action goes through inside a section. The repository itself is opened to the assistant by the employee's rights in the "AI Assistant → Repository" branch (see "[Users and Access Rights](users.md)").
 
 **An employee's personal section.** Create a section with the "Personal" type, name its owner in the description, and give rights only to that employee. If everyone has a personal section, one memory note for everyone can tell the assistants how to find their own: for example, a "Personal" section whose key equals the employee's number (ID).
+
+**The AI Dispatcher's section** is set up the same way: "Personal", with rights only for its login — "Topics — List", "Topics — Create", "Data — Read" and "Data — Write". In it the dispatcher keeps a topic per event key and a record per event, so the "Topics and Data" of this section are a log of everything it has done.
 
 ### Topics and Data
 

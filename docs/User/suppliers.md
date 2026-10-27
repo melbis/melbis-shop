@@ -7,10 +7,11 @@ additional options.
 
 The window is divided into three parts: on the left — **"Supplier Groups"**, in
 the middle — the **"Suppliers"** of the selected group, below them — the
-**"Supplier Locations"**. The right-hand column holds the additional options on
-two tabs: **"Supplier Options"** and **"Location Options"**. Every list has the
-standard functions: adding, deleting and moving items in the list (up and down),
-as well as a "Table Designer" for column configuration. The section is edited
+**"Supplier Locations"**. The right-hand column holds three tabs:
+**"Supplier Options"**, **"Location Options"** and **"Linked Brands"**. The
+lists of groups, suppliers and locations have the standard functions: adding,
+deleting and moving items in the list (up and down), as well as a "Table
+Designer" for column configuration. The section is edited
 **in lock mode** — changes are applied using the "Save" / "Save and Exit"
 buttons (see "[Three Data Working Modes](basics.md)").
 
@@ -20,10 +21,6 @@ buttons (see "[Three Data Working Modes](basics.md)").
 * **Name** — the supplier's name;
 * **Type**, **Status** — configurable properties (see below);
 * **Parameters** — a free-form text field;
-* **Manager** — the responsible manager;
-* **Phone Numbers**, **Email Address** — supplier contact details;
-* **Warehouse Address**, **Service Center Address**, **Service Center Phone** — warehouse and service
-  center address;
 * **Note** — a free-form note.
 
 ## Supplier Locations
@@ -42,6 +39,14 @@ option tree and the sets of fixed values are defined in the "Settings Registry"
 (the "suppliers" and "supplier locations" placements), and in the right-hand
 column a value is assigned to the selected supplier or location: from a list,
 as free text or by an input mask (see "[Settings Registry](registry.md)").
+
+## Linked Brands
+
+The **"Linked Brands"** tab lists all the store's brands. A checkmark in the
+**"Link"** column links a brand to the selected supplier; clearing it breaks the
+link. In the **"Parameters"** column a linked brand can be given free-form text;
+when the link is broken, the text is deleted together with it. The brands
+themselves are created in the "[Brands](brands.md)" section.
 
 ## Configuring Type and Status
 

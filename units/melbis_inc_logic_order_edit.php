@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.517 @ 2026-10-22
+ * @version 6.5.1.520 @ 2026-10-27
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -220,7 +220,8 @@ function Run($mUserId, $mVersion)
         'order_id' => $mVersion['order_id']
         ];
     $order = MELBIS()->SqlSelectFlat(__LINE__, $command, $param);
-    if ( !isset($order['id']) )
+    $order_new = !isset($order['id']);
+    if ( $order_new )
     {
         $order['id'] = MELBIS()->SqlGenId('orders');
         $code_parts = str_split(substr(time(), -6), 3);
@@ -237,6 +238,15 @@ function Run($mUserId, $mVersion)
     // Update order
     $order['version_id'] = $version['id'];
     MELBIS()->SqlUpdate(__LINE__, '{DBNICK}_orders', $order, 'id');
+
+    // Tell the store about a new order, wherever it was placed
+    if ( $order_new )
+    {
+        $data_event = [
+            'order_id' => $order['id']
+            ];
+        MELBIS()->SysUserEventAdd('kNewOrder', $data_event);
+    }
     
     // Result orders
     $result['orders'][] = $order['id'];    

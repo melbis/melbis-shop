@@ -1,9 +1,11 @@
 {
-    "description": "Logical Notify",
-    "parameters": "LOGIC_NOTIFY",
+    "description": "The journal of events",
+    "parameters": "",
     "tables": [],
-    "includes": [],
-    "cache_on": "1",
+    "includes": [
+        ""
+    ],
+    "cache_on": "0",
     "cache_time": "0",
     "lazy_load": "0",
     "entry_point": "0",

@@ -77,7 +77,13 @@ a section — how many products per page, which block to show and the like.
 
 The tab declares the named SQL queries an employee switches on in the section's
 "Advanced Query" alongside the ordinary conditions. The **"Placement"** list says
-where the filter will show up: **products**, **orders** or **customers**.
+where the filter will show up: **products**, **orders**, **customers**, **prices**,
+**descriptions** or **browser**.
+
+Filters for **products** are shared: they are present in "Prices", "Descriptions",
+"Browser" and in the product selection window. A filter with the **prices**,
+**descriptions** or **browser** placement is visible only in its own window and
+stands after the shared ones.
 
 The query is written against the **server's database** and must return a single
 column — the identifiers of the rows to be selected. The table prefix is written

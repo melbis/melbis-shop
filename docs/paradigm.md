@@ -1,6 +1,6 @@
 # Concept
 
-Built into Melbis Shop is not only a set of programs but also a way of running a business: the owner states a task in words, the AI assistant carries it out with the store's tools, and if the tool it needs does not exist, it builds one. This page describes the approach itself. How to connect the assistant and grant it rights — "[AI Assistant](User/ai-assistant.md)".
+Built into Melbis Shop is not only a set of programs but also a way of running a business: the owner states a task in words, the AI assistant carries it out with the store's tools, and if the tool it needs does not exist, it builds one. What must always happen, without reminders, is entrusted to the AI Dispatcher: it takes up the work by itself on store events — "[AI Dispatcher](User/ai-dispatcher.md)". This page describes the approach itself. How to connect the assistant and grant it rights — "[AI Assistant](User/ai-assistant.md)".
 
 ## Two Approaches to Running a Store
 

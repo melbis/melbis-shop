@@ -12,7 +12,9 @@ There is a third role as well: the application is the control panel for the
 opened it, so its reach is set by ordinary user rights; on top of that the owner
 sets up **AI Tools** — ready-made store commands the assistant runs instead of
 manual work — and hands them out to employees one command at a time. This is
-covered in "[AI Tools](ai-tools.md)".
+covered in "[AI Tools](ai-tools.md)". The same control panel also runs the
+**AI Dispatcher** — an agent with a login of its own, which the application on a
+separate computer wakes up with store events (see "[AI Dispatcher](ai-dispatcher.md)").
 
 ## Desktop
 

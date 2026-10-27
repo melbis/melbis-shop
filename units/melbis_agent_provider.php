@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.517 @ 2026-10-22
+ * @version 6.5.1.520 @ 2026-10-27
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -45,7 +45,7 @@ function CmdListCut($mUserId, $mParam)
  **/
 function CmdListFull($mUserId, $mParam)
 {
-    $tables = ['provider_group', 'provider', 'provider_stock', 'provider_key_set', 'provider_stock_key_set'];
+    $tables = ['provider_group', 'provider', 'provider_stock', 'provider_brand', 'provider_key_set', 'provider_stock_key_set'];
 
     return TABLE\Read($tables);
 }
@@ -229,6 +229,60 @@ function CmdStockKeyUpdate($mUserId, $mParam)
 function CmdStockKeyRemove($mUserId, $mParam)
 {
     return TABLE\KeySetRemove($mUserId, 'provider_stock', $mParam['id']);
+}
+
+
+// Brands
+//==================================================================================================
+
+
+/**
+ * Function CmdBrandAdd
+ **/
+function CmdBrandAdd($mUserId, $mParam)
+{
+    // A pair stands once, as the tick in the program
+    $list = implode(',', $mParam['brand_id']);
+    $command = "SELECT brand_id
+                  FROM {DBNICK}_provider_brand
+                 WHERE provider_id = :PROVIDER_ID
+                   AND brand_id IN ( $list )
+               ";
+    $param_link = [
+        'provider_id' => $mParam['provider_id']
+        ];
+    $linked = MELBIS()->SqlSelect(__LINE__, $command, $param_link);
+    if ( count($linked) > 0 )
+    {
+        $brand_set = array_column($linked, 'brand_id');
+        $said = implode(', ', $brand_set);
+
+        return [
+            'result'  => false,
+            'message' => 'The brands ['.$said.'] are linked to this provider already'
+            ];
+    }
+
+    return TABLE\AddBlock($mUserId, 'provider_brand', 'brand_id', $mParam['brand_id'], $mParam);
+}
+
+
+/**
+ * Function CmdBrandUpdate
+ **/
+function CmdBrandUpdate($mUserId, $mParam)
+{
+    return TABLE\Update($mUserId, 'provider_brand', $mParam['id'], $mParam);
+}
+
+
+/**
+ * Function CmdBrandRemove
+ **/
+function CmdBrandRemove($mUserId, $mParam)
+{
+    $mParam['apply'] = true;
+    return TABLE\Remove($mUserId, 'provider_brand', $mParam['id'], $mParam);
 }
 
 ?>

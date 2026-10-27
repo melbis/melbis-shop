@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.517 @ 2026-10-22
+ * @version 6.5.1.520 @ 2026-10-27
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -54,6 +54,8 @@ CREATE TABLE {DBNICK}_oper (
    load_max_1  DECIMAL(10,2) DEFAULT '0' NOT NULL,
    load_max_5  DECIMAL(10,2) DEFAULT '0' NOT NULL,
    load_max_15 DECIMAL(10,2) DEFAULT '0' NOT NULL,
+   event_key   CHAR(100) DEFAULT '' NOT NULL,
+   event_state CHAR(32) DEFAULT '' NOT NULL,
    PRIMARY KEY (id),
    KEY IDX1 (command)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
@@ -176,16 +178,12 @@ CREATE TABLE {DBNICK}_user (
    id 			   INT UNSIGNED DEFAULT '0' NOT NULL,
    group_id 	   INT UNSIGNED DEFAULT NULL,
    login 		   CHAR(100) DEFAULT '' NOT NULL,
-   pass_code 	   CHAR(32) DEFAULT '' NOT NULL,
+   pass_key 	   CHAR(44) DEFAULT '' NOT NULL,
    name 		      CHAR(255) DEFAULT '' NOT NULL,
-   phone 		   CHAR(255) DEFAULT '' NOT NULL,
-   email		      CHAR(255) DEFAULT '' NOT NULL,
    params		   MEDIUMTEXT DEFAULT ('') NOT NULL,
-   add_group_id 	INT UNSIGNED DEFAULT NULL,
    is_blocked 		TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
-   KEY IDX1 (group_id),
-   KEY IDX2 (add_group_id)
+   KEY IDX1 (group_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 /**
@@ -196,8 +194,6 @@ CREATE TABLE {DBNICK}_user_group (
    id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
    skey 	      CHAR(32) DEFAULT '' NOT NULL,
    name 	      CHAR(100) DEFAULT '' NOT NULL,
-   phone 	   CHAR(255) DEFAULT '' NOT NULL,
-   email	      CHAR(255) DEFAULT '' NOT NULL,
    pos		   INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
@@ -209,6 +205,22 @@ CREATE TABLE {DBNICK}_user_chat (
    to_user_id	INT UNSIGNED DEFAULT NULL,
    message_txt	TEXT DEFAULT ('') NOT NULL,
    date_time	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,	
+   KEY IDX1 (date_time)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+/**
+ * Table user_event
+ **/
+DROP TABLE IF EXISTS {DBNICK}_user_event;
+CREATE TABLE {DBNICK}_user_event (
+   id 		   BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+   user_ids 	TEXT DEFAULT ('') NOT NULL,
+   group_ids	TEXT DEFAULT ('') NOT NULL,
+   key_name 	CHAR(100) DEFAULT '' NOT NULL,
+   data 	      MEDIUMTEXT DEFAULT ('') NOT NULL,
+   state 	   CHAR(32) DEFAULT 'ALONE' NOT NULL,
+   date_time	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,
+   PRIMARY KEY (id),
    KEY IDX1 (date_time)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
@@ -298,7 +310,8 @@ CREATE TABLE {DBNICK}_user_task (
    kind_key 	CHAR(100) DEFAULT 'kDefault' NOT NULL,
    state_key 	CHAR(100) DEFAULT 'kNew' NOT NULL,
    privy 	   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
-   date_time	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,	
+   begin_time	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,	
+   end_time	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,	
    PRIMARY KEY (id),
    KEY IDX1 (user_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
@@ -808,10 +821,10 @@ CREATE TABLE {DBNICK}_topic_key_set (
  **/
 DROP TABLE IF EXISTS {DBNICK}_topic_store;
 CREATE TABLE {DBNICK}_topic_store (
-   id 		   BIGINT UNSIGNED DEFAULT '0' NOT NULL,
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
    topic_id 	INT UNSIGNED DEFAULT NULL,
-   store_id 	BIGINT UNSIGNED DEFAULT NULL,
-   pos 		   BIGINT UNSIGNED DEFAULT '0' NOT NULL,
+   store_id 	INT UNSIGNED DEFAULT NULL,
+   pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),   
    KEY IDX1 (store_id),
    KEY IDX2 (topic_id, store_id)
@@ -976,12 +989,6 @@ CREATE TABLE {DBNICK}_provider (
    kind_key 	CHAR(100) DEFAULT 'kDefault' NOT NULL,
    state_key 	CHAR(100) DEFAULT 'kDefault' NOT NULL,
    params 	   CHAR(255) DEFAULT '' NOT NULL,
-   manager 	   CHAR(255) DEFAULT '' NOT NULL,
-   phones 	   CHAR(255) DEFAULT '' NOT NULL,
-   emails	   CHAR(255) DEFAULT '' NOT NULL,
-   store 	   CHAR(255) DEFAULT '' NOT NULL,
-   serv_addr 	CHAR(255) DEFAULT '' NOT NULL,
-   serv_phone 	CHAR(255) DEFAULT '' NOT NULL,
    notice	   MEDIUMTEXT DEFAULT ('') NOT NULL,
    pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
@@ -1122,6 +1129,21 @@ CREATE TABLE {DBNICK}_provider_stock_key_set (
 
 
 /**
+ * Table provider_brand
+ **/
+DROP TABLE IF EXISTS {DBNICK}_provider_brand;
+CREATE TABLE {DBNICK}_provider_brand (
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   provider_id 	INT UNSIGNED DEFAULT NULL,
+   brand_id 	INT UNSIGNED DEFAULT NULL,
+   params 	   CHAR(255) DEFAULT '' NOT NULL,
+   PRIMARY KEY (id),
+   KEY IDX1 (provider_id),
+   KEY IDX2 (brand_id)
+) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
+
+
+/**
  * Table info
  **/
 DROP TABLE IF EXISTS {DBNICK}_info;
@@ -1172,7 +1194,7 @@ CREATE TABLE {DBNICK}_files_info (
  **/
 DROP TABLE IF EXISTS {DBNICK}_info_value;
 CREATE TABLE {DBNICK}_info_value (
-   id 		   BIGINT UNSIGNED DEFAULT '0' NOT NULL,
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
    skey 	      CHAR(32) DEFAULT '' NOT NULL,
    info_id 	   INT UNSIGNED DEFAULT NULL,
    name 	      MEDIUMTEXT DEFAULT ('') NOT NULL,
@@ -1180,7 +1202,7 @@ CREATE TABLE {DBNICK}_info_value (
    kind_key    CHAR(100) DEFAULT 'kDefault' NOT NULL,
    params 	   CHAR(255) DEFAULT '' NOT NULL,
    seo_code 	CHAR(255) DEFAULT '' NOT NULL,
-   pos 		   BIGINT UNSIGNED DEFAULT '0' NOT NULL,
+   pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY IDX1 (info_id),
    KEY IDX2 (kind_key)
@@ -1192,17 +1214,17 @@ CREATE TABLE {DBNICK}_info_value (
  **/
 DROP TABLE IF EXISTS {DBNICK}_files_info_value;
 CREATE TABLE {DBNICK}_files_info_value (
-   id		         BIGINT UNSIGNED DEFAULT '0' NOT NULL,
-   elem_id	      BIGINT UNSIGNED DEFAULT NULL,
+   id		         INT UNSIGNED DEFAULT '0' NOT NULL,
+   elem_id	      INT UNSIGNED DEFAULT NULL,
    kind_key 	   CHAR(100) DEFAULT 'kDefault' NOT NULL,
    file_name 	   CHAR(100) DEFAULT '' NOT NULL,
    file_size	   INT UNSIGNED DEFAULT '0' NOT NULL,
    upload_time    DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,
    upload_ok 	   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    real_name	   CHAR(255) DEFAULT '' NOT NULL,
-   parent_id	   BIGINT UNSIGNED DEFAULT NULL,
+   parent_id	   INT UNSIGNED DEFAULT NULL,
    format_xml 	   MEDIUMTEXT DEFAULT ('') NOT NULL,
-   pos		      BIGINT UNSIGNED DEFAULT '0' NOT NULL,
+   pos		      INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY IDX1 (elem_id, kind_key, pos)   
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
@@ -1591,8 +1613,8 @@ CREATE TABLE {DBNICK}_param_value_key_set (
  **/
 DROP TABLE IF EXISTS {DBNICK}_store_param;
 CREATE TABLE {DBNICK}_store_param (
-   id 		      BIGINT UNSIGNED DEFAULT '0' NOT NULL,
-   store_id 	   BIGINT UNSIGNED DEFAULT NULL,
+   id 		      INT UNSIGNED DEFAULT '0' NOT NULL,
+   store_id 	   INT UNSIGNED DEFAULT NULL,
    param_id 	   INT UNSIGNED DEFAULT NULL,
    value_id 	   INT UNSIGNED DEFAULT NULL,
    value_name	   CHAR(255) DEFAULT '' NOT NULL,
@@ -1667,9 +1689,9 @@ CREATE TABLE {DBNICK}_trans (
  **/
 DROP TABLE IF EXISTS {DBNICK}_trans_origin;
 CREATE TABLE {DBNICK}_trans_origin (
-   id 		   BIGINT UNSIGNED DEFAULT '0' NOT NULL,
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
    trans_id	   INT UNSIGNED DEFAULT NULL,
-   item_id	   BIGINT UNSIGNED DEFAULT NULL,
+   item_id	   INT UNSIGNED DEFAULT NULL,
    item_code 	CHAR(32) DEFAULT '' NOT NULL,
    context     CHAR(255) DEFAULT '' NOT NULL,
    origin      MEDIUMTEXT DEFAULT ('') NOT NULL,
@@ -1693,10 +1715,10 @@ CREATE TABLE {DBNICK}_trans_origin (
  **/
 DROP TABLE IF EXISTS {DBNICK}_trans_lang;
 CREATE TABLE {DBNICK}_trans_lang (
-   id 		      BIGINT UNSIGNED DEFAULT '0' NOT NULL,
+   id 		      INT UNSIGNED DEFAULT '0' NOT NULL,
    lang_id	      INT UNSIGNED DEFAULT NULL,
    trans_id	      INT UNSIGNED DEFAULT NULL,
-   origin_id   	BIGINT UNSIGNED DEFAULT NULL,
+   origin_id   	INT UNSIGNED DEFAULT NULL,
    translate   	MEDIUMTEXT DEFAULT ('') NOT NULL,
    is_approve  	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    is_error    	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
@@ -1771,7 +1793,7 @@ CREATE TABLE {DBNICK}_advert_goods (
    id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
    advert_id 	INT UNSIGNED DEFAULT NULL,
    kind_key 	CHAR(100) DEFAULT 'kDefault' NOT NULL,
-   elem_id 	   BIGINT UNSIGNED DEFAULT NULL,
+   elem_id 	   INT UNSIGNED DEFAULT NULL,
    params      CHAR(255) DEFAULT '' NOT NULL,
    comment     CHAR(255) DEFAULT '' NOT NULL,
    pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
@@ -1863,7 +1885,7 @@ CREATE TABLE {DBNICK}_advert_key_set (
  **/
 DROP TABLE IF EXISTS {DBNICK}_store;
 CREATE TABLE {DBNICK}_store (
-   id 		      BIGINT UNSIGNED DEFAULT '0' NOT NULL,
+   id 		      INT UNSIGNED DEFAULT '0' NOT NULL,
    provider_id 	INT UNSIGNED DEFAULT NULL,
    brand_id 	   INT UNSIGNED DEFAULT NULL,
    code_shop 	   CHAR(255) DEFAULT '' NOT NULL,
@@ -1882,7 +1904,7 @@ CREATE TABLE {DBNICK}_store (
    clann_title 	CHAR(255) DEFAULT '' NOT NULL,
    clann_descr 	MEDIUMTEXT DEFAULT ('') NOT NULL,
    clann_root 	   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
-   relate_id	   BIGINT UNSIGNED DEFAULT '0' NOT NULL,
+   relate_id	   INT UNSIGNED DEFAULT '0' NOT NULL,
    rating 	      TINYINT DEFAULT '0' NOT NULL,
    disc_group_id  INT UNSIGNED DEFAULT NULL,
    tax_group_id   INT UNSIGNED DEFAULT NULL,
@@ -1933,8 +1955,8 @@ CREATE TABLE {DBNICK}_store (
  **/
 DROP TABLE IF EXISTS {DBNICK}_files_store;
 CREATE TABLE {DBNICK}_files_store (
-   id		      BIGINT UNSIGNED DEFAULT '0' NOT NULL,
-   elem_id	   BIGINT UNSIGNED DEFAULT NULL,
+   id		      INT UNSIGNED DEFAULT '0' NOT NULL,
+   elem_id	   INT UNSIGNED DEFAULT NULL,
    kind_key 	CHAR(100) DEFAULT 'kDefault' NOT NULL,
    file_name 	CHAR(100) DEFAULT '' NOT NULL,
    file_size	INT UNSIGNED DEFAULT '0' NOT NULL,
@@ -1955,13 +1977,13 @@ CREATE TABLE {DBNICK}_files_store (
 DROP TABLE IF EXISTS {DBNICK}_store_set;
 CREATE TABLE {DBNICK}_store_set (
    id 		   BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,  
-   store_id 	BIGINT UNSIGNED DEFAULT NULL,
+   store_id 	INT UNSIGNED DEFAULT NULL,
    obj_key 	   CHAR(100) DEFAULT 'kGoods' NOT NULL,
    kind_key 	CHAR(100) DEFAULT 'kDefault' NOT NULL,
-   elem_id 	   BIGINT UNSIGNED DEFAULT NULL,   
+   elem_id 	   INT UNSIGNED DEFAULT NULL,   
    params 	   CHAR(255) DEFAULT '' NOT NULL,
    comment 	   CHAR(255) DEFAULT '' NOT NULL,
-   pos		   BIGINT UNSIGNED DEFAULT '0' NOT NULL,
+   pos		   INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY IDX1 (store_id),
    KEY IDX2 (kind_key)
@@ -1974,9 +1996,9 @@ CREATE TABLE {DBNICK}_store_set (
 DROP TABLE IF EXISTS {DBNICK}_store_info;
 CREATE TABLE {DBNICK}_store_info (
    id 		   BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-   store_id 	BIGINT UNSIGNED DEFAULT NULL,
+   store_id 	INT UNSIGNED DEFAULT NULL,
    info_id  	INT UNSIGNED DEFAULT NULL,
-   value_id 	BIGINT UNSIGNED DEFAULT NULL,
+   value_id 	INT UNSIGNED DEFAULT NULL,
    value_dec 	DECIMAL(10,4) DEFAULT '0' NOT NULL,
    value_txt 	MEDIUMTEXT DEFAULT ('') NOT NULL,
    PRIMARY KEY (id),   
@@ -1993,8 +2015,8 @@ CREATE TABLE {DBNICK}_store_info (
  **/
 DROP TABLE IF EXISTS {DBNICK}_store_stock;
 CREATE TABLE {DBNICK}_store_stock (
-   id 		      BIGINT UNSIGNED DEFAULT '0' NOT NULL,
-   store_id 	   BIGINT UNSIGNED DEFAULT NULL,
+   id 		      INT UNSIGNED DEFAULT '0' NOT NULL,
+   store_id 	   INT UNSIGNED DEFAULT NULL,
    provider_stock_id INT UNSIGNED DEFAULT NULL,
    how 		      INT DEFAULT '0' NOT NULL,
    params 	      CHAR(255) DEFAULT '' NOT NULL,
@@ -2010,7 +2032,7 @@ CREATE TABLE {DBNICK}_store_stock (
 DROP TABLE IF EXISTS {DBNICK}_store_comment;
 CREATE TABLE {DBNICK}_store_comment (
    id 		   BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-   store_id 	BIGINT UNSIGNED DEFAULT NULL,
+   store_id 	INT UNSIGNED DEFAULT NULL,
    parent_id 	BIGINT UNSIGNED DEFAULT NULL,
    user_name	CHAR(255) DEFAULT '' NOT NULL,
    user_email	CHAR(255) DEFAULT '' NOT NULL,
@@ -2069,10 +2091,10 @@ CREATE TABLE {DBNICK}_store_comment_block (
  **/
 DROP TABLE IF EXISTS {DBNICK}_u_info_value;
 CREATE TABLE {DBNICK}_u_info_value (
-   id 		   BIGINT UNSIGNED DEFAULT '0' NOT NULL,
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
    skey 	      CHAR(32) DEFAULT '' NOT NULL,
    user_id	   INT UNSIGNED DEFAULT NULL,
-   base_id	   BIGINT UNSIGNED DEFAULT NULL,
+   base_id	   INT UNSIGNED DEFAULT NULL,
    was_update	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    info_id 	   INT UNSIGNED DEFAULT NULL,
    name 	      MEDIUMTEXT DEFAULT ('') NOT NULL,
@@ -2080,7 +2102,7 @@ CREATE TABLE {DBNICK}_u_info_value (
    kind_key 	CHAR(100) DEFAULT 'kDefault' NOT NULL,
    params 	   CHAR(255) DEFAULT '' NOT NULL,
    seo_code 	CHAR(255) DEFAULT '' NOT NULL,
-   pos 		   BIGINT UNSIGNED DEFAULT '0' NOT NULL,
+   pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
    UNIQUE (user_id, id),
    KEY IDX1 (base_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
@@ -2091,17 +2113,17 @@ CREATE TABLE {DBNICK}_u_info_value (
  **/
 DROP TABLE IF EXISTS {DBNICK}_u_files_info_value;
 CREATE TABLE {DBNICK}_u_files_info_value (
-   id		      BIGINT UNSIGNED DEFAULT '0' NOT NULL,
-   base_id	   BIGINT UNSIGNED DEFAULT NULL,
+   id		      INT UNSIGNED DEFAULT '0' NOT NULL,
+   base_id	   INT UNSIGNED DEFAULT NULL,
    user_id	   INT UNSIGNED DEFAULT NULL,
-   elem_id	   BIGINT UNSIGNED DEFAULT NULL,
+   elem_id	   INT UNSIGNED DEFAULT NULL,
    kind_key 	CHAR(100) DEFAULT 'kDefault' NOT NULL,
    file_name 	CHAR(100) DEFAULT '' NOT NULL,
    file_size	INT UNSIGNED DEFAULT '0' NOT NULL,
    upload_time DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,
    upload_ok 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    real_name	CHAR(255) DEFAULT '' NOT NULL,
-   parent_id	BIGINT UNSIGNED DEFAULT NULL,
+   parent_id	INT UNSIGNED DEFAULT NULL,
    format_xml 	MEDIUMTEXT DEFAULT ('') NOT NULL,
    pos		   INT UNSIGNED DEFAULT '0' NOT NULL,
    UNIQUE (user_id, id),
@@ -2115,9 +2137,9 @@ CREATE TABLE {DBNICK}_u_files_info_value (
  **/
 DROP TABLE IF EXISTS {DBNICK}_u_store;
 CREATE TABLE {DBNICK}_u_store (
-   id 		      BIGINT UNSIGNED DEFAULT '0' NOT NULL,
+   id 		      INT UNSIGNED DEFAULT '0' NOT NULL,
    user_id	      INT UNSIGNED DEFAULT NULL,
-   base_id	      BIGINT UNSIGNED DEFAULT NULL,
+   base_id	      INT UNSIGNED DEFAULT NULL,
    was_update	   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    was_edit	      TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    provider_id 	INT UNSIGNED DEFAULT NULL,
@@ -2134,11 +2156,11 @@ CREATE TABLE {DBNICK}_u_store (
    status_key 	   CHAR(100) DEFAULT 'kDefault' NOT NULL,
    kind_key 	   CHAR(100) DEFAULT 'kDefault' NOT NULL,
    state_key 	   CHAR(100) DEFAULT 'kDefault' NOT NULL,
-   clann 	      BIGINT UNSIGNED DEFAULT '0' NOT NULL,
+   clann 	      INT UNSIGNED DEFAULT '0' NOT NULL,
    clann_title 	CHAR(255) DEFAULT '' NOT NULL,
    clann_descr 	MEDIUMTEXT DEFAULT ('') NOT NULL,
    clann_root 	   TINYINT UNSIGNED DEFAULT '0' NOT NULL,
-   relate_id	   BIGINT UNSIGNED DEFAULT '0' NOT NULL,
+   relate_id	   INT UNSIGNED DEFAULT '0' NOT NULL,
    price 	      DECIMAL(10,2) DEFAULT '0' NOT NULL,
    price_curr_id  INT UNSIGNED DEFAULT NULL,
    seo_psu 	      CHAR(255) DEFAULT '' NOT NULL,
@@ -2159,19 +2181,19 @@ CREATE TABLE {DBNICK}_u_store (
  **/
 DROP TABLE IF EXISTS {DBNICK}_u_files_store;
 CREATE TABLE {DBNICK}_u_files_store (
-   id		      BIGINT UNSIGNED DEFAULT '0' NOT NULL,
-   base_id	   BIGINT UNSIGNED DEFAULT NULL,
+   id		      INT UNSIGNED DEFAULT '0' NOT NULL,
+   base_id	   INT UNSIGNED DEFAULT NULL,
    user_id	   INT UNSIGNED DEFAULT NULL,
-   elem_id  	BIGINT UNSIGNED DEFAULT NULL,
+   elem_id  	INT UNSIGNED DEFAULT NULL,
    kind_key 	CHAR(100) DEFAULT 'kDefault' NOT NULL,
    file_name 	CHAR(100) DEFAULT '' NOT NULL,
    file_size	INT UNSIGNED DEFAULT '0' NOT NULL,
    upload_time DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,
    upload_ok 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    real_name	CHAR(255) DEFAULT '' NOT NULL,
-   parent_id	BIGINT UNSIGNED DEFAULT NULL,
+   parent_id	INT UNSIGNED DEFAULT NULL,
    format_xml 	MEDIUMTEXT DEFAULT ('') NOT NULL,
-   pos		   BIGINT UNSIGNED DEFAULT '0' NOT NULL,
+   pos		   INT UNSIGNED DEFAULT '0' NOT NULL,
    UNIQUE (user_id, id),
    KEY IDX1 (elem_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
@@ -2182,15 +2204,15 @@ CREATE TABLE {DBNICK}_u_files_store (
  **/
 DROP TABLE IF EXISTS {DBNICK}_u_store_set;
 CREATE TABLE {DBNICK}_u_store_set (
-   id		      BIGINT UNSIGNED DEFAULT '0' NOT NULL,
+   id		      INT UNSIGNED DEFAULT '0' NOT NULL,
    user_id	   INT UNSIGNED DEFAULT NULL,
    store_id 	INT UNSIGNED DEFAULT NULL,
    obj_key 	   CHAR(100) DEFAULT 'kGoods' NOT NULL,
    kind_key 	CHAR(100) DEFAULT 'kDefault' NOT NULL,
-   elem_id 	   BIGINT UNSIGNED DEFAULT NULL,   
+   elem_id 	   INT UNSIGNED DEFAULT NULL,   
    params 	   CHAR(255) DEFAULT '' NOT NULL,
    comment 	   CHAR(255) DEFAULT '' NOT NULL,
-   pos		   BIGINT UNSIGNED DEFAULT '0' NOT NULL,
+   pos		   INT UNSIGNED DEFAULT '0' NOT NULL,
    UNIQUE (user_id, id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
@@ -2200,11 +2222,11 @@ CREATE TABLE {DBNICK}_u_store_set (
  **/
 DROP TABLE IF EXISTS {DBNICK}_u_store_info;
 CREATE TABLE {DBNICK}_u_store_info (
-   id		      BIGINT UNSIGNED DEFAULT '0' NOT NULL,	
+   id		      INT UNSIGNED DEFAULT '0' NOT NULL,	
    user_id	   INT UNSIGNED DEFAULT NULL,
-   store_id 	BIGINT UNSIGNED DEFAULT NULL,
+   store_id 	INT UNSIGNED DEFAULT NULL,
    info_id 	   INT UNSIGNED DEFAULT NULL,
-   value_id 	BIGINT UNSIGNED DEFAULT NULL,
+   value_id 	INT UNSIGNED DEFAULT NULL,
    value_dec 	DECIMAL(10,4) DEFAULT '0' NOT NULL,
    value_txt 	MEDIUMTEXT DEFAULT ('') NOT NULL,
    UNIQUE (user_id, id)
@@ -2216,12 +2238,12 @@ CREATE TABLE {DBNICK}_u_store_info (
  **/
 DROP TABLE IF EXISTS {DBNICK}_u_topic_store;
 CREATE TABLE {DBNICK}_u_topic_store (   
-   id		      BIGINT UNSIGNED DEFAULT '0' NOT NULL,   
+   id		      INT UNSIGNED DEFAULT '0' NOT NULL,   
    user_id	   INT UNSIGNED DEFAULT NULL,
-   base_id	   BIGINT UNSIGNED DEFAULT NULL,   
+   base_id	   INT UNSIGNED DEFAULT NULL,   
    topic_id 	INT UNSIGNED DEFAULT NULL,   
-   store_id 	BIGINT UNSIGNED DEFAULT NULL,   
-   pos 		   BIGINT UNSIGNED DEFAULT '0' NOT NULL,   
+   store_id 	INT UNSIGNED DEFAULT NULL,   
+   pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,   
    UNIQUE (user_id, id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
@@ -2302,7 +2324,7 @@ CREATE TABLE {DBNICK}_field_value (
  **/
 DROP TABLE IF EXISTS {DBNICK}_client;
 CREATE TABLE {DBNICK}_client (
-   id 		   BIGINT UNSIGNED DEFAULT '0' NOT NULL,
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
    group_id 	INT UNSIGNED DEFAULT NULL,
    login 	   CHAR(100) DEFAULT '' NOT NULL,
    pass 	      CHAR(100) DEFAULT '' NOT NULL,
@@ -2349,8 +2371,8 @@ CREATE TABLE {DBNICK}_client_rules (
  **/
 DROP TABLE IF EXISTS {DBNICK}_client_field;
 CREATE TABLE {DBNICK}_client_field (
-   id 		   BIGINT UNSIGNED DEFAULT '0' NOT NULL,
-   client_id 	BIGINT UNSIGNED DEFAULT NULL,
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   client_id 	INT UNSIGNED DEFAULT NULL,
    field_id 	INT UNSIGNED DEFAULT NULL,
    value_id 	INT UNSIGNED DEFAULT NULL,
    value_txt 	MEDIUMTEXT DEFAULT ('') NOT NULL,
@@ -2605,7 +2627,7 @@ CREATE TABLE {DBNICK}_order_store_option_block (
  **/
 DROP TABLE IF EXISTS {DBNICK}_orders;
 CREATE TABLE {DBNICK}_orders (
-   id 		   BIGINT UNSIGNED DEFAULT '0' NOT NULL,
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
    code 	      CHAR(100) DEFAULT '' NOT NULL,
    version_id 	INT UNSIGNED DEFAULT NULL,
    date_time 	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,	
@@ -2620,10 +2642,10 @@ CREATE TABLE {DBNICK}_orders (
  **/
 DROP TABLE IF EXISTS {DBNICK}_orders_version;
 CREATE TABLE {DBNICK}_orders_version (
-   id 		   BIGINT UNSIGNED DEFAULT '0' NOT NULL,
-   order_id 	BIGINT UNSIGNED DEFAULT NULL,
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
+   order_id 	INT UNSIGNED DEFAULT NULL,
    user_id 	   INT UNSIGNED DEFAULT NULL,
-   client_id 	BIGINT UNSIGNED DEFAULT NULL,
+   client_id 	INT UNSIGNED DEFAULT NULL,
    date_time 	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,	
    total_sum 	DECIMAL(10,2) DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
@@ -2639,7 +2661,7 @@ CREATE TABLE {DBNICK}_orders_version (
 DROP TABLE IF EXISTS {DBNICK}_orders_client_field;
 CREATE TABLE {DBNICK}_orders_client_field (
    id 		      BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,  
-   version_id 	   BIGINT UNSIGNED DEFAULT NULL,
+   version_id 	   INT UNSIGNED DEFAULT NULL,
    field_id 	   INT UNSIGNED DEFAULT NULL,
    field_skey  	CHAR(32) DEFAULT '' NOT NULL,
    field_name 	   CHAR(255) DEFAULT '' NOT NULL,
@@ -2665,8 +2687,8 @@ CREATE TABLE {DBNICK}_orders_client_field (
 DROP TABLE IF EXISTS {DBNICK}_orders_store;
 CREATE TABLE {DBNICK}_orders_store (
    id 			      BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,  
-   version_id 		   BIGINT UNSIGNED DEFAULT NULL,
-   store_id 		   BIGINT UNSIGNED DEFAULT NULL,   
+   version_id 		   INT UNSIGNED DEFAULT NULL,
+   store_id 		   INT UNSIGNED DEFAULT NULL,   
    store_provider_id INT UNSIGNED DEFAULT NULL,
    store_stock_id    INT UNSIGNED DEFAULT NULL,
    store_brand_id 	INT UNSIGNED DEFAULT NULL,
@@ -2689,8 +2711,8 @@ CREATE TABLE {DBNICK}_orders_store (
    recalc 		      TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    out_price 		   DECIMAL(10,2) DEFAULT '0' NOT NULL,
    amount		      INT DEFAULT '0' NOT NULL,
-   notice 		      CHAR(255) DEFAULT '' NOT NULL,
-   auto_notice 		CHAR(255) DEFAULT '' NOT NULL,
+   notice 		      MEDIUMTEXT DEFAULT ('') NOT NULL,
+   auto_notice 		MEDIUMTEXT DEFAULT ('') NOT NULL,
    pos 			      INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id),
    KEY IDX1 (version_id),
@@ -2704,7 +2726,7 @@ CREATE TABLE {DBNICK}_orders_store (
 DROP TABLE IF EXISTS {DBNICK}_orders_store_option;
 CREATE TABLE {DBNICK}_orders_store_option (
    id 		      BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,  
-   version_id	   BIGINT UNSIGNED DEFAULT NULL,
+   version_id	   INT UNSIGNED DEFAULT NULL,
    order_store_id BIGINT UNSIGNED DEFAULT NULL,
    option_id	   INT UNSIGNED DEFAULT NULL,
    option_skey 	CHAR(32) DEFAULT '' NOT NULL,
@@ -2715,6 +2737,7 @@ CREATE TABLE {DBNICK}_orders_store_option (
    value_skey 	   CHAR(32) DEFAULT '' NOT NULL,
    value_name 	   CHAR(255) DEFAULT '' NOT NULL,
    value_modify_sum DECIMAL(10,4) DEFAULT '0' NOT NULL,
+   notice 		      MEDIUMTEXT DEFAULT ('') NOT NULL,
    PRIMARY KEY (id),
    KEY IDX1 (version_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
@@ -2726,7 +2749,7 @@ CREATE TABLE {DBNICK}_orders_store_option (
 DROP TABLE IF EXISTS {DBNICK}_orders_option;
 CREATE TABLE {DBNICK}_orders_option (
    id 			      BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,  
-   version_id		   BIGINT UNSIGNED DEFAULT NULL,
+   version_id		   INT UNSIGNED DEFAULT NULL,
    option_id		   INT UNSIGNED DEFAULT NULL,
    option_skey 		CHAR(32) DEFAULT '' NOT NULL,
    option_name		   CHAR(255) DEFAULT '' NOT NULL,
@@ -2739,7 +2762,7 @@ CREATE TABLE {DBNICK}_orders_option (
    value_modify_sum	DECIMAL(10,4) DEFAULT '0' NOT NULL,
    value_oper_num 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    value_source_num 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
-   notice 		MEDIUMTEXT DEFAULT ('') NOT NULL,
+   notice 		      MEDIUMTEXT DEFAULT ('') NOT NULL,
    PRIMARY KEY (id),
    KEY IDX1 (version_id),
    KEY IDX2 (value_id),
@@ -3003,7 +3026,7 @@ CREATE TABLE {DBNICK}_tmp_info (
  **/
 DROP TABLE IF EXISTS {DBNICK}_tmp_orders;
 CREATE TABLE {DBNICK}_tmp_orders (
-   id 		   BIGINT UNSIGNED DEFAULT '0' NOT NULL,
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
    user_id	   INT UNSIGNED DEFAULT NULL,
    UNIQUE (user_id, id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
@@ -3016,7 +3039,7 @@ CREATE TABLE {DBNICK}_tmp_orders (
  **/
 DROP TABLE IF EXISTS {DBNICK}_tmp_client;
 CREATE TABLE {DBNICK}_tmp_client (
-   id 		   BIGINT UNSIGNED DEFAULT '0' NOT NULL,
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
    user_id	   INT UNSIGNED DEFAULT NULL,
    UNIQUE (user_id, id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
@@ -3071,7 +3094,7 @@ CREATE TABLE {DBNICK}_tmp_order_right (
  **/
 DROP TABLE IF EXISTS {DBNICK}_tmp_store;
 CREATE TABLE {DBNICK}_tmp_store (
-   id 		   BIGINT UNSIGNED DEFAULT '0' NOT NULL,
+   id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
    user_id	   INT UNSIGNED DEFAULT NULL,
    UNIQUE (user_id, id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};

@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.517 @ 2026-10-22
+ * @version 6.5.1.520 @ 2026-10-27
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -238,7 +238,8 @@ function Normalize($mUserId, $mVersion)
                 'value_id'          => $one['id'] ?? null,
                 'value_skey'        => $one['skey'] ?? '',
                 'value_name'        => $one['name'] ?? '',
-                'value_modify_sum'  => LOGIC_COMMON\Price($one['modify_sum'] ?? 0, $one['sum_curr_id'] ?? 0)
+                'value_modify_sum'  => LOGIC_COMMON\Price($one['modify_sum'] ?? 0, $one['sum_curr_id'] ?? 0),
+                'notice'            => ''
                 ];
         }
                
@@ -286,6 +287,7 @@ function Normalize($mUserId, $mVersion)
                         if ( $row['custom_sum'] == 0 ) $value['value_modify_sum'] = 0;                                                
                     }                         
                 }
+                $temp['notice'] = $option['notice'];
                 $temp = array_merge($temp, $value);
             }                                   
             unset($temp);                                          
@@ -486,7 +488,7 @@ function Verify($mUserId, $mVersion, $mVersionBefore)
     
     // The rules and the person
     $user = array_column(MELBIS()->SysUsers(), null, 'id')[$mUserId] ?? [];
-    $group = $user['group'] ?? [];
+    $group_id = $user['group_id'] ?? 0;
     
     foreach ( MELBIS()->SysOrderOptionLimits() as $limit )
     {
@@ -495,7 +497,9 @@ function Verify($mUserId, $mVersion, $mVersionBefore)
         
         foreach ( $limit['right'] as $right )
         {
-            if ( $right['user_id'] != $mUserId && !in_array($right['group_id'], $group) ) continue;
+            // His own right or his group's
+            $mine = ( $right['user_id'] == $mUserId ) || ( $group_id > 0 && $right['group_id'] == $group_id );
+            if ( !$mine ) continue;
             
             $mVersion['result']['value'] = 'OPTION_LIMIT';
             $mVersion['result']['message'] = $limit['message'];
@@ -749,7 +753,8 @@ function GoodsAdd($mVersion, $mStoreId, $mAmount = 1, $mPriceOut = 0)
                 'value_id'          => $one['id'] ?? null,
                 'value_skey'        => $one['skey'] ?? '',
                 'value_name'        => $one['name'] ?? '',
-                'value_modify_sum'  => LOGIC_COMMON\Price($one['modify_sum'] ?? 0, $one['sum_curr_id'] ?? 0)
+                'value_modify_sum'  => LOGIC_COMMON\Price($one['modify_sum'] ?? 0, $one['sum_curr_id'] ?? 0),
+                'notice'            => ''
                 ];
         }
         

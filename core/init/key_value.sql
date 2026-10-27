@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.517 @ 2026-10-22
+ * @version 6.5.1.520 @ 2026-10-27
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -111,28 +111,27 @@ INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('8
 INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('83', 'MODULE_ORDER_VERSION_ADD', '80', '2', '102', '0');
 INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('107', 'ORDER_TRANSPORT', '80', '2', '103', '0');
 INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('118', 'code 118', '106', '1', '104', '1');
-INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('116', 'MODULE_NOTIFICATION', '118', '2', '105', '0');
-INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('117', 'EVENT_NOTIFICATION', '118', '2', '106', '0');
-INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('150', 'code 150', '106', '1', '107', '1');
-INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('151', 'MODULE_TRANSLATE_LINE', '150', '2', '108', '0');
-INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('169', 'code 169', '106', '1', '109', '1');
-INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('170', 'code 170', '169', '2', '110', '1');
-INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('171', 'AGENT_MEMORY_KIND_KEY', '170', '3', '111', '0');
-INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('176', 'code 176', '169', '2', '112', '1');
-INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('177', 'AGENT_REPO_KIND_KEY', '176', '3', '113', '0');
-INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('172', 'code 172', '169', '2', '114', '1');
-INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('173', 'AGENT_TOOL_KIND_KEY', '172', '3', '115', '0');
-INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('174', 'code 174', '172', '3', '116', '1');
-INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('175', 'AGENT_TOOL_COMMAND_KIND_KEY', '174', '4', '117', '0');
-INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('8', 'FILES_KEY_VALUE', '0', '0', '118', '1');
-INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('66', 'code 66', '8', '1', '119', '1');
-INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('9', 'FILES_PROFILE', '66', '2', '120', '0');
-INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('7', 'FILES_MASK', '66', '2', '121', '0');
-INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('67', 'code 67', '8', '1', '122', '1');
-INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('65', 'HTML_OPTION', '67', '2', '123', '0');
-INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('123', 'HTML_TAG', '67', '2', '124', '0');
-INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('124', 'HTML_CLASS', '67', '2', '125', '0');
-INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('125', 'HTML_TEMPLATE', '67', '2', '126', '0');
+INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('117', 'EVENT_NOTIFICATION', '118', '2', '105', '0');
+INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('150', 'code 150', '106', '1', '106', '1');
+INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('151', 'MODULE_TRANSLATE_LINE', '150', '2', '107', '0');
+INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('169', 'code 169', '106', '1', '108', '1');
+INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('170', 'code 170', '169', '2', '109', '1');
+INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('171', 'AGENT_MEMORY_KIND_KEY', '170', '3', '110', '0');
+INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('176', 'code 176', '169', '2', '111', '1');
+INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('177', 'AGENT_REPO_KIND_KEY', '176', '3', '112', '0');
+INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('172', 'code 172', '169', '2', '113', '1');
+INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('173', 'AGENT_TOOL_KIND_KEY', '172', '3', '114', '0');
+INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('174', 'code 174', '172', '3', '115', '1');
+INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('175', 'AGENT_TOOL_COMMAND_KIND_KEY', '174', '4', '116', '0');
+INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('8', 'FILES_KEY_VALUE', '0', '0', '117', '1');
+INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('66', 'code 66', '8', '1', '118', '1');
+INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('9', 'FILES_PROFILE', '66', '2', '119', '0');
+INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('7', 'FILES_MASK', '66', '2', '120', '0');
+INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('67', 'code 67', '8', '1', '121', '1');
+INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('65', 'HTML_OPTION', '67', '2', '122', '0');
+INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('123', 'HTML_TAG', '67', '2', '123', '0');
+INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('124', 'HTML_CLASS', '67', '2', '124', '0');
+INSERT INTO {DBNICK}_key (id, code, tindex, tlevel, absindex, folder) VALUES ('125', 'HTML_TEMPLATE', '67', '2', '125', '0');
 UPDATE {DBNICK}_generator SET gen_value = 177 WHERE table_name = 'key';
 
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('1', 'INFO_KIND_KEY', 'kDefault', '', '1', '2');
@@ -195,9 +194,7 @@ INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('156', 'FILES_BRAND', 'kDescr', '<STYLE><Font Color="#999999"/></STYLE>', '1', '3');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('157', 'FILES_BRAND', 'kDefault', '', '1', '1');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('159', 'ORDER_STORE_OPTION_KIND_KEY', 'kDefault', '', '1', '159');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('161', 'MODULE_NOTIFICATION', 'melbis_inc_logic_notify.php', '', '0', '161');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('163', 'EVENT_NOTIFICATION', 'kNewOrder', '', '0', '163');
-INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('164', 'EVENT_NOTIFICATION', 'kNewClient', '', '0', '164');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('178', 'FILES_KEY_VALUE', 'kAttach', '', '1', '178');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('181', 'HTML_TAG', 'p', '', '1', '1');
 INSERT INTO {DBNICK}_key_value (id, key_code, key_name, format_xml, sys_key, pos) VALUES ('182', 'HTML_TAG', 'div', '', '1', '3');

@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.517 @ 2026-10-22
+ * @version 6.5.1.520 @ 2026-10-27
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -119,11 +119,11 @@ function CmdAdd($mUserId, $mParam)
     $row = $mParam;
     unset($row['content']);
 
-    // This person is the author
+    // This person is the author, the work starts now unless given
     $now = MELBIS()->DateTime();
     $row['user_id'] = $mUserId;
     $row['state_key'] = 'kNew';
-    $row['date_time'] = $now;
+    if ( !isset($row['begin_time']) ) $row['begin_time'] = $now;
     MELBIS()->SqlInsert(__LINE__, '{DBNICK}_user_task', $row);
     $task_id = MELBIS()->SqlLastInsertId();
 

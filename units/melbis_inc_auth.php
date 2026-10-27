@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.517 @ 2026-10-22
+ * @version 6.5.1.520 @ 2026-10-27
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -104,9 +104,11 @@ function Access($mModule, $mPost)
             // Not auth yet
             if ( isset($mPost['login']) )
             {                   
-                // Try auth, zero means no
-                if ( isset($mPost['pass']) ) $mPost['pass_code'] = md5($mPost['pass']);
-                $user_id = MELBIS()->SysUserLoginCheck($mPost['login'], $mPost['pass_code'] ?? '');
+                // Try auth by the sign, zero means no
+                $login = $mPost['login'];
+                $stamp = $mPost['stamp'] ?? '';
+                $sign = $mPost['sign'] ?? '';
+                $user_id = MELBIS()->SysUserSignCheck($login, $stamp, $sign);
                 if ( $user_id < 1 )
                 {
                     // Wrong

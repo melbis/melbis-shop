@@ -8,7 +8,9 @@ How the MCP server gets into the store, what the agent is allowed there and what
 
 **The login and the password.** If the program is running on this store, the pair comes from it — it is the person sitting at the program right now. If it is not — the login is taken from `Shop.ini` in the store folder, and the password from the Windows registry, where the program keeps it encrypted when the "store passwords" box is ticked. There is no third way: the password does not pass through the correspondence and the agent does not see it.
 
-**Who the agent works as.** There is no separate user for the AI in the store: the agent works under a person's login and with their rights. Everything the agent does the store signs with that person's name: the author of a task, the author of a file's version, the owner of a note, the one who holds a table.
+The password does not go to the store. The server computes a key from it once — from the login, the store's domain and the password — and signs every request with it: a string of the login, the time and the command. The store keeps only the public half of the key and checks the signature; the time of the signature is valid within ±10 minutes.
+
+**Who the agent works as.** The agent works under a person's login and with their rights. Everything the agent does the store signs with that person's name: the author of a task, the author of a file's version, the owner of a note, the one who holds a table. The exception is the AI Dispatcher: it has its own login, the program's Dispatcher launches it by the store's events, and nobody sits at the keyboard (see "[AI Dispatcher](../User/ai-dispatcher.md)").
 
 ## Rights
 
@@ -63,7 +65,7 @@ After the right is granted the session is opened anew: the list does not change 
 
 Every request is signed with a daily token. The tokens are obtained by the program while it runs, and it puts them into the store folder, into `tokens\<login>-<date>.lic`. The MCP server only reads them and does not request a license itself.
 
-A license is issued for a "domain + login" pair, so the token is shared by the employee and their agent: there is no separate license for the AI.
+A license is issued for a "domain + login" pair, so the token is shared by the employee and their agent: the assistant needs no license of its own. The AI Dispatcher has its own login, and its own license.
 
 No file for today — and on a licensed store the session will not open: `session_connect` answers `LICENCE_NONE` and names the folder it looked in. There is one cure for it: open the store in the program, then `session_init` and `session_connect` anew. The engine refuses a token with codes of its own — `LICENCE_ERROR`, `LICENCE_DOMAIN`, `LICENCE_DATE` (see "[Answers and Refusals](answers.md)"). The server looks for the token anew at every request, so the change of day in the middle of a session does not close it: until the program has written the file for the new day, every command gets a `LICENCE_NONE` refusal, and afterwards it works again.
 

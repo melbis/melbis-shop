@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.517 @ 2026-10-22
+ * @version 6.5.1.520 @ 2026-10-27
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -8,7 +8,6 @@
  *
  * People         - The people with their tables
  * Login          - Weighs a login
- * Password       - A password of clear letters
  *
  **************************************************************************************************/
 
@@ -17,11 +16,10 @@
 namespace MELBIS_AGENT_USER;
 
 // Libraries
-use MELBIS_INC_AGENT_SYSTEM as SYS;
 use MELBIS_INC_AGENT_TABLE as TABLE;
 
 // The columns a read gives
-const FIELDS_READ = "id, group_id, add_group_id, login, name, phone, email, params, is_blocked";
+const FIELDS_READ = "id, group_id, login, name, params, is_blocked";
 
 
 // ————— Public —————
@@ -60,28 +58,8 @@ function CmdAdd($mUserId, $mParam)
     $weighed = Login($mParam['login'], 0);
     if ( !$weighed['result'] ) return $weighed;
 
-    $password = Password();
-
-    $tables = ['{DBNICK}_user'];
-    $lock = SYS\TablesLock($tables, $mUserId);
-    if ( !$lock['result'] ) return $lock;
-
-    // Every field is a column
-    $row = $mParam;
-    $row['id'] = MELBIS()->SqlGenId('user');
-    $row['pass_code'] = md5($password);
-    MELBIS()->SqlInsert(__LINE__, '{DBNICK}_user', $row);
-
-    SYS\TablesUnlock($tables, $mUserId);
-
-    return [
-        'result'  => true,
-        'message' => 'The person ['.$mParam['login'].'] is in the shop',
-        'detail'  => [
-            'id'       => $row['id'],
-            'password' => $password
-            ]
-        ];
+    // No password here: the owner gives it in the Program
+    return TABLE\Add($mUserId, 'user', $mParam);
 }
 
 
@@ -105,6 +83,28 @@ function CmdUpdate($mUserId, $mParam)
 
         $weighed = Login($mParam['login'], reset($ids));
         if ( !$weighed['result'] ) return $weighed;
+
+        // The key is made of the login and the password together
+        $user_id = reset($ids);
+        $login = $mParam['login'];
+        $command = "SELECT COUNT(*)
+                      FROM {DBNICK}_user
+                     WHERE id = :ID
+                       AND login <> :LOGIN
+                       AND pass_key <> ''
+                   ";
+        $param_user = [
+            'id'    => $user_id,
+            'login' => $login
+            ];
+        $keyed = (int)MELBIS()->SqlSelectValue(__LINE__, $command, 0, $param_user);
+        if ( $keyed > 0 )
+        {
+            return [
+                'result'  => false,
+                'message' => 'A new login goes with a new password, given in [MShop:FUserRightUser:LPass]'
+                ];
+        }
     }
 
     // The branch under the session
@@ -159,52 +159,6 @@ function CmdRemove($mUserId, $mParam)
 }
 
 
-/**
- * Function CmdPassword
- **/
-function CmdPassword($mUserId, $mParam)
-{
-    // A password for a person who stands
-    $command = "SELECT id
-                  FROM {DBNICK}_user
-                 WHERE id = :ID
-               ";
-    $param_user = [
-        'id' => $mParam['id']
-        ];
-    $found = MELBIS()->SqlSelectValue(__LINE__, $command, 0, $param_user);
-    if ( $found == 0 )
-    {
-        return [
-            'result'  => false,
-            'message' => 'No person ['.$mParam['id'].'] in the shop'
-            ];
-    }
-
-    $password = Password();
-
-    $tables = ['{DBNICK}_user'];
-    $lock = SYS\TablesLock($tables, $mUserId);
-    if ( !$lock['result'] ) return $lock;
-
-    $row = [
-        'id'        => $mParam['id'],
-        'pass_code' => md5($password)
-        ];
-    MELBIS()->SqlUpdate(__LINE__, '{DBNICK}_user', $row, 'id');
-
-    SYS\TablesUnlock($tables, $mUserId);
-
-    return [
-        'result'  => true,
-        'message' => 'A new password of ['.$mParam['id'].'], said once',
-        'detail'  => [
-            'password' => $password
-            ]
-        ];
-}
-
-
 // Groups
 //==================================================================================================
 
@@ -238,7 +192,6 @@ function CmdGroupRemove($mUserId, $mParam)
     $command = "SELECT COUNT(*)
                   FROM {DBNICK}_user
                  WHERE group_id IN ( $list )
-                    OR add_group_id IN ( $list )
                ";
     $people = (int)MELBIS()->SqlSelectValue(__LINE__, $command, 0);
 
@@ -434,26 +387,6 @@ function Login($mLogin, $mSelfId)
     return [
         'result' => true
         ];
-}
-
-
-/**
- * Function Password
- **/
-function Password()
-{
-    // Letters nobody misreads aloud
-    $alphabet = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789';
-    $max = strlen($alphabet) - 1;
-
-    $password = '';
-    for ( $i = 0; $i < 12; $i++ )
-    {
-        $pick = random_int(0, $max);
-        $password .= $alphabet[$pick];
-    }
-
-    return $password;
 }
 
 

@@ -15,7 +15,7 @@ Not required: the right to the module is checked by the module itself by key, as
 | [`find`] | string | show the places of the answer where this text occurs, instead of its beginning |
 | [`debug`] | yes/no | add the debugger's report |
 
-Every call is a POST. The server itself adds the session person's `login` and `pass_code` to the fields, like the program with the "User identification required" checkbox; they do not pass through the agent: if the module prints its variables, the value of `pass_code` in its answer and in the file is replaced with `<pass_code>`. Which fields each window sends — "[Web Modules](../Dev/web.md)". The value of a field of `post` is a string, a number or a yes/no; a list of values goes as `name[]=…`, one per value.
+Every call is a POST. The server itself adds the session person's `login`, `stamp` and `sign` to the fields, like the program with the "User identification required" checkbox; they do not pass through the agent: if the module prints its variables, the signature in its answer and in the file is replaced with `<sign>`. Which fields each window sends — "[Web Modules](../Dev/web.md)". The value of a field of `post` is a string, a number or a yes/no; a list of values goes as `name[]=…`, one per value.
 
 **The tool has cookies of its own:** they live while the MCP server is running and do not mix with the cookies of `shop_page`. So the module's session is kept between calls, and the `shop_page` page stays the page of an anonymous visitor.
 
@@ -30,7 +30,7 @@ Every call is a POST. The server itself adds the session person's `login` and `p
 
 Then as text — the first 2000 characters of the module's answer, if neither `find` nor `debug` is given.
 
-The fields are as in [`shop_page`](shop_page.md); `post` is the fields the agent passed, without `login` and `pass_code`, or `null`. The module's answer is saved into `modules\` of the conversation folder, and the file name is taken from the address.
+The fields are as in [`shop_page`](shop_page.md); `post` is the fields the agent passed, without `login`, `stamp` and `sign`, or `null`. The module's answer is saved into `modules\` of the conversation folder, and the file name is taken from the address.
 
 ## Refusals
 

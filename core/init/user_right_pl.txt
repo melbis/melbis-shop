@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.517 @ 2026-10-22
+ * @version 6.5.1.520 @ 2026-10-27
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -9,10 +9,8 @@
 table={DBNICK}_oper|id|name
 264=Biznes
 82=Dyspozytor
-83=Pobierz informacje ogólne
-84=Czytaj wiadomości
+83=Sprawdzanie powiadomień
 85=Wyślij wiadomość
-246=Sprawdź powiadomienia
 281=Harmonogram
 282=Aktualizuj ustawienia
 283=Zadania
@@ -296,12 +294,14 @@ table={DBNICK}_oper|id|name
 64=Użytkownicy
 1=Pobierz
 2=Zapisz
+449=Zmień hasło
 318=Profile
 319=Pobierz
 320=Zapisz
 
 table={DBNICK}_user|id|name
 1=Administrator
+2=Dyspozytor AI
 
 table={DBNICK}_user_group|id|name
 1=Administratorzy

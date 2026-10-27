@@ -40,17 +40,20 @@ convenient to carry over when the application is installed on another computer.
 
 The **"Connection"** window sets up the link to the selected store's server.
 
-### Connection Parameters
+### Credentials
 
 The store's **site URL** — it can be entered without `http://`, the application
 adds that itself. The **login** and the **password** are an employee's account
 in the store, and the same account decides the rights to everything you do in
-the application.
+the application. The password does not leave the computer: the application
+derives a key from it and signs every request with that key, so the first call
+to the server after the password is entered takes about a second.
 
 The **secure access code** is needed when a proxy with bot protection stands in front of
 the site, for example Cloudflare: by it the proxy lets the program and the AI
 assistant through. At a new workplace it is entered once, after that the program
-updates the code itself at every exchange with the server. Where it is set for the whole store —
+updates the code itself at every exchange with the server. The code goes out only together
+with a license; in demonstration mode it has no effect. Where it is set for the whole store —
 "[Installation](installation.md)", the "Security" section.
 
 The **"Store passwords in the system registry"** checkbox spares you typing the
@@ -60,6 +63,19 @@ saved earlier are erased on saving.
 The **"Proxy server (if used)"** group holds the address, the port, the login
 and the password of the proxy, when the way out to the internet goes through
 one.
+
+### Change Password
+
+Employees change their own password: they enter the **new password**, **repeat
+the new password** and click **"Change Password"**. The password is changed on
+the server at once — the window's "Save" button need not be pressed for this —
+and the new password itself goes to the "Credentials" tab and into the system
+registry, if passwords are stored there. An employee's first password is set by
+the administrator in the users window.
+
+While the administrator keeps the users window open, the change does not go
+through: saving that window would bring the old password back. The application
+says so — wait until the window is closed, and try again.
 
 ### Connection Settings
 

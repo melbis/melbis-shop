@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.517 @ 2026-10-22
+ * @version 6.5.1.520 @ 2026-10-27
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -9,10 +9,8 @@
 table={DBNICK}_oper|id|name
 264=Business
 82=Dispatcher
-83=Ottenere informazioni generali
-84=Leggere i messaggi
+83=Controllo delle notifiche
 85=Inviare un messaggio
-246=Controllare le notifiche
 281=Utilità di pianificazione
 282=Aggiornare le impostazioni
 283=Attività
@@ -296,12 +294,14 @@ table={DBNICK}_oper|id|name
 64=Utenti
 1=Ottenere
 2=Salvare
+449=Cambia password
 318=Profili
 319=Ottenere
 320=Salvare
 
 table={DBNICK}_user|id|name
 1=Amministratore
+2=Dispatcher IA
 
 table={DBNICK}_user_group|id|name
 1=Amministratori

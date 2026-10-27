@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.517 @ 2026-10-22
+ * @version 6.5.1.520 @ 2026-10-27
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -112,7 +112,6 @@ table={DBNICK}_key|id|name
 83=Édition
 107=Paramètres de transmission
 118=Gestionnaire
-116=Détection des événements
 117=Liste des événements
 150=Multilinguisme
 151=Traducteur
@@ -196,9 +195,7 @@ table={DBNICK}_key_value|id|value_txt
 156=Fichier de la description
 157=Par défaut
 159=Par défaut
-161=MELBIS_INC_LOGIC_NOTIFY\Run
 163=Nouvelle commande
-164=Nouveau client
 178=Fichier supplémentaire
 181=<P> Paragraphe
 182=<DIV> Section

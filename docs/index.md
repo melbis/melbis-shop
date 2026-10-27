@@ -12,6 +12,7 @@
 * [Basic operating principles](User/basics.md)
 * [Connecting to a store](User/connection.md)
 * [AI Assistant](User/ai-assistant.md)
+* [AI Dispatcher](User/ai-dispatcher.md)
 
 **1.2 Business**
 
@@ -123,6 +124,7 @@
 **2.7 Operations**
 
 * [Task scheduler](Dev/cron.md)
+* [Event tracking](Dev/events.md)
 * [Logs, errors and metrics](Dev/log.md)
 * [Utility methods](Dev/util.md)
 

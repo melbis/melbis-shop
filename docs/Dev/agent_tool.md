@@ -113,9 +113,9 @@ Multiplicity is a property of the registry row, not of the field as such: the sa
   answer names the next step.
 - **Partiality.** A command that changes something existing touches only the fields it
   was given; the ones it was not are pulled from the current row.
-- **Secrets do not travel.** A password is not accepted as a parameter and is not
-  stored in the clear: it is generated in the module, kept in the database as md5, and
-  goes out once in the response, with an instruction to change it.
+- **Secrets do not travel.** A tool neither accepts, nor creates, nor shows a
+  password: the administrator sets it in the program, and from then on the employee
+  changes it themselves.
 - **Self-protection.** A command that saws off the branch it sits on (blocking or
   deleting the employee whose session is running) is rejected with `result=false`.
 - **Demolition takes a second call.** A delete command first answers with what would
@@ -271,8 +271,8 @@ The second call, with `apply: true`, after the person's consent:
 The agent assembles a call from three layers of text, each with its own depth:
 
 - the tool's `descr` — what it does and when to call it;
-- the command's `descr` — the meaning and the behavioral caveats ("the password is not
-  supplied and is returned only once");
+- the command's `descr` — the meaning and the behavioral caveats ("the link is deleted at
+  once, without a second call");
 - the parameter's `descr` — what this value is and what it should be; a dictionary of
   allowed values is named here in words (`a value of STORE_KIND_KEY`).
 
