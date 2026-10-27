@@ -26,7 +26,7 @@ echo "Pulling the latest images..."
 docker compose pull
 
 echo "Starting containers..."
-docker compose up -d
+docker compose up -d --remove-orphans
 docker exec melbis_shop chown -R www-data:www-data /var/www/html
 
 echo "Cleaning up old Docker images and volumes..."

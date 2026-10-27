@@ -1,6 +1,6 @@
 # Server
 
-The **"Server"** window manages the store's server directly over SSH: it installs and updates it, shows its state, runs commands, and edits configuration files. Everything is done as **root**, so the section is available to the store owner and is meant for one-off jobs rather than for everyday operation.
+The **"Server"** window manages the store's server directly over SSH: it installs and updates it, shows its state, runs commands, transfers files, and edits configuration files. Everything is done as **root**, so the section is available to the store owner and is meant for one-off jobs rather than for everyday operation.
 
 The progress of any operation is visible in the **log** at the bottom of the window; the **"Save log"** button writes it out to a text file. The connection is opened for the duration of the operation and closed when it finishes.
 
@@ -23,7 +23,8 @@ The **"Installation"** tab, the **"Install server"** button — a full automatic
 The **"Maintenance"** tab:
 
 * **"Update server"** — updating the server to the version matching the current
-  version of the application. The result is unpredictable if the server was
+  version of the application. The update removes the containers of services that
+  are not in the Docker configuration file. The result is unpredictable if the server was
   configured by hand, so make a backup before updating.
 * **"Status report"** — server diagnostics. It changes nothing and only writes
   information about the state of the store's services and the certificate's
@@ -33,9 +34,20 @@ The **"Maintenance"** tab:
 
 The **"Console"** tab runs arbitrary commands: a command is typed into the **"Run command"** field and sent with the **"Send"** button or the Enter key, and the reply goes to the log.
 
-The **"Inside the web container"** checkbox runs the command not on the server itself but inside the store's container, as the web server's user — this is how the engine's environment is checked (versions, file permissions, availability of PHP extensions).
+Files are transferred here as well. The full path to the file from `/` is typed into the **"File on the server"** field:
 
-> **Careful!** Without this checkbox the command runs on the server as root.
+* **"Get File"** — downloads the file; the program asks where to save it on the
+  computer.
+* **"Send File"** — the program asks which file on the computer to send and writes
+  it to this path. The file is created or replaced as a whole, without
+  confirmation and without a backup copy.
+
+The **"Inside the web container"** checkbox moves both the command and the file from the server into the store's container, where they work as the web server's user — this is how the engine's environment is checked (versions, file permissions, availability of PHP extensions). The path to the file is then given inside the container. The site root there is `/var/www/html`, the same folder as `/var/melbis/www` on the server. The exception is the engine code in `core/`: it comes from the image, and anything written there is lost when the server restarts.
+
+> **Careful!** Without this checkbox the command runs and the file is written on
+> the server as root. A new file in the site folder gets root as its owner: the
+> engine will read it but cannot change it until the server is restarted or
+> updated. Site files are easier to send with the checkbox.
 
 ## Settings
 
@@ -43,7 +55,7 @@ The **"Settings"** tab edits the server's configuration files: **Nginx**, the **
 
 Only the file that was loaded in this same window can be saved — this rules out writing your edits into someone else's file. The server keeps the previous contents next to it with the `.bak` extension, so one step back is always available.
 
-The **"Restart server"** button stops and starts the store's containers again — this is what applies the edits you have made. The store is unavailable for that time.
+The **"Restart server"** button stops and starts the store's containers again — this is what applies the edits you have made. The containers of services that are not in the Docker configuration file are removed. The store is unavailable for that time. After the start, the program gives all the site's files back to their owner — the web server's user.
 
 > **Careful!** A mistake in a configuration file can stop the store from working.
 
