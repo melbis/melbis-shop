@@ -2,7 +2,7 @@
 
 Library modules are modular scripts belonging to the `inc` group. Unlike regular modules, the parser does not call them and they have no templates. Their purpose is to contain shared functions used by several regular modules at once. This allows repetitive logic to be placed in a single location rather than duplicated across individual modules.
 
-In a library's name, after `inc` comes its own group — `melbis_inc_web_callback.php` belongs to the `web` group. Libraries are organized by this group in the Workbench tree, alongside the modules of their respective project section (see "Accepted Conventions").
+In a library's name, after `inc` comes its own group — `melbis_inc_page_callback.php` belongs to the `page` group. Libraries are organized by this group in the Workbench tree, alongside the modules of their respective project section (see "Accepted Conventions").
 
 To connect a library to a regular module, simply check the box next to it in the IDE's right panel — the parser will load it automatically before running the module, making all its functions available.
 
@@ -36,12 +36,12 @@ A library that a module includes but does not call is declared with a `use` line
 
 Let us look at three characteristic examples from the demonstration store.
 
-## melbis_inc_web_topic — Temporary Tables
+## melbis_inc_page_menu — Temporary Tables
 
-The short name of this library is `TOPIC`. Its function `Sub` builds an in-memory temporary table containing all subsections of a given section, recursively traversing the category tree. The second function, `Menu`, returns the sections of one menu — it is called by `melbis_cataloge` and `melbis_cataloge_sub`.
+The short name of this library is `PAGE_MENU`. Its function `Sub` builds an in-memory temporary table containing all subsections of a given section, recursively traversing the category tree. The second function, `Menu`, returns the sections of one menu — it is called by `melbis_cataloge` and `melbis_cataloge_sub`.
 
 ```php
-namespace MELBIS_INC_WEB_TOPIC;
+namespace MELBIS_INC_PAGE_MENU;
 
 function Sub($mId)
 {
@@ -64,20 +64,20 @@ function Sub($mId)
 }
 ```
 
-Why is this needed? When a module displays a list of products in a section, it must account not only for products in that section itself, but also for products in all its subsections. The same table will be needed by the attribute filter module. Instead of writing a recursive CTE in each of these modules, it is sufficient to call `TOPIC\Sub` from the library once — and the temporary table is ready for use in subsequent queries:
+Why is this needed? When a module displays a list of products in a section, it must account not only for products in that section itself, but also for products in all its subsections. The same table will be needed by the attribute filter module. Instead of writing a recursive CTE in each of these modules, it is sufficient to call `PAGE_MENU\Sub` from the library once — and the temporary table is ready for use in subsequent queries:
 
 ```php
 // In the melbis_page_topic module:
 namespace MELBIS_PAGE_TOPIC;
 
-use MELBIS_INC_WEB_TOPIC as TOPIC;
+use MELBIS_INC_PAGE_MENU as PAGE_MENU;
 
 function Main($mVars)
 {
     $id = $mVars['id'];
 
     // Create a temporary table of subsections
-    TOPIC\Sub($id);
+    PAGE_MENU\Sub($id);
 
     // Now we can JOIN with {DBNICK}_topic_sub
     $command = "SELECT s.id
@@ -98,15 +98,15 @@ function Main($mVars)
 }
 ```
 
-## melbis_inc_web_callback — Template Engine Callbacks
+## melbis_inc_page_callback — Template Engine Callbacks
 
 This module registers template engine modifiers. A callback is a PHP function that can be called directly from an HTML template as a variable modifier.
 
 Registration stands in the body of the library's file, and the callbacks below, next to it:
 
 ```php
-// In the melbis_inc_web_callback library:
-namespace MELBIS_INC_WEB_CALLBACK;
+// In the melbis_inc_page_callback library:
+namespace MELBIS_INC_PAGE_CALLBACK;
 
 // Register the template callbacks
 MELBIS()->DefineCallback('TopicLink');
@@ -121,15 +121,15 @@ function TopicLink($mVars)
 }
 ```
 
-The function's name is not written in the registration: the engine looks for `TopicLink` in the same file the registration line stands in — here that is `MELBIS_INC_WEB_CALLBACK\TopicLink`, and in a library without a namespace — `MELBIS_INC_WEB_CALLBACK_TopicLink`. That is why the short registration stands in the library itself: in a module's file the same line would look for a function of the module.
+The function's name is not written in the registration: the engine looks for `TopicLink` in the same file the registration line stands in — here that is `MELBIS_INC_PAGE_CALLBACK\TopicLink`, and in a library without a namespace — `MELBIS_INC_PAGE_CALLBACK_TopicLink`. That is why the short registration stands in the library itself: in a module's file the same line would look for a function of the module.
 
 Naming the function explicitly is only needed when its name differs from the modifier's or when it lies in another file:
 
 ```php
-MELBIS()->DefineCallback('TopicLink', CALLBACK\TopicLink(...));
+MELBIS()->DefineCallback('TopicLink', PAGE_CALLBACK\TopicLink(...));
 ```
 
-The three dots are not a shorthand in the example but PHP syntax: that is how a function is passed as a value without being called, and the name is resolved by the compiler together with the `use` line rather than by a string in quotes. The string form (`'MELBIS_INC_WEB_CALLBACK\TopicLink'`) works too, but it does not know the short name from `use`: a name in quotes is written in full, and when the function moves it stays as it was. Either form is checked by the engine at registration, so a non-existent name will not live to reach the storefront.
+The three dots are not a shorthand in the example but PHP syntax: that is how a function is passed as a value without being called, and the name is resolved by the compiler together with the `use` line rather than by a string in quotes. The string form (`'MELBIS_INC_PAGE_CALLBACK\TopicLink'`) works too, but it does not know the short name from `use`: a name in quotes is written in full, and when the function moves it stays as it was. Either form is checked by the engine at registration, so a non-existent name will not live to reach the storefront.
 
 The body of a library's file runs once per request — when the first module includes it. A module is included on every request, even when its result is taken from the cache, so the registration stands in the file body rather than inside a function: a function would not run at all when the result is served from the cache.
 
@@ -139,8 +139,8 @@ The library is included by **every module in whose template the modifier stands*
 // In the section menu module melbis_cataloge:
 namespace MELBIS_CATALOGE;
 
-use MELBIS_INC_WEB_TOPIC as TOPIC;
-use MELBIS_INC_WEB_CALLBACK;
+use MELBIS_INC_PAGE_MENU as PAGE_MENU;
+use MELBIS_INC_PAGE_CALLBACK;
 ```
 
 This way the modifier works wherever the module is shown: on a page, in the header of another entry point and in the answer to a separate request, when there is no page around the module at all. A module that uses no modifiers itself does not need the library, even if modules with modifiers are shown inside it: they include it themselves.

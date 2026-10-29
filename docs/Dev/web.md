@@ -87,11 +87,11 @@ An external module opened in an ordinary browser gets the language of that brows
 
 ---
 
-## The melbis_inc_auth Library
+## The melbis_inc_logic_auth Library
 
-For web modules, the standard demo store distribution includes the `melbis_inc_auth` library. It handles all the boilerplate code: user authentication by signature (`login`, `stamp`, `sign`), storing the authentication state in a PHP session, checking access rights to the module, and routing POST calls between module functions.
+For web modules, the standard demo store distribution includes the `melbis_inc_logic_auth` library. It handles all the boilerplate code: user authentication by signature (`login`, `stamp`, `sign`), storing the authentication state in a PHP session, checking access rights to the module, and routing POST calls between module functions.
 
-**The central function — `MELBIS_INC_AUTH\Router($mModule, $mVars)`** — performs the following steps in order:
+**The central function — `MELBIS_INC_LOGIC_AUTH\Router($mModule, $mVars)`** — performs the following steps in order:
 
 1. Checks whether a logout has been requested (`logout` in POST).
 2. Authenticates the user: via `login`, `stamp` and `sign` from POST — through `SysUserSignCheck` — or from a previously saved session.
@@ -104,11 +104,11 @@ Thanks to this, the entire main module function reduces to a single line:
 ```php
 namespace MELBIS_WEB_SAMPLE;
 
-use MELBIS_INC_AUTH as AUTH;
+use MELBIS_INC_LOGIC_AUTH as LOGIC_AUTH;
 
 function Main($mVars)
 {
-    return AUTH\Router(MELBIS()->UnitName(), $mVars);
+    return LOGIC_AUTH\Router(MELBIS()->UnitName(), $mVars);
 }
 ```
 
@@ -150,7 +150,7 @@ function Page($mUserId, $mVars)
 }
 ```
 
-The `auth.htm` template contains a call to the `melbis_web_auth` module — it renders the login form. After the form is submitted, the router `AUTH\Router` processes the POST again, authenticates the user, and this time `Page` parses the main `page.htm` template.
+The `auth.htm` template contains a call to the `melbis_web_auth` module — it renders the login form. After the form is submitted, the router `LOGIC_AUTH\Router` processes the POST again, authenticates the user, and this time `Page` parses the main `page.htm` template.
 
 ---
 
@@ -302,13 +302,13 @@ Configuring external modules — **"Development → Modules and Options", the "E
 
 Since external modules can also be opened from a regular browser, authentication here works in two modes automatically:
 
-**When opened from the application** — Melbis Shop passes `login`, `stamp` and `sign` in POST. `AUTH\Router` authenticates the user without a form and immediately displays the content.
+**When opened from the application** — Melbis Shop passes `login`, `stamp` and `sign` in POST. `LOGIC_AUTH\Router` authenticates the user without a form and immediately displays the content.
 
 **When opened directly in a browser** — POST does not contain credentials, the router passes `$mUserId = null`, and the `Page` function substitutes the authentication form template. After a successful login, the data is saved in the PHP session, and the form is no longer shown on subsequent requests.
 
 The sign-in form signs by itself: the `melbis_crypto_sign` function from `statics/melbis/main.js` computes the key from the password in the browser and sends the same `login`, `stamp` and `sign` — the password never leaves the browser. The signature is made by the browser's built-in WebCrypto, so the form works only over https and in browsers with Ed25519: Chrome 137, Firefox 129, Safari 17 and newer.
 
-The same module code works in both cases — the branching happens entirely automatically inside the `melbis_inc_auth` library. The developer only needs to correctly handle the `$mUserId == null` case in the `Page` function.
+The same module code works in both cases — the branching happens entirely automatically inside the `melbis_inc_logic_auth` library. The developer only needs to correctly handle the `$mUserId == null` case in the `Page` function.
 
 ---
 
@@ -325,7 +325,7 @@ index.php → Run('melbis_web_sample')
 MELBIS_WEB_SAMPLE\Main($mVars)
     │
     ▼
-MELBIS_INC_AUTH\Router(...)
+MELBIS_INC_LOGIC_AUTH\Router(...)
     ├─ authentication + rights verification
     ├─ func absent          → MELBIS_WEB_SAMPLE\Page($userId, $mVars)         → HTML
     ├─ func = 'GetCataloge' → MELBIS_WEB_SAMPLE\GetCataloge($userId, $mVars)  → JSON

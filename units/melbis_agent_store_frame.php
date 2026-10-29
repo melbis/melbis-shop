@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.522 @ 2026-10-27
+ * @version 6.5.1.525 @ 2026-10-29
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -188,7 +188,8 @@ function CmdLoad($mUserId, $mParam)
  **/
 function CmdTakeTopic($mUserId, $mParam)
 {
-    $said = STORE\Topic($mUserId, 'descr', SCHEMA, $mParam);
+    // Ids are enough: the copy reads the store itself
+    $said = STORE\Topic($mUserId, 'descr', SCHEMA, $mParam, false);
 
     return Take($mUserId, $said);
 }
@@ -199,7 +200,8 @@ function CmdTakeTopic($mUserId, $mParam)
  **/
 function CmdTakeQuery($mUserId, $mParam)
 {
-    $said = STORE\Query($mUserId, 'descr', SCHEMA, $mParam);
+    // Ids are enough: the copy reads the store itself
+    $said = STORE\Query($mUserId, 'descr', SCHEMA, $mParam, false);
 
     return Take($mUserId, $said);
 }

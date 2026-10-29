@@ -19,7 +19,7 @@ The signatures of the modules' functions: what can be called from a module or a 
 {
   "functions": {"columns": ["source", "name", "signature"],
                 "rows": [["melbis_cataloge", "Main", "($mVars)"],
-                         ["melbis_inc_auth", "MELBIS_INC_AUTH_command", "($mUserId, $mCommand)"]]}
+                         ["melbis_inc_logic_auth", "Router", "($mModule, $mVars)"]]}
 }
 ```
 

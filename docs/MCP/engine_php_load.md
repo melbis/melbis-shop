@@ -20,7 +20,7 @@ Two blocks: the data in JSON, then the file's body as text — as it is, with no
 {
   "path": "./../units/melbis_cataloge.php",
   "manifest": {"description": "Cataloge menu", "parameters": "", "tables": "topic=1",
-               "includes": "melbis_inc_web_topic.php=1", "cache_on": 0, "cache_time": 2,
+               "includes": "melbis_inc_page_menu.php=1", "cache_on": 0, "cache_time": 2,
                "lazy_load": 0, "entry_point": 0,
                "trick_on": 0, "trick_load_idx": 0, "trick_load_max": 0,
                "trick_comp_max": 0, "trick_time_max": 0,

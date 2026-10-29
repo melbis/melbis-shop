@@ -39,7 +39,7 @@ Everything the store is made of: the modules, the folders, the files and the ser
 | `entry` | the module is an entry point: it can be run directly from a root script |
 | `lazy` | lazy loading |
 | `tables` | the tables the module's cache depends on: `store=1\|log=0` |
-| `includes` | the included libraries: `melbis_inc_auth.php=1` |
+| `includes` | the included libraries: `melbis_inc_logic_auth.php=1` |
 | `size` | the size of the module's file in bytes |
 
 ### dirs and files — the folders and the files

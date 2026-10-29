@@ -48,7 +48,7 @@ With `unit`:
 |---|---|
 | `unit`, `path` | the address and the place in the tree |
 | `descr` | the tool's description in full |
-| `commands` | the commands: `name`, `may` — whether it is granted to this login, `descr` — the description, `params` — the command's fields, `files` — whether it accepts attachments |
+| `commands` | the commands: `name`, `may` — whether it is granted to this login or to the session's proxy, `descr` — the description, `params` — the command's fields, `files` — whether it accepts attachments |
 | `params` | the fields: `name`, `type`, `required` — whether it is required, `default` — the default value, `descr` |
 | `files` | `null` if the command accepts no attachments; otherwise `required` and `descr` |
 

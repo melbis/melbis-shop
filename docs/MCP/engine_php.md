@@ -17,7 +17,7 @@ The modules' templates — the `.htm` files in the template groups — are the `
 
 `units/` is a flat list: a module lies right in it, with no subfolders.
 
-**A library** is a module that other modules include; it has no templates of its own. The engine counts a module as a library when the second word of its name is `inc` or `include` (`melbis_inc_auth`), or when there is no underscore in the name. For such a module `engine_php_add` creates no folders in the template groups.
+**A library** is a module that other modules include; it has no templates of its own. The engine counts a module as a library when the second word of its name is `inc` or `include` (`melbis_inc_logic_auth`), or when there is no underscore in the name. For such a module `engine_php_add` creates no folders in the template groups.
 
 ## The Manifest
 

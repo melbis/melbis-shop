@@ -34,7 +34,7 @@ A typical module is the catalog menu `melbis_cataloge` from the demonstration st
 <?php
 namespace MELBIS_CATALOGE;
 
-use MELBIS_INC_WEB_TOPIC as TOPIC;
+use MELBIS_INC_PAGE_MENU as PAGE_MENU;
 
 /**
  * Function Main
@@ -52,7 +52,7 @@ function Main($mVars)
     $root = MELBIS()->SqlSelectFlat(__LINE__, $command);
 
     // Get the menu sections with a library function
-    $menu = TOPIC\Menu($root['id'], $root['tlevel']);
+    $menu = PAGE_MENU\Menu($root['id'], $root['tlevel']);
 
     // Pass data to the template engine
     MELBIS()->TplAssign($tpl, 'MENU', $menu);
@@ -106,10 +106,10 @@ $store['price_curr'] = LOGIC_COMMON\Price($store['price'], $store['price_curr_id
 The word `as` is optional. Without it the library stays under its full name — which suits the case where it needs no short one, or has not declared one:
 
 ```php
-use MELBIS_INC_WEB_TOPIC;
+use MELBIS_INC_PAGE_MENU;
 
 ...
-$menu = MELBIS_INC_WEB_TOPIC\Menu($id, $level);
+$menu = MELBIS_INC_PAGE_MENU\Menu($id, $level);
 ```
 
 **The `use` line is obligatory in a module with a space.** Without it PHP resolves the name `MELBIS_INC_LOGIC_COMMON\Price()` relative to the current space — it looks for `MELBIS_STORE_CARD\MELBIS_INC_LOGIC_COMMON\Price` — and falls over at the moment of the call. The only way to do without `use` is a leading slash: `\MELBIS_INC_LOGIC_COMMON\Price($sum, $curr_id)`. In a flat module, on the contrary, `use` is not needed: there a name with a slash is global anyway.

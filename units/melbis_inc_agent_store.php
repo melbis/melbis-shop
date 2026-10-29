@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.522 @ 2026-10-27
+ * @version 6.5.1.525 @ 2026-10-29
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -39,7 +39,7 @@ use MELBIS_INC_AGENT_QUERY as QUERY;
 /**
  * Function Topic
  **/
-function Topic($mUserId, $mPlace, $mSchema, $mParam)
+function Topic($mUserId, $mPlace, $mSchema, $mParam, $mCards = true)
 {
     $page = QUERY\PageLimit($mParam);
     if ( !$page['result'] ) return $page;
@@ -63,9 +63,10 @@ function Topic($mUserId, $mPlace, $mSchema, $mParam)
     $limit = $page['limit'];
     $offset = $page['offset'];
 
-    // One row of the page
+    // One row of the page, as cards or as ids
     $pull = QUERY\PullStore($from, $limit, $offset);
-    $tables = QUERY\PullFull($mSchema, $pull);
+    if ( $mCards ) $tables = QUERY\PullFull($mSchema, $pull);
+    else $tables = QUERY\PullIds($mSchema, $pull);
 
     $shown = count($tables[array_key_first($mSchema)]);
     $message = $shown.' goods of '.$found.' standing in the section(s) walked';
@@ -88,7 +89,7 @@ function Topic($mUserId, $mPlace, $mSchema, $mParam)
 /**
  * Function Query
  **/
-function Query($mUserId, $mPlace, $mSchema, $mParam)
+function Query($mUserId, $mPlace, $mSchema, $mParam, $mCards = true)
 {
     // Asked nothing, it signs itself
     //-------------------------------
@@ -126,7 +127,8 @@ function Query($mUserId, $mPlace, $mSchema, $mParam)
     // One row of the page
     //--------------------
     $pull = QUERY\PullStore($from, $limit, $offset, $param);
-    $tables = QUERY\PullFull($mSchema, $pull);
+    if ( $mCards ) $tables = QUERY\PullFull($mSchema, $pull);
+    else $tables = QUERY\PullIds($mSchema, $pull);
 
     $shown = count($tables[array_key_first($mSchema)]);
     $message = $shown.' goods of '.$found.' found by '.$said['leaf'].' condition(s)';

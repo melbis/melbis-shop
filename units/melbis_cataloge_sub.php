@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.522 @ 2026-10-27
+ * @version 6.5.1.525 @ 2026-10-29
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -12,8 +12,8 @@
 
 namespace MELBIS_CATALOGE_SUB;
 
-use MELBIS_INC_WEB_TOPIC as TOPIC;
-use MELBIS_INC_WEB_CALLBACK;
+use MELBIS_INC_PAGE_MENU as PAGE_MENU;
+use MELBIS_INC_PAGE_CALLBACK;
 
 
 // ————— Public —————
@@ -43,7 +43,7 @@ function Main($mVars)
     if ( !isset($root['id']) ) return '';       
         
     // Menu
-    $menu = TOPIC\Menu($root['id'], $root['tlevel']);
+    $menu = PAGE_MENU\Menu($root['id'], $root['tlevel']);
     MELBIS()->TplAssign($tpl, 'MENU', $menu);
     
     // Final

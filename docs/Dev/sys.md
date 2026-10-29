@@ -599,11 +599,11 @@ Nulling is a matter of last resort, and nothing calls it by itself: the hard swe
 
 ## 14. The Event Log {#events}
 
-The log is the store's way of telling employees and the AI dispatcher that something has happened. The engine writes a row into it when an operation with an event key in the operations registry is performed. A module writes one too, when something of its own happens: an order on the storefront, a payment system's answer. The program's Dispatcher polls the log, and a notification with the same key plays a sound or launches a command. How events are built as a whole — where they come from, how they reach the program and how to set up your own — is in "[Event Tracking](events.md)".
+The log is the store's way of telling employees and the AI dispatcher that something has happened. The engine writes a row into it when an operation with an event key in the "Operation Catalog" is performed. A module writes one too, when something of its own happens: an order on the storefront, a payment system's answer. The program's Dispatcher polls the log, and a notification with the same key plays a sound or launches a command. How events are built as a whole — where they come from, how they reach the program and how to set up your own — is in "[Event Tracking](events.md)".
 
 | Door | What it does |
 |---|---|
-| `SysUserEventAdd($mKeyName, $mData = [], $mState = 'ALONE', $mUserIds = [], $mGroupIds = [])` | writes an event and answers with its `id` |
+| `SysUserEventAdd($mKeyName, $mData = [], $mState = 'ALONE', $mUserIds = [], $mGroupIds = [], $mProxyId = null)` | writes an event and answers with its `id` |
 | `SysUserEventList($mFromId = 0, $mKeyName = '', $mState = '', $mLimit = 100)` | events after `$mFromId` in ascending `id` order, no more than `$mLimit` |
 | `SysUserEventLoad($mId)` | one event by its number; `[]` if there is none |
 | `SysUserEventLast($mKeyName = '', $mState = '', $mBeforeTime = '')` | the last event — of the log, of a key or of a state, and with `$mBeforeTime` the last one before that time; `[]` if there is none |
@@ -623,6 +623,14 @@ $event_id = MELBIS()->SysUserEventAdd('kNewOrder', $data_order);
 **The data** is the module's array. The door puts it into the log as is, and `SysUserEventList` gives it back as an array. An event of a program operation carries the `user_id` of whoever performed it, and `command`.
 
 **The recipients** are lists of employee and group `id`s. Empty lists mean the event is for everyone. An employee's Dispatcher sees an event if it is for everyone or if the lists hold the employee or their group.
+
+**The proxy** is the `id` of the employee with whose rights the AI dispatcher performs the AI tool commands it has not been granted itself. Only an event addressed to the dispatcher by number or by group passes rights on; an event for everyone passes no proxy. The reading doors give the proxy as a number, and `null` if there is none. Events of program operations are written without a proxy. How the dispatcher works with a proxy — "[AI Dispatcher](../User/ai-dispatcher.md#proxy)".
+
+```php
+// The dispatcher checks the order with the rights of the manager who placed it
+$recipient_set = [$dispatcher_id];
+$event_id = MELBIS()->SysUserEventAdd('kOrderCheck', $data_order, 'ALONE', $recipient_set, [], $manager_id);
+```
 
 **The state** is a word the store agrees on. The engine writes `ALONE` unless the registry has set another one. From then on the state is changed by whoever handles the event.
 

@@ -39,12 +39,12 @@ The call goes through three stages, and at each of them the parameters change th
 
 - **the MCP server** — on this computer: reads the files, assembles the request, and not everything goes on to the store;
 - **Melbis Core** — the store's engine: checks the call against the registry, lays out the attachments, and only the fields reach the module;
-- **the tool's module** — gets the person of the session and the ready-made fields in `$mParam`.
+- **the tool's module** — gets the person of the session, or the session's proxy if the proxy performs the command, and the ready-made fields in `$mParam`.
 
 | Parameter | MCP server | Melbis Core | Module |
 |---|---|---|---|
 | `unit` | passes it on | finds the tool in the registry; takes the module's file from the registry, not from the call | — |
-| `command` | passes it on | finds the module's function whatever the case of its name, checks whether the command is granted | — |
+| `command` | passes it on | finds the module's function whatever the case of its name, checks whether the command is granted to the login, and if not, to the session's proxy | — |
 | [`params`] | passes it on | checks the fields against the registry, casts the types, fills in the defaults | `$mParam` |
 | [`params_source`] | reads the file and sends it as `params` | as `params` | `$mParam` |
 | [`files`] | reads the files into parts of the request; the `file` path does not go to the store | lays the files out on the disk and creates their rows | `$mParam['files']` — the files' rows with `id`, `path`, `size`… |
@@ -110,6 +110,8 @@ The fields the agent has written on an attachment beyond the ones the store know
 | `tables` | the answer's tables: `rows` — how many rows, `file` — where they lie, `head` — the first three rows as text, cut to 300 characters; with `into` also `job` — the job's file, and `job_rows` — how many rows it holds now; `{}` if there are no tables |
 | `files` | the attachments the command has kept for itself; `[]` if there are none |
 | `time` | `server` — how long the call lasted on the server, `module` — how much of that the module took, `trip` — the whole round trip by this computer's clock; with `debug` also `sql` and `sql_ms` |
+
+If the command was performed by the session's proxy, the text of the answer begins with the line `run as: <login>`: the command went through with that login's rights and is signed with its name.
 
 The table's file is overwritten by every call of that command, the job's file only grows — see "[AI Tools](tool.md)". How the command builds this answer — the keys, the tables, the refusals and the crashes, with examples — is described in "The Command's Response" of the developer guide, "[AI Tools](../Dev/agent_tool.md)".
 

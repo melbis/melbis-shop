@@ -1,6 +1,6 @@
 {
-    "description": "Topic reading for the storefront",
-    "parameters": "TOPIC",
+    "description": "Callback template functions",
+    "parameters": "PAGE_CALLBACK",
     "tables": [],
     "includes": [
         ""

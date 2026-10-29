@@ -1,9 +1,13 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.522 @ 2026-10-27
+ * @version 6.5.1.525 @ 2026-10-29
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
+ **************************************************************************************************
+ *
+ * Write    - Writes an event, with its proxy
+ *
  **************************************************************************************************/
 
 
@@ -60,7 +64,7 @@ function CmdLoad($mUserId, $mParam)
     {
         return [
             'result'  => false,
-            'message' => 'No event ['.$id.'] in the journal: swept, or a test run of the Dispatcher'
+            'message' => 'No event ['.$id.'] in the journal: swept, or never written'
             ];
     }
 
@@ -148,16 +152,45 @@ function CmdState($mUserId, $mParam)
  **/
 function CmdAdd($mUserId, $mParam)
 {
+    // The caller lends only himself
+    $proxy_id = null;
+    if ( $mParam['proxy'] ) $proxy_id = $mUserId;
+
+    return Write($mParam, $proxy_id);
+}
+
+
+/**
+ * Function CmdAddProxy
+ **/
+function CmdAddProxy($mUserId, $mParam)
+{
+    return Write($mParam, $mParam['proxy_id']);
+}
+
+
+// ————— Private —————
+//==================================================================================================
+
+
+/**
+ * Function Write
+ **/
+function Write($mParam, $mProxyId)
+{
     $key_name = $mParam['key_name'];
     $data = $mParam['data'] ?? [];
     $state = $mParam['state'];
     $user_ids = $mParam['user_ids'] ?? [];
     $group_ids = $mParam['group_ids'] ?? [];
-    $id = MELBIS()->SysUserEventAdd($key_name, $data, $state, $user_ids, $group_ids);
+    $id = MELBIS()->SysUserEventAdd($key_name, $data, $state, $user_ids, $group_ids, $mProxyId);
+
+    $message = 'The event ['.$id.'] of ['.$key_name.'] is in the journal';
+    if ( isset($mProxyId) ) $message .= ', with the proxy ['.$mProxyId.']';
 
     return [
         'result'  => true,
-        'message' => 'The event ['.$id.'] of ['.$key_name.'] is in the journal',
+        'message' => $message,
         'detail'  => [
             'id' => $id
             ]

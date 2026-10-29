@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.522 @ 2026-10-27
+ * @version 6.5.1.525 @ 2026-10-29
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -14,6 +14,7 @@
  * PullStore     - One page of the goods
  * PullOrders    - One page of the orders
  * PullFull      - Every table of the schema
+ * PullIds       - The root by id alone
  *
  * SqlBuild      - Json query into one WHERE
  *
@@ -228,6 +229,28 @@ function PullFull($mSchema, $mTable)
                    ";
         $said[$table] = MELBIS()->SqlSelect(__LINE__, $command);
     }
+
+    return $said;
+}
+
+
+/**
+ * Function PullIds
+ **/
+function PullIds($mSchema, $mTable)
+{
+    // The page as ids, the rest is not read
+    $root = array_key_first($mSchema);
+
+    $command = "SELECT id
+                  FROM $mTable
+              ORDER BY id
+               ";
+    $rows = MELBIS()->SqlSelect(__LINE__, $command);
+
+    $said = [
+        $root => $rows
+        ];
 
     return $said;
 }

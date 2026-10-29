@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.522 @ 2026-10-27
+ * @version 6.5.1.525 @ 2026-10-29
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -15,7 +15,7 @@
 
 namespace MELBIS_WEB_SAMPLE;
 
-use MELBIS_INC_AUTH as AUTH;
+use MELBIS_INC_LOGIC_AUTH as LOGIC_AUTH;
 use MELBIS_INC_LOGIC_COMMON as LOGIC_COMMON;
 
 
@@ -28,7 +28,7 @@ use MELBIS_INC_LOGIC_COMMON as LOGIC_COMMON;
  **/
 function Main($mVars)
 { 
-    return AUTH\Router(MELBIS()->UnitName(), $mVars);
+    return LOGIC_AUTH\Router(MELBIS()->UnitName(), $mVars);
 } 
 
 

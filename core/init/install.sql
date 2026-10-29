@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.522 @ 2026-10-27
+ * @version 6.5.1.525 @ 2026-10-29
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -216,6 +216,7 @@ CREATE TABLE {DBNICK}_user_event (
    id 		   BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
    user_ids 	TEXT DEFAULT ('') NOT NULL,
    group_ids	TEXT DEFAULT ('') NOT NULL,
+   proxy_id 	INT UNSIGNED DEFAULT NULL,
    key_name 	CHAR(100) DEFAULT '' NOT NULL,
    data 	      MEDIUMTEXT DEFAULT ('') NOT NULL,
    state 	   CHAR(32) DEFAULT 'ALONE' NOT NULL,
@@ -2127,7 +2128,8 @@ CREATE TABLE {DBNICK}_u_files_info_value (
    format_xml 	MEDIUMTEXT DEFAULT ('') NOT NULL,
    pos		   INT UNSIGNED DEFAULT '0' NOT NULL,
    UNIQUE (user_id, id),
-   KEY IDX1 (elem_id)
+   KEY IDX1 (elem_id),
+   KEY IDX2 (base_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 
@@ -2195,7 +2197,8 @@ CREATE TABLE {DBNICK}_u_files_store (
    format_xml 	MEDIUMTEXT DEFAULT ('') NOT NULL,
    pos		   INT UNSIGNED DEFAULT '0' NOT NULL,
    UNIQUE (user_id, id),
-   KEY IDX1 (elem_id)
+   KEY IDX1 (elem_id),
+   KEY IDX2 (base_id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
 
 

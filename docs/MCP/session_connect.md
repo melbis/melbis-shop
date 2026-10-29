@@ -10,7 +10,7 @@ Not required: a login that has been granted nothing has to sign in too, to learn
 
 | Parameter | Type | What it is |
 |---|---|---|
-| `topic` | string | the topic of the conversation in one word of Latin letters, digits, `-` and `_`: `prices-sept`. Everything the agent does in the conversation and everything the tools write for it lies in the folder of this name, and after a break the same word brings the agent back to the folder and its data |
+| `topic` | string | the topic of the conversation in one word of Latin letters, digits, `-` and `_`: `prices-sept`. Everything the agent does in the conversation and everything the tools write for it lies in the folder of this name, and after a break the same word brings the agent back to the folder and its data. In a session launched by the program's Dispatcher, the server names the folder, and the topic does not affect it |
 
 The store and the login are worked out without the agent.
 
@@ -27,6 +27,8 @@ Two blocks: first the session's data in JSON, then the text.
   "user":    {"id": 5, "login": "manager", "name": "Irina",
               "options": {"LANG": "ru"}, "from": "program"},
   "group":   {"id": 2, "skey": "MANAGER", "name": "Managers", "options": {}},
+  "proxy":   null,
+  "event":   null,
   "demo":    false,
   "folder":  "D:\\Melbis\\shop.example.com\\mcp\\claude-code\\prices-sept",
   "cache":   {"topics": 3, "size": 48213760},
@@ -44,8 +46,10 @@ Two blocks: first the session's data in JSON, then the text.
 | `store` | the store: the name from the program's list of stores, the address, the folder on the computer; `pinned` — whether the server is pinned to it |
 | `user` | the user: the number, the login, the name, the parameters; `from` — where the login came from: `program` — from the running program, `settings` — from the saved settings |
 | `group` | the user's group: the number, `skey`, the name, the parameters; `null` if there is no group |
+| `proxy` | the proxy — another store login with whose rights the session performs the AI tool commands this login has not been granted: the number, the login, the name, the group. It is named by an event addressed to this login by number or by group; `null` — there is no proxy or it is blocked |
+| `event` | the event on which the program's Dispatcher launched the session: the number, the key, the state, the time, the data; `null` — the session was not launched by the Dispatcher, or by the "Test" button |
 | `demo` | the store works in demo mode, without a license |
-| `folder` | the folder of this conversation, `mcp\<application>\<topic>\` in the store folder: it holds both the agent's files and everything the tools write |
+| `folder` | the folder of this conversation, `mcp\<application>\<topic>\` in the store folder, and in a Dispatcher session `mcp\<application>\event\<day>\<event number>\`: it holds both the agent's files and everything the tools write |
 | `cache` | the folders of all the conversations of this application in the store: how many there are and how many bytes they take up |
 | `build` | the build of the program the server is installed next to. If it changes in the middle of a conversation, the program has been updated under it, and the tool descriptions the host has already shown the agent are out of date: the new ones come with compacting the conversation or with a new conversation |
 | `memory` | how many notes the agent can see and how many of them are critical; `null` — there is no right to read the memory |

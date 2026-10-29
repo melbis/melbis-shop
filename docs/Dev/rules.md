@@ -63,13 +63,13 @@ In the "Workbench" tree, libraries are organized by this group — alongside reg
 
 ```
 melbis
-    auth          melbis_inc_auth.php
-    logic         melbis_inc_logic_common.php
+    logic         melbis_inc_logic_auth.php
+                  melbis_inc_logic_common.php
                   melbis_inc_logic_order.php
                   melbis_inc_logic_order_calc.php
                   melbis_inc_logic_order_edit.php
-    web           melbis_inc_web_callback.php
-                  melbis_inc_web_topic.php
+    page          melbis_inc_page_callback.php
+                  melbis_inc_page_menu.php
     base          melbis_base_footer.php
                   melbis_base_head.php
                   melbis_base_header.php
@@ -79,9 +79,9 @@ melbis
                   melbis_cataloge_sub.php
 ```
 
-The purpose can be omitted if there is only one library in the group: `melbis_inc_auth.php` represents group `auth` with no purpose, while `melbis_inc_web_callback.php` represents group `web` with purpose `callback`.
+The purpose can be omitted if there is only one library in the group: the name is then `{company}_inc_{group}.php`. So `melbis_inc_logic_auth.php` is group `logic` with purpose `auth`, while `melbis_inc_page_callback.php` is group `page` with purpose `callback`.
 
-The idea is to keep a library close to the modules that use it: `melbis_inc_web_callback` and `melbis_inc_web_topic` belong to the web part of the project and are grouped under `web`, rather than being scattered among all other libraries.
+The idea is to keep a library close to the modules that use it: `melbis_inc_page_callback` and `melbis_inc_page_menu` serve the modules that build storefront pages and are grouped under `page`, rather than being scattered among all other libraries.
 
 ## Functions in Module Scripts
 

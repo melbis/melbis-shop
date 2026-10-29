@@ -10,7 +10,7 @@ How the MCP server gets into the store, what the agent is allowed there and what
 
 The password does not go to the store. The server computes a key from it once — from the login, the store's domain and the password — and signs every request with it: a string of the login, the time and the command. The store keeps only the public half of the key and checks the signature; the time of the signature is valid within ±10 minutes.
 
-**Who the agent works as.** The agent works under a person's login and with their rights. Everything the agent does the store signs with that person's name: the author of a task, the author of a file's version, the owner of a note, the one who holds a table. The exception is the AI Dispatcher: it has its own login, the program's Dispatcher launches it by the store's events, and nobody sits at the keyboard (see "[AI Dispatcher](../User/ai-dispatcher.md)").
+**Who the agent works as.** The agent works under a person's login and with their rights. Everything the agent does the store signs with that person's name: the author of a task, the author of a file's version, the owner of a note, the one who holds a table. The exception is the AI Dispatcher: it has its own login, the program's Dispatcher launches it by the store's events, and nobody sits at the keyboard (see "[AI Dispatcher](../User/ai-dispatcher.md)"). Its session may come with a proxy — another store login named by the event. An AI tool command that the dispatcher has not been granted but the proxy has, the server performs with the proxy's rights and signs with the proxy's name; the agent does not choose the proxy (see "[Assignments with an Employee's Rights](../User/ai-dispatcher.md#proxy)").
 
 ## Rights
 

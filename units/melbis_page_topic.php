@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.522 @ 2026-10-27
+ * @version 6.5.1.525 @ 2026-10-29
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -12,7 +12,7 @@
 
 namespace MELBIS_PAGE_TOPIC;
 
-use MELBIS_INC_WEB_TOPIC as TOPIC;
+use MELBIS_INC_PAGE_MENU as PAGE_MENU;
 
 
 // ————— Public —————
@@ -31,7 +31,7 @@ function Main($mVars)
     $id = $mVars['id'];
     
     // Sub topic 
-    TOPIC\Sub($id);
+    PAGE_MENU\Sub($id);
     
     $command = "SELECT s.id 
                   FROM {DBNICK}_topic_sub t_sub

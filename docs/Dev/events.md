@@ -18,10 +18,11 @@ The log is kept by the store's server, one for all workstations. A log row:
 | `data` | the event data in JSON |
 | `state` | the state — a word the store agrees on; `ALONE` by default |
 | `user_ids`, `group_ids` | who it is addressed to: employee and group numbers separated by commas; empty — everyone |
+| `proxy_id` | the proxy — the employee with whose rights the AI Dispatcher performs the AI tool commands it has not been granted; empty — no proxy |
 | `date_time` | the time of the entry by the store's clock |
 
 A module reads the log through the doors of the "[Event Log](sys.md#events)",
-an agent through the "Events" AI tool, built on the same doors.
+an agent through a store AI tool built on the same doors.
 
 The application's Dispatcher receives only the number, the key and the time of
 an event. The data is read by whoever handles the event — by its number:
@@ -103,6 +104,11 @@ The handler reads for itself what they are at the moment.
 
 **The recipients** are lists of employee and group numbers; empty — everyone.
 
+**The proxy** is an employee's number, if the event assigns the AI Dispatcher work
+with that employee's rights. Only an event addressed to the dispatcher by number
+or by group passes rights on. The door signature and an example are in the
+"[Event Log](sys.md#events)".
+
 A scheduled task writes events too. A module that the "[Task
 Scheduler](cron.md)" calls once a day marks the morning of a working day:
 
@@ -162,6 +168,12 @@ in environment variables:
 | `MELBIS_EVENT` | the event key |
 | `MELBIS_ID` | the event number; `0` for the "Test" button |
 | `MELBIS_TIME` | the event time |
+
+The ready agent commands — `claude.bat`, `codex.bat`, `opencode.bat` — do not
+read the variables. The agent's MCP server receives the event number from the
+program together with the login, and the agent sees the event itself in the
+answer to signing in to the store. Number `0` is a run from the "Test" button:
+there is no event, this is a test run.
 
 ## Handling by a Module {#handling}
 
@@ -306,6 +318,9 @@ by states by one module; the others read this event without changing its state.
 2. Give the agent a note on this key and subscribe its Dispatcher — see
    "[AI Dispatcher](../User/ai-dispatcher.md)".
 3. If the event is frequent, put a [cascade](#cascade) between it and the agent.
+4. If the work must go with an employee's rights, the module writes their number
+   into the event's proxy — "[Assignments with an Employee's
+   Rights](../User/ai-dispatcher.md#proxy)".
 
 ## What to Watch Out For {#pitfalls}
 
@@ -319,3 +334,6 @@ by states by one module; the others read this event without changing its state.
   it performs writes an event it is subscribed to, it wakes itself up endlessly.
 * **Each event is a separate command launch.** Several events in a row launch
   several commands, and they run at the same time.
+* **The proxy is passed only by an addressed event.** For an event for everyone
+  the proxy does not work, even if `proxy_id` is written: otherwise its rights
+  would go to everyone whose Dispatcher has a command.

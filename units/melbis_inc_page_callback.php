@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.522 @ 2026-10-27
+ * @version 6.5.1.525 @ 2026-10-29
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -12,7 +12,7 @@
  *
  **************************************************************************************************/
 
-namespace MELBIS_INC_WEB_CALLBACK;
+namespace MELBIS_INC_PAGE_CALLBACK;
 
 // Register the template callbacks
 MELBIS()->DefineCallback('TopicLink');

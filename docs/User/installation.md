@@ -46,7 +46,7 @@ The code works only with a license: the program, its browser and the MCP server 
 
 In Cloudflare this takes two rules, in this order:
 
-- **Skip**: **User Agent** contains `<code>` — the program, its browser and the AI assistant pass by the checks.
+- **Skip**: **User Agent** contains `<code>` — the program, its browser and the AI assistant pass by the checks. In the action tick every item, including **All rate limiting rules**: otherwise batch work will run into the request rate limit.
 - **Block**: **URI Path** starts with `/core/` — the exchange with the engine is closed to everyone who has no code.
 
 The **"Generate"** button puts in a random code of 16 characters.

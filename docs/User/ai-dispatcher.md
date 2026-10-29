@@ -33,11 +33,11 @@ Take a new order in the demonstration store:
    login. Its "[Dispatcher](dispatcher.md)" learns of the event within a second
    or two.
 3. The "New order" notification is enabled in the Dispatcher, and the
-   `claude.bat` command is set in it. The Dispatcher runs the command and passes
-   it the event key, the event number, and the time.
+   `claude.bat` command is set in it. The Dispatcher runs the command and tells
+   the agent's MCP server the event number itself, together with the login.
 4. The command opens a new conversation with the agent. The agent signs in to the
-   store and reads its notes, the note on the `kNewOrder` event, the event itself,
-   and the order.
+   store and receives the event at once, then reads its notes, the note on the
+   `kNewOrder` event, and the order.
 5. Following the note, it sets the administrator a task in the
    "[Scheduler](planner.md)": order number, customer, total — and makes a record
    in its own repository section.
@@ -121,7 +121,7 @@ In the demo store it is the "AI-Dispatcher" section with the key `agent`, the to
 
 The dispatcher does the same things as the assistant, but more strictly: through the store's [AI tools](ai-tools.md#tools), not with direct database queries. The tool already holds the store's rules — how a task is set, how an order is read — and the dispatcher does not have to guess them.
 
-Grant its login only the commands its notes need. For a new order in the demo store these are four tools: Events — to read the event and mark it handled, Scheduler — to set a task, Orders — to read the order, Browser — to read the charter. A new command in its note means a new tick in the rights to that command.
+Grant its login only the commands its notes need: usually marking the event handled, setting a task, and reading what the event is about. A new command in its note means a new tick in the rights to that command.
 
 ## Rights and Security
 
@@ -138,6 +138,24 @@ The only limits on the dispatcher are its rights: there is no person beside it t
 * **Do not subscribe it to its own events.** If an operation that the dispatcher
   performs itself writes an event it is subscribed to, it will keep waking itself
   up without end.
+
+## Assignments with an Employee's Rights {#proxy}
+
+An event can assign the dispatcher work with the rights of a particular employee — this employee is called the proxy. The employee's number is written into the event by a store module, and only an event addressed to the dispatcher by number or by group passes rights on. An event for everyone passes no proxy.
+
+* **Its own rights first.** Everything granted to the dispatcher it does itself
+  and in its own name.
+* **What is missing — with the proxy's rights.** An AI tool command that the
+  dispatcher has not been granted but the employee has, the server performs with
+  the employee's rights: with their catalog sections and orders, and the store
+  signs it with the employee's name.
+* **The agent chooses nothing.** It neither names nor changes the proxy: the
+  server decides for every command by itself and writes in the answer whose
+  rights it went through.
+* **Its own stays its own.** The dispatcher's MCP tools, memory, and repository
+  always work with its own rights.
+
+So whatever the dispatcher must do only with employees' rights is simply not granted to it. For example, without a price change command of its own, the dispatcher changes prices only on assignment from an employee who is allowed to, and only in that employee's sections. How AI tool commands are granted — "[AI Tools](ai-tools.md)".
 
 ## Installation
 
@@ -166,6 +184,8 @@ setx CLAUDE_CODE_OAUTH_TOKEN "key"
 
 The variable is visible to programs started after this command — restart Melbis Shop. The key is access to your subscription: do not forward it or show it to anyone.
 
+Codex signs in once with the `codex login` command or with a key in the `CODEX_API_KEY` variable. Codex reads the settings from the store folder only if it has been trusted with that folder: open `codex` in the store folder once and confirm the trust. OpenCode — with the `/connect` command in its window: there you choose the model provider, for example DeepSeek, and enter its key.
+
 ### 2. User
 
 In "[Users and Access Rights](users.md)" — a separate user for the dispatcher, with its own group and password. The demo store already has one: the login `agent`, "AI Dispatcher"; it has no password set, and nobody can sign in under it until you set one.
@@ -185,24 +205,29 @@ Then, in "AI Components": its notes, its repository section, the AI tool command
 
 An event reaches the Dispatcher if its key is in the "[Settings Registry](registry.md)", the "Dispatcher" → "Event list" branch; "New order" (`kNewOrder`) is there from the very start.
 
-On the dispatcher's computer, in the "Dispatcher" window, the "Notifications" tab: tick the event in "Notification Activation" and enter the "Command" that starts the agent. The command receives the event's key, number, and time in the environment variables `MELBIS_EVENT`, `MELBIS_ID`, and `MELBIS_TIME`.
+On the dispatcher's computer, in the "Dispatcher" window, the "Notifications" tab: tick the event in "Notification Activation" and enter the "Command" that starts the agent. The command receives the event's key, number, and time in the environment variables `MELBIS_EVENT`, `MELBIS_ID`, and `MELBIS_TIME`. The ready agent commands do not read them: the agent's MCP server receives the event number from the program, and the agent sees the event itself when it signs in to the store.
 
-For Claude Code the command is ready — `claude.bat`. The program puts this file into the store folder on every start, from the `Engine\MCP\Setup\` folder of the distribution: it opens a conversation with the agent and passes the event to it. For another application such a file is written by you.
+The ready commands lie in the store folder: `claude.bat` — for Claude Code, `codex.bat` — for Codex, `opencode.bat` — for OpenCode with the DeepSeek V4 Flash model. The program puts them there on every start, from the `Engine\MCP\Setup\` folder of the distribution: the file opens a conversation with the agent. The model and the flags are changed in the `Engine\MCP\Setup\` folder itself — the copy in the store folder is rewritten on every start. For another application such a file is written by you.
 
 ### 4. Check
 
 * **"Test"** next to the command saves it and runs it at once, with the event
-  number `0`. The agent will not find an event with that number and will set the
-  administrator a task about it — which means the whole chain up to the Scheduler
-  works.
+  number `0`. The agent signs in to the store, learns that this is a test run,
+  and finishes its work without writing anything. That it has signed in is seen
+  by the conversation folder `mcp\<application>\event\<day>\0` in the store
+  folder: the server creates it at sign-in.
 * **A real event** — for example, a test order on the storefront. Check the task
   in the Scheduler, the record in the dispatcher's section, and the `Command =>`
   line with the event key and number in the "[Activity Log](journal.md)".
-* To watch the agent at work with your own eyes, run `claude.bat -test` in the
-  store folder: the conversation opens in a window, as with the assistant.
+* To watch the agent at work with your own eyes, run the command in the store
+  folder with the `-test` key: `claude.bat -test` opens the conversation in a
+  window, as with the assistant, while `codex.bat -test` and `opencode.bat -test`
+  show the course of the work and do not close the window at the end.
 
 ### 5. Putting It into Service
 
 The program on the dispatcher's computer is always running, under its login; Windows does not go to sleep and does not end the session. The Dispatcher window can be closed: the request to the server goes on without it.
 
 Every event is a separate conversation and a separate spend of the agent application's subscription. A new assignment is added the same way: an event note, a subscription, a check.
+
+**Conversation folders.** Every run works in its own folder `mcp\<application>\event\<day>\<event number>` in the store folder, and the folders pile up. They are cleaned by the owner — for example, a scheduled task writes its own event once a day, and the Dispatcher on the dispatcher's computer runs a command on it that deletes the days older than a week.
