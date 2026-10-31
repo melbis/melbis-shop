@@ -1,18 +1,18 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.525 @ 2026-10-29
+ * @version 6.5.1.530 @ 2026-10-31
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
  **************************************************************************************************
  *
- * Write    - Writes an event, with its proxy
+ * Write    - Writes an event: its author, and its principal when one is named
  *
  **************************************************************************************************/
 
 
 // Name space
-namespace MELBIS_AGENT_EVENT;
+namespace MELBIS_AGENT_USER_EVENT;
 
 
 // ————— Public —————
@@ -150,22 +150,25 @@ function CmdState($mUserId, $mParam)
 /**
  * Function CmdAdd
  **/
-function CmdAdd($mUserId, $mParam)
+function CmdAdd($mUserId, $mParam, $mAgentId)
 {
-    // The caller lends only himself
-    $proxy_id = null;
-    if ( $mParam['proxy'] ) $proxy_id = $mUserId;
+    // The session signs the event and lends only whose rights it runs on
+    $princ_id = null;
+    if ( $mParam['princ'] ) $princ_id = $mUserId;
 
-    return Write($mParam, $proxy_id);
+    return Write($mAgentId, $princ_id, $mParam);
 }
 
 
 /**
- * Function CmdAddProxy
+ * Function CmdAddPrinc
  **/
-function CmdAddProxy($mUserId, $mParam)
+function CmdAddPrinc($mUserId, $mParam, $mAgentId)
 {
-    return Write($mParam, $mParam['proxy_id']);
+    // The session signs the event, the principal is whoever is named
+    $princ_id = $mParam['princ_id'];
+
+    return Write($mAgentId, $princ_id, $mParam);
 }
 
 
@@ -176,17 +179,17 @@ function CmdAddProxy($mUserId, $mParam)
 /**
  * Function Write
  **/
-function Write($mParam, $mProxyId)
+function Write($mUserId, $mPrincId, $mParam)
 {
     $key_name = $mParam['key_name'];
-    $data = $mParam['data'] ?? [];
     $state = $mParam['state'];
-    $user_ids = $mParam['user_ids'] ?? [];
-    $group_ids = $mParam['group_ids'] ?? [];
-    $id = MELBIS()->SysUserEventAdd($key_name, $data, $state, $user_ids, $group_ids, $mProxyId);
+    $data = $mParam['data'] ?? [];
+    $for_users = $mParam['for_users'] ?? [];
+    $for_groups = $mParam['for_groups'] ?? [];
+    $id = MELBIS()->SysUserEventAdd($mUserId, $mPrincId, $key_name, $state, $data, $for_users, $for_groups);
 
     $message = 'The event ['.$id.'] of ['.$key_name.'] is in the journal';
-    if ( isset($mProxyId) ) $message .= ', with the proxy ['.$mProxyId.']';
+    if ( isset($mPrincId) ) $message .= ', with the principal ['.$mPrincId.']';
 
     return [
         'result'  => true,

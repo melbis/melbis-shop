@@ -22,7 +22,7 @@ When opened, the window **locks the section's data on the server** for you: whil
 the lock is yours, the window has a **red frame**, and other employees can open
 the section only for reading.
 
-If the section is already locked by another employee, the **"Tables Are Locked"**
+If the section is already locked by another user, the **"Tables Are Locked"**
 window appears with the name of whoever holds it:
 
 * **Retry** — try again; the button repeats the attempt by itself, with a
@@ -229,7 +229,7 @@ console. They open in a separate window on top of the program. The same command 
 
 ## Access Rights
 
-Employee access is set at two levels: **globally** — in the "System"
+User access is set at two levels: **globally** — in the "System"
 → "Users" section, and **at the catalog section level** — in "Catalog" → "Access
 Rights". Commercial fields (the "Prices" section) and content (the "Descriptions" section) are two
 independent access planes, to which "Placement" and "Browser" are added. The

@@ -1,6 +1,6 @@
 # shop_module
 
-Opens a web module of this store the way the program opens it in its windows: in the name of the session's person and with the window's fields. For checking and developing built-in and external modules — "[Web Modules](../Dev/web.md)".
+Opens a web module of this store the way the program opens it in its windows: in the name of the session's user and with the window's fields. For checking and developing built-in and external modules — "[Web Modules](../Dev/web.md)".
 
 ## The Right
 
@@ -15,7 +15,7 @@ Not required: the right to the module is checked by the module itself by key, as
 | [`find`] | string | show the places of the answer where this text occurs, instead of its beginning |
 | [`debug`] | yes/no | add the debugger's report |
 
-Every call is a POST. The server itself adds the session person's `login`, `stamp` and `sign` to the fields, like the program with the "User identification required" checkbox; they do not pass through the agent: if the module prints its variables, the signature in its answer and in the file is replaced with `<sign>`. Which fields each window sends — "[Web Modules](../Dev/web.md)". The value of a field of `post` is a string, a number or a yes/no; a list of values goes as `name[]=…`, one per value.
+Every call is a POST. The server itself adds the session user's `login`, `stamp` and `sign` to the fields, like the program with the "User identification required" checkbox; they do not pass through the agent: if the module prints its variables, the signature in its answer and in the file is replaced with `<sign>`. Which fields each window sends — "[Web Modules](../Dev/web.md)". The value of a field of `post` is a string, a number or a yes/no; a list of values goes as `name[]=…`, one per value.
 
 **The tool has cookies of its own:** they live while the MCP server is running and do not mix with the cookies of `shop_page`. So the module's session is kept between calls, and the `shop_page` page stays the page of an anonymous visitor.
 

@@ -1,10 +1,10 @@
 # session_connect
 
-Opens the session: signs in to the store under the user's login and tells the agent everything it needs to know about the session in one answer. Which store and which login the server signs in under — "[Sign-in, Rights, License](access.md)".
+Opens the session: signs in to the store under the user and tells the agent everything it needs to know about the session in one answer. Which store and which user the server signs in under — "[Sign-in, Rights, License](access.md)".
 
 ## The Right
 
-Not required: a login that has been granted nothing has to sign in too, to learn what it may do.
+Not required: a user that has been granted nothing has to sign in too, to learn what it may do.
 
 ## Parameters
 
@@ -12,7 +12,7 @@ Not required: a login that has been granted nothing has to sign in too, to learn
 |---|---|---|
 | `topic` | string | the topic of the conversation in one word of Latin letters, digits, `-` and `_`: `prices-sept`. Everything the agent does in the conversation and everything the tools write for it lies in the folder of this name, and after a break the same word brings the agent back to the folder and its data. In a session launched by the program's Dispatcher, the server names the folder, and the topic does not affect it |
 
-The store and the login are worked out without the agent.
+The store and the user are worked out without the agent.
 
 ## The Answer
 
@@ -27,7 +27,7 @@ Two blocks: first the session's data in JSON, then the text.
   "user":    {"id": 5, "login": "manager", "name": "Irina",
               "options": {"LANG": "ru"}, "from": "program"},
   "group":   {"id": 2, "skey": "MANAGER", "name": "Managers", "options": {}},
-  "proxy":   null,
+  "princ":   null,
   "event":   null,
   "demo":    false,
   "folder":  "D:\\Melbis\\shop.example.com\\mcp\\claude-code\\prices-sept",
@@ -46,8 +46,8 @@ Two blocks: first the session's data in JSON, then the text.
 | `store` | the store: the name from the program's list of stores, the address, the folder on the computer; `pinned` — whether the server is pinned to it |
 | `user` | the user: the number, the login, the name, the parameters; `from` — where the login came from: `program` — from the running program, `settings` — from the saved settings |
 | `group` | the user's group: the number, `skey`, the name, the parameters; `null` if there is no group |
-| `proxy` | the proxy — another store login with whose rights the session performs the AI tool commands this login has not been granted: the number, the login, the name, the group. It is named by an event addressed to this login by number or by group; `null` — there is no proxy or it is blocked |
-| `event` | the event on which the program's Dispatcher launched the session: the number, the key, the state, the time, the data; `null` — the session was not launched by the Dispatcher, or by the "Test" button |
+| `princ` | the principal — another user of the store with whose rights the session performs the AI tool commands this user has not been granted: the number, the login, the name, the group. It is named by an event addressed to this user by number or by group; `null` — there is no principal or it is blocked |
+| `event` | the event on which the program's Dispatcher launched the session: the number, the author `user_id` (`null` — the store itself), the key, the state, the time, the data; `null` — the session was not launched by the Dispatcher, or by the "Test" button |
 | `demo` | the store works in demo mode, without a license |
 | `folder` | the folder of this conversation, `mcp\<application>\<topic>\` in the store folder, and in a Dispatcher session `mcp\<application>\event\<day>\<event number>\`: it holds both the agent's files and everything the tools write |
 | `cache` | the folders of all the conversations of this application in the store: how many there are and how many bytes they take up |
@@ -55,7 +55,7 @@ Two blocks: first the session's data in JSON, then the text.
 | `memory` | how many notes the agent can see and how many of them are critical; `null` — there is no right to read the memory |
 | `tools` | how many AI tools the store has; `null` — there is no right to their list |
 | `tasks` | the scheduler's open tasks by state, two lists: `waiting` — the move is the user's ("New", "Reassigned", "Requires clarification", "Completed" — handed in to them as the creator), `given` — the ones they have given to others, in all the open states; closed ones are not counted; `null` — the user has no right to the scheduler |
-| `granted` | the MCP tools granted to this login |
+| `granted` | the MCP tools granted to this user |
 
 **The parameters** are the options the owner sets in the "[Users and Access Rights](../User/users.md)" window, on the "User Options" and "Group Options" tabs (in the language your program runs in the captions may differ). The set takes in the parameters with a filled-in key (`skey`). A value from a list comes with its own key, and with its name when it has no key; free input comes as text. An empty set is `{}`.
 

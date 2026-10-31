@@ -2,7 +2,7 @@
 
 The **"Development → AI Components"** window holds everything the store gives the AI assistant and the [AI Dispatcher](ai-dispatcher.md), on three tabs:
 
-* **"AI Tools"** — commands written for your store, and the employees'
+* **"AI Tools"** — commands written for your store, and the users'
   permissions for each of them;
 * **"AI Memory"** — the assistant's notes about the store and about working with
   each employee;
@@ -21,7 +21,7 @@ A tool is worth creating when you see one of two things:
 
 * **the work is being assembled by hand.** What the assistant puts together from a
   pool of queries every time is worth writing up as a module once — then it becomes
-  a button both for the assistant and for the employees who have no database rights
+  a button both for the assistant and for the users who have no database rights
   at all. There is no need to wait for the third repetition: the assistant will
   suggest it itself as soon as it has done such work by hand, and will name the
   price — how many queries and tables it took;
@@ -68,11 +68,11 @@ The **line stream** type (`jsonl`) stands apart — it is for tools that load a 
 
 ### Rights
 
-A right is granted **per command** — by a checkmark at the intersection of "command × employee or group". A tool has as many separate permissions as it has commands: you can allow reading the list without allowing adding and changing. The rights of an employee and of their groups add up.
+A right is granted **per command** — by a checkmark at the intersection of "command × user or group". A tool has as many separate permissions as it has commands: you can allow reading the list without allowing adding and changing. The rights of a user and of their group add up.
 
-**Rights are handed out to people, not to the assistant.** The assistant works on behalf of the employee who started it (see "[AI Assistant](ai-assistant.md)"), and the grant is counted for that person. Hence the fact that the same tool can do different things for different employees.
+**Rights are handed out to users, not to the assistant.** The assistant works under the user of whoever started it (see "[AI Assistant](ai-assistant.md)"), and the grant is counted for that user. Hence the fact that the same tool can do different things for different users.
 
-**The AI Dispatcher has a login of its own** (see "[AI Dispatcher](ai-dispatcher.md)"), and commands are granted to it the same way as to an employee — with a checkmark on its row. Grant only those its notes name: it works without a person, and the grant is the only thing that limits it.
+**The AI Dispatcher has a user of its own** (see "[AI Dispatcher](ai-dispatcher.md)"), and commands are granted to it the same way as to any user — with a checkmark on its row. Grant only those its notes name: it works without a person, and the grant is the only thing that limits it.
 
 **The command, the grant, and the fields are all checked by the engine itself, before the module.** An unknown word, a command that has not been granted, and a field that does not match all come back as a ready-made refusal, and the module never sees them — what is left for it are the rules of the subject area.
 
@@ -80,11 +80,11 @@ A right is granted **per command** — by a checkmark at the intersection of "co
 
 ### Ready-Made Tools
 
-The demonstration store ships with a ready-made set: products with their prices and descriptions, the catalog and attributes, files and image profiles, the settings registry, employees, scheduler tasks. The exact list does not live in the documentation — it is the store's data: the full and always fresh list stands in "Development → AI Components" on the "AI Tools" tab, and the assistant takes this same list before its first task.
+The demonstration store ships with a ready-made set: products with their prices and descriptions, the catalog and attributes, files and image profiles, the settings registry, users, scheduler tasks. The exact list does not live in the documentation — it is the store's data: the full and always fresh list stands in "Development → AI Components" on the "AI Tools" tab, and the assistant takes this same list before its first task.
 
 A couple of examples of what that looks like:
 
-- **Scheduler** — the agent creates a task on behalf of an employee, and it
+- **Scheduler** — the agent creates a task on behalf of a user, and it
   appears for the assignee as a new one (see "[Scheduler](planner.md)");
 - **Prices** — reads and changes a product's price fields with exactly the same
   columns as the program's price window;
@@ -102,21 +102,21 @@ They also serve as samples for developing your own.
 
 ## AI Memory {#memory}
 
-Notes the assistant keeps about the store: working rules, employees' directives, decisions and their reasons. The assistant reads them at the start of work, so the next session — on another computer, in another application — does not start from scratch. The whole memory is visible here: whoever can open the window sees the notes of all employees.
+Notes the assistant keeps about the store: working rules, employees' directives, decisions and their reasons. The assistant reads them at the start of work, so the next session — on another computer, in another application — does not start from scratch. The whole memory is visible here: whoever can open the window sees the notes of all users.
 
-On the left is the **"Users"** tree: "All users", under it the groups, and in each group its employees. The node decides whose note it is:
+On the left is the **"Users"** tree: "All users", under it the groups, and in each group its users. The node decides whose note it is:
 
 | Node | Whose note | Who writes it |
 |---|---|---|
-| "All users" | for all employees | the administrator, in this window |
-| group | for the group's employees, main or additional | the administrator, in this window |
-| employee | the employee's own | this employee's assistant, with their consent; the administrator — here |
+| "All users" | for all users | the administrator, in this window |
+| group | for the group's users | the administrator, in this window |
+| user | the user's own | this user's assistant, with the person's consent; the administrator — here |
 
-**The AI Dispatcher's notes** lie under its login, like an employee's, but they are written by the administrator, here: the dispatcher has nobody to ask for consent. They are its working routine and a note for each event key. A note for everyone that suits only people begins with a line saying it is not for the dispatcher's login — see "[AI Dispatcher](ai-dispatcher.md)".
+**The AI Dispatcher's notes** lie under its user, like everyone's, but they are written by the administrator, here: the dispatcher has nobody to ask for consent. They are its working routine and a note for each event key. A note for everyone that suits only people is hidden from the dispatcher's login with the "Hide from" field — see "[AI Dispatcher](ai-dispatcher.md)".
 
 On the right are the **"Notes"** of the selected node, with rows coloured by type, and under the table the text of the current note. The order is changed with "Move Up" and "Move Down".
 
-**To hand a note over**, drag it from the table onto another node of the tree: the note moves there. With **Ctrl** held down it is copied — this is how a rule the assistant wrote down for one employee is given to the whole group while the author keeps it.
+**To hand a note over**, drag it from the table onto another node of the tree: the note moves there. With **Ctrl** held down it is copied — this is how a rule the assistant wrote down for one user is given to the whole group while the author keeps it.
 
 While the window is open, the assistant can neither write a new note nor delete its own: the window holds the memory in work. When you are done, close it.
 
@@ -130,6 +130,7 @@ While the window is open, the assistant can neither write a new note nor delete 
 | Name | the note's short name |
 | Description for the AI assistant | one line on what the note is about |
 | Note text | the note itself; a double click opens the visual editor, the field's second button the source HTML |
+| Hide from (logins and group keys) | whom not to show the note to: logins and group keys separated by a space, a comma or a semicolon; empty — everyone it is addressed to sees it |
 
 Whose note it is is not set in the card: it is the tree node under which the note was added.
 
@@ -138,7 +139,7 @@ Whose note it is is not set in the card: it is the tree node under which the not
 | Type | What it is |
 |---|---|
 | Critical | what is observed in every session; the assistant reads these notes before any other work |
-| Directive | an employee's instruction; for the AI Dispatcher — what to do on an event |
+| Directive | a person's instruction; for the AI Dispatcher — what to do on an event |
 | Skill | how to work with this person |
 | Default | everything else |
 
@@ -156,7 +157,7 @@ On the left are the **"Repository Sections"** — a tree with the usual actions:
 
 | Field | What it defines |
 |---|---|
-| Type | "Personal" — working data of one employee's assistant; "Shared" — what the assistants of all employees need; "Default" — no mark |
+| Type | "Personal" — working data of one user's assistant; "Shared" — what the assistants of all users need; "Default" — no mark |
 | Name | the section's name in the tree |
 | Key | a short name by which the assistant can find the section |
 | Description for the AI assistant | what the section is for: by it the assistant decides what to put here |
@@ -176,13 +177,13 @@ The **"Access Rights"** tab of the selected section: **"Permissions for User Gro
 | Data — Read | read the topics' records |
 | Data — Write | add records |
 
-The rights of an employee and of their groups — main and additional — add up. A section without a single checkbox is invisible to the assistant. An employee with the right to save this window has all sections open with all checkboxes. A row with all checkboxes cleared is removed when the window is saved.
+The rights of a user and of their group add up. A section without a single checkbox is invisible to the assistant. An employee with the right to save this window has all sections open with all checkboxes. A row with all checkboxes cleared is removed when the window is saved.
 
-The checkboxes decide which action goes through inside a section. The repository itself is opened to the assistant by the employee's rights in the "AI Assistant → Repository" branch (see "[Users and Access Rights](users.md)").
+The checkboxes decide which action goes through inside a section. The repository itself is opened to the assistant by the user's rights in the "AI Assistant → Repository" branch (see "[Users and Access Rights](users.md)").
 
-**An employee's personal section.** Create a section with the "Personal" type, name its owner in the description, and give rights only to that employee. If everyone has a personal section, one memory note for everyone can tell the assistants how to find their own: for example, a "Personal" section whose key equals the employee's number (ID).
+**A user's personal section.** Create a section with the "Personal" type, name its owner in the description, and give rights only to that user. If everyone has a personal section, one memory note for everyone can tell the assistants how to find their own: for example, a "Personal" section whose key equals the user's number (ID).
 
-**The AI Dispatcher's section** is set up the same way: "Personal", with rights only for its login — "Topics — List", "Topics — Create", "Data — Read" and "Data — Write". In it the dispatcher keeps a topic per event key and a record per event, so the "Topics and Data" of this section are a log of everything it has done.
+**The AI Dispatcher's section** is set up the same way: "Personal", with rights only for its user — "Topics — List", "Topics — Create", "Data — Read" and "Data — Write". In it the dispatcher keeps a topic per event key and a record per event, so the "Topics and Data" of this section are a log of everything it has done.
 
 ### Topics and Data
 
@@ -197,7 +198,7 @@ The **"Topics and Data"** tab shows what the assistants have written into the se
 
 A record has three tabs:
 
-* **"Summary"** — the time; the user — the employee whose assistant wrote it; the
+* **"Summary"** — the time; the user — the one under whom the assistant wrote it; the
   author — the assistant itself: the model and its settings; the comment — one
   line on what the record changed;
 * **"Content"** — the whole state of the topic;
@@ -210,7 +211,7 @@ Viewing topics and records is allowed by the rights "Development → AI Componen
 
 ## Export {#export}
 
-The **"Export"** button on the tool catalog toolbar collects all tools with their commands and fields, their modules and libraries into one archive `<store> tools <date>.zip`. This is how a set of tools is moved to another store or kept in reserve. Permissions do not go into the archive — they are about the people of this store; nor do memory and the repository.
+The **"Export"** button on the tool catalog toolbar collects all tools with their commands and fields, their modules and libraries into one archive `<store> tools <date>.zip`. This is how a set of tools is moved to another store or kept in reserve. Permissions do not go into the archive — they are about the users of this store; nor do memory and the repository.
 
 The archive is assembled by the server from what has already been sent to it: unsaved changes in the window will not get into the archive, which the program warns about. The right "Development → AI Components → Export" is required.
 

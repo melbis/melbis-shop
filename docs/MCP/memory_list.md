@@ -1,6 +1,6 @@
 # memory_list
 
-Returns the list of the notes the agent sees: its own, those of its groups and those for everyone. The texts of the notes are not in the list — `memory_load` reads them.
+Returns the list of the notes the agent sees: its own, those of its groups and those for everyone, except the ones hidden from its login or group. The texts of the notes are not in the list — `memory_load` reads them.
 
 ## The Right
 

@@ -17,9 +17,9 @@ A tool is an entity, a command is one piece of work with it: `CmdList`, `CmdAdd`
 | the address — `unit` | the tool's module in capitals: `melbis_agent_currency.php` is called as `MELBIS_AGENT_CURRENCY` |
 | the path — `path` | where the tool stands in the program's tree of AI tools, its own name last |
 | the description — `descr` | the owner's words: what the tool does and within what bounds |
-| the commands | `may` — the ones granted to this login, `also` — the rest |
+| the commands | `may` — the ones granted to this user, `also` — the rest |
 
-The list shows **all** the tools and **all** their commands whatever the rights are: an empty `may` means "the tool is there, but not one of its commands has been granted to this login".
+The list shows **all** the tools and **all** their commands whatever the rights are: an empty `may` means "the tool is there, but not one of its commands has been granted to this user".
 
 ## The Call
 

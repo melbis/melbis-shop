@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.525 @ 2026-10-29
+ * @version 6.5.1.530 @ 2026-10-31
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -14,7 +14,7 @@
 
 
 // Name space
-namespace MELBIS_AGENT_TASK;
+namespace MELBIS_AGENT_USER_TASK;
 
 // The states with doors elsewhere
 const STATE_DOOR = [

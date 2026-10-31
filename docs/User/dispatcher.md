@@ -6,8 +6,8 @@ The **"Dispatcher"** window opens automatically when the program starts. The
 **"Users"** tab displays **"Groups and Users"** (who is currently in the store),
 **"User Locks"** (their current locks), the **"Send Message"** chat, and **license**
 information and program updates. Here, too, the Dispatcher reminds you of the need
-to "[Reload](basics.md#recreate)" the local database when it becomes outdated. An
-employee is online if their program has contacted the server within the last 2
+to "[Reload](basics.md#recreate)" the local database when it becomes outdated. A
+user is online if their program has contacted the server within the last 2
 minutes, by the server's clock.
 
 The **"Notifications"** tab sets which store [events](#events) the Dispatcher
@@ -46,7 +46,7 @@ and a time.
   "[Orders](orders.md)" window. Module events of their own are set up by a
   developer — see "[Event Tracking](../Dev/events.md#modules)".
 
-An event can be addressed to everyone, to individual employees, or to groups.
+An event can be addressed to everyone, to individual users, or to groups.
 Operation events are for everyone.
 
 **How an event reaches the program.** It is brought by the same Dispatcher request

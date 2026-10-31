@@ -1,6 +1,6 @@
 # System Doors and Utilities
 
-A store keeps dozens of reference directories in its database: the settings registry, product and order options, customer fields, currencies, suppliers, languages, the application's operations, web modules, employees and the rights granted to them. A module reads all of this constantly and almost never changes it.
+A store keeps dozens of reference directories in its database: the settings registry, product and order options, customer fields, currencies, suppliers, languages, the application's operations, web modules, users and the rights granted to them. A module reads all of this constantly and almost never changes it.
 
 The `Sys*` methods come in two kinds. **Doors** read these directories, each one its own source with **one and the same query** — sections 3 to 8. **Utilities** do the system work every module would otherwise write for itself: they walk down a door's answer, look at a table's schema, rebuild a tree, count and sweep dependencies — sections 9 to 14. Two utilities stand among the doors of their own sections: writing a setting and checking a sign-in.
 
@@ -27,7 +27,7 @@ $ua = $lang['UA'] ?? [];
 
 **A row is self-sufficient.** It holds every column of the table, `id`, `skey` and `pos` included. That is why the answer is a list and not a map: a map's key is a column taken out of the row, and the moment the row is fetched by iteration or by `array_column`, the name is lost and there is nowhere to get it from.
 
-**The order of the rows is a contract.** The list arrives in the application's order: `pos` for flat directories, `absindex` for trees, and `id` as the second key — so that equal `pos` values do not give a different answer from request to request. Employees have no order column of their own at all; there the order is the order of appearance. Nested lists are ordered by the same rule, each by its own column.
+**The order of the rows is a contract.** The list arrives in the application's order: `pos` for flat directories, `absindex` for trees, and `id` as the second key — so that equal `pos` values do not give a different answer from request to request. Users have no order column of their own at all; there the order is the order of appearance. Nested lists are ordered by the same rule, each by its own column.
 
 **A door returns the family whole.** Where a directory has subordinate tables, they arrive as a nested list under a key of their own, and so on all the way down: a supplier group has `provider`, a supplier has `stock`; an option has `value`; a tax area has `rule`, and a rule has `rate`. The name of the key is the name of what lies in it.
 
@@ -44,7 +44,7 @@ $mine = $provider[$provider_id] ?? [];
 
 The row loses nothing in the process: a supplier holds `group_id` inside it, a warehouse holds `provider_id` — the way up is known from the row itself. In detail — section 9.
 
-**A derived field comes on top of the columns, not instead of them.** A door may add to a row something the table does not hold, if that spares every store one and the same calculation: this is how a currency got its `rate` and a group of employees its `users` list. The real columns stay where they were.
+**A derived field comes on top of the columns, not instead of them.** A door may add to a row something the table does not hold, if that spares every store one and the same calculation: this is how a currency got its `rate` and a group of users its `users` list. The real columns stay where they were.
 
 **A row without a symbolic name is in the list as well.** The door does not pick out "only those with a `skey`": the set is maintained by the store owner, an unnamed row there is an ordinary thing, and the data refers to it by `id`. A currency without a `skey` stands in a product's `price_curr_id`, and without it in the list the price cannot be worked out. Whoever needs only the named ones filters them out themselves.
 
@@ -54,13 +54,13 @@ The row loses nothing in the process: a supplier holds `group_id` inside it, a w
 
 **The fields are named after the table's columns.** What is written in `install.sql` and in the table description is what is in the row: `kind_key`, `tindex`, `is_blocked`, `modify_sum`. There is no second vocabulary to learn, and a `grep` by the column name finds both the queries and the modules.
 
-**Addressing is twofold, and the boundary follows the meaning.** A symbolic name addresses what the code refers to: an operation's command, a module's `skey`, a setting's key. An identifier addresses what a person created in the store: an employee, a brand, a section, an option value. Such rows may have no symbolic name at all, and that is normal.
+**Addressing is twofold, and the boundary follows the meaning.** A symbolic name addresses what the code refers to: an operation's command, a module's `skey`, a setting's key. An identifier addresses what a person created in the store: a user, a brand, a section, an option value. Such rows may have no symbolic name at all, and that is normal.
 
 **Neither the doors nor the utilities take `$mLine`.** Their query is their own, and the module's line has nothing to do with it. In refusals and in the log, the method's name stands in place of the line number.
 
 ## 2. What Is Cached and What Is Read Live
 
-There is one rule: **a door reads through the static cache, a utility caches nothing.** Directories, employees, rights — all of these are doors, and all of them go through the cache.
+There is one rule: **a door reads through the static cache, a utility caches nothing.** Directories, users, rights — all of these are doors, and all of them go through the cache.
 
 Freshness does not suffer from it. A static entry's address is assembled from the table's change mark, and that mark is moved by every write that goes through the engine — both a PHP module and the native client, which writes through the same exchange scripts. Once the table has changed, the entry has a different address, and the very next request assembles it anew. A day in an entry's lifetime is not a delay before a change shows up; it is the term for an entry nobody has cancelled.
 
@@ -68,7 +68,7 @@ The mark stays put only for a write that goes past the engine: a raw query from 
 
 For the most part the utilities do not go to the database at all: both `SysPick*` walk the ready array a door has already brought, while the tree doors, `SysSelfKeyModify` and the event log write. But four of them read, and each without the static cache — for a reason of its own.
 
-**`SysUserSignCheck`** — the verb in the name says this is a check and not a list. The employee's key is read from the database at every sign-in: a new password and a block take effect at once, without waiting for the cache.
+**`SysUserSignCheck`** — the verb in the name says this is a check and not a list. The user's key is read from the database at every sign-in: a new password and a block take effect at once, without waiting for the cache.
 
 **`SysTableColumns`** — its query text holds not a single table of the store, which means there is no mark by which the entry could be cancelled. The schema is remembered for the duration of the request: within one request the columns do not change.
 
@@ -82,7 +82,7 @@ A door keeps nothing in the request's memory: every call goes to the static cach
 
 The engine finds a module's dependency on a table itself — from the query the door executed. There is no need to mark it in the Workbench, and nowhere to do so: from the accounting point of view, a door's query is no different from a query written by hand in the module. How the list is assembled and when it grows is covered in the "Caching" section.
 
-**A page assembled according to rights, though, is no fit for the module cache.** The door will answer with fresh data, but a page that got into the cache will go to someone who does not hold those rights. Modules that ask about rights work under a particular employee, and there is no point caching them.
+**A page assembled according to rights, though, is no fit for the module cache.** The door will answer with fresh data, but a page that got into the cache will go to someone who does not hold those rights. Modules that ask about rights work under a particular user, and there is no point caching them.
 
 ## 3. The Settings Registry
 
@@ -97,7 +97,7 @@ $phone = $self['SHOP_PHONE']['value_txt'] ?? '';
 
 The prefix lies in the setting itself: it groups settings for display, while they are addressed by code. `DefineSelfVars` can lay a whole group out into the global array — the case of the prefix makes no difference to it.
 
-**`SysSelfKeyModify($mUserId, $mCode, $mValue, $mTries = false, $mPause = false)`** — the section's utility, the one that writes. It checks that the setting exists and that the person is allowed to edit it, takes the table under a lock, writes, and releases the lock. It sits out an occupied table the way `SqlTableLock` does: the attempts and the pause in milliseconds go through to it, and `BUSY` arrives only after them. It answers with a word:
+**`SysSelfKeyModify($mUserId, $mCode, $mValue, $mTries = false, $mPause = false)`** — the section's utility, the one that writes. It checks that the setting exists and that the user is allowed to edit it, takes the table under a lock, writes, and releases the lock. It sits out an occupied table the way `SqlTableLock` does: the attempts and the pause in milliseconds go through to it, and `BUSY` arrives only after them. It answers with a word:
 
 | Answer | What happened |
 |---|---|
@@ -210,7 +210,7 @@ foreach ( MELBIS()->SysOrderOptionBlocks() as $block )
 }
 ```
 
-**A limit's `right` is not a right but an addressee.** The rows of `order_option_limit_right` say *who* the ban applies to: `user_id` — an employee, `group_id` — a group; an empty one arrives as zero. This is not the family of rights (section 8): there a door answers "is it allowed", while here it returns a rule with a text of its own, and the store's owner falls under it like everyone else if they have been named. Whether the rule concerns a person the module decides itself — by `group_id` from `SysUsers`:
+**A limit's `right` is not a right but an addressee.** The rows of `order_option_limit_right` say *who* the ban applies to: `user_id` — a user, `group_id` — a group; an empty one arrives as zero. This is not the family of rights (section 8): there a door answers "is it allowed", while here it returns a rule with a text of its own, and the store's owner falls under it like everyone else if they have been named. Whether the rule concerns a user the module decides itself — by `group_id` from `SysUsers`:
 
 ```php
 $user_set = MELBIS()->SysUsers();
@@ -296,11 +296,11 @@ foreach ( $menu as $module )
 }
 ```
 
-## 7. People
+## 7. Users
 
-**`SysUsers()`** — the store's employees. A person's group lies in their `group_id` column, and whoever has not been moved anywhere yet arrives with zero.
+**`SysUsers()`** — the store's users. A user's group lies in their `group_id` column, and whoever has not been moved anywhere yet arrives with zero.
 
-**`SysUserGroups()`** — the groups, and inside each one, under the `users` key, the **identifiers** of its people rather than their rows: people have a door of their own, and the group names them instead of copying them. It unfolds in two lines:
+**`SysUserGroups()`** — the groups, and inside each one, under the `users` key, the **identifiers** of its users rather than their rows: users have a door of their own, and the group names them instead of copying them. It unfolds in two lines:
 
 ```php
 $user_set = MELBIS()->SysUsers();
@@ -314,13 +314,13 @@ foreach ( $group['users'] as $user_id )
 
 A group nobody has been moved into yet is in the list — simply with an empty `users`.
 
-**`SysUserSignCheck($mLogin, $mStamp, $mSign)`** — sign-in by signature: it returns the employee's identifier or zero. Zero means all of it at once — no such login, the signature did not match, the time ran out, the person is blocked — and that is right: from the outside these cases must not be told apart. `$mSign` is an Ed25519 signature of the string `login|time|WEB` in base64, made with a key computed from the password; `$mStamp` is the time of the signature in GMT in the form `YYYY-MM-DD hh:mm:ss`, valid within ±10 minutes. The word `WEB` separates a sign-in to a web module from the program's requests: a signature of one does not fit the other. The program and the MCP server add `login`, `stamp` and `sign` to the module's post themselves; the form in a browser signs with the `melbis_crypto_sign` function from `statics/melbis/main.js` of the demo store.
+**`SysUserSignCheck($mLogin, $mStamp, $mSign)`** — sign-in by signature: it returns the user's identifier or zero. Zero means all of it at once — no such login, the signature did not match, the time ran out, the user is blocked — and that is right: from the outside these cases must not be told apart. `$mSign` is an Ed25519 signature of the string `login|time|WEB` in base64, made with a key computed from the password; `$mStamp` is the time of the signature in GMT in the form `YYYY-MM-DD hh:mm:ss`, valid within ±10 minutes. The word `WEB` separates a sign-in to a web module from the program's requests: a signature of one does not fit the other. The program and the MCP server add `login`, `stamp` and `sign` to the module's post themselves; the form in a browser signs with the `melbis_crypto_sign` function from `statics/melbis/main.js` of the demo store.
 
-The verb in the name is not for decoration: this is a utility rather than a door — it reads without the cache. The password is in no door and nowhere in the database: only the employee's public key lies there, and it is not in the list of `SysUsers` columns either.
+The verb in the name is not for decoration: this is a utility rather than a door — it reads without the cache. The password is in no door and nowhere in the database: only the user's public key lies there, and it is not in the list of `SysUsers` columns either.
 
 ## 8. Rights
 
-Ten doors, one per family of rights. The first argument everywhere is the employee being asked about.
+Ten doors, one per family of rights. The first argument everywhere is the user being asked about.
 
 | Door | What is being asked |
 |---|---|
@@ -346,7 +346,7 @@ foreach ( ['browse', 'frame', 'price'] as $for )
 }
 ```
 
-The three order doors are three different questions about the same options. `SysOrderRight` asks about a **value**: an order is visible to whoever has been granted the values of its options, the status among them. The other two ask about an **option**: is the employee entitled to set a value for it in an order themselves. Blocks and limits (section 4.1) are not rights but rules: they restrict the choice, not the access.
+The three order doors are three different questions about the same options. `SysOrderRight` asks about a **value**: an order is visible to whoever has been granted the values of its options, the status among them. The other two ask about an **option**: is the user entitled to set a value for it in an order themselves. Blocks and limits (section 4.1) are not rights but rules: they restrict the choice, not the access.
 
 **The answer comes in three shapes**, and this is worth reading carefully:
 
@@ -355,7 +355,7 @@ $allow = MELBIS()->SysWebKeyRight($user_id, 'FIN_ACCOUNT', 'read');   // true | 
 $allow = MELBIS()->SysWebKeyRight($user_id, '', 'read');              // true | array
 ```
 
-With a named object the door answers "yes" or "no". Without an object it returns the set of what is allowed: a map of `name => id`. And if the person is allowed **everything** — they are the owner or hold a super-right — `true` comes instead of the map.
+With a named object the door answers "yes" or "no". Without an object it returns the set of what is allowed: a map of `name => id`. And if the user is allowed **everything** — they are the owner or hold a super-right — `true` comes instead of the map.
 
 Hence the rule: check for `=== true`, not for "truthiness". A non-empty array is truthy as well.
 
@@ -382,11 +382,11 @@ Hence also what is not worth doing: iterating over this answer as a ready-made l
   modules and web options, `PUT_TOPIC_RIGHT` — all sections, `PUT_INFO_RIGHT` — all
   info items, `PUT_ORDER_OPTION` — all three order doors at once, `PUT_KEY_VALUE` —
   all settings.
-- **A blocked employee holds nothing**, not even modules without authentication.
+- **A blocked user holds nothing**, not even modules without authentication.
   A live session does not save them: the block takes effect from the next request.
   A deleted one all the more so.
 
-The employee's identifier is required and must be a number greater than zero: a right is a system question, and it cannot be asked about nobody. Zero or a foreign string stops execution.
+The user's identifier is required and must be a number greater than zero: a right is a system question, and it cannot be asked about nobody. Zero or a foreign string stops execution.
 
 ## 9. Taking a Door’s Answer Apart
 
@@ -428,7 +428,7 @@ $key = MELBIS()->SysPickFlat($keys, 'skey');
 $min = $key['MIN_BUY'] ?? [];
 ```
 
-What is thrown out is **everything that is an array** — both a nested level and a derived field that is a list. A supplier group loses its nested `provider`, a group of employees its `users` list, but the columns stay where they were: only the convenient summary goes.
+What is thrown out is **everything that is an array** — both a nested level and a derived field that is a list. A supplier group loses its nested `provider`, a group of users its `users` list, but the columns stay where they were: only the convenient summary goes.
 
 ## 10. The Table Schema
 
@@ -508,7 +508,7 @@ Where there is no tree, the order is held by the `pos` column: reference directo
 
 One table may hold several lists — and then a **scope** tells them apart, the same one as in a tree: a column and its value. For tax rates that is `['group_id' => 3]`, for option values `['option_id' => 7]`.
 
-In the employee's working tables, with the `u_` prefix, an identifier repeats from one employee to another, so their scope always includes `user_id`.
+In the user's working tables, with the `u_` prefix, an identifier repeats from one user to another, so their scope always includes `user_id`.
 
 | Utility | What it does | What it answers |
 |---|---|---|
@@ -571,7 +571,7 @@ if ( !empty($count) )
     ]
 ```
 
-One table is sometimes bound twice by different columns — like `user_chat`, where a person stands both as the sender and as the recipient. A row per relation was chosen for exactly that reason: otherwise one pass would wipe out the result of the other.
+One table is sometimes bound twice by different columns — like `user_chat`, where a user stands both as the sender and as the recipient. A row per relation was chosen for exactly that reason: otherwise one pass would wipe out the result of the other.
 
 The latch is taken only where orphans have been found: the relation is first checked with a cheap count, and where there is nothing to sweep — which is the ordinary case — the row answers `gone 0` without a lock. The removal itself finds its orphans anew, already under the latch, so `gone` speaks of what actually went rather than of the count of the pre-check.
 
@@ -603,7 +603,7 @@ The log is the store's way of telling employees and the AI dispatcher that somet
 
 | Door | What it does |
 |---|---|
-| `SysUserEventAdd($mKeyName, $mData = [], $mState = 'ALONE', $mUserIds = [], $mGroupIds = [], $mProxyId = null)` | writes an event and answers with its `id` |
+| `SysUserEventAdd($mUserId, $mPrincId, $mKeyName, $mState = 'ALONE', $mData = [], $mForUsers = [], $mForGroups = [])` | writes an event and answers with its `id` |
 | `SysUserEventList($mFromId = 0, $mKeyName = '', $mState = '', $mLimit = 100)` | events after `$mFromId` in ascending `id` order, no more than `$mLimit` |
 | `SysUserEventLoad($mId)` | one event by its number; `[]` if there is none |
 | `SysUserEventLast($mKeyName = '', $mState = '', $mBeforeTime = '')` | the last event — of the log, of a key or of a state, and with `$mBeforeTime` the last one before that time; `[]` if there is none |
@@ -615,22 +615,24 @@ $data_order = [
     'order_id'  => $order_id,
     'client_id' => $client_id
     ];
-$event_id = MELBIS()->SysUserEventAdd('kNewOrder', $data_order);
+$event_id = MELBIS()->SysUserEventAdd(null, null, 'kNewOrder', 'ALONE', $data_order);
 ```
 
-**The key** is the event's code; by it a Dispatcher notification recognizes its own.
+**The author** is the `id` of the user who wrote the event; `null` — the store itself: a storefront module, a scheduled task. An event of a program operation records whoever performed it as the author. The reading doors give the author as a number, and `null` if there is none.
 
-**The data** is the module's array. The door puts it into the log as is, and `SysUserEventList` gives it back as an array. An event of a program operation carries the `user_id` of whoever performed it, and `command`.
-
-**The recipients** are lists of employee and group `id`s. Empty lists mean the event is for everyone. An employee's Dispatcher sees an event if it is for everyone or if the lists hold the employee or their group.
-
-**The proxy** is the `id` of the employee with whose rights the AI dispatcher performs the AI tool commands it has not been granted itself. Only an event addressed to the dispatcher by number or by group passes rights on; an event for everyone passes no proxy. The reading doors give the proxy as a number, and `null` if there is none. Events of program operations are written without a proxy. How the dispatcher works with a proxy — "[AI Dispatcher](../User/ai-dispatcher.md#proxy)".
+**The principal** is the `id` of the user with whose rights the AI dispatcher performs the AI tool commands it has not been granted itself. Only an event addressed to the dispatcher by number or by group passes rights on; an event for everyone passes no principal. The author and the principal have no defaults: each call decides for itself whom the event comes from and whether it passes rights on. The reading doors give the principal as a number, and `null` if there is none. Events of program operations are written without a principal. How the dispatcher works with a principal — "[AI Dispatcher](../User/ai-dispatcher.md#princ)".
 
 ```php
 // The dispatcher checks the order with the rights of the manager who placed it
 $recipient_set = [$dispatcher_id];
-$event_id = MELBIS()->SysUserEventAdd('kOrderCheck', $data_order, 'ALONE', $recipient_set, [], $manager_id);
+$event_id = MELBIS()->SysUserEventAdd(null, $manager_id, 'kOrderCheck', 'ALONE', $data_order, $recipient_set);
 ```
+
+**The key** is the event's code; by it a Dispatcher notification recognizes its own.
+
+**The data** is the module's array. The door puts it into the log as is, and `SysUserEventList` gives it back as an array. An event of a program operation carries `command`.
+
+**The recipients** are lists of user and group `id`s. Empty lists mean the event is for everyone. The program's Dispatcher sees an event if it is for everyone or if the lists hold the user it works under or that user's group.
 
 **The state** is a word the store agrees on. The engine writes `ALONE` unless the registry has set another one. From then on the state is changed by whoever handles the event.
 

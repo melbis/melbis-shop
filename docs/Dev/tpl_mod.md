@@ -15,7 +15,7 @@ Called via the pipe symbol `|`. Parameters are passed via a colon `:`. Modifiers
 * `{NAME|case:up}` — **Case.** The kind comes first: `up` — all uppercase, `down` — all lowercase, `first` — only the first letter capitalised, the tail left as it is, `title` — every word capitalised (the tail of a word is lowered in the process: `IVAN IVANOV` → `Ivan Ivanov`). The second parameter is the target: `value` (the default) or `key`, that is the names of the keys: `{DATA|case:down,key}`. The case is changed by the UTF-8 rules, Cyrillic included. The kind is obligatory: without it, or with an unknown name, parsing the template stops with an error.
 * `{BADGE|tag:span,badge,color: red}` — **Wraps a value in an HTML tag.** Parameters: `tag,class,style` (everything except the tag is optional). `{BADGE|tag}` without parameters wraps in `<span>`. If the value is empty — the tag is not output at all (empty string). If the input is an array (e.g., a list of product tags) — wraps **each** element separately and joins them with a line break: `{TAGS|tag:span,tag-badge}`. Escaping of `_cm_`/`_sp_` etc. works here too — see the table below.
 
-**Order matters:** `tag` does not escape the content of the value — if it came from a user (untrusted HTML), apply `|html` first, and only then `|tag`: `{USER_COMMENT|html|tag:span,comment}`.
+**Order matters:** `tag` does not escape the content of the value — if it came from a visitor (untrusted HTML), apply `|html` first, and only then `|tag`: `{USER_COMMENT|html|tag:span,comment}`.
 
 ### Formatted Output
 * `{TEXT|print:VAR1,VAR2}` — **Flexible string formatting.** Uses standard PHP `sprintf` to substitute values into a template string.
@@ -90,7 +90,7 @@ If the path in `array_item`/`json_item` points not to a final scalar value but t
   All parameters are optional and are passed positionally, comma-separated:
   1. **Compression quality**, 0–100 (default `85`).
   2. **Timeout in ms** (default `1000`) — the total time budget for conversion for the *entire page*: once the cumulative page render time exceeds the threshold, the modifier stops converting new files (including for other `|webp` tags on the same page) and simply serves the original — this protects the page from slowdowns when many not-yet-cached images need to be converted at once.
-  3. **Upload date field** in the source array (default `UPLOAD_TIME`) — if it is set and found, we have a *dynamic* file (a regular image uploaded via the admin panel/by a user), whose path is built from the upload date, just like `|path`. If you pass an **empty string** here, the modifier switches to *static template file* mode — the path is built relative to `templates/{template}/`, without a date dependency.
+  3. **Upload date field** in the source array (default `UPLOAD_TIME`) — if it is set and found, we have a *dynamic* file (a regular image uploaded via the admin panel/by a visitor), whose path is built from the upload date, just like `|path`. If you pass an **empty string** here, the modifier switches to *static template file* mode — the path is built relative to `templates/{template}/`, without a date dependency.
   4. **File name field** (default `FILE_NAME`) — in dynamic mode this is the key in the passed array (`{ROW:FILE_NAME}`); in static mode — the file path itself, literally, relative to `templates/{template}/`.
 
   The modifier understands both a single record (an associative array with date/file name fields) and a **list of records** (a gallery) — in the latter case it returns a list of ready URLs, one per element.

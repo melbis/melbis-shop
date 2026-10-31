@@ -40,7 +40,7 @@ With `topics` — what has been removed:
 | `removed` | the removed folders |
 | `missing` | the named topics that have no folder |
 
-The folder of a conversation going on right now in another window cannot be told from an old one by the list — the time of the last write gives a hint. So only what the user has named is removed. The folder of the current conversation can be removed too: the next write creates it anew, but without the files it held before.
+The folder of a conversation going on right now in another window cannot be told from an old one by the list — the time of the last write gives a hint. So only what the person has named is removed. The folder of the current conversation can be removed too: the next write creates it anew, but without the files it held before.
 
 When the conversation folders take up more than a gigabyte together, the answer of [`session_connect`](session_connect.md) says so.
 

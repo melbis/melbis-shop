@@ -8,7 +8,7 @@ The list is data, not code. A new tool appears for the agent without updating th
 
 The registry is the only source of the signature: from it the agent learns both what the tool does (the descriptions) and how to call it (the commands with their fields). The module does not describe itself — all that is left in it are the command bodies.
 
-Rights are granted to **people**: the agent signs in to the store under the login of the employee sitting at the keyboard — there is no separate AI user — and the grant is counted for them: either their own row or a row of their group. Hence the fact that the same tool can do different things for different employees. A right is a command: as many commands, as many rights. The holder of the "Change AI settings" right (`PUT_AGENT_OPTION`) owns all commands automatically. The list is open to everyone: the agent sees all tools and all commands — the granted ones in the `may:` line, the rest in the `also:` line; with an empty `may:`, the agent tells the employee whom to ask for access.
+Rights are granted to **users**: the agent signs in to the store under a user — that of the person sitting at the keyboard, or its own if it is the AI dispatcher — and the grant is counted for that user: either their own row or a row of their group. Hence the fact that the same tool can do different things for different users. A right is a command: as many commands, as many rights. The holder of the "Change AI settings" right (`PUT_AGENT_OPTION`) owns all commands automatically. The list is open to everyone: the agent sees all tools and all commands — the granted ones in the `may:` line, the rest in the `also:` line; with an empty `may:`, the agent tells the person whom to ask for access.
 
 ## A Tool Is an Entity, a Command Is Its Function
 
@@ -33,11 +33,15 @@ function CmdList($mUserId, $mParam)
 }
 ```
 
-- `$mUserId` — the id of **the employee whose session is open**, that is, the person
-  at the keyboard. It is always real, there is no anonymous session, and there is no
-  point checking it for zero. It signs authorship: of tasks, notes, changes.
+- `$mUserId` — the id of **the user with whose rights the command is performed**:
+  the session's user, or the session's principal if the command runs with the
+  principal's rights. It is always real, there is no anonymous session, and there is no point
+  checking it for zero. It signs authorship: of tasks, notes, changes.
 - `$mParam` — the command's fields as a ready-made array, already weighed against the
   registry (see "The Routine Is the Engine's Job").
+- `$mAgentId` — the id of the session's user, that is, of the agent; without a principal it
+  equals `$mUserId`. Only a command that cares who really called it declares it — the
+  others make do with two parameters.
 
 The function returns an array, and it travels to the agent whole — how it is built is described below, in "The Command's Response".
 
@@ -107,7 +111,7 @@ Multiplicity is a property of the registry row, not of the field as such: the sa
 - **Tables taken — writing only.** All reads and checks are done before the lock;
   between taking and releasing there is nothing but writing. Busy tables come back
   as a ready-made refusal advising a later retry. The lock is written on behalf of
-  the session's employee: the program's lock list shows whose request holds it.
+  the session's user: the program's lock list shows whose request holds it.
 - **A refusal is a hint.** A missed login answers with a list of logins, a missed id
   with the name of the list command: the agent will correct itself in one move if the
   answer names the next step.
@@ -117,7 +121,7 @@ Multiplicity is a property of the registry row, not of the field as such: the sa
   password: the administrator sets it in the program, and from then on the employee
   changes it themselves.
 - **Self-protection.** A command that saws off the branch it sits on (blocking or
-  deleting the employee whose session is running) is rejected with `result=false`.
+  deleting the user whose session is running) is rejected with `result=false`.
 - **Demolition takes a second call.** A delete command first answers with what would
   go together with the rows and what would be left referring to them, and deletes only
   on a repeat call that says `apply`. That is the confirmation — in the command's
@@ -292,7 +296,7 @@ The aliases it publishes are named by the library in its own manifest, in the `p
 
 ## Backup and Update
 
-**Development → AI Components → Export** (the `TOOL_EXPORT` right; for the agent — `tool_export`) collects the whole registry and the modules behind it into a single archive: `index.json` with the tree and the md5 sum of every file, `tools/<unit>.json` per tool — the commands with their fields — and `units/` with the modules, the manifests, and the libraries found through those manifests. Grants do not go into the archive: they are about the store's people, not about the tools.
+**Development → AI Components → Export** (the `TOOL_EXPORT` right; for the agent — `tool_export`) collects the whole registry and the modules behind it into a single archive: `index.json` with the tree and the md5 sum of every file, `tools/<unit>.json` per tool — the commands with their fields — and `units/` with the modules, the manifests, and the libraries found through those manifests. Grants do not go into the archive: they are about the store's users, not about the tools.
 
 There is no import door, and that is a decision: after installation the owner adapts the tools to their own needs, and an update is always a comparison rather than an overwrite. The agent unpacks the container, finds what has diverged by the sums in the index, and transfers it point by point: the registry by direct queries, the module by saving the file.
 
@@ -306,7 +310,7 @@ Live samples in the platform's demonstration store:
   registry, five commands;
 - `melbis_agent_user.php` — an entity with four commands: password generation,
   deletion guarded by history, a partial `CmdUpdate`;
-- `melbis_agent_task.php` — a mirror of the program's scheduler: open tasks and the
-  archive per person, the way the window loads them; task movement by separate
+- `melbis_agent_user_task.php` — a mirror of the program's scheduler: open tasks and the
+  archive per user, the way the window loads them; task movement by separate
   commands, by the right of the assignee and of the author, as in the task card;
   privacy expressed by a single formula in every query.

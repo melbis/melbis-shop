@@ -149,7 +149,7 @@ The main development rule: For the parser to understand that a block (e.g., `{#P
 
 ## Two-Pass Parsing and Caching
 
-The template engine architecture is built on the principle of **Deferred Evaluation**. This means that page processing happens in two stages (passes). This solves the main problem: how to cache heavy modules while still keeping dynamic data in them (such as the current cart or the user's name).
+The template engine architecture is built on the principle of **Deferred Evaluation**. This means that page processing happens in two stages (passes). This solves the main problem: how to cache heavy modules while still keeping dynamic data in them (such as the current cart or the visitor's name).
 
 **How the two passes work:**
 

@@ -19,7 +19,7 @@ Without `unit`:
 ```json
 {"grant": "Development -> AI Components",
  "tools": {"columns": ["unit", "path", "descr", "may", "also"],
-           "rows": [["MELBIS_AGENT_TASK", "Business -> Scheduler",
+           "rows": [["MELBIS_AGENT_USER_TASK", "Business -> Scheduler",
                      "The scheduler of the program: the tasks and the feed of notes under every one of them.",
                      ["CmdList", "CmdAdd", "CmdNoteList", "CmdNoteAdd"], []]]}}
 ```
@@ -34,7 +34,7 @@ If the store has no tools, `rows` is empty, and the second block is `This store 
 With `unit`:
 
 ```json
-{"unit": "MELBIS_AGENT_TASK", "path": "Business -> Scheduler",
+{"unit": "MELBIS_AGENT_USER_TASK", "path": "Business -> Scheduler",
  "descr": "The scheduler of the program…",
  "commands": [{"name": "CmdAdd", "may": true,
                "descr": "Adds a task and opens its feed with the first note…",
@@ -48,7 +48,7 @@ With `unit`:
 |---|---|
 | `unit`, `path` | the address and the place in the tree |
 | `descr` | the tool's description in full |
-| `commands` | the commands: `name`, `may` — whether it is granted to this login or to the session's proxy, `descr` — the description, `params` — the command's fields, `files` — whether it accepts attachments |
+| `commands` | the commands: `name`, `may` — whether it is granted to this user or to the session's principal, `descr` — the description, `params` — the command's fields, `files` — whether it accepts attachments |
 | `params` | the fields: `name`, `type`, `required` — whether it is required, `default` — the default value, `descr` |
 | `files` | `null` if the command accepts no attachments; otherwise `required` and `descr` |
 

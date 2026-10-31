@@ -18,6 +18,8 @@ The **"Installation"** tab, the **"Install server"** button — a full automatic
 > application asks for confirmation, but once started the operation cannot be
 > cancelled.
 
+The **"Enable Demo Mode"** button puts the `admin.here` file into the store's root and switches the store into demonstration mode — this is how access is brought back if the password has not been set or has been forgotten. While the mode is on, anyone who signs in becomes an administrator, so the program asks for confirmation. In detail — "[Demonstration Mode](installation.md#demo-mode)" in the "Installation" section.
+
 ## Maintenance
 
 The **"Maintenance"** tab:

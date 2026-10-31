@@ -12,7 +12,7 @@ The **"Clear"** button empties the log, and the **"Keep on top of other windows"
 
 ## When the Log Helps
 
-The server's reply shows the reason for a refusal, and it is more precise than a general error message: the license key has expired or does not match, the password is wrong, the employee has no right to the command, the store is closed for maintenance, access from this IP address is forbidden, the command did not fit into the time allowed, or the volume of data exceeded what is permitted.
+The server's reply shows the reason for a refusal, and it is more precise than a general error message: the license key has expired or does not match, the password is wrong, the user has no right to the command, the store is closed for maintenance, access from this IP address is forbidden, the command did not fit into the time allowed, or the volume of data exceeded what is permitted.
 
 If the server does not answer for longer than it should, the application offers to stop waiting — interrupting closes the connection but does not undo the part of the work already done on the server.
 

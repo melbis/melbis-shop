@@ -6,7 +6,7 @@ data cannot be edited here — that is what "[Descriptions](descriptions.md)",
 "[Prices](prices.md)" and "[Placement](location.md)" are for.
 
 Hence two uses. The first is a workplace for whoever needs to **look**: the
-section opens under a right of its own, and the person does not have to have
+section opens under a right of its own, and the user does not have to have
 access to editing at all. The second is quick access to a product's web modules
 for those who do have that access: loading a set here is simpler and faster than
 in the heavy sections.
@@ -24,7 +24,7 @@ only what belongs to the Browser alone.
 
 ## What Shows Up in the Sections
 
-The tree shows the sections the employee has any right at all on:
+The tree shows the sections the user has any right at all on:
 **"Browser"**, "Descriptions", "Prices" or "Placement" — any one of them opens the
 section for viewing. The "Browser" right is granted where a person is meant to
 see products but not edit them; it is given in the "[Catalog](catalog.md)" on the
@@ -81,6 +81,6 @@ Editor](report-editor.md)", and who gets which one is decided there as well.
 ## Embedded Web Module
 
 The panel shows the selected product through the eyes of the storefront, or of
-any other web module granted to the employee. The module is chosen from the list
+any other web module granted to the user. The module is chosen from the list
 above the panel, and the button beside it turns the panel vertical or horizontal.
 More on this in "[Web Modules](web-modules.md)".

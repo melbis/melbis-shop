@@ -8,7 +8,7 @@ a reminder.
 
 The window consists of three lists and an auxiliary panel:
 
-* **Users** — store employees;
+* **Users** — store users;
 * **Tasks** — tasks of the selected user; the task's text is shown below the list;
 * **Responses** — responses and comments on the selected task; below the list are
   the text of the selected response and the **"Comment"** button.
@@ -26,7 +26,7 @@ user on the left switches to their task list. The **"Tasks"** toggle determines
 which tasks to display:
 
 * **in progress** — tasks assigned to this user;
-* **created** — tasks created by them for other employees.
+* **created** — tasks created by them for other users.
 
 The **"Start"** and **"Due"** columns show the task's dates; an empty cell means
 there is no date. Clicking a column header sorts the list, by due date for

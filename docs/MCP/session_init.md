@@ -1,6 +1,6 @@
 # session_init
 
-Shows where one can sign in, before signing in. It changes nothing and does not go to the store, so it may be called as often as you like — after the user has switched the store in the program, for example.
+Shows where one can sign in, before signing in. It changes nothing and does not go to the store, so it may be called as often as you like — after the person has switched the store in the program, for example.
 
 ## The Right
 
@@ -50,7 +50,7 @@ The program matters because it is the one that gives out the login and the passw
 | no store has ever been opened | the owner opens the store in the program |
 | pinning with no folder, or to a folder that is not in the list of stores | the session will not open, the owner fixes the server's configuration |
 
-When the program is running on the store that is wanted and the session was not launched by the Dispatcher, there is no text: the sign-in will open under the person sitting at the program.
+When the program is running on the store that is wanted and the session was not launched by the Dispatcher, there is no text: the sign-in will open under the user the program works under.
 
 ## Refusals
 

@@ -4,13 +4,13 @@
 
 During a normal page render, the parser runs all modules sequentially: first the router, then the header, menu, content, recommendation blocks, widgets — and only after all of them have finished does the page get sent to the browser. If one of the modules performs a heavy database query or calls an external API, it delays the delivery of the entire page.
 
-Lazy Loading solves this problem. The idea is simple: "heavy" modules do not run together with the page — instead of their output, the parser substitutes an AJAX placeholder. The browser receives the page instantly, displays it to the user, and then fetches the content of the deferred modules in the background and inserts their results into the appropriate places without reloading the page.
+Lazy Loading solves this problem. The idea is simple: "heavy" modules do not run together with the page — instead of their output, the parser substitutes an AJAX placeholder. The browser receives the page instantly, displays it to the visitor, and then fetches the content of the deferred modules in the background and inserts their results into the appropriate places without reloading the page.
 
 This is especially useful for blocks that:
 - execute slow aggregating SQL queries (statistics, recommendations, "similar products");
 - call external services (exchange rates, stock availability via a supplier's API);
 - are personalized and cannot be cached at the page level;
-- are not critical for the user's initial perception of the page.
+- are not critical for the visitor's initial perception of the page.
 
 ## Reasonable Limit
 

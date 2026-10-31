@@ -25,17 +25,17 @@ None.
 | `operation` | the path of the operation in the program's tree of operations; empty outside an operation |
 | `since` | since when |
 
-The list takes in every lock of one's own login and every lock of the shared tables; the personal tables of other users (`u_*`) do not get into it.
+The list takes in every lock of one's own user and every lock of the shared tables; the personal tables of other users (`u_*`) do not get into it.
 
 How to read a row:
 
 | `user` | `command` | What it is |
 |---|---|---|
 | `MELBIS SYSTEM` | `MELBIS_SYSTEM` | the storefront has taken the table for the time of a write; a table that the `clear_dependent` step is cleaning up looks the same |
-| a person | `MELBIS_SYSTEM` | a lock outside an operation: a manual one from the program, a pool's `lock` step or the adding of an element file — or a hanging one |
-| a person | a command | an ordinary operation: the whole group of its tables is taken |
+| a user | `MELBIS_SYSTEM` | a lock outside an operation: a manual one from the program, a pool's `lock` step or the adding of an element file — or a hanging one |
+| a user | a command | an ordinary operation: the whole group of its tables is taken |
 
-**One's own locks cannot be told apart by the name.** The agent signs in under the login of the person at the computer, so its lock and the lock of an open program window stand under one name. They differ in the operation and the time.
+**One's own locks cannot be told apart by the name.** The agent signs in under the user of the person at the computer, so its lock and the lock of an open program window stand under one name. They differ in the operation and the time.
 
 ## Refusals
 

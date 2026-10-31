@@ -27,7 +27,7 @@ These answers the server gives itself, without turning to the store.
 |---|---|---|
 | `Not connected. Call "session_connect" first.` | the session is not open: there has been none yet, the sign-in failed or the agent application restarted the server | sign in anew |
 | `STORE_SWITCHED:` and both stores | the server is not tied to a store, and the store open in the program is not the one the session is open in | ask the user: `session_connect` signs in to the program's store, while returning the program to the former store continues the session |
-| `ACCESS_DENIED: this user may not run AGENT_…` and the path in the tree of rights | the login has not been granted the right to this tool | the owner grants the right at the named path, the agent opens the session anew |
+| `ACCESS_DENIED: this user may not run AGENT_…` and the path in the tree of rights | the user has not been granted the right to this tool | the owner grants the right at the named path, the agent opens the session anew |
 | `RULES_REQUIRED:` and the text of the rules | the tool's rules have not been accepted in this session | read the rules, call `session_rules_accept` with the code from the refusal, repeat the call |
 | `The store asks you to read its kCritical notes…` | the critical notes of the memory have not been read; until then only `memory_list` and `memory_load` work | read the notes |
 | `LICENCE_NONE:` | a licensed store has no license file for today; the text names the folder the server looked in | open the store in the program: an open session starts working by itself as soon as the file appears, and on sign-in — repeat `session_init` and `session_connect` |
@@ -62,7 +62,7 @@ Some of the engine's answers the server does not retell with a code but explains
 
 | Answer | When |
 |---|---|
-| `The table … is in work right now, and nothing was written…` | the table is held by another employee or by an open window of the program; nothing was written. Who holds it — `engine_db_locks` |
+| `The table … is in work right now, and nothing was written…` | the table is held by another user or by an open window of the program; nothing was written. Who holds it — `engine_db_locks` |
 | `File not found: … Check the path against engine_map_tree.` | loading a file that does not exist: the path is checked against `engine_map_tree` |
 | `Not the answer of the engine: HTTP <code> (Server: …, Retry-After: …): "…"…` | something other than the engine's answer came: a proxy in front of the site, the web server or the hosting answered, or the engine crashed before it could answer. In the brackets — who answered and in how many seconds to retry, if it said so; in the quotes — its own words: the page title or the first line of the text. The same line without the first words `shop_page` and `shop_module` put above a page with an error code, except 404, and `shop_agent` appends it to the end of the refusal. What each code means and what to do — the recipe `pass_proxy_check.md` and the "Security" section in "[Installation](../User/installation.md)" |
 | `The server of the store refused the request as too large (HTTP 413)…` | the request is larger than the store's server accepts: a list of files is split into several calls, and for the sake of one large file the owner raises the server's limit |

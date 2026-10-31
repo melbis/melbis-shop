@@ -16,7 +16,7 @@ Collects the store's AI tools into a single archive on this computer: the whole 
 
 ```json
 {"file": "D:\\Melbis\\shop.example.com\\melbis-tools-2026-09-17.zip", "bytes": 133400,
- "index": {"melbis": "…", "tree": ["…"], "files": {"units/melbis_agent_task.php": "…"}}}
+ "index": {"melbis": "…", "tree": ["…"], "files": {"units/melbis_agent_user_task.php": "…"}}}
 ```
 
 | Field | What it is |

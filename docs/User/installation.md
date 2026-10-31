@@ -16,7 +16,12 @@ The group's buttons:
 * **"Check"** — a trial connection with the parameters entered; it changes nothing.
   Any editing is worth starting with it.
 * **"Installation"** — creating the store's tables. The reference data is filled in
-  the language chosen in the **"Settings language"** field next to it.
+  the language chosen in the **"Settings language"** field next to it. Before
+  running, the program asks for the administrator's password, and the typed text
+  is visible: the password goes to the user `admin`, and together with this login
+  it is written into the connection parameters. The store goes into
+  [demonstration mode](#demo-mode) at the same time — the "Switch to Working Mode"
+  button is visible at once.
 * **"Set"** — reinstalling the language settings only: the names in the reference
   directories are replaced with the defaults for the chosen language.
 * **"Repair"** — repairing damaged tables by the means of the DBMS.
@@ -34,15 +39,15 @@ The **"Access from IP"** field limits the circle of those who may work with the 
 
 The **"Blocking user access for backup"** group — the **start time** and the **end time** of the daily window when the server does not let users into the store. It exists so that a backup taken by the hosting's own means captures the data in a quiet state.
 
-The **"Keep a log of store users' actions"** checkbox turns on the recording of employees' actions.
+The **"Keep a log of store users' actions"** checkbox turns on the recording of users' actions.
 
 ### Secure Access Code
 
-If a proxy with bot protection stands in front of the site, for example Cloudflare, it may not let in the program and the AI assistant: to it their requests look like a robot's. The **"Secure access code"** field sets a password by which the proxy recognizes them. The program, its built-in browser and the MCP server append it to the User-Agent of every request to the site. Only employees who have signed in know the code, so it cannot be faked just by calling oneself the program.
+If a proxy with bot protection stands in front of the site, for example Cloudflare, it may not let in the program and the AI assistant: to it their requests look like a robot's. The **"Secure access code"** field sets a password by which the proxy recognizes them. The program, its built-in browser and the MCP server append it to the User-Agent of every request to the site. Only users who have signed in know the code, so it cannot be faked just by calling oneself the program.
 
 The program gets the code from the server at every exchange and keeps it in the store's connection parameters on this computer, so from the next start the code goes already with the first request. The MCP server takes the code from the same place before each of its requests.
 
-The code works only with a license: the program, its browser and the MCP server append it when the signed-in employee has a license for today. In demonstration mode the code is not sent, so turn the **Block** rule on after switching to working mode.
+The code works only with a license: the program, its browser and the MCP server append it when the signed-in user has a license for today. In demonstration mode the code is not sent, so turn the **Block** rule on after switching to working mode.
 
 In Cloudflare this takes two rules, in this order:
 
@@ -55,21 +60,17 @@ At a new workplace the code is entered once: the "[Connection](connection.md#con
 
 The code is changed without stopping work: for the time of the switch put both codes into the **Skip** rule (`contains <old>` or `contains <new>`) and set the new code here. Every workplace gets it at the next exchange with the server, after which the old code can be taken out of the rule. A workplace that was switched off all this time enters the new code in the "Connection" window by hand. A built-in browser window that is already open takes the new code the next time it opens.
 
-### Demonstration Mode
+### Demonstration Mode {#demo-mode}
 
-While the marker file `admin.here` lies in the store's root, the store runs in demonstration mode: no license is required, user rights are not checked — whoever signs in counts as an administrator — and no action log is kept. The marker is placed by the server installation so that a new store can be entered before there is either a license or a single employee.
+While the marker file `admin.here` lies in the store's root, the store runs in demonstration mode: no license is required, user rights are not checked — whoever signs in counts as an administrator — and no action log is kept. The marker is placed by the server installation, so that a new store can be entered before there is either a license or the users' passwords, and by the table installation — as a safeguard in case signing in with the password fails.
 
-In this mode a warning and a **"Switch to working mode"** button are visible at the top of the window. It deletes the marker, after which authentication, licensing, and the log come into force. Demonstration mode cannot be brought back from the application — the file is created only on the server.
+In this mode a warning and a **"Switch to working mode"** button are visible at the top of the window. It deletes the marker, after which authentication, licensing, and the log come into force. The marker is put back only on the server — how to do it is described below.
 
-Before you click "Switch to Working Mode", set passwords for the employees, and first of all for yourself, in the users window. In a new store nobody has a password, and without one it will be impossible to sign in after leaving demonstration mode.
+Before you click "Switch to Working Mode", set passwords for the users, and first of all for yourself, in the users window. After the server installation nobody has a password, and after the table installation nobody but `admin`. Without a password it will be impossible to sign in after leaving demonstration mode.
 
 #### Bringing Demonstration Mode Back
 
-If access is lost — the password was not set or has been forgotten — demonstration mode is brought back on the server. In the "[Server](server.md)" window, on the "Connection" tab, enter the IP address and the root password. Then on the "Console" tab tick the "Inside web container" checkbox and run:
-
-```bash
-touch admin.here
-```
+If access is lost — the password was not set or has been forgotten — demonstration mode is brought back on the server. In the "[Server](server.md)" window, on the "Connection" tab, enter the IP address and the root password, then on the "Installation" tab click **"Enable Demo Mode"** and confirm.
 
 The store switches to demonstration mode at once: sign in, set the passwords and click "Switch to Working Mode" again.
 

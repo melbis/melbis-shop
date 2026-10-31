@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.525 @ 2026-10-29
+ * @version 6.5.1.530 @ 2026-10-31
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -176,6 +176,106 @@ function CmdLoad($mUserId, $mParam)
     $tables = ['u_store', 'u_topic_store', 'u_store_info', 'u_store_set', 'u_files_store', 'u_info_value', 'u_files_info_value'];
 
     return TABLE\Read($tables, $mUserId);
+}
+
+
+/**
+ * Function CmdClear
+ **/
+function CmdClear($mUserId, $mParam)
+{
+    // Written only under the hold
+    $held = Held($mUserId);
+    if ( !$held['result'] ) return $held;
+
+    $scope = $mParam['scope'];
+    $scope_set = ['unchanged', 'goods', 'all'];
+    if ( !in_array($scope, $scope_set) )
+    {
+        return [
+            'result'  => false,
+            'message' => 'A scope is unchanged, goods or all, and ['.$scope.'] is none of them'
+            ];
+    }
+
+    // What changes would go
+    //----------------------
+    $param_user = [
+        'user_id' => $mUserId
+        ];
+    $command = "SELECT COUNT(*) AS rows_all, COALESCE(SUM(was_update), 0) AS rows_changed
+                  FROM {DBNICK}_u_store
+                 WHERE user_id = :USER_ID";
+    $goods = MELBIS()->SqlSelectFlat(__LINE__, $command, $param_user);
+    $command = "SELECT COUNT(*) AS rows_all, COALESCE(SUM(was_update), 0) AS rows_changed
+                  FROM {DBNICK}_u_info_value
+                 WHERE user_id = :USER_ID";
+    $values = MELBIS()->SqlSelectFlat(__LINE__, $command, $param_user);
+
+    $lost_goods = ( $scope == 'unchanged' ) ? 0 : (int)$goods['rows_changed'];
+    $lost_values = ( $scope == 'all' ) ? (int)$values['rows_changed'] : 0;
+    if ( $lost_goods + $lost_values > 0 && !$mParam['apply'] )
+    {
+        return [
+            'result'  => false,
+            'message' => $lost_goods.' goods and '.$lost_values.' values carry changes not published yet, and they go. Say apply'
+            ];
+    }
+
+    // The rows of the goods, then the goods
+    //--------------------------------------
+    $only = '';
+    if ( $scope == 'unchanged' ) $only = 'AND s.was_update = 0';
+    $names = array_keys(SCHEMA);
+    foreach ( $names as $table )
+    {
+        $tie = QUERY\Tie(SCHEMA, $table);
+        if ( count($tie) == 0 ) continue;
+
+        $key = $tie[0];
+        $command = "DELETE x
+                      FROM {DBNICK}_u_$table x
+                      JOIN {DBNICK}_u_store s
+                        ON s.id = x.$key
+                       AND s.user_id = x.user_id
+                     WHERE x.user_id = :USER_ID
+                           $only";
+        MELBIS()->SqlQuery(__LINE__, $command, $param_user);
+    }
+
+    $only = '';
+    if ( $scope == 'unchanged' ) $only = 'AND was_update = 0';
+    $command = "DELETE FROM {DBNICK}_u_store
+                      WHERE user_id = :USER_ID
+                            $only";
+    MELBIS()->SqlQuery(__LINE__, $command, $param_user);
+    $gone = MELBIS()->SqlAffectedRows();
+
+    $message = $gone.' goods out of the personal workspace';
+
+    // The values of the lists, with their files
+    //------------------------------------------
+    if ( $scope == 'all' )
+    {
+        $command = "DELETE FROM {DBNICK}_u_files_info_value
+                          WHERE user_id = :USER_ID";
+        MELBIS()->SqlQuery(__LINE__, $command, $param_user);
+
+        $command = "DELETE FROM {DBNICK}_u_info_value
+                          WHERE user_id = :USER_ID";
+        MELBIS()->SqlQuery(__LINE__, $command, $param_user);
+        $values_gone = MELBIS()->SqlAffectedRows();
+
+        $message .= ', and '.$values_gone.' values of the lists';
+    }
+
+    $kept = (int)$goods['rows_all'] - $gone;
+    if ( $kept > 0 ) $message .= '; '.$kept.' changed goods stay';
+
+    return [
+        'result'  => true,
+        'message' => $message.'; the catalogue keeps everything as it is'
+        ];
 }
 
 

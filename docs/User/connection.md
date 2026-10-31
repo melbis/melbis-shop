@@ -43,7 +43,7 @@ The **"Connection"** window sets up the link to the selected store's server.
 ### Credentials
 
 The store's **site URL** — it can be entered without `http://`, the application
-adds that itself. The **login** and the **password** are an employee's account
+adds that itself. The **login** and the **password** are a user's account
 in the store, and the same account decides the rights to everything you do in
 the application. The password does not leave the computer: the application
 derives a key from it and signs every request with that key, so the first call
@@ -70,7 +70,7 @@ Employees change their own password: they enter the **new password**, **repeat
 the new password** and click **"Change Password"**. The password is changed on
 the server at once — the window's "Save" button need not be pressed for this —
 and the new password itself goes to the "Credentials" tab and into the system
-registry, if passwords are stored there. An employee's first password is set by
+registry, if passwords are stored there. A user's first password is set by
 the administrator in the users window.
 
 While the administrator keeps the users window open, the change does not go
@@ -86,7 +86,7 @@ Here you set the portions the application exchanges with the server in:
 * **file size** — the portion files are transferred in;
 * **rows for merging products** — the portion used when merging product data;
 * **auto-retry on a lock** — after how many seconds to try again if the table
-  needed is busy with another employee;
+  needed is busy with another user;
 * **waiting for the server's answer** — how long to wait before offering to
   break the operation off;
 * **forced sending/receiving of files** — transfer the files anew instead of
@@ -103,7 +103,7 @@ The tab describes the work with the assistant. **Your role** — "Owner",
 "Developer" or "Employee" — sets the manner of the conversation, and the
 **"Agent"** says which tool you use.
 
-The assistant signs into the store under your login, so it can do exactly what
+The assistant signs into the store under your user account, so it can do exactly what
 you can: it has no account of its own. The **"Check connection"** button runs a
 real check and names the reason if something is wrong — no licence issued, the
 store did not accept the login or the password, the user has no rights from the

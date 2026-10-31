@@ -118,7 +118,7 @@ same parameters, the module may not execute at all. Therefore, everything that d
 on a specific visitor is handled by a separate mechanism: a global array is expanded in
 a second pass, which is never cached.
 
-This is where mistakes most often occur: a username, cart contents, and the current
+This is where mistakes most often occur: a visitor's name, cart contents, and the current
 language cannot be output as a regular module variable — otherwise the first visitor
 will bake their value into the cache, and everyone else will see it. How to do it
 correctly is described in the "Global Array" section; the cache levels themselves are

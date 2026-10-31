@@ -14,11 +14,12 @@ The log is kept by the store's server, one for all workstations. A log row:
 | Field | What it holds |
 |---|---|
 | `id` | the event number, grows with every entry |
+| `user_id` | the author — the user who wrote the event; empty — the store itself. For an operation event, the one who performed it |
+| `princ_id` | the principal — the user with whose rights the AI Dispatcher performs the AI tool commands it has not been granted; empty — no principal |
 | `key_name` | the key — the event code, for example `kNewOrder` |
-| `data` | the event data in JSON |
 | `state` | the state — a word the store agrees on; `ALONE` by default |
-| `user_ids`, `group_ids` | who it is addressed to: employee and group numbers separated by commas; empty — everyone |
-| `proxy_id` | the proxy — the employee with whose rights the AI Dispatcher performs the AI tool commands it has not been granted; empty — no proxy |
+| `data` | the event data in JSON |
+| `for_users`, `for_groups` | who it is addressed to: user and group numbers separated by commas; empty — everyone |
 | `date_time` | the time of the entry by the store's clock |
 
 A module reads the log through the doors of the "[Event Log](sys.md#events)",
@@ -50,10 +51,11 @@ performed:
 | data the application receives in portions | on the first portion |
 | an AI assistant tool | by the operation of its right — for example, "AI Assistant → Tools → Execute"; a refusal writes no event |
 
-The data of an operation event is who performed what:
+The event records who performed the operation as its author, in `user_id`, and
+the data says what was performed:
 
 ```json
-{"user_id": 5, "command": "UPDATE_PRICE_STORE"}
+{"command": "UPDATE_PRICE_STORE"}
 ```
 
 `command` is the operation's "Command for the server". Operation events are
@@ -89,7 +91,7 @@ if ( $order_new )
     $data_event = [
         'order_id' => $order['id']
         ];
-    MELBIS()->SysUserEventAdd('kNewOrder', $data_event);
+    MELBIS()->SysUserEventAdd(null, null, 'kNewOrder', 'ALONE', $data_event);
 }
 ```
 
@@ -102,10 +104,13 @@ with a capital letter — `kNewOrder`, `kPricesSaved`.
 **The data** is numbers, not copies of rows: an order, a product, a customer.
 The handler reads for itself what they are at the moment.
 
-**The recipients** are lists of employee and group numbers; empty — everyone.
+**The recipients** are lists of user and group numbers; empty — everyone.
 
-**The proxy** is an employee's number, if the event assigns the AI Dispatcher work
-with that employee's rights. Only an event addressed to the dispatcher by number
+**The author** is the number of the user the event comes from; `null` — the store
+itself.
+
+**The principal** is a user's number, if the event assigns the AI Dispatcher work
+with that user's rights. Only an event addressed to the dispatcher by number
 or by group passes rights on. The door signature and an example are in the
 "[Event Log](sys.md#events)".
 
@@ -125,7 +130,7 @@ function Main($mVars)
     $data_event = [
         'day' => $day
         ];
-    $event_id = MELBIS()->SysUserEventAdd('kMorning', $data_event);
+    $event_id = MELBIS()->SysUserEventAdd(null, null, 'kMorning', 'ALONE', $data_event);
     echo "Event $event_id\r\n";
 
     return '';
@@ -140,7 +145,7 @@ chat has changed; in silence — when the time runs out, and the application ask
 the next one right away. A module event wakes the request just as an operation
 event does.
 
-The Dispatcher receives events addressed to everyone, to this employee or to
+The Dispatcher receives events addressed to everyone, to this user or to
 their group.
 
 The application remembers the number of the last event it has seen and asks for
@@ -240,7 +245,7 @@ function Main($mVars)
                 'order_id' => $order_id,
                 'reason'   => 'sum'
                 ];
-            MELBIS()->SysUserEventAdd('kOrderAttention', $data_event);
+            MELBIS()->SysUserEventAdd(null, null, 'kOrderAttention', 'ALONE', $data_event);
         }
 
         MELBIS()->SysUserEventState($event['id'], 'DONE');
@@ -318,14 +323,14 @@ by states by one module; the others read this event without changing its state.
 2. Give the agent a note on this key and subscribe its Dispatcher — see
    "[AI Dispatcher](../User/ai-dispatcher.md)".
 3. If the event is frequent, put a [cascade](#cascade) between it and the agent.
-4. If the work must go with an employee's rights, the module writes their number
-   into the event's proxy — "[Assignments with an Employee's
-   Rights](../User/ai-dispatcher.md#proxy)".
+4. If the work must go with a user's rights, the module writes their number
+   into the event as the principal — "[Assignments with a User's
+   Rights](../User/ai-dispatcher.md#princ)".
 
 ## What to Watch Out For {#pitfalls}
 
 * **An operation event comes to everyone.** It says that the operation has been
-  performed, not that it concerns you. An event for one employee or group is
+  performed, not that it concerns you. An event for one user or group is
   written by a module that names the recipients.
 * **An operation event does not say what has changed** — only who performed
   which operation. What exactly, the handler finds out for itself, for example
@@ -334,6 +339,6 @@ by states by one module; the others read this event without changing its state.
   it performs writes an event it is subscribed to, it wakes itself up endlessly.
 * **Each event is a separate command launch.** Several events in a row launch
   several commands, and they run at the same time.
-* **The proxy is passed only by an addressed event.** For an event for everyone
-  the proxy does not work, even if `proxy_id` is written: otherwise its rights
+* **The principal is passed only by an addressed event.** For an event for everyone
+  the principal does not work, even if `princ_id` is written: otherwise its rights
   would go to everyone whose Dispatcher has a command.

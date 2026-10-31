@@ -1,6 +1,6 @@
 # The Session
 
-A session is the MCP server's work with one store under one login. Everything the agent does with the store happens inside an open session. Four tools of the `session_` family open it and serve it, and none of them requires a right: a session has to open before anything can be forbidden.
+A session is the MCP server's work with one store under one user. Everything the agent does with the store happens inside an open session. Four tools of the `session_` family open it and serve it, and none of them requires a right: a session has to open before anything can be forbidden.
 
 ## The Order
 
@@ -14,12 +14,12 @@ A session is the MCP server's work with one store under one login. Everything th
    agent accepts the rules with the
    [`session_rules_accept`](session_rules_accept.md) tool and repeats the call.
 4. Cleanup. The server does not clear the conversation folders by itself:
-   [`session_clear`](session_clear.md) shows them and removes the ones the user
+   [`session_clear`](session_clear.md) shows them and removes the ones the person
    names.
 
 ## Why the Agent Names Only the Topic at Sign-in
 
-The agent names the conversation with one word, the topic: the server keeps the conversation folder under it, and after a break the same topic brings the agent back to its data. Beyond that the agent chooses nothing at sign-in — neither the store nor the login. The store is the one last opened in the program, or the one the server is pinned to. The login is that of the person sitting at the program, or the one saved in its settings. So the agent will not sign in where the person has not signed in, and the password does not get into the correspondence. Only a person can switch the store, and only in the program. How exactly the server finds the store and the login-password pair — "[Sign-in, Rights, License](access.md)".
+The agent names the conversation with one word, the topic: the server keeps the conversation folder under it, and after a break the same topic brings the agent back to its data. Beyond that the agent chooses nothing at sign-in — neither the store nor the user. The store is the one last opened in the program, or the one the server is pinned to. The user is the one the person is signed in under in the program, or the one saved in its settings. So the agent will not sign in where the person has not signed in, and the password does not get into the correspondence. Only a person can switch the store, and only in the program. How exactly the server finds the store and the login-password pair — "[Sign-in, Rights, License](access.md)".
 
 ## What the Session Remembers
 
@@ -27,7 +27,7 @@ At sign-in the server remembers, and holds until the end of the session:
 
 | What | Why |
 |---|---|
-| the store and the login | every request goes to this store under this login |
+| the store and the user | every request goes to this store under this user |
 | the topic of the conversation | everything the agent and the tools write to this computer goes into the folder of this topic |
 | the granted rights | a call of a tool that is not granted the server refuses at once, without going to the store |
 | the critical notes of the memory: how many there are and which have been read | until they have all been read, the other tools refuse |

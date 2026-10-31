@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.525 @ 2026-10-29
+ * @version 6.5.1.530 @ 2026-10-31
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -245,7 +245,7 @@ function Run($mUserId, $mVersion)
         $data_event = [
             'order_id' => $order['id']
             ];
-        MELBIS()->SysUserEventAdd('kNewOrder', $data_event);
+        MELBIS()->SysUserEventAdd(null, null, 'kNewOrder', 'ALONE', $data_event);
     }
     
     // Result orders

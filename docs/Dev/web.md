@@ -73,7 +73,7 @@ With the "User identification required" flag, `login`, `stamp` and `sign` are ad
 ]
 ```
 
-The AI assistant opens a module the same way — with the [`shop_module`](../MCP/shop_module.md) tool: it passes the window fields itself, and the MCP server adds the person's `login`, `stamp` and `sign`.
+The AI assistant opens a module the same way — with the [`shop_module`](../MCP/shop_module.md) tool: it passes the window fields itself, and the MCP server adds the `login`, `stamp` and `sign` of the session's user.
 
 ### The User's Language
 

@@ -1,6 +1,6 @@
 # engine_db_unlocks
 
-Lifts the locks hanging under one's own login outside any operation — those left by a pool that fell or by an AI tool that broke off.
+Lifts the locks hanging under one's own user outside any operation — those left by a pool that fell or by an AI tool that broke off.
 
 ## The Right
 
@@ -10,12 +10,12 @@ Lifts the locks hanging under one's own login outside any operation — those le
 
 | Parameter | Type | What it is |
 |---|---|---|
-| [`tables`] | list of strings | which tables to free: the bare name `store` or the real `ms_store`. Without it — all the hanging locks of one's own login |
+| [`tables`] | list of strings | which tables to free: the bare name `store` or the real `ms_store`. Without it — all the hanging locks of one's own user |
 
 The tool does not touch what belongs to others:
 
 * **the storefront's lock** — it stands under `MELBIS SYSTEM`;
-* **another person's lock**;
+* **another user's lock**;
 * **the lock of an open program window** — it names its operation.
 
 One's own manual lock from the program looks the same as a hanging one and is lifted together with them. A lock taken a second ago may belong to a call that is still going: the time is visible in `engine_db_locks`.

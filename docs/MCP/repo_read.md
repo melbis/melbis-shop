@@ -72,7 +72,7 @@ The topics' current records — the last record of each of `topic` and `topics` 
 
 | Field | What it is |
 |---|---|
-| `records` | the records: the number, the topic and its name, the author, the person, the time, `comment`, the size and the text of `body`; `appendix_size` is the size of the appendix, and `appendix` itself comes only with `appendix: true` |
+| `records` | the records: the number, the topic and its name, the author, the user, the time, `comment`, the size and the text of `body`; `appendix_size` is the size of the appendix, and `appendix` itself comes only with `appendix: true` |
 | `empty` | the topics that have no records yet |
 | `missed` | the numbers under which there are no topics |
 

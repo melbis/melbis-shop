@@ -10,7 +10,7 @@ The `engine_db_*` section reads and changes the store's data right in its databa
 | `engine_db_select` | reads data as a pool of steps |
 | `engine_db_execute` | changes data as a pool of steps |
 | `engine_db_locks` | who has taken tables into work |
-| `engine_db_unlocks` | lifts the locks that hang under one's own login |
+| `engine_db_unlocks` | lifts the locks that hang under one's own user |
 
 Reading and changing are different rights: the owner can grant `engine_db_select` without `engine_db_execute`.
 
@@ -58,10 +58,10 @@ Melbis does not use the locks of the DBMS. To take a table into work means to ma
 * **Who takes tables.** The program — for the time of an operation or by hand; the storefront —
   for the time of its own write; a pool — by the `lock` step.
 * **The `lock` step** waits out a lock for a moment and refuses if the table is still busy —
-  even if it is a window of the program under the same login that holds it. Everything the
+  even if it is a window of the program under the same user that holds it. Everything the
   pool has taken it releases itself when it finishes.
 * **A hanging lock.** If a pool fell hard or an AI tool broke off between taking a table and
-  freeing it, the mark stays under the login, outside any operation, and does not expire by
+  freeing it, the mark stays under the user, outside any operation, and does not expire by
   itself. Such marks are lifted by `engine_db_unlocks`.
 
 In the program all the locks are seen and lifted in the dispatcher — "[Dispatcher and Locks](../User/dispatcher.md#locks)".

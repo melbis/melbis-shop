@@ -1,6 +1,6 @@
 # Users and Access Rights
 
-The "Users" section (the "System" tab) — store employees, their groups, and access rights.
+The "Users" section (the "System" tab) — store users, their groups, and access rights.
 
 ## Groups and Users
 
@@ -16,7 +16,7 @@ defined: **"Command for Server"**, the **"Allowed Time"** of its execution (from
 **"Server Load Limit"** (by average load over 1 / 5 / 15 minutes; 0 — no restrictions),
 **"Event After the Operation"** and **"Tables for Exchange with Server"**. Below are
 **"Permissions for User Groups"** and **"Permissions for Users"**: an "Access" checkbox
-at the intersection of an operation and an employee.
+at the intersection of an operation and a user.
 
 **Event After the Operation.** If an operation has an **"Event key"**, the store records
 an event after each of its runs: who ran which operation. **"State"** is the word the

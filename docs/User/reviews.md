@@ -13,11 +13,11 @@ comment).
 
 There can be many reviews, so the required subset is loaded via the **"Advanced
 Review Query"** with saving to a profile. The conditions are varied: product attributes,
-user fields, and review parameters themselves — for example, by date (you can select
+review author fields, and review parameters themselves — for example, by date (you can select
 an automatic period template). The advanced query and profiles mechanism is described in
 "[Basic Operating Principles](basics.md)".
 
-A review contains: the product (ID, store code, name), user data
+A review contains: the product (ID, store code, name), author data
 (name, e-mail, IP address), **Rating**, the number of upvotes and downvotes, and the date.
 
 ## Functions

@@ -8,12 +8,12 @@ works with it in batch mode — hence the speed of a desktop application instead
 web interface delays. The general mechanics of this workflow are covered in a separate section, "[Basic Operating Principles](basics.md)".
 
 There is a third role as well: the application is the control panel for the
-**AI Assistant**. The assistant works with the store under the login of whoever
+**AI Assistant**. The assistant works with the store under the user account of whoever
 opened it, so its reach is set by ordinary user rights; on top of that the owner
 sets up **AI Tools** — ready-made store commands the assistant runs instead of
-manual work — and hands them out to employees one command at a time. This is
+manual work — and hands them out to users one command at a time. This is
 covered in "[AI Tools](ai-tools.md)". The same control panel also runs the
-**AI Dispatcher** — an agent with a login of its own, which the application on a
+**AI Dispatcher** — an agent with a user account of its own, which the application on a
 separate computer wakes up with store events (see "[AI Dispatcher](ai-dispatcher.md)").
 
 ## Desktop
@@ -76,7 +76,7 @@ developers.
 ## "System" Tab
 
 * **Stores** — switching and adding stores, local database placement.
-* **Users** — groups, staff members, and their access rights.
+* **Users** — groups, users, and their access rights.
 * **Connection** — authorization, internet connection settings, licensing; the "AI Assistant" tab lives here too: your role in the conversation with it and a check of its connection.
 * **Locks** — viewing and releasing locks.
 * **Profiles** — retrieve and save profiles on the server.

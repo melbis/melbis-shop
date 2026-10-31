@@ -20,15 +20,15 @@ Sections are set up by the administrator in the program; the agent only reads th
 
 | Label | What it is |
 |---|---|
-| `kPersonal` | a personal section: the working notes of one person's assistant |
+| `kPersonal` | a personal section: the working notes of one user's agent |
 | `kShared` | a shared section: what the assistants of all employees need |
 | `kDefault` | no label |
 
-A label restricts nothing: who sees a section is decided by its rights. The administrator sets up a personal section for every employee separately, with rights for that employee alone. The assistant finds its section by the description and the rights, and a memory note can set a scheme — for example, `kPersonal` with an `skey` equal to the user's number.
+A label restricts nothing: who sees a section is decided by its rights. The administrator sets up a personal section for every user separately, with rights for that user alone. The assistant finds its section by the description and the rights, and a memory note can set a scheme — for example, `kPersonal` with an `skey` equal to the user's number.
 
 ## Section Rights
 
-A row of a section's rights gives a person or a group — main or additional — a set of flags, and every flag lets through the action of the same name:
+A row of a section's rights gives a user or a group a set of flags, and every flag lets through the action of the same name:
 
 | Flag | Action |
 |---|---|
@@ -52,7 +52,7 @@ A record does not change: every new one is added to the topic, the last one is t
 | Record field | What it is |
 |---|---|
 | `author` | who wrote: the model, its effort and the like |
-| `user` | the person whose assistant wrote; empty when the user has been deleted |
+| `user` | the user the agent wrote under; empty when the user has been deleted |
 | `comment` | one line about what the record changed — the history is read by them |
 | `body` | the text: the whole state of the topic |
 | `appendix` | data to the record, read only when it is needed |

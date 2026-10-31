@@ -51,7 +51,7 @@ Removes the topic together with all its records at once.
 
 ## store_write
 
-A new record of the topic. A record does not change: the last one is the topic's current state, the earlier ones are its history. The record's person is the session's login, and the store sets the time. A byte order mark at the beginning of a `*_source` file is dropped.
+A new record of the topic. A record does not change: the last one is the topic's current state, the earlier ones are its history. The record's user is the session's user, and the store sets the time. A byte order mark at the beginning of a `*_source` file is dropped.
 
 ```json
 {"record": 2, "topic": 1, "name": "Levenhuk telescopes", "size": 158}

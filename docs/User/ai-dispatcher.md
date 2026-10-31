@@ -13,7 +13,7 @@ It is the same agent application as the [AI assistant](ai-assistant.md), and it 
 | | AI assistant | AI dispatcher |
 |---|---|---|
 | Who starts the work | an employee, with a task in the correspondence | a store event |
-| Under whose login | under the employee's login, with their rights | under its own login, with its own rights |
+| Under which user | under the employee's user account, with their rights | under its own user account, with its own rights |
 | Where it runs | on the employee's computer, while they are working | on its own computer, all the time |
 | How it knows what to do | from the employee's task and from memory | from memory only: a note for each event |
 | If something is unclear | asks | sets a task for a person and finishes |
@@ -88,7 +88,7 @@ The AI dispatcher knows exactly as much about the store as is written in the sto
 
 ### Memory: Its Own Notes
 
-The assistant learns in conversation: it offers to write down what it has understood, and the employee agrees. The dispatcher has nobody to learn from, so its notes are written by the administrator, in advance, under the dispatcher's login in the "AI Memory" tree.
+The assistant learns in conversation: it offers to write down what it has understood, and the employee agrees. The dispatcher has nobody to learn from, so its notes are written by the administrator, in advance, under the dispatcher's user in the "AI Memory" tree.
 
 Three kinds of notes are needed:
 
@@ -100,13 +100,13 @@ Three kinds of notes are needed:
 
 Notes of the "Critical" type it reads at the start of every conversation, an event note — when its event arrives. A new assignment is a new event note and a subscription to the event in the Dispatcher; nothing else has to be rewritten.
 
-**Notes for everyone are written for people.** The dispatcher reads them too, and much of what is in them — "ask who you are talking to", "plan first, then agreement" — does it harm: it will stop and wait for an answer that will never come. Such a note begins with a line saying that it is not for the dispatcher's login. Notes that everyone needs — for example, where the [charter](../charter.md) lies — leave shared: the dispatcher reads the charter the same way the employees do.
+**Notes for everyone are written for people.** The dispatcher reads them too, and much of what is in them — "ask who you are talking to", "plan first, then agreement" — does it harm: it will stop and wait for an answer that will never come. Such a note is hidden from the dispatcher's login, and it simply does not receive it. Notes that everyone needs — for example, where the [charter](../charter.md) lies — leave shared: the dispatcher reads the charter the same way the employees do.
 
-That is how it is done in the demo store. Under the `agent` login lie "AI dispatcher at work" (the working procedure), "Storing data in the repository" (working with the repository), and "Event kNewOrder" (the directive for a new order). The shared "Working with a person" and "Storing data in the repository" begin with the line "Not for the user with the login "agent"". The demo store's notes are written in English — translate them into the store's language, as you do the charter.
+That is how it is done in the demo store. Under the `agent` login lie "AI dispatcher at work" (the working procedure), "Storing data in the repository" (working with the repository), and "Event kNewOrder" (the directive for a new order). The shared "Working with a person" and "Storing data in the repository" are hidden from the `agent` login. The demo store's notes are written in English — translate them into the store's language, as you do the charter.
 
 ### Repository: Memory Between Runs
 
-Every run is a new conversation: about the previous run the agent knows only what it has written down itself. So the dispatcher has its own section in the "[AI Repository](ai-tools.md#repo)" — of the "Personal" type, with rights for its login only:
+Every run is a new conversation: about the previous run the agent knows only what it has written down itself. So the dispatcher has its own section in the "[AI Repository](ai-tools.md#repo)" — of the "Personal" type, with rights for its user only:
 
 * **a topic** — one event key: `kNewOrder`, `kPricesSaved`;
 * **a record** — one handled event: the time, what has been done, what is left.
@@ -121,7 +121,7 @@ In the demo store it is the "AI-Dispatcher" section with the key `agent`, the to
 
 The dispatcher does the same things as the assistant, but more strictly: through the store's [AI tools](ai-tools.md#tools), not with direct database queries. The tool already holds the store's rules — how a task is set, how an order is read — and the dispatcher does not have to guess them.
 
-Grant its login only the commands its notes need: usually marking the event handled, setting a task, and reading what the event is about. A new command in its note means a new tick in the rights to that command.
+Grant its user only the commands its notes need: usually marking the event handled, setting a task, and reading what the event is about. A new command in its note means a new tick in the rights to that command.
 
 ## Rights and Security
 
@@ -139,23 +139,23 @@ The only limits on the dispatcher are its rights: there is no person beside it t
   performs itself writes an event it is subscribed to, it will keep waking itself
   up without end.
 
-## Assignments with an Employee's Rights {#proxy}
+## Assignments with a User's Rights {#princ}
 
-An event can assign the dispatcher work with the rights of a particular employee — this employee is called the proxy. The employee's number is written into the event by a store module, and only an event addressed to the dispatcher by number or by group passes rights on. An event for everyone passes no proxy.
+An event can assign the dispatcher work with the rights of a particular user — this user is called the principal: the dispatcher acts on their behalf. The user's number is written into the event by a store module, and only an event addressed to the dispatcher by number or by group passes rights on. An event for everyone passes no principal.
 
 * **Its own rights first.** Everything granted to the dispatcher it does itself
   and in its own name.
-* **What is missing — with the proxy's rights.** An AI tool command that the
-  dispatcher has not been granted but the employee has, the server performs with
-  the employee's rights: with their catalog sections and orders, and the store
-  signs it with the employee's name.
-* **The agent chooses nothing.** It neither names nor changes the proxy: the
+* **What is missing — with the principal's rights.** An AI tool command that the
+  dispatcher has not been granted but the principal has, the server performs with
+  the principal's rights: with their catalog sections and orders, and the store
+  signs it with the principal's name.
+* **The agent chooses nothing.** It neither names nor changes the principal: the
   server decides for every command by itself and writes in the answer whose
   rights it went through.
 * **Its own stays its own.** The dispatcher's MCP tools, memory, and repository
   always work with its own rights.
 
-So whatever the dispatcher must do only with employees' rights is simply not granted to it. For example, without a price change command of its own, the dispatcher changes prices only on assignment from an employee who is allowed to, and only in that employee's sections. How AI tool commands are granted — "[AI Tools](ai-tools.md)".
+So whatever the dispatcher must do only with other users' rights is simply not granted to it. For example, without a price change command of its own, the dispatcher changes prices only on assignment from a user who is allowed to, and only in that user's sections. How AI tool commands are granted — "[AI Tools](ai-tools.md)".
 
 ## Installation
 
@@ -165,7 +165,7 @@ A separate computer or virtual server running Windows that works around the cloc
 
 * **Melbis Shop**, connected to the store under the dispatcher's login. This is a
   separate workplace: the dispatcher's login needs its own license, like any
-  employee.
+  user.
 * **An agent application for the terminal** (CLI) with a paid subscription — Claude
   Code, Codex CLI or OpenCode. It has to be the terminal version: the Dispatcher
   launches the agent with a command, with no window and no person. The application
@@ -199,7 +199,7 @@ The group's rights in the "Operation Catalog":
 | "AI Assistant → Repository" — all three operations | the agent keeps its section |
 | "AI Assistant → Tools → Get list", "Execute" | the agent works with AI tools |
 
-Then, in "AI Components": its notes, its repository section, the AI tool commands for its login.
+Then, in "AI Components": its notes, its repository section, the AI tool commands for its user.
 
 ### 3. Event Subscription
 

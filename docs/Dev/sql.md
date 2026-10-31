@@ -35,7 +35,7 @@ $brand_line = implode(',', $brand_ids);
 $command = "SELECT id FROM {DBNICK}_store WHERE brand_id IN ($brand_line)";
 ```
 
-The type cast here is not decoration: it is the only thing standing between a list from a user request and the SQL text.
+The type cast here is not decoration: it is the only thing standing between a list from a visitor's request and the SQL text.
 
 ## 2. Fetching Data
 
@@ -140,7 +140,7 @@ Three requirements for the query that the engine does not verify:
 
 The direction is validated against a list (`asc` / `desc`) — nothing else will pass. However, **the field name is only validated by character set**, and that set is intentionally broad: it allows parentheses and colons so that expressions like `RAND(:TOWN_HASH)` work. This means a function call or subquery can be smuggled through a field name — quotes and commas are filtered out, but `(SELECT ...)` consists entirely of allowed characters.
 
-This leads to the rule: **the sort field name is set by the developer, not the visitor.** A `?order=price` value coming from the URL should be parsed through a `switch` statement and mapped to your own column name — never pass a user-supplied string directly as a key.
+This leads to the rule: **the sort field name is set by the developer, not the visitor.** A `?order=price` value coming from the URL should be parsed through a `switch` statement and mapped to your own column name — never pass the visitor's string directly as a key.
 
 ### 2.4. Manual Result Iteration
 
@@ -206,7 +206,7 @@ $store_id = MELBIS()->SqlGenId('store');
 
 The table name is passed **without a prefix** — as it is recorded in the `{DBNICK}_generator` table. The method atomically increments the counter and returns the new value. This scheme is used because identifiers must be synchronized between the server and the native client working with the same database. When there are many records, the counter is not moved one at a time — see 3.1.
 
-The employee's working tables, with the `u_` prefix, count identifiers for each employee by their own counter. For them `SqlGenId` and `SqlGenIdBlock` take the employee as the third argument — `SqlGenId('u_store', $user_id)`. The counter is taken from `{DBNICK}_generator_u`, and if the employee has never worked with the table yet, it is set up by the very first call.
+The user's working tables, with the `u_` prefix, count identifiers for each user by their own counter. For them `SqlGenId` and `SqlGenIdBlock` take the user as the third argument — `SqlGenId('u_store', $user_id)`. The counter is taken from `{DBNICK}_generator_u`, and if the user has never worked with the table yet, it is set up by the very first call.
 
 Helper methods:
 
@@ -350,7 +350,7 @@ $taken = MELBIS()->SqlTableLock(__LINE__, '{DBNICK}_store', $user_id, 1);
 
 ### 6.1. The Owner of a Lock
 
-Both methods have a third argument — `$mUserId`, the employee the table is taken **for**. It is visible in the application's list of locks, and the lock is released by it as well.
+Both methods have a third argument — `$mUserId`, the user the table is taken **for**. It is visible in the application's list of locks, and the lock is released by it as well.
 
 ```php
 $taken = MELBIS()->SqlTableLock(__LINE__, '{DBNICK}_store', $user_id);
@@ -360,11 +360,11 @@ $taken = MELBIS()->SqlTableLock(__LINE__, '{DBNICK}_store', $user_id);
 $gone = MELBIS()->SqlTableUnlock(__LINE__, '{DBNICK}_store', $user_id);
 ```
 
-By default there is a zero there — "held by a storefront module", as it always was, so code written earlier has not stopped working. Naming the employee is worth doing where the work goes on in their name: a stuck lock is then not anonymous, and it is visible whose request left it behind.
+By default there is a zero there — "held by a storefront module", as it always was, so code written earlier has not stopped working. Naming the user is worth doing where the work goes on in their name: a stuck lock is then not anonymous, and it is visible whose request left it behind.
 
 **Occupancy does not depend on the owner.** Nobody will take an occupied table, including whoever holds it: a repeated `SqlTableLock` with the same `$mUserId` answers `false` too. The owner decides not "who may take it" but "who may release it".
 
-The exception is the employee's working tables, with the `u_` prefix: everyone has their own rows in them, so such a table is occupied only for the one who holds it. One employee's open window does not stop another from taking it.
+The exception is the user's working tables, with the `u_` prefix: everyone has their own rows in them, so such a table is occupied only for the one who holds it. One user's open window does not stop another from taking it.
 
 **`SqlTableUnlock` answers with the number of rows released.** A zero means there was nothing to release — most often because it was taken under one name and is being released under another, and the lock has stayed hanging:
 
@@ -375,14 +375,14 @@ if ( MELBIS()->SqlTableUnlock(__LINE__, '{DBNICK}_store', $user_id) === 0 )
 }
 ```
 
-The method releases only what `SqlTableLock` sets: a program window opened by the same employee holds the table with a row of its own, and the call does not touch that row.
+The method releases only what `SqlTableLock` sets: a program window opened by the same user holds the table with a row of its own, and the call does not touch that row.
 
-**Whether the employee holds the tables is answered by `SqlTableHeld($mLine, $mTables, $mUserId = 0)`.** `true` — every table named was taken by `SqlTableLock` in their name; a program window of the same employee does not count. The method only reads. It is needed when one call takes the lock and another one writes: the writer cannot take it again, because an occupied table is occupied for its own owner as well.
+**Whether the user holds the tables is answered by `SqlTableHeld($mLine, $mTables, $mUserId = 0)`.** `true` — every table named was taken by `SqlTableLock` in their name; a program window of the same user does not count. The method only reads. It is needed when one call takes the lock and another one writes: the writer cannot take it again, because an occupied table is occupied for its own owner as well.
 
 ```php
 if ( !MELBIS()->SqlTableHeld(__LINE__, '{DBNICK}_store', $user_id) )
 {
-    // The table is not taken by this employee — writing is not allowed
+    // The table is not taken by this user — writing is not allowed
     return '';
 }
 ```

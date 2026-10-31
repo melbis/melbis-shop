@@ -4,7 +4,7 @@ The `engine` family is forty-four MCP tools that work with the store's files and
 
 ## Who It Is for and Why
 
-Access to the engine is a developer's access. The right to change in the "Direct access → Development" branch opens the whole store: a login that is allowed to save a module can do to the store everything the store itself can (see "[Sign-in, Rights, License](access.md)").
+Access to the engine is a developer's access. The right to change in the "Direct access → Development" branch opens the whole store: a user who is allowed to save a module can do to the store everything the store itself can (see "[Sign-in, Rights, License](access.md)").
 
 The ordinary work — create a product, set a task, change a price — is more convenient and safer to do through the store's AI tools. The owner writes them to their own rules, and the agent takes them before the engine: the list is given by `tool_list`.
 

@@ -1,7 +1,7 @@
 # Catalog
 
 The "Catalog" section (the "Structure" tab) is for managing store sections: their
-ordering, properties and options, as well as employee access rights to sections.
+ordering, properties and options, as well as user access rights to sections.
 Quick catalog functions are also available in "Prices", "Descriptions", and "Placement", but full
 management is here.
 

@@ -20,7 +20,7 @@ Web Console"**, **"Close Module"**, and **"Open Module in Browser"**. The last o
 opens an external module in the system browser — its address can be saved and opened
 on another device.
 
-An external module may require authentication (employee login and password), in which case it
+An external module may require authentication (user login and password), in which case it
 can be safely opened from anywhere.
 
 ## Configuration

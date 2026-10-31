@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.525 @ 2026-10-29
+ * @version 6.5.1.530 @ 2026-10-31
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -214,12 +214,13 @@ CREATE TABLE {DBNICK}_user_chat (
 DROP TABLE IF EXISTS {DBNICK}_user_event;
 CREATE TABLE {DBNICK}_user_event (
    id 		   BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-   user_ids 	TEXT DEFAULT ('') NOT NULL,
-   group_ids	TEXT DEFAULT ('') NOT NULL,
-   proxy_id 	INT UNSIGNED DEFAULT NULL,
+   user_id 	   INT UNSIGNED DEFAULT NULL,
+   princ_id 	INT UNSIGNED DEFAULT NULL,
    key_name 	CHAR(100) DEFAULT '' NOT NULL,
-   data 	      MEDIUMTEXT DEFAULT ('') NOT NULL,
    state 	   CHAR(32) DEFAULT 'ALONE' NOT NULL,
+   data 	      MEDIUMTEXT DEFAULT ('') NOT NULL,
+   for_users 	TEXT DEFAULT ('') NOT NULL,
+   for_groups	TEXT DEFAULT ('') NOT NULL,
    date_time	DATETIME DEFAULT '2000-01-01 00:00:00' NOT NULL,
    PRIMARY KEY (id),
    KEY IDX1 (date_time)
@@ -444,6 +445,7 @@ CREATE TABLE {DBNICK}_agent_memory (
    id 		   INT UNSIGNED DEFAULT '0' NOT NULL,
    user_id 	   INT UNSIGNED DEFAULT NULL,
    group_id 	INT UNSIGNED DEFAULT NULL,
+   for_skip 	CHAR(255) DEFAULT '' NOT NULL,
    category 	CHAR(100) DEFAULT '' NOT NULL,
    name 	      CHAR(100) DEFAULT '' NOT NULL,
    info 	      CHAR(255) DEFAULT '' NOT NULL,

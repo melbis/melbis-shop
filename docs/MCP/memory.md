@@ -6,11 +6,13 @@ The `memory` family is the agent's memory of the store: the notes that lie in th
 
 | Level, `level` | Who reads | Who writes |
 |---|---|---|
-| `all` — for everyone | every login of the store | the administrator |
-| `group` — for a group | the logins of that group, the main one or an additional one | the administrator |
-| `own` — the agent's own | the login the agent signed in under | the agent, with the `memory_save` tool |
+| `all` — for everyone | every user of the store | the administrator |
+| `group` — for a group | the users of that group | the administrator |
+| `own` — the agent's own | the user the agent signed in under | the agent, with the `memory_save` tool |
 
-The agent's own notes belong to the login — to the person at the computer: another employee has a memory of their own. The notes for groups and for everyone the administrator writes — in the program or by a row in the `agent_memory` table; `memory_save` and `memory_remove` do not reach them.
+The agent's own notes belong to the user the agent signed in under: another user has a memory of its own. The notes for groups and for everyone the administrator writes — in the program or by a row in the `agent_memory` table; `memory_save` and `memory_remove` do not reach them.
+
+**Whom not to show a note to**, the administrator writes in the `for_skip` field: logins and group keys separated by a space, a comma or a semicolon. The server does not give such a note to these logins: it is neither in the list nor among the critical ones that must be read.
 
 ## Kinds
 
@@ -19,7 +21,7 @@ Every note has a kind, `kind_key`, from the store's registry — the `key_value`
 | Kind | What it is |
 |---|---|
 | `kCritical` | what must be observed in every session |
-| `kDirect` | a directive from the user |
+| `kDirect` | a directive from the person |
 | `kSkill` | how to work with this person |
 | `kDefault` | everything else |
 
@@ -49,7 +51,7 @@ The list goes by the levels — for everyone, for the groups, the agent's own �
 
 ## In the Program
 
-All of the memory is visible and editable in "Development → AI Components", on the "AI Memory" tab; whoever can open this window sees the notes of all employees. The window takes the `agent_memory` table into work as soon as it opens, and while it is open `memory_save` and `memory_remove` refuse.
+All of the memory is visible and editable in "Development → AI Components", on the "AI Memory" tab; whoever can open this window sees the notes of all users. The window takes the `agent_memory` table into work as soon as it opens, and while it is open `memory_save` and `memory_remove` refuse.
 
 In the language your program runs in the captions may differ.
 

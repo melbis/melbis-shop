@@ -26,12 +26,12 @@ An attachment entry:
 | Field | Type | What it is |
 |---|---|---|
 | `file` | string | the file on this computer — an absolute path or a path from the store folder |
-| `entity` | string | the entity — the table that owns the file, see "[Element Files](engine_files.md)"; `u_store` and `u_info_value` are the working tables of the employee, the one who signed in |
+| `entity` | string | the entity — the table that owns the file, see "[Element Files](engine_files.md)"; `u_store` and `u_info_value` are the working tables of the user the agent signed in as |
 | `elem_id` | number | the id of the row the file belongs to |
 | [`kind_key`] | string | the kind of the file; `kBase` by default |
 | [`real_name`] | string | the name for people; the file's name by default |
 
-A file of a working table goes into `u_files_store` or `u_files_info_value` the same way the program puts it there: the row gets the employee, the number comes from their counter, the kinds are the same as for the files of a product or a value. A section held by this employee's AI tool takes the file under the same hold; a section held by the "Descriptions" window lets no writing in.
+A file of a working table goes into `u_files_store` or `u_files_info_value` the same way the program puts it there: the row gets the user, the number comes from its counter, the kinds are the same as for the files of a product or a value. A section held by this user's AI tool takes the file under the same hold; a section held by the "Descriptions" window lets no writing in.
 
 ## The Path of the Call
 
@@ -39,12 +39,12 @@ The call goes through three stages, and at each of them the parameters change th
 
 - **the MCP server** — on this computer: reads the files, assembles the request, and not everything goes on to the store;
 - **Melbis Core** — the store's engine: checks the call against the registry, lays out the attachments, and only the fields reach the module;
-- **the tool's module** — gets the person of the session, or the session's proxy if the proxy performs the command, and the ready-made fields in `$mParam`.
+- **the tool's module** — gets the user of the session, or the session's principal if the command goes with the principal's rights; the ready-made fields in `$mParam`; as the third argument, the user of the session in `$mAgentId`.
 
 | Parameter | MCP server | Melbis Core | Module |
 |---|---|---|---|
 | `unit` | passes it on | finds the tool in the registry; takes the module's file from the registry, not from the call | — |
-| `command` | passes it on | finds the module's function whatever the case of its name, checks whether the command is granted to the login, and if not, to the session's proxy | — |
+| `command` | passes it on | finds the module's function whatever the case of its name, checks whether the command is granted to the user, and if not, to the session's principal | — |
 | [`params`] | passes it on | checks the fields against the registry, casts the types, fills in the defaults | `$mParam` |
 | [`params_source`] | reads the file and sends it as `params` | as `params` | `$mParam` |
 | [`files`] | reads the files into parts of the request; the `file` path does not go to the store | lays the files out on the disk and creates their rows | `$mParam['files']` — the files' rows with `id`, `path`, `size`… |
@@ -88,7 +88,7 @@ CmdAdd($mUserId, [
 
 The fields the agent has written on an attachment beyond the ones the store knows travel in the same row: a tool can ask more about a file than Melbis Core knows.
 
-**4. The module** sees only the person of the session and the ready-made fields: it knows nothing of `debug`, `into`, the local paths or `files_source`. Its answer goes the way back — "The Path of the Answer" below.
+**4. The module** sees only the user of the session and the ready-made fields: it knows nothing of `debug`, `into`, the local paths or `files_source`. Its answer goes the way back — "The Path of the Answer" below.
 
 ## The Answer
 
@@ -111,7 +111,7 @@ The fields the agent has written on an attachment beyond the ones the store know
 | `files` | the attachments the command has kept for itself; `[]` if there are none |
 | `time` | `server` — how long the call lasted on the server, `module` — how much of that the module took, `trip` — the whole round trip by this computer's clock; with `debug` also `sql` and `sql_ms` |
 
-If the command was performed by the session's proxy, the text of the answer begins with the line `run as: <login>`: the command went through with that login's rights and is signed with its name.
+If the command went through with the rights of the session's principal, the text of the answer begins with the line `run as: <login>`: the command went through with that user's rights and is signed with its name.
 
 The table's file is overwritten by every call of that command, the job's file only grows — see "[AI Tools](tool.md)". How the command builds this answer — the keys, the tables, the refusals and the crashes, with examples — is described in "The Command's Response" of the developer guide, "[AI Tools](../Dev/agent_tool.md)".
 
@@ -181,7 +181,7 @@ What every key means for the one who writes a tool — "The Command's Response" 
 | `The command [<command>] takes no files…` | attachments were sent to a command that does not accept them |
 | `The command [<command>] carries the files themselves - …` | the command requires attachments and there are none |
 | `Unknown element entity: <entity>`, `Element not found: <entity> id <id>`, `No group […]` | the attachment points at an unknown entity, at an element that does not exist, or at a file kind that is not its own |
-| `The table files_… is in work right now, and nothing was written…` | somebody else holds the attachments table, and the working `u_files_…` one is held by the "Descriptions" window of the same employee; not one of them was written |
+| `The table files_… is in work right now, and nothing was written…` | somebody else holds the attachments table, and the working `u_files_…` one is held by the "Descriptions" window of the same user; not one of them was written |
 | `unit is required…`, `command is required…` | the tool or the command is not named |
 | `into is the bare name of a job…` | `into` holds a path or a dot |
 | `These files come to more than … KB together…` | the attachments together are heavier than `MaxFileSize` from `Shop.ini`: if the command takes every file separately, they are sent in smaller batches, otherwise the owner raises the limit; a single file passes at any size |

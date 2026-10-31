@@ -13,7 +13,7 @@ Three things are required for this to work:
   each employee has their own; how much and for what depends on the program
   chosen, and OpenCode can also work for free.
 * **Rights from the "AI Assistant" branch**, granted to your store user. The
-  assistant needs no separate account — see "Rights". A login of its own is had
+  assistant needs no separate account — see "Rights". A user of its own is had
   only by the [AI Dispatcher](ai-dispatcher.md), which works without a person.
 
 **Python** is worth installing on the same computer right away: the assistant processes data with its own scripts — it parses price lists and exports, reconciles lists, prepares files for import. A script handles thousands of rows in seconds and does not spend the subscription on going through rows in the conversation.
@@ -55,7 +55,7 @@ It has no separate account — only the [AI Dispatcher](ai-dispatcher.md) has on
 
 Three consequences follow, worth keeping in mind:
 
-* **the same assistant can do different things for different employees** — according to their rights;
+* **the same assistant can do different things for different users** — according to their rights;
 * **its actions are signed with their name** — in the activity log, in the version
   history, in task authorship; you cannot tell "did it themselves" from "did it
   through the assistant" by the name;
@@ -92,16 +92,16 @@ Where to put what is decided by one question: is it needed in every session, lat
 
 **Charter.** A new store gets a sample charter right away, and the assistant turns to it from the first session; in a store without a charter it will offer to set one up. Who reads the charter and who edits it is decided by the section access rights in the "[Catalog](catalog.md)". Established rules belong in the charter, not in memory: the memory is left with the everyday.
 
-**Memory.** The assistant offers to write down what it has understood: it names the rule, the name, the category, and the type of the note, and writes it only if you agree. Its notes belong to the login they were made under — another employee has their own memory. Notes for a group or for everyone are written by the administrator: they take precedence over the assistant's notes, and the assistant does not change them itself. Notes of the "Critical" type — those for everyone, for groups, and its own — the assistant reads at the start of every session: until it has loaded them, the MCP server does not carry out any of its other commands.
+**Memory.** The assistant offers to write down what it has understood: it names the rule, the name, the category, and the type of the note, and writes it only if you agree. Its notes belong to the user they were made under — another user has their own memory. Notes for a group or for everyone are written by the administrator: they take precedence over the assistant's notes, and the assistant does not change them itself. Notes of the "Critical" type — those for everyone, for groups, and its own — the assistant reads at the start of every session: until it has loaded them, the MCP server does not carry out any of its other commands.
 
-Notes pile up quickly, so from time to time the assistant offers to review them, and it deletes what is no longer needed only with your consent. All of the memory is visible in the "AI Components" window, and whoever can open it sees the notes of all employees. While the window is open, the assistant will not write new notes — it will offer to put them into the "[Scheduler](planner.md)" if the scheduler tool has been granted to it.
+Notes pile up quickly, so from time to time the assistant offers to review them, and it deletes what is no longer needed only with your consent. All of the memory is visible in the "AI Components" window, and whoever can open it sees the notes of all users. While the window is open, the assistant will not write new notes — it will offer to put them into the "[Scheduler](planner.md)" if the scheduler tool has been granted to it.
 
-**Repository.** Sections are set up by the administrator: a personal one — for a single employee, shared ones — for everyone; who sees what in a section is decided by its rights. The assistant writes there when you have sent it there or when a memory note says so — the same note may also say which section is your personal one. In other cases it only offers: "this is worth saving in your personal section" — and writes it down if you agree. Having written it, it names the section and the topic, so that it is clear where to look.
+**Repository.** Sections are set up by the administrator: a personal one — for a single user, shared ones — for everyone; who sees what in a section is decided by its rights. The assistant writes there when you have sent it there or when a memory note says so — the same note may also say which section is your personal one. In other cases it only offers: "this is worth saving in your personal section" — and writes it down if you agree. Having written it, it names the section and the topic, so that it is clear where to look.
 
-A record in the repository does not change: each new one is added to the topic, so the whole history of the work is visible. Your personal section is not seen by the assistants of other employees — except the administrator: whoever can save the "AI Components" window has all sections open. If you have no personal section, the assistant will advise you to ask the administrator for one.
+A record in the repository does not change: each new one is added to the topic, so the whole history of the work is visible. Your personal section is not seen by the assistants of other users — except the administrator: whoever can save the "AI Components" window has all sections open. If you have no personal section, the assistant will advise you to ask the administrator for one.
 
 How the administrator maintains the memory and the repository — "AI Components", the "[AI Memory](ai-tools.md#memory)" and "[AI Repository](ai-tools.md#repo)" tabs.
 
 ## What It Can Do Beyond the Basics
 
-Everything described above is the same in any Melbis store. On top of it the assistant has **AI Tools** — ready-made commands written for your store: create a product the way it is done here, close an order by your rules. The owner sets them up, and they are handed out one command at a time to each employee — see "[AI Tools](ai-tools.md#tools)".
+Everything described above is the same in any Melbis store. On top of it the assistant has **AI Tools** — ready-made commands written for your store: create a product the way it is done here, close an order by your rules. The owner sets them up, and they are handed out one command at a time to each user — see "[AI Tools](ai-tools.md#tools)".

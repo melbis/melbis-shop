@@ -75,7 +75,7 @@ The storefront learns of a change to a table by a mark. The `change` step marks 
 ## Locks in a Pool
 
 * **`lock`** takes all the named tables or none. A lock it waits out for a moment, and a table
-  busy longer it refuses — even if it is a window of the program under the same login that
+  busy longer it refuses — even if it is a window of the program under the same user that
   holds it.
 * **`unlock`** releases only what this pool has taken.
 * **At the end the pool releases everything it has taken** — an `unlock` as the last step is not

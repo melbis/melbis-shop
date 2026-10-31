@@ -40,17 +40,21 @@ The server does not decide what to do: what is allowed is decided by the user's 
 
 **The AI assistant**, or **the agent**, is the language model inside the agent application. It reads the descriptions of the tools, decides which one to call, and parses the answer.
 
-**The user** is the person who writes to the agent: the owner, a developer or an employee.
+**The user** is the store's account: a login, a group and rights. The agent always works under a user.
+
+**The person** is the one who writes to the agent: the owner, a developer or an employee.
+
+**The AI dispatcher** is an agent with a user of its own: the program's Dispatcher launches it by the store's events, and there is no person at the keyboard.
 
 The captions of the program's windows and fields are given here in English: in the language your program runs in they may differ.
 
 ### The Session and the Rights
 
-**A session** is work with one store under one login. It is opened by `session_connect`, and it lives until the agent application restarts the server. The store, the login and the list of rights are remembered at the moment it opens. Grant a new right, and the session is opened anew.
+**A session** is work with one store under one user. It is opened by `session_connect`, and it lives until the agent application restarts the server. The store, the user and the list of rights are remembered at the moment it opens. Grant a new right, and the session is opened anew.
 
 An application opened on the store folder starts a server tied to this store: switching in the program does not affect it, and two stores can be run in two windows. A server without a tie signs in to the store last opened in the program and follows it: while another store is open there, the tools refuse with `STORE_SWITCHED`.
 
-**Signing in under a user.** There is no separate user for the AI in the store: the agent works under a person's login, with their rights and in their name. The login-password pair the server takes itself — from the running program, and if it is closed, from the Windows registry (only when the "store passwords" box is ticked). The password never passes through the correspondence and does not go to the store: the server computes a key from it and signs every request with it.
+**Signing in under a user.** The agent works under a user of the store, with its rights and in its name: a person's assistant — under that person's user, the AI dispatcher — under its own. The login-password pair the server takes itself — from the running program, and if it is closed, from the Windows registry (only when the "store passwords" box is ticked). The password never passes through the correspondence and does not go to the store: the server computes a key from it and signs every request with it.
 
 **A right** is a row of the "AI Assistant" branch in the store user's rights. One right can open several MCP tools at once: "Direct access → Development → Read data", for example, opens the file map, the search, and loading a module. Ten tools require no rights: `session_init`, `session_connect`, `session_rules_accept`, `session_clear`, `shop_page`, `shop_module`, `shop_agent` and the three `remote_*` — they are let onto the server by the program's "Server" window. In detail — "[Sign-in, Rights, License](access.md)".
 

@@ -6,11 +6,11 @@ How the MCP server gets into the store, what the agent is allowed there and what
 
 **The store.** An agent application opened on the store folder starts a server tied to this store: the program puts a configuration with `--store <store folder>` into the folder. Such a server works with its own store only, whatever is open in the program: switching the store in the program does not break an open session, and two stores can be run in two windows. A new session gets its password from the program opened on this store or from the saved settings, and the program lays down the license tokens only while it is open on the store — see below. A server without `--store` — the configuration from the "AI Assistant" tab of the "Connection" window, for an application opened not on a store folder — signs in to the store last opened in the program and follows it: while another store is open in the program, its tools refuse with `STORE_SWITCHED`. A tie to a folder that is not in the program's list of stores does not open a session at all.
 
-**The login and the password.** If the program is running on this store, the pair comes from it — it is the person sitting at the program right now. If it is not — the login is taken from `Shop.ini` in the store folder, and the password from the Windows registry, where the program keeps it encrypted when the "store passwords" box is ticked. There is no third way: the password does not pass through the correspondence and the agent does not see it.
+**The login and the password.** If the program is running on this store, the pair comes from it — it is the user the person at the program signed in as. If it is not — the login is taken from `Shop.ini` in the store folder, and the password from the Windows registry, where the program keeps it encrypted when the "store passwords" box is ticked. There is no third way: the password does not pass through the correspondence and the agent does not see it.
 
 The password does not go to the store. The server computes a key from it once — from the login, the store's domain and the password — and signs every request with it: a string of the login, the time and the command. The store keeps only the public half of the key and checks the signature; the time of the signature is valid within ±10 minutes.
 
-**Who the agent works as.** The agent works under a person's login and with their rights. Everything the agent does the store signs with that person's name: the author of a task, the author of a file's version, the owner of a note, the one who holds a table. The exception is the AI Dispatcher: it has its own login, the program's Dispatcher launches it by the store's events, and nobody sits at the keyboard (see "[AI Dispatcher](../User/ai-dispatcher.md)"). Its session may come with a proxy — another store login named by the event. An AI tool command that the dispatcher has not been granted but the proxy has, the server performs with the proxy's rights and signs with the proxy's name; the agent does not choose the proxy (see "[Assignments with an Employee's Rights](../User/ai-dispatcher.md#proxy)").
+**Who the agent works as.** The agent works under the person's user and with its rights. Everything the agent does the store signs with that user's name: the author of a task, the author of a file's version, the owner of a note, the one who holds a table. The exception is the AI dispatcher: it has its own user, the program's Dispatcher launches it by the store's events, and nobody sits at the keyboard (see "[AI Dispatcher](../User/ai-dispatcher.md)"). Its session may come with a principal — another user of the store, named by the event, on whose behalf the dispatcher acts. An AI tool command that the dispatcher has not been granted but the principal has, the server performs with the principal's rights and signs with the principal's name; the agent does not choose the principal (see "[Assignments with a User's Rights](../User/ai-dispatcher.md#princ)").
 
 ## Rights
 
@@ -46,9 +46,9 @@ Behind every MCP tool there is a command of the engine — `AGENT_` and the name
 
 `remote_exec`, `remote_load` and `remote_save` work without rights as well: they do not turn to the engine, and they are let onto the server by the program's "Server" window while the owner keeps it open with the root password and the access checkbox — "[The Server](remote.md)".
 
-The "Development" branch divides the work with the project's files into reading and changing only, and this is not a simplification: a login that may save a module can already do to the store everything the store itself can do. That is why "Modify data" includes "Read data": a save begins with loading the file.
+The "Development" branch divides the work with the project's files into reading and changing only, and this is not a simplification: a user that may save a module can already do to the store everything the store itself can do. That is why "Modify data" includes "Read data": a save begins with loading the file.
 
-**The rights belong to the person.** The agent signs in under the user's login, so with one employee it can do more than with another, in one and the same store.
+**The rights belong to the user.** The agent signs in under the person's user, so with one person it can do more than with another, in one and the same store.
 
 **When they are checked.** The list of rights comes on sign-in, and a call of a tool that has not been granted the server refuses itself, without turning to the store — and it names the missing right as a path in the tree of rights:
 
@@ -59,16 +59,16 @@ The owner grants it in the program, to the user you signed in as
 The session has to be opened again afterwards.
 ```
 
-After the right is granted the session is opened anew: the list does not change in the middle of the work. If a right was taken away in the middle of a session, the call passes the server and it is the store that refuses — with a bare `ACCESS_DENIED`, without a path. It means the login's rights have changed; after reconnecting the refusal comes with a path.
+After the right is granted the session is opened anew: the list does not change in the middle of the work. If a right was taken away in the middle of a session, the call passes the server and it is the store that refuses — with a bare `ACCESS_DENIED`, without a path. It means the user's rights have changed; after reconnecting the refusal comes with a path.
 
 ## License
 
 Every request is signed with a daily token. The tokens are obtained by the program while it runs, and it puts them into the store folder, into `tokens\<login>-<date>.lic`. The MCP server only reads them and does not request a license itself.
 
-A license is issued for a "domain + login" pair, so the token is shared by the employee and their agent: the assistant needs no license of its own. The AI Dispatcher has its own login, and its own license.
+A license is issued for a "domain + login" pair, so the token is shared by the user and its agent: the assistant needs no license of its own. The AI Dispatcher has its own login, and its own license.
 
 No file for today — and on a licensed store the session will not open: `session_connect` answers `LICENCE_NONE` and names the folder it looked in. There is one cure for it: open the store in the program, then `session_init` and `session_connect` anew. The engine refuses a token with codes of its own — `LICENCE_ERROR`, `LICENCE_DOMAIN`, `LICENCE_DATE` (see "[Answers and Refusals](answers.md)"). The server looks for the token anew at every request, so the change of day in the middle of a session does not close it: until the program has written the file for the new day, every command gets a `LICENCE_NONE` refusal, and afterwards it works again.
 
 ## Demo Mode
 
-While `admin.here` lies in the store's root, the engine checks neither the license nor the login with the password, and anyone who signs in becomes an administrator. The server recognizes this itself, and the answer of `session_connect` requires the agent to warn the user first thing. How to leave the demo mode — "[Installation](../User/installation.md)".
+While `admin.here` lies in the store's root, the engine checks neither the license nor the login with the password, and anyone who signs in becomes an administrator. The server recognizes this itself, and the answer of `session_connect` requires the agent to warn the person first thing. How to leave the demo mode — "[Installation](../User/installation.md)".
