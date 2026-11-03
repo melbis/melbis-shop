@@ -24,5 +24,6 @@ Deletes a module's template from a template group. There is no undo.
 |---|---|
 | `Template not found: <template>` | there is no such template |
 | `path goes as templates/<group>/units/<module>/<template>.htm` | the path is wrong |
+| `path is a static file, not a template: …` | a file next to the module's templates, but not `.htm`, is a static: `engine_static_remove` deletes it |
 
 The common refusals — "[Answers and Refusals](answers.md)".

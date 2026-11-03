@@ -19,7 +19,9 @@ The family has rules of its own — `shop.md` in the `Engine\MCP` folder. The fi
 
 ## The Page
 
-`shop_page` requests a page the way a visitor's browser does, and saves the HTML in `pages\` of the conversation folder. Every read is a new visit: without cookies and without a session.
+`shop_page` requests a page the way a visitor's browser does, and saves the HTML in `pages\` of the conversation folder.
+
+**A visitor is defined by their cookies and headers.** Without `cookies` a read is a new visit, without cookies and without a session. The answer returns the cookies after the request together with what the site has written, and the next call with them carries on the same visitor. This is how a page is opened with cookies set in advance — for example, with a chosen storefront version or currency — and how one sees what the site writes into the cookies. The request headers are set by `headers`: a phone's `User-Agent` and `Sec-CH-UA-Mobile: ?1` open the mobile version where the storefront chooses it by device. The site's answer headers come in the `headers` field of the answer.
 
 **The page may come from the cache.** Saving a module's file resets the cache of that module only — what clears itself is described in "[Configuration and Cache](engine_dev.md)". If an edit is not visible on the page, the reason is sometimes the cache of another module, the one that prints the changed place.
 
@@ -31,11 +33,11 @@ The family has rules of its own — `shop.md` in the `Engine\MCP` folder. The fi
 
 With the field `post` the call becomes a form submission. That is how everything alive on the storefront works: the cart, a request, a review, an order. Unlike a read, a submission changes the store — rows of the cart appear, requests, letters to the manager, and in a working store a real order too. The storefront has no test mode.
 
-**The cookies of the submissions are kept** while the MCP server runs, so submissions one after another are one visitor. A read of a page does not see these cookies: putting a product into the cart and looking at the cart are two submissions. In the demo store the cart answers to the fields `func` and `id`:
+**Submissions one after another are one visitor if the cookies are passed on:** the next call goes with the `cookies` from the previous answer. In the demo store the cart answers to the fields `func` and `id`:
 
 ```json
 {"url": "/?mod=melbis_basket", "post": {"func": "Plus", "id": 12}}
-{"url": "/?mod=melbis_basket", "post": {"func": "Goods"}}
+{"url": "/?mod=melbis_basket", "post": {"func": "Goods"}, "cookies": {"MELBIS_SHOP": "k3fq9…"}}
 ```
 
 **The fields of a form** are named the way the page's markup writes them. A list of values goes as `name[]=…`, one per value — that is how a browser sends checkboxes and a multiple choice, and only so does PHP read the field as an array. The form's token, if there is one, does not take itself: the page is read first.
@@ -44,7 +46,7 @@ With the field `post` the call becomes a form submission. That is how everything
 
 `shop_module` opens a built-in or external web module the way the program opens it: a POST in the name of the session's user — the server adds `login`, `stamp` and `sign` itself — with the window's fields that the agent passed. That is how the modules a manager sees in the program's windows are checked and developed. The answer is saved into `modules\` of the conversation folder; with `debug` the debugger's report comes, as for a page.
 
-**`shop_module` has cookies of its own**: the module's session is kept between calls and does not mix with the cookies of `shop_page`, so the page stays the page of an anonymous visitor.
+**`shop_module` handles cookies like the page:** the module's session lasts while the agent passes the cookies from the answer to the next call.
 
 **A function of the module writes real data** in the name of the session's user: a call with `func` in a working store is the same action as pressing a button in the program's window.
 

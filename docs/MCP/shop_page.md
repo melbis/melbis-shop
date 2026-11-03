@@ -14,13 +14,18 @@ Not required; with `debug` — "Direct access → Development → Get configurat
 | [`find`] | string | show the places of the page where this text occurs, instead of its beginning |
 | [`debug`] | yes/no | add the debugger's report |
 | [`post`] | object | the fields of a form — the call becomes a form submission |
+| [`cookies`] | object | the visitor's cookies, name → value: the ones that came in the previous answer, to carry on the same visitor. Without them — a new visitor |
+| [`headers`] | object | the request headers, name → value: `Sec-CH-UA-Mobile`, `Accept-Language`, `Referer` and others. `User-Agent` goes after the `MelbisShop-MCP` mark and the access code by which the proxy lets the request through |
 
-The value of a field of `post` is a string, a number or a yes/no; a list of values goes as `name[]=…`, one per value, an empty list does not go at all. What a submission changes and how its cookies are kept — "[The Storefront](shop.md)".
+The value of a field of `post` is a string, a number or a yes/no; a list of values goes as `name[]=…`, one per value, an empty list does not go at all. What a submission changes and how to lead one visitor through several calls — "[The Storefront](shop.md)".
 
 ## The Answer
 
 ```json
-{"url": "https://shop.example.com/", "debug": false, "post": null, "status": 200,
+{"url": "https://shop.example.com/", "debug": false, "post": null,
+ "cookies": {"MELBIS_SHOP": "k3fq9…"}, "status": 200,
+ "headers": {"Server": "nginx", "Content-Type": "text/html; charset=UTF-8",
+             "Set-Cookie": "MELBIS_SHOP=k3fq9…; path=/; secure; HttpOnly; SameSite=Lax"},
  "bytes": 9742, "time": 63, "title": "Home page",
  "file": "D:\\Melbis\\shop.example.com\\mcp\\claude-code\\prices-sept\\pages\\index.html",
  "report": null, "found": null}
@@ -33,7 +38,9 @@ Then as text — the first 2000 characters of the page, if neither `find` nor `d
 | `url` | the page's address, without the debugger's code |
 | `debug` | whether the report was asked for |
 | `post` | the form's body in the shape in which it went: `func=Plus&id=12`; `null` on a read |
+| `cookies` | the cookies after the request: the ones passed in the call and the ones written by the site. The ones the site deleted are not here |
 | `status` | the HTTP answer's code. An error page is not a refusal: it is saved and comes the same way |
+| `headers` | the site's answer headers, name → value; repeated ones, usually `Set-Cookie`, go separated by a line break. Windows follows a redirect by itself, so these are the headers of the final page |
 | `bytes` | the page's size |
 | `time` | how long the request took, ms |
 | `title` | the text of `<title>` |
@@ -81,6 +88,11 @@ Up to five places. `at` is the position of the match in the page's file in bytes
 | `ACCESS_DENIED…` and `The code of the debugger is read through engine_dev_config…` | `debug` without the right "Get configuration" |
 | `The debugger has no code in this store…` | the debugger's password is not set in the store: "Development → Installation", the "Debugger password" field |
 | `The field [<name>] of post takes a value or a list of values…` | an object or a list inside a list in the field `post` |
+| `cookies takes an object…` | `cookies` is not an object |
+| `The cookie [<name>] cannot be sent…` | the cookie's value is an object or a list; the name holds `=`, `;`, a comma or a space; the value holds `;` or a line break |
+| `headers takes an object…` | `headers` is not an object |
+| `The header [<name>] cannot be sent…` | the header's value is an object, a list or text with a line break; the name holds a colon or a space |
+| `The header [<name>] is the request's own…` | `headers` holds `Cookie`, `Host`, `Content-Type` or `Content-Length`: cookies go through `cookies`, the rest is set by the request itself |
 | `Cannot connect to …`, `HttpSendRequest failed, code …` | the site does not answer this computer |
 
 In the language your program runs in the captions may differ.

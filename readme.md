@@ -19,7 +19,7 @@ Seven steps with screenshots, from renting a server to the first task for the ag
 ## 🤖 What the AI agent does here
 
 - **56 MCP tools** in the box: project files (modules, templates, statics, images — with version history), the database (pools of steps with locks and cache marks), catalogue trees, product files, storefront pages as a visitor sees them, and the platform documentation itself.
-- **26 store tools with 244 commands** come with the demo store: products and prices, descriptions, catalogue and attributes, suppliers, orders, scheduler tasks, users, image profiles, batch import of goods and files.
+- **28 store tools with 285 commands** come with the demo store: products and prices, descriptions, catalogue and attributes, suppliers, orders, scheduler tasks, users, image profiles, batch import of goods and files.
 - **Permissions per command.** Tools are data, not code: the owner grants each command to a person or a group. An employee with no database access still runs the agent — inside their own rights.
 - **A real run, with the log and screenshots:** one message in plain words → the first working version of a store — currencies, suppliers, a catalogue with 12 products, three roles with separate rights, a business-process roadmap — in **24 min 45 s and 21.2k tokens**. Half an hour more: a redesign from a free third-party template. → https://melbis.com/en/doc/install/ai_work/
 

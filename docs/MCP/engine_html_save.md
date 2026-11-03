@@ -36,7 +36,7 @@ What else the save does — rewrites the file whole, resets the module's cache, 
 
 | Answer | When |
 |---|---|
-| `… is not a template…` | the path is not a template: templates lie in `templates/<group>/units/<module>/` |
+| `… is not a template…` | the path is not a template: templates are the `.htm` files in `templates/<group>/units/<module>/`, the other files next to them are statics, handled by `engine_static_*` |
 | `No such file: … SAVE changes a file, it does not create one…` | the template is not on the server — it is created by `engine_html_add` |
 | `Say content, or content_source with a path on this machine…` | neither `content` nor `content_source` is named |
 | `path is required` | `path` is not named |

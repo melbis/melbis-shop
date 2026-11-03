@@ -24,7 +24,8 @@ The template appears only in the group named. Added to the main group, it works 
 
 | Answer | When |
 |---|---|
-| `path goes as templates/<group>/units/<module>/<template>.htm` | the path is wrong: not inside `templates/<group>/units/<module>/` or without `.htm` |
+| `path goes as templates/<group>/units/<module>/<template>.htm` | the path is wrong: not inside `templates/<group>/units/<module>/` |
+| `path is a static file, not a template: …` | a file next to the module's templates, but not `.htm`, is a static: `engine_static_add` creates it |
 | `Template already exists: <name>` | a template with such a name already exists in this group |
 
 The common refusals — "[Answers and Refusals](answers.md)".

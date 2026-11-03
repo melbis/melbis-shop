@@ -26,6 +26,7 @@ Renames a module's template. The template stays in its folder: only the file nam
 |---|---|
 | `A template is renamed inside its module folder: only the file name changes.` | `new_path` leads into another group or into another module's folder |
 | `path goes as templates/<group>/units/<module>/<template>.htm`, `new_path goes as …` | the path is wrong |
+| `path is a static file, not a template: …`, `new_path is a static file…` | a file next to the module's templates, but not `.htm`, is a static: `engine_static_rename` renames it |
 | `Template not found: <name>` | there is no template with such a name in the group |
 | `Template already exists: <name>` | a template with the new name already exists in the group |
 

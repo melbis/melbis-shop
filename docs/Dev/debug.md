@@ -254,11 +254,15 @@ if ( MELBIS()->DebugState() )
 When developing AJAX modules and web modules, standard debugging via browser output does not work — the result goes to JavaScript and is lost there. In such cases, it is convenient to save intermediate data to a file:
 
 ```php
-// Save the $data array to a file dump.htm next to the module's templates
+// Save $data to dump.log next to the module's templates
 MELBIS()->TplDumpVar('dump', $data);
 ```
 
-The file is created in the templates directory of the current module. Remember to remove the call after debugging.
+The value is written through `print_r`, so anything will do — an array, an object, a string. The file `name.log` goes into the module's folder in the current template group, `templates/<group>/units/<module>/`. It cannot be opened by an address from the browser: `.htaccess` closes all `.log` files. It is read in the Workbench tree.
+
+Without a dot the file is rewritten on every call. A dot at the start of the name — `'.dump'` — appends to the end, a dot at the end — `'dump.'` — to the beginning, as with `TplParse`. An appended dump grows without limit and is cleaned by hand.
+
+The dump is written only when the module's function runs. A module served from the cache writes nothing: for the time of debugging the module's cache is switched off. The method answers `true` if the file is written. After debugging the call is removed.
 
 ---
 
