@@ -2,7 +2,7 @@
 
 The **"Installation"** window sets the store's initial parameters on the server: database access, language and character sets, parser behaviour, access restrictions, and it also performs a full copy and restore of the store.
 
-The settings are read from the server when the window opens and written back with the **"Save"** button; **"Cancel"** closes the window without changing anything.
+The settings are read from the server when the window opens and written back with the **"Save"** button; **"Cancel"** closes the window without changing anything. After the server is installed in the "[Server](server.md)" window, this window opens by itself.
 
 > The section is meant for the initial setup and for one-off jobs. A mistake in
 > these parameters stops the whole store.
@@ -19,7 +19,9 @@ The group's buttons:
   the language chosen in the **"Settings language"** field next to it. Before
   running, the program asks for the administrator's password, and the typed text
   is visible: the password goes to the user `admin`, and together with this login
-  it is written into the connection parameters. The store goes into
+  it is written into the connection parameters. Then the window's parameters are
+  saved on the server, as with the "Save" button, only the window stays open: the
+  tables are created in the database the store then works with. The store goes into
   [demonstration mode](#demo-mode) at the same time — the "Switch to Working Mode"
   button is visible at once.
 * **"Set"** — reinstalling the language settings only: the names in the reference

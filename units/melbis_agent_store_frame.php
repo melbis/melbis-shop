@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.531 @ 2026-11-03
+ * @version 6.5.1.535 @ 2026-11-05
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -15,6 +15,7 @@ use MELBIS_INC_AGENT_SYSTEM as SYS;
 use MELBIS_INC_AGENT_STORE as STORE;
 use MELBIS_INC_AGENT_QUERY as QUERY;
 use MELBIS_INC_AGENT_TABLE as TABLE;
+use MELBIS_INC_AGENT_FILE as FILE;
 
 // What this tool knows
 const SCHEMA = [
@@ -861,6 +862,85 @@ function CmdClannNew($mUserId, $mParam)
             'clann' => $clann
             ]
         ];
+}
+
+
+// Files
+//==================================================================================================
+
+
+/**
+ * Function CmdFileList
+ **/
+function CmdFileList($mUserId, $mParam)
+{
+    // The workspace twins only: the catalogue goes by the File tool
+    return FILE\FileList($mUserId, $mParam, true);
+}
+
+
+/**
+ * Function CmdFileAdd
+ **/
+function CmdFileAdd($mUserId, $mParam)
+{
+    // Written only under the hold
+    $held = Held($mUserId);
+    if ( !$held['result'] ) return $held;
+
+    return FILE\FileAdd($mUserId, $mParam, true);
+}
+
+
+/**
+ * Function CmdFileMake
+ **/
+function CmdFileMake($mUserId, $mParam)
+{
+    // Written only under the hold
+    $held = Held($mUserId);
+    if ( !$held['result'] ) return $held;
+
+    return FILE\FileMake($mUserId, $mParam, true);
+}
+
+
+/**
+ * Function CmdFileUpdate
+ **/
+function CmdFileUpdate($mUserId, $mParam)
+{
+    // Written only under the hold
+    $held = Held($mUserId);
+    if ( !$held['result'] ) return $held;
+
+    return FILE\FileUpdate($mUserId, $mParam, true);
+}
+
+
+/**
+ * Function CmdFileRemove
+ **/
+function CmdFileRemove($mUserId, $mParam)
+{
+    // Written only under the hold
+    $held = Held($mUserId);
+    if ( !$held['result'] ) return $held;
+
+    return FILE\FileRemove($mUserId, $mParam, true);
+}
+
+
+/**
+ * Function CmdFilePos
+ **/
+function CmdFilePos($mUserId, $mParam)
+{
+    // Written only under the hold
+    $held = Held($mUserId);
+    if ( !$held['result'] ) return $held;
+
+    return FILE\FilePos($mUserId, $mParam, true);
 }
 
 

@@ -25,8 +25,9 @@ The log is kept by the store's server, one for all workstations. A log row:
 A module reads the log through the doors of the "[Event Log](sys.md#events)",
 an agent through a store AI tool built on the same doors.
 
-The application's Dispatcher receives only the number, the key and the time of
-an event. The data is read by whoever handles the event — by its number:
+The application's Dispatcher receives the number, the key and the time of an
+event and the [agent launch parameters](#agent). The rest of the data is read by
+whoever handles the event — by its number:
 
 ```php
 $event = MELBIS()->SysUserEventLoad($event_id);
@@ -88,8 +89,13 @@ if ( $order_new )
 // Tell the store about a new order, wherever it was placed
 if ( $order_new )
 {
+    // The dispatcher handles a new order with this model
+    $agent_event = [
+        'model' => 'sonnet'
+        ];
     $data_event = [
-        'order_id' => $order['id']
+        'order_id'     => $order['id'],
+        'MELBIS_AGENT' => $agent_event
         ];
     MELBIS()->SysUserEventAdd(null, null, 'kNewOrder', 'ALONE', $data_event);
 }
@@ -102,7 +108,9 @@ find the order complete.
 with a capital letter — `kNewOrder`, `kPricesSaved`.
 
 **The data** is numbers, not copies of rows: an order, a product, a customer.
-The handler reads for itself what they are at the moment.
+The handler reads for itself what they are at the moment. The `MELBIS_AGENT`
+key of the data is special — it holds the [agent launch parameters](#agent): the
+demo store sets the model in it.
 
 **The recipients** are lists of user and group numbers; empty — everyone.
 
@@ -173,12 +181,46 @@ in environment variables:
 | `MELBIS_EVENT` | the event key |
 | `MELBIS_ID` | the event number; `0` for the "Test" button |
 | `MELBIS_TIME` | the event time |
+| `MELBIS_AGENT_<KEY>` | the [agent launch parameters](#agent), one variable per key |
 
-The ready agent commands — `claude.bat`, `codex.bat`, `opencode.bat` — do not
-read the variables. The agent's MCP server receives the event number from the
-program together with the login, and the agent sees the event itself in the
-answer to signing in to the store. Number `0` is a run from the "Test" button:
-there is no event, this is a test run.
+The ready agent commands — `claude.bat`, `codex.bat`, `opencode.bat` — take only
+the model and the effort from the variables. The agent's MCP server receives the
+event number from the program together with the login, and the agent sees the
+event itself in the answer to signing in to the store. Number `0` is a run from
+the "Test" button: there is no event, this is a test run.
+
+## Agent Launch Parameters {#agent}
+
+An event can say how to launch the agent: the module puts a `MELBIS_AGENT` object
+into the data. The program hands each of its keys to the command as an
+environment variable `MELBIS_AGENT_<KEY>`, the key in capital letters: `model`
+comes as `MELBIS_AGENT_MODEL`.
+
+```json
+{"order_id": 25, "MELBIS_AGENT": {"model": "sonnet", "effort": "medium"}}
+```
+
+* **The key** — Latin letters, digits and `_`, up to 32 characters: it becomes
+  the variable's name. **The value** — a string or a number, it goes as is; a
+  nested object is not passed on.
+* **The ready commands** take two keys:
+
+  | Key | `claude.bat` | `codex.bat` | `opencode.bat` |
+  |---|---|---|---|
+  | `model` | the model, without the key — `sonnet` | the model, without the key — the one set in Codex itself | the model, without the key — `deepseek/deepseek-v4-flash` |
+  | `effort` | the effort, without the key — `high` | the effort, without the key — `high` | — |
+
+  The other keys are for your own commands: such a command reads the variables
+  itself.
+* **Each application has its own model names**, so the module writes the name
+  for the application the dispatcher runs on.
+* **The variables of the previous run** the program deletes before each new one:
+  an event without `MELBIS_AGENT` launches the agent with the default values.
+* **Which values are allowed is decided by the owner** in the code of whoever
+  writes the events — modules and AI tools. The program discards nothing, and
+  the ready commands put the value in such a way that cmd does not run it as a
+  command. A double quote in the value will still break the argument of
+  `codex.bat` and `opencode.bat`.
 
 ## Handling by a Module {#handling}
 
@@ -241,9 +283,14 @@ function Main($mVars)
         $order_sum = OrderSum($order_id);
         if ( $order_sum >= SUM_ATTENTION )
         {
+            // A big order is worth the strongest model
+            $agent_event = [
+                'model' => 'opus'
+                ];
             $data_event = [
-                'order_id' => $order_id,
-                'reason'   => 'sum'
+                'order_id'     => $order_id,
+                'reason'       => 'sum',
+                'MELBIS_AGENT' => $agent_event
                 ];
             MELBIS()->SysUserEventAdd(null, null, 'kOrderAttention', 'ALONE', $data_event);
         }
@@ -291,6 +338,9 @@ What the cascade gives:
   threshold" is thousands of times cheaper than a conversation with the model.
 * **The rule can be checked.** The threshold and the conditions are visible in
   the code, and they can be debugged in the browser like any task module.
+* **The model fits the task.** The special event names the model itself in the
+  [launch parameters](#agent): a large order is handled by a strong model, the
+  routine by a simpler one.
 * **The frequent event does not go anywhere.** The state does not hide it from
   the Dispatchers: employees subscribed to "New order" get a notification.
 

@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.531 @ 2026-11-03
+ * @version 6.5.1.535 @ 2026-11-05
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -242,8 +242,13 @@ function Run($mUserId, $mVersion)
     // Tell the store about a new order, wherever it was placed
     if ( $order_new )
     {
+        // The dispatcher handles a new order with this model
+        $agent_event = [
+            'model' => 'sonnet'
+            ];
         $data_event = [
-            'order_id' => $order['id']
+            'order_id'     => $order['id'],
+            'MELBIS_AGENT' => $agent_event
             ];
         MELBIS()->SysUserEventAdd(null, null, 'kNewOrder', 'ALONE', $data_event);
     }

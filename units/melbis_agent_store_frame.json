@@ -3,6 +3,7 @@
     "parameters": "",
     "tables": [],
     "includes": [
+        "melbis_inc_agent_file.php=1",
         "melbis_inc_agent_query.php=1",
         "melbis_inc_agent_store.php=1",
         "melbis_inc_agent_system.php=1",

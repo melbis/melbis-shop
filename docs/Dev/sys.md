@@ -630,7 +630,7 @@ $event_id = MELBIS()->SysUserEventAdd(null, $manager_id, 'kOrderCheck', 'ALONE',
 
 **The key** is the event's code; by it a Dispatcher notification recognizes its own.
 
-**The data** is the module's array. The door puts it into the log as is, and `SysUserEventList` gives it back as an array. An event of a program operation carries `command`.
+**The data** is the module's array. The door puts it into the log as is, and `SysUserEventList` gives it back as an array. An event of a program operation carries `command`. The `MELBIS_AGENT` key holds the parameters with which the Dispatcher launches the agent — "[Agent Launch Parameters](events.md#agent)".
 
 **The recipients** are lists of user and group `id`s. Empty lists mean the event is for everyone. The program's Dispatcher sees an event if it is for everyone or if the lists hold the user it works under or that user's group.
 

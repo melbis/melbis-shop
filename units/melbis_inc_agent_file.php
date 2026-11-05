@@ -1,10 +1,17 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.531 @ 2026-11-03
+ * @version 6.5.1.535 @ 2026-11-05
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
  **************************************************************************************************
+ *
+ * FileList    - The door of reading files
+ * FileAdd     - The door of hanging files
+ * FileMake    - The door of painting one
+ * FileUpdate  - The door of changing rows
+ * FileRemove  - The door of deleting rows
+ * FilePos     - The door of their order
  *
  * Home        - The files table of it
  * EntityOne   - Weighs one entity
@@ -25,6 +32,8 @@
  * MaskMap     - The masks with a picture
  *
  * Make        - Derives a picture
+ *
+ * FileAllowed - The rows a door may touch
  *
  * EntityGone  - Refuses an element gone
  *
@@ -57,6 +66,7 @@ namespace MELBIS_INC_AGENT_FILE;
 
 // Libraries
 use MELBIS_INC_AGENT_SYSTEM as SYS;
+use MELBIS_INC_AGENT_TABLE as TABLE;
 
 // The words of a type, by the number of the editor
 const TYPE_WORD = ['jpeg', 'png', 'webp'];
@@ -79,9 +89,277 @@ const FRAME = [
     'u_info_value' => 'u_files_info_value'
     ];
 
+// The operation that saves an element in the program, where no right of data stands on it
+const OPER = [
+    'brand'              => 'PUT_BRAND',
+    'advert_text'        => 'PUT_ADVERT',
+    'key_value'          => 'PUT_KEY_VALUE',
+    'lang'               => 'PUT_LANG',
+    'field'              => 'PUT_CLIENT_RULES',
+    'order_option'       => 'PUT_ORDER_OPTION',
+    'order_option_value' => 'PUT_ORDER_OPTION',
+    'web_key'            => 'PUT_OUTSIDE_RIGHT',
+    'web_key_value'      => 'PUT_OUTSIDE_RIGHT'
+    ];
+
 
 // ————— Public —————
 //==================================================================================================
+
+// Doors of the tools
+//==================================================================================================
+
+
+/**
+ * Function FileList
+ **/
+function FileList($mUserId, $mParam, $mFrame)
+{
+    $found = EntityOne($mParam['entity'], $mFrame);
+    if ( $found !== true ) return $found;
+
+    $entity = $mParam['entity'];
+
+    foreach ( $mParam['elem_id'] as $id )
+    {
+        $gate = RightElem($mUserId, $entity, $id);
+        if ( $gate !== true ) return $gate;
+    }
+
+    $rows = FileAll($entity, $mParam['elem_id'], $mUserId);
+    $table = Home($entity);
+
+    return [
+        'result'  => true,
+        'message' => 'The files of the elements named',
+        'tables'  => [
+            $table => $rows
+            ]
+        ];
+}
+
+
+/**
+ * Function FileAdd
+ **/
+function FileAdd($mUserId, $mParam, $mFrame)
+{
+    // The right of the element
+    $tables = [];
+    $kept = [];
+    $said = [];
+    $touched = [];
+    foreach ( $mParam['files'] as $one )
+    {
+        $entity = $one['entity'];
+
+        // The entity, as elsewhere
+        $found = EntityOne($entity, $mFrame);
+        if ( $found !== true )
+        {
+            FileDrop($entity, $one['id'], $one['disk'], $mUserId);
+            $said[] = $one['real_name'].': '.$found['message'];
+            continue;
+        }
+
+        $gate = RightElem($mUserId, $entity, $one['elem_id']);
+        if ( $gate === true ) $gate = Held($mUserId, $entity);
+        if ( $gate !== true )
+        {
+            FileDrop($entity, $one['id'], $one['disk'], $mUserId);
+            $said[] = $one['real_name'].': '.$gate['message'];
+            continue;
+        }
+
+        $row = FileOne($entity, $one['id'], $mUserId);
+        $table = Home($entity);
+        $tables[$table][] = $row;
+        $kept[] = $row['id'];
+        $touched[$entity][] = $row['elem_id'];
+    }
+
+    foreach ( $touched as $entity => $elems )
+    {
+        Touched($mUserId, $entity, $elems);
+    }
+
+    // Answers files even when empty
+    if ( count($kept) == 0 )
+    {
+        return [
+            'result'  => false,
+            'files'   => [],
+            'message' => 'No file stayed: '.implode(' | ', $said)
+            ];
+    }
+
+    $message = count($kept).' file(s) in the store, as they came';
+    if ( count($said) > 0 ) $message .= '. Gone: '.implode(' | ', $said);
+
+    return [
+        'result'  => true,
+        'files'   => $kept,
+        'message' => $message,
+        'tables'  => $tables
+        ];
+}
+
+
+/**
+ * Function FileMake
+ **/
+function FileMake($mUserId, $mParam, $mFrame)
+{
+    $found = EntityOne($mParam['entity'], $mFrame);
+    if ( $found !== true ) return $found;
+
+    $entity = $mParam['entity'];
+
+    $table = Home($entity);
+    $was = FileOne($entity, $mParam['id'], $mUserId);
+    if ( !isset($was['id']) )
+    {
+        return [
+            'result'  => false,
+            'message' => 'No file ['.$mParam['id'].'] in '.$table
+            ];
+    }
+
+    $gate = RightElem($mUserId, $entity, $was['elem_id']);
+    if ( $gate !== true ) return $gate;
+
+    $row = ProfileOne($mParam['profile']);
+    if ( !isset($row['id']) )
+    {
+        return [
+            'result'  => false,
+            'message' => 'No profile ['.$mParam['profile'].']'
+            ];
+    }
+
+    $show = ProfileShow($row, true);
+    if ( isset($show['broken']) )
+    {
+        return [
+            'result'  => false,
+            'message' => 'The recipe of ['.$mParam['profile'].'] is unreadable'
+            ];
+    }
+
+    $hold = TABLE\Hold($mUserId, $table);
+    if ( !$hold['result'] ) return $hold;
+
+    // One act of the workshop
+    $made = Make($mUserId, $entity, $was, $mParam['profile'], $show,
+                 $mParam['real_name'] ?? '');
+
+    TABLE\Release($mUserId, $table);
+
+    if ( !$made['result'] ) return $made;
+
+    $elems = [$was['elem_id']];
+    Touched($mUserId, $entity, $elems);
+
+    $row = FileOne($entity, $made['id'], $mUserId);
+
+    return [
+        'result'  => true,
+        'message' => $made['message'],
+        'detail'  => [
+            'id' => $made['id']
+            ],
+        'tables'  => [
+            $table => [$row]
+            ]
+        ];
+}
+
+
+/**
+ * Function FileUpdate
+ **/
+function FileUpdate($mUserId, $mParam, $mFrame)
+{
+    $found = EntityOne($mParam['entity'], $mFrame);
+    if ( $found !== true ) return $found;
+
+    $entity = $mParam['entity'];
+
+    $named = FileAllowed($mUserId, $entity, $mParam['id']);
+    if ( !$named['result'] ) return $named;
+
+    // Every field is a column
+    $fields = $mParam;
+    unset($fields['entity']);
+
+    $ids = array_column($named['rows'], 'id');
+    $table = Home($entity);
+
+    $said = TABLE\Update($mUserId, $table, $ids, $fields);
+    if ( !$said['result'] ) return $said;
+
+    $elems = array_column($named['rows'], 'elem_id');
+    Touched($mUserId, $entity, $elems);
+
+    return $said;
+}
+
+
+/**
+ * Function FileRemove
+ **/
+function FileRemove($mUserId, $mParam, $mFrame)
+{
+    $found = EntityOne($mParam['entity'], $mFrame);
+    if ( $found !== true ) return $found;
+
+    $entity = $mParam['entity'];
+
+    $named = FileAllowed($mUserId, $entity, $mParam['id']);
+    if ( !$named['result'] ) return $named;
+
+    $ids = array_column($named['rows'], 'id');
+    $table = Home($entity);
+
+    $mParam['apply'] = true;
+    $said = TABLE\Remove($mUserId, $table, $ids, $mParam);
+    if ( !$said['result'] ) return $said;
+
+    $elems = array_column($named['rows'], 'elem_id');
+    Touched($mUserId, $entity, $elems);
+
+    return $said;
+}
+
+
+/**
+ * Function FilePos
+ **/
+function FilePos($mUserId, $mParam, $mFrame)
+{
+    $found = EntityOne($mParam['entity'], $mFrame);
+    if ( $found !== true ) return $found;
+
+    $entity = $mParam['entity'];
+
+    $gate = RightElem($mUserId, $entity, $mParam['elem_id']);
+    if ( $gate !== true ) return $gate;
+
+    // Every file of the element
+    $scope = [
+        'elem_id'  => $mParam['elem_id']
+        ];
+
+    $table = Home($entity);
+    $said = TABLE\Pos($mUserId, $table, $scope, $mParam);
+    if ( !$said['result'] ) return $said;
+
+    $elems = [$mParam['elem_id']];
+    Touched($mUserId, $entity, $elems);
+
+    return $said;
+}
+
 
 // Entities
 //==================================================================================================
@@ -100,20 +378,30 @@ function Home($mEntity)
 /**
  * Function EntityOne
  **/
-function EntityOne($mEntity)
+function EntityOne($mEntity, $mFrame = false)
 {
-    // An unknown word refused early
+    // The catalogue and the workspace are two circles, each with a tool of its own
     $entity = trim((string)$mEntity);
     $common = MELBIS()->SysFileEntities();
     $frame = array_keys(FRAME);
-    $all = array_merge($common, $frame);
-    if ( in_array($entity, $all) ) return true;
+    $own = $common;
+    $other = $frame;
+    $there = 'the tool of the personal workspace answers them';
+    if ( $mFrame )
+    {
+        $own = $frame;
+        $other = $common;
+        $there = 'the File tool answers them';
+    }
+    if ( in_array($entity, $own) ) return true;
 
-    $list = implode(', ', $all);
+    $list = implode(', ', $own);
+    $message = 'No files on ['.$mEntity.']; these take: '.$list;
+    if ( in_array($entity, $other) ) $message = 'No files on ['.$mEntity.'] here - '.$there;
 
     return [
         'result'  => false,
-        'message' => 'No files on ['.$mEntity.']; these take: '.$list
+        'message' => $message
         ];
 }
 
@@ -287,7 +575,16 @@ function RightElem($mUserId, $mEntity, $mElemId)
     $found = (int)MELBIS()->SqlSelectValue(__LINE__, $command, 0, $param_elem);
     if ( $found == 0 ) return EntityGone($mEntity, $elem_id);
 
-    return true;
+    // Whoever saves the element in the program changes its files
+    $oper = OPER[$mEntity] ?? '';
+    if ( $oper == '' ) return true;
+    $may = MELBIS()->SysOperRight($mUserId, $oper);
+    if ( $may ) return true;
+
+    return [
+        'result'  => false,
+        'message' => 'The files of ['.$elem_id.'] are not yours - they go with the operation '.$oper.' of the program'
+        ];
 }
 
 
@@ -722,6 +1019,57 @@ function Make($mUserId, $mEntity, $mWas, $mProfile, $mShow, $mRealName = '')
 
 // ————— Private —————
 //==================================================================================================
+
+// Doors of the tools
+//==================================================================================================
+
+
+/**
+ * Function FileAllowed
+ **/
+function FileAllowed($mUserId, $mEntity, $mIds)
+{
+    // Weighs the element of each
+    $list = implode(',', $mIds);
+    $table = Home($mEntity);
+    $mine = '';
+    if ( isset(FRAME[$mEntity]) ) $mine = 'AND user_id = '.(int)$mUserId;
+
+    $command = "SELECT *
+                  FROM {DBNICK}_$table
+                 WHERE id IN ( $list )
+                       $mine
+               ";
+    $rows = MELBIS()->SqlSelect(__LINE__, $command);
+
+    $lost = array_diff($mIds, array_column($rows, 'id'));
+    if ( count($lost) > 0 )
+    {
+        $said = implode(', ', $lost);
+
+        return [
+            'result'  => false,
+            'message' => 'No files ['.$said.'] in '.$table
+            ];
+    }
+
+    $seen = [];
+    foreach ( $rows as $was )
+    {
+        if ( isset($seen[$was['elem_id']]) ) continue;
+
+        $gate = RightElem($mUserId, $mEntity, $was['elem_id']);
+        if ( $gate !== true ) return $gate;
+
+        $seen[$was['elem_id']] = 1;
+    }
+
+    return [
+        'result' => true,
+        'rows'   => $rows
+        ];
+}
+
 
 // Entities
 //==================================================================================================

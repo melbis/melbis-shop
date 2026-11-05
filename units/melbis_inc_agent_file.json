@@ -3,7 +3,8 @@
     "parameters": "FILE",
     "tables": [],
     "includes": [
-        "melbis_inc_agent_system.php=1"
+        "melbis_inc_agent_system.php=1",
+        "melbis_inc_agent_table.php=1"
     ],
     "cache_on": "1",
     "cache_time": "0",
