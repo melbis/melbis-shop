@@ -39,7 +39,7 @@ The call goes through three stages, and at each of them the parameters change th
 
 - **the MCP server** — on this computer: reads the files, assembles the request, and not everything goes on to the store;
 - **Melbis Core** — the store's engine: checks the call against the registry, lays out the attachments, and only the fields reach the module;
-- **the tool's module** — gets the user of the session, or the session's principal if the command goes with the principal's rights; the ready-made fields in `$mParam`; as the third argument, the user of the session in `$mAgentId`.
+- **the tool's module** — gets the user of the session, or the session's principal if the command goes with the principal's rights; the ready-made fields in `$mParam`; as the third argument, the user of the session in `$mAgentId`; as the fourth, the session's principal in `$mPrincId`, or `null`, whichever rights the command runs with.
 
 | Parameter | MCP server | Melbis Core | Module |
 |---|---|---|---|

@@ -33,6 +33,7 @@ It sees the whole store:
 | Store copy | fetches the store's entire code, profiles, or a database dump — the same as the program's "Copy store" button; `config.json` is not included in the copy |
 | Storefront | opens store pages as a visitor and reads the debugger report |
 | Server | runs commands and moves files on the store's server — while you let it in in the "[Server](server.md)" window |
+| Web consoles | reads and fills in the pages of sites you have signed in to in the "[AI Browser](ai-browser.md)" window: hosting, delivery, payments, advertising |
 | Documentation | reads the manuals and table descriptions straight from the distribution — which is why its answers about Melbis are specific rather than general |
 
 ## Setup

@@ -27,7 +27,7 @@ namespace MELBIS_AGENT_USER;
  * Function CmdList
  * The users of the store
  **/
-function CmdList($mUserId, $mParam)
+function CmdList($mUserId, $mParam, $mAgentId = null, $mPrincId = null)
 {
 	// ...
 }
@@ -40,8 +40,14 @@ function CmdList($mUserId, $mParam)
 - `$mParam` — the command's fields as a ready-made array, already weighed against the
   registry (see "The Routine Is the Engine's Job").
 - `$mAgentId` — the id of the session's user, that is, of the agent; without a principal it
-  equals `$mUserId`. Only a command that cares who really called it declares it — the
-  others make do with two parameters.
+  equals `$mUserId`.
+- `$mPrincId` — the id of the session's principal, or `null`, whichever rights the
+  command runs with: by it a command running with the agent's rights knows on whose
+  behalf the work is done.
+
+Only a command that needs the last two declares them — the others make do with two.
+The defaults keep the command working when another module calls it directly through
+`UnitRun` with two arguments (see "[Utility Methods](util.md)").
 
 The function returns an array, and it travels to the agent whole — how it is built is described below, in "The Command's Response".
 

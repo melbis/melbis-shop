@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.535 @ 2026-11-05
+ * @version 6.5.1.536 @ 2026-11-10
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -113,24 +113,24 @@ function CmdListClosed($mUserId, $mParam)
 /**
  * Function CmdAdd
  **/
-function CmdAdd($mUserId, $mParam)
+function CmdAdd($mUserId, $mParam, $mAgentId = null, $mPrincId = null)
 {
     // Every field is a column
     $row = $mParam;
     unset($row['content']);
 
-    // This person is the author, the work starts now unless given
+    // The principal of the session sets the task, otherwise this person; the work starts now unless given
     $now = MELBIS()->DateTime();
-    $row['user_id'] = $mUserId;
+    $row['user_id'] = $mPrincId ?? $mUserId;
     $row['state_key'] = 'kNew';
     if ( !isset($row['begin_time']) ) $row['begin_time'] = $now;
     MELBIS()->SqlInsert(__LINE__, '{DBNICK}_user_task', $row);
     $task_id = MELBIS()->SqlLastInsertId();
 
-    // The first note of feed
+    // The first note of feed is signed by whoever wrote it
     $note = [
         'task_id'   => $task_id,
-        'user_id'   => $mUserId,
+        'user_id'   => $mAgentId ?? $mUserId,
         'kind_key'  => $row['kind_key'],
         'state_key' => 'kNew',
         'content'   => $mParam['content'] ?? '',

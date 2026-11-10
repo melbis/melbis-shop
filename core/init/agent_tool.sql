@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.535 @ 2026-11-05
+ * @version 6.5.1.536 @ 2026-11-10
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -48,7 +48,7 @@ UPDATE {DBNICK}_generator SET gen_value = 49 WHERE table_name = 'agent_tool';
 
 INSERT INTO {DBNICK}_agent_tool_command (id, tool_id, name, descr, kind_key, pos) VALUES ('257', '1', 'CmdList', 'Reads the open tasks this person may see - every task not closed, theirs and those of others alike: exec_id is whose hands a task is in and user_id who gave it, and the message counts them against this person. The feed of a task is CmdNoteList, the closed tasks are CmdListClosed.', '', '1');
 INSERT INTO {DBNICK}_agent_tool_command (id, tool_id, name, descr, kind_key, pos) VALUES ('405', '1', 'CmdListClosed', 'Reads the closed tasks of one person - the ones they gave and the ones they carried out - as far as this person may see them; the program loads its archive the same way, person by person.', '', '2');
-INSERT INTO {DBNICK}_agent_tool_command (id, tool_id, name, descr, kind_key, pos) VALUES ('258', '1', 'CmdAdd', 'Adds a task and opens its feed with the first note, the way the program opens one. The person of this session signs as the author, and the state at birth is kNew.', '', '3');
+INSERT INTO {DBNICK}_agent_tool_command (id, tool_id, name, descr, kind_key, pos) VALUES ('258', '1', 'CmdAdd', 'Adds a task and opens its feed with the first note, the way the program opens one. The principal of the session, when there is one, is the author - the task is set on their behalf, and they accept and close it; otherwise the person of this session. The first note is signed by the session\'s own login, and the state at birth is kNew.', '', '3');
 INSERT INTO {DBNICK}_agent_tool_command (id, tool_id, name, descr, kind_key, pos) VALUES ('406', '1', 'CmdState', 'Moves a task in the hands of this person to another state and leaves it there - accepted, held, stopped or a state of the store\'s own. The states that hand a task on have commands of their own: kTrans and kExplain are CmdPass, kDone is CmdDone, kClose is CmdClose, and a comment is CmdNoteAdd. kind_key and privy given here change with it.', '', '4');
 INSERT INTO {DBNICK}_agent_tool_command (id, tool_id, name, descr, kind_key, pos) VALUES ('407', '1', 'CmdPass', 'Hands a task in the hands of this person to someone else: kTrans passes the work on, kExplain asks them to make something clear. The person it goes to moves it from then on; a task is never passed to oneself.', '', '5');
 INSERT INTO {DBNICK}_agent_tool_command (id, tool_id, name, descr, kind_key, pos) VALUES ('408', '1', 'CmdDone', 'Marks a task in the hands of this person as done and gives it back to its author, the way the program does; the author then closes it with CmdClose or passes it on again.', '', '6');

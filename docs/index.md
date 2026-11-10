@@ -54,6 +54,7 @@
 * [Report editor](User/report-editor.md)
 * [Modules and options](User/module-options.md)
 * [AI Components](User/ai-tools.md)
+* [AI Browser](User/ai-browser.md)
 * [Server](User/server.md)
 * [Installation](User/installation.md)
 * [Workbench](Dev/ide.md)
@@ -244,3 +245,9 @@
 * [remote_exec](MCP/remote_exec.md)
 * [remote_load](MCP/remote_load.md)
 * [remote_save](MCP/remote_save.md)
+
+**3.9 AI Browser**
+
+* [Concept](MCP/browser.md)
+* [browser_load](MCP/browser_load.md)
+* [browser_exec](MCP/browser_exec.md)

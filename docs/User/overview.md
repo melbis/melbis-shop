@@ -69,6 +69,7 @@ developers.
 * **Report Editor** — creating reports and managing access rights to them.
 * **Modules and Options** — configuration of external and built-in web modules.
 * **AI Components** — everything the store gives the AI assistant: tools with permissions for every command, its memory and repository (see "[AI Components](ai-tools.md)").
+* **AI Browser** — a browser in which the AI assistant works in the web consoles you have signed in to yourself (see "[AI Browser](ai-browser.md)").
 * **Server** — store server management.
 * **Installation** — initial setup of base and system functions, the keys of external services, copying and restoring the store.
 * **Workbench** — built-in IDE (see the developer guide, "[Workbench](../Dev/ide.md)").

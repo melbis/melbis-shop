@@ -46,6 +46,8 @@ Behind every MCP tool there is a command of the engine — `AGENT_` and the name
 
 `remote_exec`, `remote_load` and `remote_save` work without rights as well: they do not turn to the engine, and they are let onto the server by the program's "Server" window while the owner keeps it open with the root password and the access checkbox — "[The Server](remote.md)".
 
+`browser_load` and `browser_exec` work without rights in the same way: they are let in by the program's "AI Browser" window while it is open, and only into the tabs the person has opened — "[The AI Browser](browser.md)".
+
 The "Development" branch divides the work with the project's files into reading and changing only, and this is not a simplification: a user that may save a module can already do to the store everything the store itself can do. That is why "Modify data" includes "Read data": a save begins with loading the file.
 
 **The rights belong to the user.** The agent signs in under the person's user, so with one person it can do more than with another, in one and the same store.
