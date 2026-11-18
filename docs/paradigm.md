@@ -132,6 +132,37 @@ What an ordinary day might look like:
 - **Review before publishing.** The assistant's edits are read like a colleague's
   edits — before the customer sees them.
 
+## Software 3.0
+
+[Andrej Karpathy](https://en.wikipedia.org/wiki/Andrej_Karpathy) divided programs into three kinds in 2025:
+
+- **Software 1.0** — code written by a person;
+- **Software 2.0** — the weights of a neural network: they are obtained by training, not
+  written by hand;
+- **Software 3.0** — a program in human language, executed by a language model.
+
+Melbis Shop is a Software 3.0 environment. The store is programmed with words: a task for
+the assistant, rules in the store's memory and in the charter. The assistant executes these
+words with the store's tools, and what is missing it writes itself.
+
+**The line is drawn by the author, not by the language.** A tool, module or template that
+the assistant wrote is a product of programming with words, even though it is in PHP. In the
+same way a program in C is not called a program in assembler, although machine code is what
+runs. Software 1.0 covers only what a person wrote or corrected by hand.
+
+**The set of tools is open.** The MCP tools are the assistant's permanent core, it writes
+AI tools for itself to fit tasks, and the set grows along with them. Whether the assistant
+may set up a tool by itself is decided by the rights of the user it works under. In a cautious
+setup the owner accepts the tool — as in the section "What Is Missing Gets Built".
+
+**Ordinary code works under the program in words.** The Melbis Shop program and the
+storefront engine are the base, like an operating system under an application. This does not
+cancel Software 3.0: the program in words works on top of this base.
+
+**The person decides and reviews.** They set the task, give consent and review how what the
+assistant wrote is built, but do not write the code themselves. What else stays with them is in
+the section "What Stays in Human Hands".
+
 ## The Singularity of the Business Process
 
 When the tool for a task is built in the same conversation in which the task was set, the distance between "we need it" and "it works" shrinks to a single conversation. The business stops waiting for the platform: every recurring process gets its own tool, and the store's set of capabilities matches the set of tasks of this particular business. The platform grows at the speed of the business's own tasks — this is what we call the singularity of the business process.

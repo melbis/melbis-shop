@@ -318,5 +318,5 @@ Live samples in the platform's demonstration store:
   deletion guarded by history, a partial `CmdUpdate`;
 - `melbis_agent_user_task.php` — a mirror of the program's scheduler: open tasks and the
   archive per user, the way the window loads them; task movement by separate
-  commands, by the right of the assignee and of the author, as in the task card;
+  commands, by the right of the assignee and of the author or of their agent, as in the task card;
   privacy expressed by a single formula in every query.

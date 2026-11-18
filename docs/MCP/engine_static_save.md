@@ -20,6 +20,8 @@ Either `content` or `content_source` is needed: a save without a body refuses, o
 
 **`bundle`** writes the bundle description whole, from both fields, and rebuilds at once the bundles of its own group and of the groups named in the line. Without `bundle` the file keeps its old description; both fields empty — the file leaves all the bundles. In `parameters` the bundles are listed separated by commas, the priority after a colon: `melbis.css: 10, print.css: 2`. The bundle's name is written with the extension; Latin letters, digits, a dot and an underscore are allowed in it, everything else is cut out. A bundle of another group is written after a slash: `mobi/melbis.css: 10`. In detail — "[Static Build](../Dev/tpl_bundle.md)".
 
+The file's build parameters are set in the same line — words with an exclamation mark, anywhere in the line: `!raw base.js: 10`. Today there is one parameter, `raw`: the file's content goes into the bundle as is, with no key substitution and no warnings about keys. An unknown parameter does not stay silent but comes back in `warning`: `Unknown: !raws (parameter of jquery.js);`.
+
 **`build`** raises the build number the page hangs onto its css and js: without it the visitors' browsers go on taking the old files from their cache.
 
 What else saving does — rebuilds the group's bundles, writes the version, resets the module's cache — is described in "[Statics](engine_static.md)".

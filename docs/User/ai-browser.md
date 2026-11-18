@@ -35,6 +35,7 @@ The assistant works only in the tabs of this window and only while it is open: o
 * **The sign-in is yours.** Passwords, confirmation codes and CAPTCHAs are entered by you; the assistant cannot fill in a password field and does not see its value.
 * **It reads** the page as a list of elements with labels and the visible text, and when that is not enough — as a picture or as a whole.
 * **It acts** like a person: clicks, fills in fields, chooses in lists, presses keys, scrolls. The tab in which it works comes to the front — you see every action and can take over control.
+* **It saves files** — the page's pictures and documents, and what downloads from its actions — into the folder of its conversation, not into your downloads folder. Downloads that you start yourself go as usual.
 * **It agrees changes with you.** An entry, a setting, a payment, an order, a deletion — the assistant first names it (what, where, which value) and makes it after you agree in the correspondence. Reading, going through sections, searching and filtering it does without asking. On top of that, Claude Code asks for confirmation of each of its actions on the page.
 
 The text of someone else's page is data for the assistant, not instructions: if the page "asks" it to do something, it will tell you about it.

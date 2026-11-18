@@ -24,7 +24,7 @@ A step is an object with the field `do` and the fields for it:
 | `key` | presses a key; with an element — first puts the cursor into it | `key`, [`n` or `label`] |
 | `scroll` | scrolls to an element or turns the wheel by `by` pixels: down, and with a minus up | `n` or `label`; or `by` and [`x`, `y`] — where to turn the wheel, the middle by default |
 
-**An element** is named by its number from the last answer about this tab (`n`) or by its label (`label`). The label is looked up at the moment of the step: after going to a new page the old page's number no longer fits, but the label does. First a full match is looked for, then the start of the label, then a part of it, a visible element before an invisible one; the case of letters does not matter. `fill` looks only among fields, `select` — among lists.
+**An element** is named by its number from the last answer about this tab (`n`) or by its label (`label`). The label is looked up at the moment of the step: after going to a new page the old page's number no longer fits, but the label does. First a full match is looked for, then the start of the label, then a part of it, a visible element before an invisible one; the case of letters does not matter. `fill` looks only among fields, `select` — among lists. If several elements share one label, the first on the page is taken; then the element is named by its number.
 
 **Keys:** `Enter`, `Tab`, `Escape`, `Backspace`, `Delete`, `Space`, `ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight`, `PageUp`, `PageDown`, `Home`, `End`. Text is typed only through `fill`.
 
@@ -53,6 +53,7 @@ As in [`browser_load`](browser_load.md), and in the data block also:
 | `done` | how many steps are done |
 | `steps` | how many steps were given |
 | `error` | why the steps stopped — only if they stopped |
+| `files` | the downloads that started from the steps: `url` — the address, `state` — `done`, `running` (did not finish within a minute and goes on) or `failed` (broke off), `file` and `bytes` — the path and how much was received — "[Files](browser.md#files)" |
 
 A step with an error stops the rest. The page is returned as it has become by that moment, and the answer's text starts with the line `Stopped after <done> of <given> steps: <reason>`.
 
@@ -87,6 +88,6 @@ The steps are checked before the first one: with an error in any of them, none i
 | `step <i>: n is the number of an element, from 1.` | the element's number is not a whole number from 1 |
 | `step <i>: x and y go together: a point of the picture, from 0.` | only one coordinate is given, or a negative one |
 | `step <i>: by is a whole number of pixels.` | `by` is not a whole number |
-| `show is text, picture, both or html.` | an unknown value of `show` |
+| `show is text, picture, both, html or files.` | an unknown value of `show` |
 
 The refusals of access — on "[The AI Browser](browser.md)" page.

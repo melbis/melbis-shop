@@ -27,6 +27,33 @@ the output file, so the extension is specified directly in it — `base.js`,
 `melbis.css`, `melbis.auth.js`. The name may contain Latin letters, digits, dots,
 hyphens and underscores; all other characters are stripped.
 
+### Build Parameters
+
+Parameters are set in the same line — words with an exclamation mark. Their place in
+the line is any, both entries mean the same:
+
+```
+!raw base.js: 10, admin.js: 20
+base.js: 10, admin.js: 20 !raw
+```
+
+A parameter belongs to the **file**, not to a single bundle: there is no way to say "raw only
+in `admin.js`". Nor is there a need — what the parameter is set for is either in the
+file's text or not.
+
+Today there is one parameter:
+
+| Parameter | What it does |
+|---|---|
+| `!raw` | the content goes into the bundles as is: no key substitution, no conditional sections, no warnings from this file |
+
+An unknown parameter does not vanish silently — after saving, the development environment
+shows it in the same warning as the missed keys:
+
+```
+Warning! Unknown: !raws (parameter of jquery.js);
+```
+
 ## What Can Be Bundled
 
 Any `.js` or `.css` file inside a template group can be included in a bundle — both from the shared
@@ -229,6 +256,13 @@ Warning! Unknown: PRIMARY_HOWER (buttons.css);
 Usually that is a typo in the name. If a bundle holds no `.psv` at all, the
 substitution does not run at all — a bundle of pure JS will not complain about
 its own `{...}`.
+
+And when a file that must not be changed has curly braces of its own — someone else's
+library, a script with `{MELBIS_VERSION}` for the distribution build — it is marked with
+the `!raw` parameter, and the builder takes its text as is. If only the **name** is
+someone else's while many files carry it, it is cheaper to declare that name in a `.psv` as
+substituting itself: `'MELBIS_VERSION' => '{MELBIS_VERSION}'`. The warning falls silent, and
+exactly what stood there goes back into the file.
 
 > **The substitution lives only in the bundle.** A file included into a template
 > directly, bypassing the bundle, travels to the browser with raw `{PRIMARY}`.

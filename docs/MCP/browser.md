@@ -30,7 +30,15 @@ The questions go through the program on this computer, so only an agent started 
 * **elements** — links, buttons, fields, lists, checkboxes with their labels and values, numbered right on the page; the value of a password field and of a file field is not read;
 * **text** — the page's visible text, the first 12,000 bytes;
 * **picture** — the visible part of the page, on request. It costs the same however long the page is, and helps out where the page draws itself or has little text;
-* **HTML** — the whole page as it is now, on request: it is saved as a file into the conversation folder, and only the path comes in the answer.
+* **HTML** — the whole page as it is now, on request: it is saved as a file into the conversation folder, and only the path comes in the answer;
+* **files** — the list of what the page has loaded: pictures, videos, documents, with the type, size and address, on request.
+
+## Files {#files}
+
+Files go into the conversation's `browser` folder under the names `tab<number>-<time>-<name>`. The path and size of each come in the answer.
+
+* **The page's files.** `browser_load` saves by the addresses from the page's file list what the browser has already loaded: the same file, with no second download, including behind a sign-in to the site.
+* **Downloads.** A file whose download started from a `browser_exec` step lands in the same place; the program waits for it up to a minute. Downloads that the person starts go as usual, into their downloads folder.
 
 The numbers are valid while the page has not changed. A step can also name an element by its label: the label is looked up at the moment of the step, so one call can go through several pages — open a form, fill it in and submit it.
 
@@ -60,6 +68,6 @@ Common to both tools. The refusals of a particular tool are on its page.
 | `The installation lacks Engine\MCP\browser.js…` | the installation lacks the part that reads the page |
 | `This Melbis Shop has no AI-browser: it is older than this MCP server…` | the program is older than the MCP server, a new one is needed |
 | `Melbis Shop did not answer the question about its AI-browser.` | the program did not answer |
-| `The AI-browser did not answer in 90 seconds…` | the answer did not come in 90 seconds: usually the page has shown a dialog and is waiting for the person |
+| `The AI-browser did not answer in 160 seconds…` | the answer did not come in 160 seconds: usually the page has shown a dialog and is waiting for the person |
 
 The common refusals of the MCP server — "[Answers and Refusals](answers.md)".
