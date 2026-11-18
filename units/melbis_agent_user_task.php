@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.536 @ 2026-11-10
+ * @version 6.5.1.537 @ 2026-11-18
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -151,7 +151,7 @@ function CmdAdd($mUserId, $mParam, $mAgentId = null, $mPrincId = null)
 /**
  * Function CmdState
  **/
-function CmdState($mUserId, $mParam)
+function CmdState($mUserId, $mParam, $mAgentId = null, $mPrincId = null)
 {
     // The states with doors elsewhere
     $state = $mParam['state_key'];
@@ -163,7 +163,7 @@ function CmdState($mUserId, $mParam)
             ];
     }
 
-    $held = TaskHeld($mUserId, $mParam['task_id']);
+    $held = TaskHeld($mUserId, $mPrincId, $mParam['task_id']);
     if ( !$held['result'] ) return $held;
 
     // Kind and privacy go along
@@ -178,7 +178,7 @@ function CmdState($mUserId, $mParam)
 /**
  * Function CmdPass
  **/
-function CmdPass($mUserId, $mParam)
+function CmdPass($mUserId, $mParam, $mAgentId = null, $mPrincId = null)
 {
     // Passed on, or asked about
     $state = $mParam['state_key'];
@@ -190,7 +190,12 @@ function CmdPass($mUserId, $mParam)
             ];
     }
 
-    if ( $mParam['exec_id'] == $mUserId )
+    $held = TaskHeld($mUserId, $mPrincId, $mParam['task_id']);
+    if ( !$held['result'] ) return $held;
+
+    // Never to its executor
+    $task = $held['task'];
+    if ( $mParam['exec_id'] == $task['exec_id'] )
     {
         return [
             'result'  => false,
@@ -198,25 +203,22 @@ function CmdPass($mUserId, $mParam)
             ];
     }
 
-    $held = TaskHeld($mUserId, $mParam['task_id']);
-    if ( !$held['result'] ) return $held;
-
     $moved = [
         'state_key' => $state,
         'exec_id'   => $mParam['exec_id']
         ];
     $content = $mParam['content'] ?? '';
 
-    return TaskWrite($mUserId, $held['task'], $moved, $content);
+    return TaskWrite($mUserId, $task, $moved, $content);
 }
 
 
 /**
  * Function CmdDone
  **/
-function CmdDone($mUserId, $mParam)
+function CmdDone($mUserId, $mParam, $mAgentId = null, $mPrincId = null)
 {
-    $held = TaskHeld($mUserId, $mParam['task_id']);
+    $held = TaskHeld($mUserId, $mPrincId, $mParam['task_id']);
     if ( !$held['result'] ) return $held;
 
     // Done goes back to author
@@ -234,18 +236,18 @@ function CmdDone($mUserId, $mParam)
 /**
  * Function CmdClose
  **/
-function CmdClose($mUserId, $mParam)
+function CmdClose($mUserId, $mParam, $mAgentId = null, $mPrincId = null)
 {
     $named = TaskAllowed($mUserId, [$mParam['task_id']]);
     if ( !$named['result'] ) return $named;
 
-    // Its author alone closes, as in program
+    // Its author or their agent
     $task = reset($named['rows']);
-    if ( $task['user_id'] != $mUserId )
+    if ( $task['user_id'] != $mUserId && $task['user_id'] != $mPrincId )
     {
         return [
             'result'  => false,
-            'message' => 'The task ['.$task['id'].'] is closed by its author ['.$task['user_id'].']'
+            'message' => 'The task ['.$task['id'].'] is closed by its author ['.$task['user_id'].'] or their agent'
             ];
     }
 
@@ -354,18 +356,18 @@ function TaskAllowed($mUserId, $mIds)
 /**
  * Function TaskHeld
  **/
-function TaskHeld($mUserId, $mTaskId)
+function TaskHeld($mUserId, $mPrincId, $mTaskId)
 {
     $named = TaskAllowed($mUserId, [$mTaskId]);
     if ( !$named['result'] ) return $named;
 
-    // Its executor alone moves it
+    // Its executor or their agent
     $task = reset($named['rows']);
-    if ( $task['exec_id'] != $mUserId )
+    if ( $task['exec_id'] != $mUserId && $task['exec_id'] != $mPrincId )
     {
         return [
             'result'  => false,
-            'message' => 'The task ['.$task['id'].'] is in the hands of ['.$task['exec_id'].'], who alone moves it; a comment is CmdNoteAdd'
+            'message' => 'The task ['.$task['id'].'] is in the hands of ['.$task['exec_id'].'], moved only by them or their agent; a comment is CmdNoteAdd'
             ];
     }
 
