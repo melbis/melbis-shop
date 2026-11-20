@@ -24,8 +24,9 @@ A module builds its HTML out of the templates by the file name without `.htm` �
 
 * **Rewrites the file whole** and **creates nothing**: a new template is added by
   `engine_html_add`.
-* **Resets its module's cache** — the basic one and Trick — in all the template
-  groups at once, and with it the Smart statistics of that module.
+* **Resets its module's cache** if the template's text has changed — the basic one and
+  Trick — in all the template groups at once, and with it the Smart statistics of that
+  module.
 * **Writes a version** of the file, if that is turned on in the program's Workbench
   settings on this computer.
 * **Gives no remarks**: the code check works only for modules.

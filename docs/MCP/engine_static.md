@@ -47,8 +47,8 @@ files went in and in what order. The body of the bundle, as the storefront gets 
   bundle the build stopped at has stayed as it was.
 * **Writes the file's version** if that is turned on in the Workbench settings of the
   program on this computer.
-* **Resets the module's cache** — the basic one and Trick, and the Smart statistics with
-  them — for a file from a module's folder. Statics from `statics/` does not touch the
+* **Resets the module's cache** if the file's content has changed — the basic one and
+  Trick, and the Smart statistics with them — for a file from a module's folder. Statics from `statics/` does not touch the
   cache.
 
 The store's build number is raised only on `build`: while the number stays the same, the visitors' browsers keep the old css and js they already have.

@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.539 @ 2026-11-20
+ * @version 6.5.1.540 @ 2026-11-20
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -95,11 +95,14 @@ function MELBIS()
  **/    
 function MELBIS_halt($mType, $mFile, $mError, $mInfo = '') 
 {
-    // Vars
-    $config_exist = defined('MELBIS_TIME_ZONE');    
+    static $calls = 0;
     
-    // Melbis parser stop process
-    if ( function_exists('MELBIS') ) MELBIS()->Stop();  
+    // Vars
+    $calls++;
+    $config_exist = defined('MELBIS_TIME_ZONE');                    
+
+    // Stop the parser once: a repeat may try to build it anew
+    if ( $calls == 1 && function_exists('MELBIS') ) MELBIS()->Stop();
     
     // Datetime                          
     $time_zone = $config_exist ? MELBIS_TIME_ZONE : 'UTC';    
@@ -159,7 +162,6 @@ function MELBIS_halt($mType, $mFile, $mError, $mInfo = '')
     }
     
     // Backup time   
-    //------------
     $backup_now = false;    
     $error_header = '500 Internal Server Error';
     if ( $config_exist )

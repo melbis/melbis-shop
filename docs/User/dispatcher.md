@@ -11,8 +11,8 @@ user is online if their program has contacted the server within the last 2
 minutes, by the server's clock.
 
 The **"Notifications"** tab sets which store [events](#events) the Dispatcher
-responds to and how: **"Notification Activation"**, **"Sound Notification"**, and
-**"Command"**.
+responds to and how: **"Notification Activation"**, **"Windows Notification"**,
+**"Sound Notification"**, and **"Command"**.
 
 The Dispatcher keeps one request open to the server: the server answers as soon as
 a message or an event arrives, and in silence — after 25 seconds, refreshing the
@@ -64,15 +64,20 @@ there from the very start. A new event appears in the list when the Dispatcher
 window is opened again.
 
 On a ticked event the Dispatcher responds like this: it shows a pop-up message with
-the event's name, plays the **"Sound Notification"** if a sound is chosen, and runs
-the **"Command"** if one is set. The command starts minimized, in the store folder;
-it receives the event's key, number, and time in the environment variables
-`MELBIS_EVENT`, `MELBIS_ID`, and `MELBIS_TIME`. The **"Test"** button saves the
-command and runs it at once, with the number `0`. Every run of the command is
-recorded in the "[Activity Log](journal.md)".
+the event's name and an icon in the tray if **"Windows Notification"** is ticked,
+plays the **"Sound Notification"** if a sound is chosen, and runs the **"Command"**
+if one is set. The sound is chosen with the **"..."** button, the command is entered
+with the same kind of button, **"X"** removes either; the setting is saved at once.
+The command starts minimized, in the store folder; it receives the event's key,
+number, and time in the environment variables `MELBIS_EVENT`, `MELBIS_ID`, and
+`MELBIS_TIME`. **"Test"** next to the command runs it at once, with the number `0`,
+and next to the sound shows the notification the way the event will show it. Every
+run of the command is recorded in the "[Activity Log](journal.md)".
 
-Ticks, sound, and command are settings of this computer for this store: on another
-workplace they are set again. Most often the command starts the
+Ticks, the Windows notification, sound, and command are settings of this computer
+for this store: on another workplace they are set again. They are tied to the event's
+key: if the key is changed in the "Event list", the event is set up again. Most
+often the command starts the
 [AI dispatcher](ai-dispatcher.md) — an agent that handles the event by itself and
 sets tasks for people.
 

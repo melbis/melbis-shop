@@ -115,7 +115,7 @@ A query answered by memory counts too. `SqlSelectStatic`, `SqlSelectEnum` and th
 
 The "Tables" tab in the IDE shows the gathered list, and one action is left to the developer — to **untick** a table the cache must not depend on. Usually that is a log or a counter: written to often, and with no effect on the output. An unticked box holds forever — it survives a save, and the engine will never write that table back.
 
-**Saving a file resets the cache.** The rule is one and the same for code and for markup: save a module's `.php` or its `.htm` template, and the basic and Trick caches of that module are gone, with nothing left to clear by hand. Saving a library removes the cache from every module that includes it.
+**Saving a file resets the cache if what the output is built from has changed.** The rule is one and the same for code and for markup: the body of a module's `.php`, its `.htm` template, its input parameters or its included libraries changed — and the basic and Trick caches of that module are gone, with nothing left to clear by hand. A save that changed only settings — the cache, Trick, Smart, deferred loading, the description or the excluded tables — leaves the cache alone. A changed library removes the cache from every module that includes it.
 
 The cache is removed across **every** template group, not only the one where the template was edited: working out whose template exactly was saved costs more than one extra redraw. Inserting a `{MELBIS:another_module(...)}` tag into someone else's template, however, resets the cache of the module whose template was saved — the called one knows nothing of the edit, and its cache is cleared separately if need be.
 

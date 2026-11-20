@@ -43,9 +43,10 @@ The keys are the same as in the `.json` file itself; only `tables` and `includes
   entire file.
 * **Creates nothing.** There is no file — the save refuses; a new file is created by
   `engine_php_add`.
-* **Clears the cache.** Saving a module takes its basic and Trick cache off in all the
-  template groups, saving a library — the cache of every module that includes it. Together
-  with the cache the Smart statistics of the same modules are taken off as well. A root
+* **Clears the cache if the body, `parameters` or `includes` have changed.** Then saving a
+  module takes its basic and Trick cache off in all the template groups, saving a library —
+  the cache of every module that includes it, and together with the cache the Smart
+  statistics of the same modules. The other manifest keys do not touch the cache. A root
   script clears nothing.
 * **Writes a version** of the file, if that is turned on in the program's Workbench
   settings on this computer.
