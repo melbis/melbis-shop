@@ -121,7 +121,7 @@ For each module call, the following is displayed:
 - `Run Smart` — the module executed early at the initiative of Smart cache.
 - `Cache Base Valid` — cache is valid, retrieved from disk. Shows the cache creation time and the table that determined its validity.
 - `Cache Base Pause` — cache is valid due to pause. Shows the cache creation time, time until the pause ends (`ETA`), and the deadline.
-- `Cache Trick` — Trick cache was served. The reason is specified: high server load (`High Server load`) or long page compile time (`Long Page compile`), the actual and allowed values, and the age of the Trick cache.
+- `Cache Trick` — Trick cache was served. The reason is specified: high server load (`High Server load`) or long page compile time (`Long Page compile`) with the actual and allowed values, or a request marked by a `CacheTrickForce` call (`Forced by script`, without numbers), and the age of the Trick cache.
 
 **Run info** — timing for the specific call: start time (`Start`), end time (`End`), duration (`Run`), and share of total page time (`Part`). Below are the input parameters with which the module was called.
 

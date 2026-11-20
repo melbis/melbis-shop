@@ -159,6 +159,17 @@ The idea: under high server load or slow page compilation, instead of regenerati
 
 The Trick cache works in parallel with the basic cache: under normal load the module operates normally, under peak load it serves the saved Trick version.
 
+**A request that needs no fresh copy.** The root script can tell the engine itself that a request is not worth a rebuild — usually it is a bot that the owner has recognized by their own signs:
+
+```php
+// index.php
+if ( $is_bot ) MELBIS()->CacheTrickForce();
+
+MELBIS()->Run($entry_point, $entry_param);
+```
+
+Until the end of the request, a module with Trick enabled whose cache is stale serves the Trick copy regardless of the load. The Smart cache does not refresh the copy ahead of time for such a request, and it gets the "pause" copy. "Max cache age" works as usual. If there is no Trick copy, the module is built as always. The engine does not decide who is a bot: the signs — User-Agent, a proxy header, a list of addresses of one's own — are chosen by the owner.
+
 ---
 
 ## 5. Smart Cache
