@@ -29,7 +29,7 @@ There can be multiple such modules for each section — they are switched using 
 
 ### Configuration
 
-Embedded modules are configured in the application: **"Development → Modules and Options", the "Embedded Modules" tab**. Select a place — products, orders, customers, the scheduler or the translator — and add a module with the following parameters:
+Embedded modules are configured in the application: **"Development → Modules and Options", the "Embedded Modules" tab**. Select a place in the "Placement" list and add a module with the following parameters. A module of the "Products: everywhere" and "Orders: everywhere" places is visible in all the windows of its branch, a module of any other place only in its own window, and "Hidden" ones are shown nowhere.
 
 - **Name** — displayed in the module list and on the tab in the panel.
 - **Module URL** — the module's URL, e.g. `http://my-shop.com/?mod=melbis_web_sample`.
@@ -38,19 +38,23 @@ Embedded modules are configured in the application: **"Development → Modules a
 
 ### Parameters Passed by the Application
 
-With each request to an embedded module, the application sends a POST request with the current window's context. A field is sent only when its record is selected in the window; if several rows are selected, their numbers go separated by `;` in the field ending in `_set`.
+With each request to an embedded module, the application sends a POST request with the current window's context. The `place` field is always sent — it is the key of the window or of its panel the module is opened from: by it a module of the "Products: everywhere" place learns which products window it works in. Any other field is sent only when its record is selected in the window; if several rows are selected, their numbers go separated by `;` in the field ending in `_set`.
 
-| Place | Window | Fields |
+| Window | `place` | Fields |
 |---|---|---|
-| products | "Placement", "Prices", "Browser", "Product Selection", "Descriptions" | `melbis` — an empty field that starts the window's request; `topic_id` — the section; `store_id` — the product; `store_set` — the selected products |
-| products | "Descriptions", the attribute values panel | the same fields plus `info_id` — the attribute, `info_value_id` — the value, `info_value_set` — the selected values |
-| orders | "Orders" | `order_id` — the order; `order_version_id` — the order version; `order_version_client_id` — the version's customer; `order_version_user_id` — the version's manager; `order_client_field_id` — the selected row of the order's customer fields; `order_store_id` — the selected row of the order's products; `order_option_id` — the selected row of the order's options; `order_set` — the selected orders |
-| orders | "Edit Order" | `order_id`, `parent_version_id` — the parent version, `order_version_id`, `order_version_client_id`, `order_version_user_id`, `order_client_field_id`, `client_field_id` — the customer field, `order_store_id`, `store_id` — the product of the selected row, `store_option_id` — the product option, `order_option_id` — the order option, and `order` — the whole order being edited |
-| customers | "Customers" | `client_id` — the customer; `client_field_id` — the selected row of the customer's fields; `client_set` — the selected customers |
-| scheduler | "Scheduler" | `melbis`; `task_id` — the task; `note_id` — the task's entry |
-| translator | "Translations" | `melbis`; `trans_id` — the translations section; `origin_id` — the source string; `origin_set` — the selected strings; `lang_id` — the selected translation row, the number of a `trans_lang` row, not of a language |
+| "Placement", "Prices", "Browser", "Product Selection", "Descriptions" | `store_location`, `store_price`, `store_browse`, `store_select`, `store_frame` | `melbis` — an empty field that starts the window's request; `topic_id` — the section; `store_id` — the product; `store_set` — the selected products |
+| "Descriptions", the attribute values panel | `store_frame_value` | the same fields plus `info_id` — the attribute, `info_value_id` — the value, `info_value_set` — the selected values |
+| "Orders" | `order_list` | `order_id` — the order; `order_version_id` — the order version; `order_version_client_id` — the version's customer; `order_version_user_id` — the version's manager; `order_client_field_id` — the selected row of the order's customer fields; `order_store_id` — the selected row of the order's products; `order_option_id` — the selected row of the order's options; `order_set` — the selected orders |
+| "Edit Order", the panels of the "Customer", "Products and Order Options" and "Web Module" tabs | `order_edit_client`, `order_edit_store`, `order_edit_service` | `order_id`, `parent_version_id` — the parent version, `order_version_id`, `order_version_client_id`, `order_version_user_id`, `order_client_field_id`, `client_field_id` — the customer field, `order_store_id`, `store_id` — the product of the selected row, `store_option_id` — the product option, `order_option_id` — the order option, and `order` — the whole order being edited |
+| "Customers" | `client` | `client_id` — the customer; `client_field_id` — the selected row of the customer's fields; `client_set` — the selected customers |
+| "Scheduler" | `schedule` | `melbis`; `task_id` — the task; `note_id` — the task's entry |
+| "Translations" | `trans` | `melbis`; `trans_id` — the translations section; `origin_id` — the source string; `origin_set` — the selected strings; `lang_id` — the selected translation row, the number of a `trans_lang` row, not of a language |
+
+`place` matches the key of the window's place in the "Placement" list everywhere except the panels: "Descriptions" has one place, `store_frame`, while the values panel sends `store_frame_value`; the order editor also has one place, `order_edit`, while each of its three panels sends a key of its own.
 
 In "Descriptions", the numbers of products and values are numbers of the main catalog, not of the rows of the Personal Workspace. The `order` field of the "Edit Order" window is JSON with the order's unsaved rows: the keys `new_orders_version`, `new_orders_client_field`, `new_orders_store`, `new_orders_store_option` and `new_orders_option`, each holding a list of rows with all their fields.
+
+Rows of options and fields with the "Do not display" flag come in `order` together with the rest, and `MELBIS_ORDER_UPDATE` writes into them the same way. The note of such an option is a place for the module's service data: the employee does not see it, and the order keeps it.
 
 With the "User identification required" flag, `login`, `stamp` and `sign` are added to any set: `stamp` is the time in GMT, `sign` is a signature of the string `login|time|WEB` with a key computed from the password. The password itself never leaves the application. This is how a module's `$mVars` looks in the "Orders" window:
 
@@ -60,6 +64,7 @@ With the "User identification required" flag, `login`, `stamp` and `sign` are ad
     'get'  => ['mod' => 'melbis_web_sample'],
     'post' => [
         'order_id'                => '1',
+        'place'                   => 'order_list',
         'order_version_id'        => '2',
         'order_version_client_id' => '1',
         'order_version_user_id'   => '1',
@@ -212,16 +217,19 @@ The page sends the application a message with the `window.chrome.webview.postMes
 window.chrome.webview.postMessage({ event: 'MELBIS_ORDER_UPDATE', data: update });
 ```
 
-The application understands two events:
+The application understands three events:
 
 | Event | Where it works | What the application does |
 |---|---|---|
 | `MELBIS_ORDER_UPDATE` | the order editing window | applies `data` to the fields of the order being edited |
+| `MELBIS_ORDER_REFRESH` | the "Orders" window | loads the current order from the server anew, like the "Refresh Order" button |
 | `MELBIS_PRINT` | any browser of the application | opens the Windows print dialog for the page |
 
 The `window.chrome.webview` object exists only in the application's browser. A module that is also opened in an ordinary browser checks for it before sending (an example is in the "Printing" section below).
 
 `MELBIS_ORDER_UPDATE` works while the order has not yet been saved. In other sections (products, customers), the web module writes changes directly to the database via the standard SQL parser methods when needed.
+
+`MELBIS_ORDER_REFRESH` is needed by a module that has itself changed a saved order on the server: the "Orders" window shows its own copy of the order and will not reread it without a command. After the refresh the program sends the window's context to the module again, and the page loads anew. So the event is sent in answer to a manager's action, not when the page loads, otherwise the refresh goes round in circles. Which window the module is open in can be told by the `order` field: the order editing window always sends it, the "Orders" window never does.
 
 A practical example: the module receives all the data of the open order from the application in JSON format, displays it in interactive tables, and allows the manager to edit individual fields directly in the browser.
 

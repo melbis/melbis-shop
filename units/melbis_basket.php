@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.540 @ 2026-11-20
+ * @version 6.5.1.550 @ 2026-11-25
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -132,15 +132,17 @@ function Fields($mVars)
     // Create 
     $tpl = MELBIS()->TplCreate();  
     
-    // Fields
-    $client_fields = $version['client'];                                    
+    // Fields, hidden ones stay out
+    $client_fields = [];
                   
     // The registry answers every field
     $field_set = array_column(MELBIS()->SysFieldValues(), null, 'id');
     
-    foreach ( $client_fields as &$row ) 
+    foreach ( $version['client'] as $row ) 
     {              
         $field = $field_set[$row['field_id']] ?? [];
+        if ( !empty($field['is_hidden']) ) continue;
+        
         $row['fixed_set'] = $field['fixed_set'] ?? 0;
         $row['value_list'] = $field['value'] ?? [];
         
@@ -150,8 +152,9 @@ function Fields($mVars)
             $value['is_selected'] = ( $value['id'] == $row['value_id'] );
         }
         unset($value);
+        
+        $client_fields[] = $row;
     }    
-    unset($row);
     
     MELBIS()->TplAssign($tpl, 'FIELDS', $client_fields);    
                                                               
@@ -174,15 +177,17 @@ function Options($mVars)
     // Create 
     $tpl = MELBIS()->TplCreate();       
         
-    // Options
-    $order_options = $version['option'];                                    
+    // Options, hidden valueless stay out
+    $order_options = [];
                   
     // The registry answers every option
     $option_set = array_column(MELBIS()->SysOrderOptionValues(), null, 'id');
     
-    foreach ( $order_options as &$row ) 
+    foreach ( $version['option'] as $row ) 
     {              
         $option = $option_set[$row['option_id']] ?? [];
+        if ( !empty($option['is_hidden']) && empty($option['value']) ) continue;
+        
         $row['fixed_set'] = $option['fixed_set'] ?? 0;
         $row['value_list'] = $option['value'] ?? [];
         
@@ -192,8 +197,9 @@ function Options($mVars)
             $value['is_selected'] = ( $value['id'] == $row['value_id'] );
         }
         unset($value);
+        
+        $order_options[] = $row;
     }    
-    unset($row);
     
     MELBIS()->TplAssign($tpl, 'OPTIONS', $order_options);    
                                                               
@@ -220,11 +226,16 @@ function Save($mVars)
     $version['client'] = $version['client'] ?? [];
     $version['option'] = $version['option'] ?? [];
     
+    // Hidden entries keep their values
+    $field_set = array_column(MELBIS()->SysFieldValues(), null, 'id');
+    $option_set = array_column(MELBIS()->SysOrderOptionValues(), null, 'id');
+    
     // Update fields     
     //--------------
     foreach ( $version['client'] as &$row )
     { 
         $id = $row['field_id'];
+        if ( !empty($field_set[$id]['is_hidden']) ) continue;
         $value_id = $mVars['post']['field'.$id.'_id'] ?? null;        
         $row['value_id'] = ( $value_id ) ? (int) $value_id : null; 
         $row['value_txt'] = $mVars['post']['field'.$id.'_text'] ?? '';
@@ -236,6 +247,8 @@ function Save($mVars)
     foreach ( $version['option'] as &$row )
     {           
         $id = $row['option_id'];        
+        $option = $option_set[$id] ?? [];
+        if ( !empty($option['is_hidden']) && empty($option['value']) ) continue;
         $value_id = $mVars['post']['option'.$id.'_id'] ?? null;      
         $row['value_id'] = ( $value_id ) ? (int) $value_id : null;
         $row['value_name'] = $mVars['post']['option'.$id.'_text'] ?? '';

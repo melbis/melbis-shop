@@ -77,12 +77,12 @@ a section — how many products per page, which block to show and the like.
 
 The tab declares the named SQL queries an employee switches on in the section's
 "Advanced Query" alongside the ordinary conditions. The **"Placement"** list says
-where the filter will show up: **products**, **orders**, **customers**, **prices**,
-**descriptions** or **browser**.
+where the filter will show up: **Products: everywhere**, **Products: prices**,
+**descriptions**, **browser**, **product selection**, **Orders** or **Customers**.
 
-Filters for **products** are shared: they are present in "Prices", "Descriptions",
-"Browser" and in the product selection window. A filter with the **prices**,
-**descriptions** or **browser** placement is visible only in its own window and
+Filters for **Products: everywhere** are shared: they are present in "Prices", "Descriptions",
+"Browser" and in the product selection window. A filter with the **Products: prices**,
+**descriptions**, **browser** or **product selection** placement is visible only in its own window and
 stands after the shared ones.
 
 The query is written against the **server's database** and must return a single

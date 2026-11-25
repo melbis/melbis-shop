@@ -1,5 +1,5 @@
 /************************************************************************************************************
- * @version 6.5.1.540 @ 2026-11-20
+ * @version 6.5.1.550 @ 2026-11-25
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
@@ -261,7 +261,7 @@ CREATE TABLE {DBNICK}_user_log (
 DROP TABLE IF EXISTS {DBNICK}_user_filter;
 CREATE TABLE {DBNICK}_user_filter (
    id 		INT UNSIGNED DEFAULT '0' NOT NULL,   
-   place 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   place 	CHAR(32) DEFAULT 'store' NOT NULL,
    name 	   CHAR(255) DEFAULT '' NOT NULL,
    sql_txt	MEDIUMTEXT DEFAULT ('') NOT NULL,
    pos	 	INT UNSIGNED DEFAULT '0' NOT NULL,
@@ -2280,6 +2280,7 @@ CREATE TABLE {DBNICK}_field (
    fixed_set 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    read_only 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    order_skip 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   is_hidden 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    mask_edit	CHAR(255) DEFAULT '' NOT NULL,
    PRIMARY KEY (id)   
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
@@ -2410,6 +2411,7 @@ CREATE TABLE {DBNICK}_order_option (
    fixed_set 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    needs_calc 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    custom_sum 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   is_hidden 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
@@ -2566,6 +2568,7 @@ CREATE TABLE {DBNICK}_order_store_option (
    fixed_set 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    needs_calc 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    custom_sum 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   is_hidden 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
    pos 		   INT UNSIGNED DEFAULT '0' NOT NULL,
    PRIMARY KEY (id)
 ) ENGINE = {ENGINE} DEFAULT CHARSET={CHARSET};
@@ -2824,7 +2827,7 @@ DROP TABLE IF EXISTS {DBNICK}_web_inside;
 CREATE TABLE {DBNICK}_web_inside (
    id 		INT UNSIGNED DEFAULT '0' NOT NULL,
    skey 	   CHAR(32) DEFAULT '' NOT NULL,
-   place 	TINYINT UNSIGNED DEFAULT '0' NOT NULL,
+   place 	CHAR(32) DEFAULT 'store' NOT NULL,
    name 	   CHAR(255) DEFAULT '' NOT NULL,
    url 		TEXT DEFAULT ('') NOT NULL,
    auth 	   TINYINT UNSIGNED DEFAULT '0' NOT NULL,

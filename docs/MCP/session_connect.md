@@ -10,7 +10,8 @@ Not required: a user that has been granted nothing has to sign in too, to learn 
 
 | Parameter | Type | What it is |
 |---|---|---|
-| `topic` | string | the topic of the conversation in one word of Latin letters, digits, `-` and `_`: `prices-sept`. Everything the agent does in the conversation and everything the tools write for it lies in the folder of this name, and after a break the same word brings the agent back to the folder and its data. In a session launched by the program's Dispatcher, the server names the folder, and the topic does not affect it |
+| `topic` | string | the topic of the conversation in one word of Latin letters, digits, `-` and `_`: `prices-sept`. Everything the agent does in the conversation and everything the tools write for it lies in the folder of this name, and after a break the same word with `continue` brings the agent back to the folder and its data. In a session launched by the program's Dispatcher, the server names the folder, and the topic does not affect it |
+| `continue` | boolean | `true` — the conversation goes on after a break and returns to its folder. Without it a topic that already has a folder is refused; with it a topic without a folder simply opens a new one. In a Dispatcher session the same applies to the event's folder |
 
 The store and the user are worked out without the agent.
 
@@ -74,13 +75,15 @@ Then — the rules of the session: what the fields of the data mean, who the age
 
 The project map is not loaded at sign-in: each of its parts the agent requests with its own tool, when it is needed.
 
-A repeated call opens the session anew: the list of rights, the accepted rules and the critical notes that have been read are reset. The conversation folder stays: with the same topic the agent returns to its data.
+A repeated call opens the session anew: the list of rights, the accepted rules and the critical notes that have been read are reset. The agent returns to the former folder with the same topic and `continue: true`.
 
 ## Refusals
 
 | Answer | When | What to do |
 |---|---|---|
 | `topic is required…`, `topic […] is not one word…` | there is no topic, or it holds something other than Latin letters, digits, `-` and `_`; the session already open stays as it was | name the conversation with one word |
+| `TOPIC_TAKEN: the topic […] already has a folder…` | the topic already has a folder, and `continue` is not passed. The text names the time of the last entry and the folder's size; the session already open stays as it was | the conversation goes on after a break — repeat with `continue: true`; another conversation — name it with another word |
+| `TOPIC_TAKEN: the folder of this event already exists…` | a Dispatcher session, and the event's folder already exists: this run has already been here | stop the run; the owner sorts it out by the logs |
 | `NO_STORE:` | no store has ever been opened in the program on this computer | open a store in the program |
 | `NO_SUCH_STORE:` | the server is pinned to a folder that is not in the program's list of stores, or no folder is given after `--store` | fix the server's configuration in the agent application, or open this store in the program once |
 | `NO_SHOP_INI:` | `Shop.ini` cannot be read in the store folder | check the store folder |

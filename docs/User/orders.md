@@ -67,6 +67,9 @@ web module is also available nearby (e.g., calling the customer via a mini-PBX â
   "[Order Options](order-options.md)"); **"Profit Calculation"** selects how
   to display profit (from supplier price, from price, etc.) â€” for display purposes only.
 * Below are the **"Order Options"**: general options for the entire order.
+* An option with the **"Do not display"** flag is visible without its note, and if it has no
+  values it is not visible at all; a customer field with this flag is not visible (see
+  "[Order Options](order-options.md)" and "[Customer Options](customer-options.md)").
 
 ### Calculation
 

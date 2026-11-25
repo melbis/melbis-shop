@@ -17,6 +17,14 @@ A session is the MCP server's work with one store under one user. Everything the
    [`session_clear`](session_clear.md) shows them and removes the ones the person
    names.
 
+A subagent never works with the MCP server: it calls neither `session_init` nor
+`session_connect`, nor any other tool of the server. Everything that concerns the store is done
+by the agent that launched it: it gets the data needed and writes the result. They exchange
+through the `sub\<task>\` subfolder in the conversation folder, which the agent names in the assignment.
+The reason is that the session lives in the server's process, and many agent applications
+launch subagents in the same process: a subagent's sign-in would replace the agent's session, and its
+calls would bypass the rules the agent accepted.
+
 ## Why the Agent Names Only the Topic at Sign-in
 
 The agent names the conversation with one word, the topic: the server keeps the conversation folder under it, and after a break the same topic brings the agent back to its data. Beyond that the agent chooses nothing at sign-in — neither the store nor the user. The store is the one last opened in the program, or the one the server is pinned to. The user is the one the person is signed in under in the program, or the one saved in its settings. So the agent will not sign in where the person has not signed in, and the password does not get into the correspondence. Only a person can switch the store, and only in the program. How exactly the server finds the store and the login-password pair — "[Sign-in, Rights, License](access.md)".
@@ -41,7 +49,7 @@ The session lives in the server's process. It ends when:
 
 * **the agent application has restarted the server.** Some applications, Claude
   Code among them, do it by themselves, in the middle of the work as well. The
-  next call gets `Not connected`, and the agent signs in anew with the same topic:
+  next call gets `Not connected`, and the agent signs in anew with the same topic and `continue: true`:
   the conversation folder and its data are still in place;
 * **the agent has called `session_connect` again.** The session opens anew, and
   everything remembered is reset.

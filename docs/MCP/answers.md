@@ -25,7 +25,7 @@ These answers the server gives itself, without turning to the store.
 
 | Answer | When | What to do |
 |---|---|---|
-| `Not connected. Call "session_connect" first.` | the session is not open: there has been none yet, the sign-in failed or the agent application restarted the server | sign in anew |
+| `Not connected. Call "session_connect" first…` | the session is not open: there has been none yet, the sign-in failed or the agent application restarted the server | sign in anew; if the conversation already had a topic — with it and `continue: true` |
 | `STORE_SWITCHED:` and both stores | the server is not tied to a store, and the store open in the program is not the one the session is open in | ask the user: `session_connect` signs in to the program's store, while returning the program to the former store continues the session |
 | `ACCESS_DENIED: this user may not run AGENT_…` and the path in the tree of rights | the user has not been granted the right to this tool | the owner grants the right at the named path, the agent opens the session anew |
 | `RULES_REQUIRED:` and the text of the rules | the tool's rules have not been accepted in this session | read the rules, call `session_rules_accept` with the code from the refusal, repeat the call |

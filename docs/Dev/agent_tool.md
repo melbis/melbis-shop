@@ -300,6 +300,8 @@ $mine = SYS\RightOne('topic', $mUserId, 'descr', $topic_id);
 
 The aliases it publishes are named by the library in its own manifest, in the `parameters` field — the engine checks `use` against them when saving.
 
+The composer libraries from `vendor/` are available to a tool just as to storefront modules.
+
 ## Backup and Update
 
 **Development → AI Components → Export** (the `TOOL_EXPORT` right; for the agent — `tool_export`) collects the whole registry and the modules behind it into a single archive: `index.json` with the tree and the md5 sum of every file, `tools/<unit>.json` per tool — the commands with their fields — and `units/` with the modules, the manifests, and the libraries found through those manifests. Grants do not go into the archive: they are about the store's users, not about the tools.

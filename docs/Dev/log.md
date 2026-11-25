@@ -31,7 +31,14 @@ rotation, compression, one-week retention. In a non-standard deployment, rotatio
 configured manually.
 
 The user activity log is configured separately from the error log —
-the `MELBIS_USER_LOG` parameter in `config.json` (see "Configuration").
+the `MELBIS_USER_LOG` parameter in `config.json` (see "Configuration"). The log lies in
+the `{DBNICK}_user_log` table and is read with a query.
+
+An entry is made by every command of the program and every call of an agent through MCP: who
+signed in, from which IP, which command came and with what. A call of an agent also gets the
+module it names (for example, an AI tool), the tool's command with its fields, the
+principal if the call went with the principal's rights, and the refusal text if the call was refused.
+Long values are cut to 500 characters with a note of the full length.
 
 ---
 

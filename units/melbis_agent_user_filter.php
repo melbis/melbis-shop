@@ -1,13 +1,9 @@
 <?php
 /***************************************************************************************************
- * @version 6.5.1.540 @ 2026-11-20
+ * @version 6.5.1.550 @ 2026-11-25
  * @copyright 2002-2026 Melbis
  * @link https://melbis.com
  * @author Dmytro Kasianov
- **************************************************************************************************
- *
- * PlaceOne       - Weighs a place
- *
  **************************************************************************************************/
 
 
@@ -16,9 +12,6 @@ namespace MELBIS_AGENT_USER_FILTER;
 
 // Libraries
 use MELBIS_INC_AGENT_TABLE as TABLE;
-
-// The places a filter stands
-const PLACE_SET = "0, 1, 2";
 
 
 // ————— Public —————
@@ -42,9 +35,6 @@ function CmdList($mUserId, $mParam)
  **/
 function CmdAdd($mUserId, $mParam)
 {
-    $place = PlaceOne($mParam['place']);
-    if ( !$place['result'] ) return $place;
-
     return TABLE\Add($mUserId, 'user_filter', $mParam);
 }
 
@@ -54,13 +44,6 @@ function CmdAdd($mUserId, $mParam)
  **/
 function CmdUpdate($mUserId, $mParam)
 {
-    // Written and weighed when named
-    if ( isset($mParam['place']) )
-    {
-        $place = PlaceOne($mParam['place']);
-        if ( !$place['result'] ) return $place;
-    }
-
     return TABLE\Update($mUserId, 'user_filter', $mParam['id'], $mParam);
 }
 
@@ -80,11 +63,10 @@ function CmdRemove($mUserId, $mParam)
  **/
 function CmdPos($mUserId, $mParam)
 {
-    $place = PlaceOne($mParam['place']);
-    if ( !$place['result'] ) return $place;
-
     // The filters of one place
-    $scope['place'] = $place['place'];
+    $scope = [
+        'place' => $mParam['place']
+        ];
 
     return TABLE\Pos($mUserId, 'user_filter', $scope, $mParam);
 }
@@ -128,35 +110,6 @@ function CmdParamRemove($mUserId, $mParam)
 function CmdParamPos($mUserId, $mParam)
 {
     return TABLE\Pos($mUserId, 'user_filter_param', [], $mParam);
-}
-
-
-// ————— Private —————
-//==================================================================================================
-
-
-/**
- * Function PlaceOne
- **/
-function PlaceOne($mPlace)
-{
-    $place = trim((string)$mPlace);
-
-    $allow = explode(',', PLACE_SET);
-    $allow = array_map('trim', $allow);
-
-    if ( !in_array($place, $allow, true) )
-    {
-        return [
-            'result'  => false,
-            'message' => 'The place is 0, 1 or 2'
-            ];
-    }
-
-    return [
-        'result' => true,
-        'place'  => (int)$place
-        ];
 }
 
 
